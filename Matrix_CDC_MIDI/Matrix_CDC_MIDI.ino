@@ -1,6 +1,5 @@
 #include <USBMIDI.h>
 #include <USBComposite.h>
-#include "CDC.h"
 #include "LED.h"
 #include "MatrixVariable.h"
 #include "MatrixSysex.h"
@@ -43,5 +42,6 @@ void loop()
   MIDI.poll();
   if (CDCEnable);
   CDCpoll();
-
 }
+
+
