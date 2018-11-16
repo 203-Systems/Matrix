@@ -4,6 +4,7 @@
 #include <LED.h>
 #include <MatrixVariable.h>
 
+
 class usbmidi : public USBMidi {
     virtual void handleNoteOff(unsigned int channel, unsigned int note, unsigned int velocity) {
       CompositeSerial.print(channel);
@@ -11,7 +12,7 @@ class usbmidi : public USBMidi {
       CompositeSerial.print(note);
       CompositeSerial.print("\t");
       CompositeSerial.println(velocity);
-    } 
+    }
 
     virtual void handleNoteOn(unsigned int channel, unsigned int note, unsigned int velocity) {
       CompositeSerial.print(channel);
