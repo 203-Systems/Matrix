@@ -5,4 +5,4 @@ void LEDon(int X, int Y, int w);
 void LEDon(int X, int Y, int W, int R, int G, int B);
 void LEDsetPallette(int X, int Y, int w);
 
-extern uint8_t LEDGamma[];
+uint8_t LEDGamma[256];

@@ -3,6 +3,7 @@
 #include <CDC.h>
 #include <LED.h>
 #include <MatrixVariable.h>
+#include <MatrixSysex.h>
 
 class usbmidi : public USBMidi {
     virtual void handleNoteOff(unsigned int channel, unsigned int note, unsigned int velocity) {
@@ -22,20 +23,25 @@ class usbmidi : public USBMidi {
     }
 };
 
-usbmidi midi;
+MatrixSysex Sysex;
+usbmidi MIDI;
+CDC CDC;
 
-void setup() {
+void setup() 
+{
   USBComposite.setProductString("Matrix CDC Proto");
   USBComposite.setVendorId(0x203);
   USBComposite.setProductId(0x802);
-  midi.registerComponent();
+  MIDI.registerComponent();
   CompositeSerial.registerComponent();
   USBComposite.begin();
 }
 
-void loop() {
+void loop() 
+{
   if (MIDIEnable);
-  midi.poll();
+  MIDI.poll();
   if (CDCEnable);
-  CDCpull();
+  CDC.poll();
+  
 }
