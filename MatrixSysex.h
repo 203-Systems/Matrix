@@ -1,8 +1,4 @@
-class MatrixSysex
-{
-  public:
     //Sysex Set
-    MatrixSysex();
     void reset();
     void EnterBootloader();
     void InitializeDevice();
@@ -26,4 +22,3 @@ class MatrixSysex
     void GetCustomKeyMap();
     void GetBrightness();
     void GetTouchSensitive();
-};

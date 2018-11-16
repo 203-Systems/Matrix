@@ -1,8 +1,3 @@
-class CDC
-{
-public:
-  CDC();
-  void poll();
+  void CDCpoll();
   void CDCDecode();
   void CDCMIDI();
-};

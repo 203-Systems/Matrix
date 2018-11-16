@@ -1,9 +1,9 @@
 #include <USBMIDI.h>
 #include <USBComposite.h>
-#include <CDC.h>
-#include <LED.h>
-#include <MatrixVariable.h>
-#include <MatrixSysex.h>
+#include "CDC.h"
+#include "LED.h"
+#include "MatrixVariable.h"
+#include "MatrixSysex.h"
 
 class usbmidi : public USBMidi {
     virtual void handleNoteOff(unsigned int channel, unsigned int note, unsigned int velocity) {
@@ -23,9 +23,7 @@ class usbmidi : public USBMidi {
     }
 };
 
-MatrixSysex Sysex;
 usbmidi MIDI;
-CDC CDC;
 
 void setup() 
 {
@@ -42,6 +40,6 @@ void loop()
   if (MIDIEnable);
   MIDI.poll();
   if (CDCEnable);
-  CDC.poll();
+  CDCpoll();
   
 }

@@ -1,9 +1,8 @@
 #include <USBComposite.h>
-#include <CDC.h>
-#include <MatrixSysex.h>
+#include "CDC.h"
+#include "MatrixSysex.h"
 
-MatrixSysex Sysex;
-usbmidi MIDI;
+// usbmidi MIDI;
 
 void CDCDecode()
 {
@@ -39,7 +38,7 @@ void CDCDecode()
   }
 }
 
-void poll()
+void CDCpoll()
 {
   if (CompositeSerial.available() > 0)
   {
@@ -62,35 +61,35 @@ void CDCSysexSet()
   switch (CompositeSerial.read() & 0x0F)
   {
     case 8:
-      Sysex.reset();
+      reset();
       break;
     case 9:
-      Sysex.EnterBootloader();
+      EnterBootloader();
       break;
     case 10:
 
-      Sysex.InitializeDevice();
+      InitializeDevice();
       break;
     case 20:
-      Sysex.UpdateColourPaletteRGB();
+      UpdateColourPaletteRGB();
       break;
     case 21:
-      Sysex.UpdateColourPaletteWRGB();
+      UpdateColourPaletteWRGB();
       break;
     case 22:
-      Sysex.ResetColourPalette();
+      ResetColourPalette();
       break;
     case 25:
-      Sysex.UpdateCustomKeyMap();
+      UpdateCustomKeyMap();
       break;
     case 26:
-      Sysex.ResetCustomKeyMap();
+      ResetCustomKeyMap();
       break;
     case 30:
-      Sysex.SetBrightness(CompositeSerial.read());
+      SetBrightness(CompositeSerial.read());
       break;
     case 31:
-      Sysex.SetTouchSensitive(CompositeSerial.read());
+      SetTouchSensitive(CompositeSerial.read());
       break;
   }
 }
@@ -100,34 +99,34 @@ void CDCSysexGet()
   switch(CompositeSerial.read() & 0x0F)
   {
     case 0:
-      Sysex.GetDeviceInfo();
+      GetDeviceInfo();
       break;
     case 1:
-      Sysex.GetModuleCount();
+      GetModuleCount();
       break;
-    case 2：
-      Sysex.GetModuleInfo();
+    case 2:
+      GetModuleInfo();
       break;
     case 5:
-      Sysex.GetAllParameter();
+      GetAllParameter();
       break;
     case 20:
-      Sysex.GetColorPaletteRGB();
+      GetColorPaletteRGB();
       break;
     case 21:
-      Sysex.GetColorPaletteWRGB();
+      GetColorPaletteWRGB();
       break;
     case 24:
-      Sysex.GetGammaState();
+      GetGammaState();
       break;
     case 25:
-      Sysex.GetCustomKeyMap();
+      GetCustomKeyMap();
       break;
     case 30:
-      Sysex.GetBrightness();
+      GetBrightness();
       break;
     case 31:
-      Sysex.GetTouchSensitive();
+      GetTouchSensitive();
       break;
   }
 }
@@ -138,11 +137,11 @@ void CDCMIDI()
   int Channel = CompositeSerial.read() & 0x0F;
   int Note = CompositeSerial.read();
   int Velocity = CompositeSerial.read();
-   switch (Mode)
-   {
-     case 8:
-       MIDI.handleNoteOff(Channel, Note, Velocity);
-     case 9:
-       MIDI.handleNoteOff(Channel, Note, Velocity);
-   }
+   // switch (Mode)
+   // {
+   //   case 8:
+   //     MIDI.handleNoteOff(Channel, Note, Velocity);
+   //   case 9:
+   //     MIDI.handleNoteOff(Channel, Note, Velocity);
+   // }
 }
