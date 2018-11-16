@@ -4,27 +4,29 @@
 
 // usbmidi MIDI;
 
+USBCompositeSerial CDC;
+
 void CDCDecode()
 {
-  switch (CompositeSerial.read())
+  switch (CDC.read())
   {
     case 0x00://0
-      LEDoff(CompositeSerial.read(), CompositeSerial.read());
+      LEDoff(CDC.read(), CDC.read());
       break;
     case 0x01://1
-      LEDon(CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read()); //XYRGB
+      LEDon(CDC.read(), CDC.read(), CDC.read(), CDC.read(), CDC.read()); //XYRGB
       break;
     case 0x02://2
-      LEDon(CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read()); //XYRGBW
+      LEDon(CDC.read(), CDC.read(), CDC.read(), CDC.read(), CDC.read(), CDC.read()); //XYRGBW
       break;
     case 0x03://3
-      LEDon(CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read()); //XYW
+      LEDon(CDC.read(), CDC.read(), CDC.read()); //XYW
       break;
     case 0x04://4
-      LEDon(CompositeSerial.read(), CompositeSerial.read()); //XY
+      LEDon(CDC.read(), CDC.read()); //XY
       break;
     case 0x05://5
-      LEDsetPallette(CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read()); //XYP
+      LEDsetPallette(CDC.read(), CDC.read(), CDC.read()); //XYP
       break;
     case 0x0D://14
       CDCSysexSet();
@@ -40,9 +42,9 @@ void CDCDecode()
 
 void CDCpoll()
 {
-  if (CompositeSerial.available() > 0)
+  if (CDC.available() > 0)
   {
-    int device = CompositeSerial.peek() >> 4;
+    int device = CDC.peek() >> 4;
     if (device == 0)
     {
     CDCDecode();
@@ -58,7 +60,7 @@ void CDCpoll()
 
 void CDCSysexSet()
 {
-  switch (CompositeSerial.read() & 0x0F)
+  switch (CDC.read() & 0x0F)
   {
     case 8:
       reset();
@@ -86,17 +88,17 @@ void CDCSysexSet()
       ResetCustomKeyMap();
       break;
     case 30:
-      SetBrightness(CompositeSerial.read());
+      SetBrightness(CDC.read());
       break;
     case 31:
-      SetTouchSensitive(CompositeSerial.read());
+      SetTouchSensitive(CDC.read());
       break;
   }
 }
 
 void CDCSysexGet()
 {
-  switch(CompositeSerial.read() & 0x0F)
+  switch(CDC.read() & 0x0F)
   {
     case 0:
       GetDeviceInfo();
@@ -133,10 +135,10 @@ void CDCSysexGet()
 
 void CDCMIDI()
 {
-  int Mode = CompositeSerial.peek() >> 4;
-  int Channel = CompositeSerial.read() & 0x0F;
-  int Note = CompositeSerial.read();
-  int Velocity = CompositeSerial.read();
+  int Mode = CDC.peek() >> 4;
+  int Channel = CDC.read() & 0x0F;
+  int Note = CDC.read();
+  int Velocity = CDC.read();
    // switch (Mode)
    // {
    //   case 8:
