@@ -1,10 +1,12 @@
 String DeviceName = "Matrix Prototype";
+int DeviceID = 0;
+
 uint32_t VID = 0x0203;
 uint32_t PID = 0x0803;
 
-int NUM_LEDS = 64;
-int NUM_BOTTOM_LEDS = 32;
-int NUM_POWERCORD_LEDS = 60;
+#define NUM_LEDS = 64;
+#define NUM_BOTTOM_LEDS = 32;
+#define NUM_POWERCORD_LEDS = 60;
 
 int FPS = 60;
 int ScanRate = 120;

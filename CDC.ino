@@ -35,7 +35,7 @@ void CDCSysexSet() {
 
 void CDCSysexGet() {
   switch(CompositeSerial.read() & 0x0F){
- 
+
   }
 }
 
