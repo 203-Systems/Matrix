@@ -1,17 +1,56 @@
-extern String DeviceName = "Matrix Prototype";
+//HardwareMapping
+//LED
+extern enum { LED_PIN = 23 };           //PB7
+extern enum { POWERCORD_PIN = 9 };      //PA9
+//KeyPad
+extern enum { SO_DATA = 30 };           //PB12
+extern enum { SO_CLOCK = 31 };          //PB13
+extern enum { SI_DATA = 8 };            //PA8
+extern enum { SI_CLOCK = 29 };          //PB14
+extern enum { SI_SCAN = 28 };           //PB15
+extern enum { FN_PIN = 34 };            //PC15
+//Analog(TouchBar)
+extern enum { Analog0 = 0 };            //PA0
+extern enum { Analog1 = 1 };            //PA1
+extern enum { Analog2 = 2 };            //PA2
+extern enum { Analog3 = 3 };            //PA3
+extern enum { Analog4 = 4 };            //PA4
+extern enum { Analog5 = 5 };            //PA5
+extern enum { Analog6 = 6 };            //PA6
+extern enum { Analog7 = 7 };            //PA7
+extern enum { Analog8 = 16 };           //PB0
+extern enum { Analog9 = 17 };           //PB1
+//I2C
+extern enum { I2C_SCL = 24 };           //PB8
+extern enum { I2C_SDA = 25 };           //PB9
+//SPI
+extern enum { SPI_SCK = 19 };           //PB3
+extern enum { SPI_MISO = 20 };          //PB4
+extern enum { SPI_MOSI = 21 };          //PB5
+extern enum { SPI_CS1 = 15 };           //PA15
+extern enum { SPI_CS2 = 22 };           //PB6
+//Serial1 (USB-C)
+extern enum { TX1 = 9 };                //PA9
+extern enum { RX1 = 10 };               //PA10
+//Serial3 (Matrix Mod)
+extern enum { TX3 = 26 };               //PB10
+extern enum { RX3 = 27 };               //PB11
+//SYSYTM
+extern enum { RESET_PIN = 32 };         //PC13
+
+//DeviceInfo
+//extern String DeviceName = "Matrix Prototype";
 extern int DeviceID = 0;
 extern uint32_t VID = 0x0203;
 extern uint32_t PID = 0x0803;
-
+//LED Setting
 extern int NUM_LEDS = 64;
 extern int NUM_BOTTOM_LEDS = 32;
 extern int NUM_POWERCORD_LEDS = 60;
-
 extern int FPS = 60;
-extern int ScanRate = 120;
-
-extern uint32_t colour[3][128] =    //MatrixColorPallette WRGB
-{{
+extern int Brightness = 64;
+extern uint32_t colour[3][128] =     //WRGB Colour Pallette
+{{                                   //MatrixColorPallette
   0x00000000, //0
   0x003F3F3F, //1
   0x005F5F5F, //2
@@ -139,8 +178,8 @@ extern uint32_t colour[3][128] =    //MatrixColorPallette WRGB
   0x00FF0040, //124
   0x00FF4070, //125
   0x00FF80A0, //126
-  0x00FFC0D0, //127
-},{ //LaunchpadColorPallette
+  0x00FFC0D0},//127
+{ //LaunchpadColorPallette
   0x00000000, //0
   0x001E1E1E, //1
   0x007F7F7F, //2
@@ -268,8 +307,8 @@ extern uint32_t colour[3][128] =    //MatrixColorPallette WRGB
   0x00B9B000, //124
   0x003F3100, //125
   0x00B35F00, //126
-  0x004B1502  //127
-},{ //CustomColorPallette
+  0x004B1502},//127,
+  { //CustomColorPallette
   0x00000000, //0
   0x001E1E1E, //1
   0x007F7F7F, //2
@@ -397,9 +436,11 @@ extern uint32_t colour[3][128] =    //MatrixColorPallette WRGB
   0x00B9B000, //124
   0x003F3100, //125
   0x00B35F00, //126
-  0x004B1502  //127
-}};
+  0x004B1502}  //127
+};
 
+//KeyPad
+extern int ScanRate = 120;
 extern uint8_t KeyMap [8][8] =
  {{64, 65, 66, 67, 96, 97, 98, 99},
   {60, 61, 62, 63, 92, 93, 94, 95},
@@ -410,9 +451,11 @@ extern uint8_t KeyMap [8][8] =
   {40, 41, 42, 43, 72, 73, 74, 75},
   {36, 37, 38, 39, 68, 69, 70, 71}};
 
-
-extern bool MIDIEnable = true;
-extern bool CDCEnable = true;
-
+//TouchBar
 extern int TouchSensitive = 0;
-extern int Brightness = 64;
+
+//Sysex
+extern boolean MIDIEnable = true;
+extern boolean CDCEnable = true;
+extern boolean POWERCORD = false;
+extern boolean RETURN = false;
