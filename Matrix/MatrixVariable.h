@@ -40,16 +40,16 @@ extern enum { RESET_PIN = 32 };         //PC13
 
 //DeviceInfo
 //extern String DeviceName = "Matrix Prototype";
-extern int DeviceID = 0;
-extern uint32_t VID = 0x0203;
-extern uint32_t PID = 0x0803;
+extern char DeviceID = 0;
+extern int VID = 0x0203;
+extern int PID = 0x0803;
 //LED Setting
 extern int NUM_LEDS = 64;
 extern int NUM_BOTTOM_LEDS = 32;
 extern int NUM_POWERCORD_LEDS = 60;
 extern int FPS = 60;
 extern int Brightness = 64;
-extern uint32_t colour[3][128] =     //WRGB Colour Pallette
+extern double colour[3][128] =     //WRGB Colour Pallette
 {{                                   //MatrixColorPallette
   0x00000000, //0
   0x003F3F3F, //1
@@ -441,7 +441,7 @@ extern uint32_t colour[3][128] =     //WRGB Colour Pallette
 
 //KeyPad
 extern int ScanRate = 120;
-extern uint8_t KeyMap [8][8] =
+extern char KeyMap [8][8] =
  {{64, 65, 66, 67, 96, 97, 98, 99},
   {60, 61, 62, 63, 92, 93, 94, 95},
   {56, 57, 58, 59, 88, 89, 90, 91},
@@ -455,7 +455,7 @@ extern uint8_t KeyMap [8][8] =
 extern int TouchSensitive = 0;
 
 //Sysex
-extern boolean MIDIEnable = true;
-extern boolean CDCEnable = true;
-extern boolean POWERCORD = false;
-extern boolean RETURN = false;
+extern char MIDIEnable = 1;
+extern char CDCEnable = 1;
+extern char POWERCORD = 0;
+extern char RETURN = 0;

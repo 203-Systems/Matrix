@@ -1,6 +1,8 @@
 #include <USBComposite.h>
-#include "LED.h"
-#include "MIDI.h"
+#include <USBMIDI.h>
+#include <FastLED.h>
+//#include "LED.h"
+//#include "MIDI.h"
 #include "MatrixVariable.h"
 //#include "MatrixSysex.h"
 
@@ -17,7 +19,7 @@ void setup()
 
 //  CDC.registerComponent();
 
-  MIDIsetup();
+  //MIDIsetup();
   LEDsetup();
 
   USBComposite.begin();
@@ -25,8 +27,8 @@ void setup()
 
 void loop()
 {
-  if (MIDIEnable);
-  MIDIpoll();
+  // if (MIDIEnable);
+  // MIDIpoll();
   // if (CDCEnable);
   // CDCpoll();
 }

@@ -1,4 +1,3 @@
-#include <USBMIDI.h>
 #include "MatrixVariable.h"
 #include "MIDI.h"
 
@@ -13,23 +12,23 @@ class usbmidi : public USBMidi {
   }
 };
 
-void MIDIsetup()
+MIDI::MIDI()
 {
-  usbmidi MIDI;
-  MIDI.registerComponent();
+  usbmidi usbmidi;
+  usbmidi.registerComponent();
 }
 
-void MIDIpoll()
+MIDI::MIDIpoll()
 {
-  MIDI.poll();
+  usbmidi.poll();
 }
 
-void MIDIon(unsigned int channel, unsigned int note, unsigned int velocity)
+MIDI::MIDIon(unsigned int channel, unsigned int note, unsigned int velocity)
 {
   LEDonMIDI(Channel, note, velocity);
   if (RETURN)
   {
-    MIDI.sendNoteOn(channel, note, velocity);
+    usbmidi.sendNoteOn(channel, note, velocity);
     // if (CDCenable)
     // {
     //   CDC.print(channel);
@@ -41,12 +40,12 @@ void MIDIon(unsigned int channel, unsigned int note, unsigned int velocity)
   }
 }
 
-void MIDIoff(unsigned int channel, unsigned int note, unsigned int velocity)
+MIDI::MIDIoff(unsigned int channel, unsigned int note, unsigned int velocity)
 {
   LEDoffMIDI(note);
   if (RETURN)
   {
-    MIDI.sendNoteOff(channel, note, velocity);
+    usbmidi.sendNoteOff(channel, note, velocity);
     // if (CDCenable)
     // {
     //   CDC.print(channel);
