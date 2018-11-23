@@ -415,4 +415,4 @@ uint8_t MIDIChannel = 1;
 bool MIDIEnable = true;
 bool CDCEnable = true;
 bool POWERCORD = false;
-bool RETURN = false;
+bool RETURN = true;

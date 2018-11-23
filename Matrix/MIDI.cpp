@@ -7,12 +7,12 @@ MIDI::MIDI()
 
 void MIDI::Begin()
 {
-  usbmidi.registerComponent();
+  //usbmidi.registerComponent();
 }
 
 void MIDI::Poll()
 {
-  usbmidi.poll();
+  USBMIDI.poll();
 }
 
 void MIDI::NoteOn(uint8_t channel, uint8_t note, uint8_t velocity)
@@ -20,7 +20,7 @@ void MIDI::NoteOn(uint8_t channel, uint8_t note, uint8_t velocity)
   //LEDonMIDI(channel, note, velocity);
   if (RETURN)
   {
-    usbmidi.sendNoteOn(channel, note, velocity);
+    MIDI::SentNoteOn(channel, note, velocity);
     // if (CDCenable)
     // {
     //   CDC.print(channel);
@@ -37,7 +37,7 @@ void MIDI::NoteOff(uint8_t channel, uint8_t note, uint8_t velocity)
   //LEDoffMIDI(note);
   if (RETURN)
   {
-    usbmidi.sendNoteOff(channel, note, velocity);
+    MIDI::SentNoteOff(channel, note, velocity);
     // if (CDCenable)
     // {
     //   CDC.print(channel);
@@ -52,10 +52,10 @@ void MIDI::NoteOff(uint8_t channel, uint8_t note, uint8_t velocity)
 
 void MIDI::SentNoteOn(uint8_t channel, uint8_t note, uint8_t velocity)
 {
-  usbmidi.sendNoteOff(channel, note, velocity);
+  USBMIDI.sendNoteOn(channel, note, velocity);
 }
 
 void MIDI::SentNoteOff(uint8_t channel, uint8_t note, uint8_t velocity)
 {
-  usbmidi.sendNoteOff(channel, note, velocity);
+  USBMIDI.sendNoteOff(channel, note, velocity);
 }

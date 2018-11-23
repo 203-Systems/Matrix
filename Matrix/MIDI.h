@@ -5,7 +5,7 @@
 #include "MatrixVariable.h"
 #include "MatrixParameter.h"
 #include "MatrixSystem.h"
-#include "USBmidi.h"
+//#include "USBmidi.h"
 #include <USBMIDI.h>
 
 //usbmidi usbmidi;
