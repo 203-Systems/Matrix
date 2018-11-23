@@ -15,6 +15,7 @@ public:
 class MIDI
 {
 public:
+  usbmidi USBmidi;
   MIDI();
   void begin();
   void NoteOn(unsigned int channel, unsigned int note, unsigned int velocity);
@@ -22,7 +23,6 @@ public:
   void Poll();
 };
 
-extern usbmidi USBmidi;
-extern MIDI Midi;
+//extern MIDI Midi;
 
 #endif

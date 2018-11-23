@@ -6,7 +6,7 @@
 //#include "MatrixSysex.h"
 
 
-// MIDI Midi;
+MIDI Midi;
 //USBCompositeSerial CDC;
 
 void setup()

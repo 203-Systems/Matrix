@@ -14,6 +14,7 @@ void usbmidi::handleNoteOn(unsigned int channel, unsigned int note, unsigned int
 
 MIDI::MIDI()
 {
+  //USBmidi();
   USBmidi.registerComponent();
   USBmidi.begin();
 }
