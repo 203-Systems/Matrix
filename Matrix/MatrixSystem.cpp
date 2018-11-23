@@ -114,7 +114,7 @@ void MatrixSystem::GetTouchSensitive()
 }
 
 //Math
-uint8 MatrixSystem::XYtoIndex(uint8 X,uint8 Y)
+uint8_t MatrixSystem::XYtoIndex(uint8_t X,uint8_t Y)
 {
   //TODO
   return 0;

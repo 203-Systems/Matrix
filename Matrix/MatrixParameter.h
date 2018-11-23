@@ -39,9 +39,9 @@
 #define RESET_PIN 32         //PC13
 
 //DeviceInfo
-#define DEVICENAME "Matrix"
+#define DEVICENAME "Matrix Prototype 2"
 #define VID 0x0203
-#define PID 0x0803
+#define PID 0x0809
 
 //LED
 #define NUM_LEDS 64

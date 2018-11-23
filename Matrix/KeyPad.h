@@ -12,8 +12,8 @@ class KeyPad
 public:
   KeyPad();
   bool Scan();
-  void On(uint8 X, uint8 Y);
-  void Off(uint8 X, uint8 Y);
+  void On(uint8_t X, uint8_t Y);
+  void Off(uint8_t X, uint8_t Y);
   bool KeyPadStats[KEYPADX][KEYPADY];
 };
 

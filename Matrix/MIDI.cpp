@@ -1,40 +1,26 @@
 #include "MIDI.h"
 
-extern MIDI Midi;
-
-void usbmidi::handleNoteOff(uint8 channel, uint8 note, uint8 velocity)
-{
-  Midi.NoteOff(channel, note, velocity);
-}
-
-void usbmidi::handleNoteOn(uint8 channel, uint8 note, uint8 velocity)
-{
-  Midi.NoteOn(channel, note, velocity);
-}
-
 MIDI::MIDI()
 {
-  //USBmidi();
-  USBmidi.registerComponent();
-  USBmidi.begin();
+  //usbmidi usbmidi;
 }
 
-void MIDI::begin()
+void MIDI::Begin()
 {
-
+  usbmidi.registerComponent();
 }
 
 void MIDI::Poll()
 {
-  USBmidi.poll();
+  usbmidi.poll();
 }
 
-void MIDI::NoteOn(uint8 channel, uint8 note, uint8 velocity)
+void MIDI::NoteOn(uint8_t channel, uint8_t note, uint8_t velocity)
 {
   //LEDonMIDI(channel, note, velocity);
   if (RETURN)
   {
-    USBmidi.sendNoteOn(channel, note, velocity);
+    usbmidi.sendNoteOn(channel, note, velocity);
     // if (CDCenable)
     // {
     //   CDC.print(channel);
@@ -46,12 +32,12 @@ void MIDI::NoteOn(uint8 channel, uint8 note, uint8 velocity)
   }
 }
 
-void MIDI::NoteOff(uint8 channel, uint8 note, uint8 velocity)
+void MIDI::NoteOff(uint8_t channel, uint8_t note, uint8_t velocity)
 {
   //LEDoffMIDI(note);
   if (RETURN)
   {
-    USBmidi.sendNoteOff(channel, note, velocity);
+    usbmidi.sendNoteOff(channel, note, velocity);
     // if (CDCenable)
     // {
     //   CDC.print(channel);
@@ -64,12 +50,12 @@ void MIDI::NoteOff(uint8 channel, uint8 note, uint8 velocity)
 }
 
 
-void MIDI::SentNoteOn(uint8 channel, uint8 note, uint8 velocity)
+void MIDI::SentNoteOn(uint8_t channel, uint8_t note, uint8_t velocity)
 {
-    USBmidi.sendNoteOff(channel, note, velocity);
+  usbmidi.sendNoteOff(channel, note, velocity);
 }
 
-void MIDI::SentNoteOff(uint8 channel, uint8 note, uint8 velocity)
+void MIDI::SentNoteOff(uint8_t channel, uint8_t note, uint8_t velocity)
 {
-    USBmidi.sendNoteOff(channel, note, velocity);
+  usbmidi.sendNoteOff(channel, note, velocity);
 }

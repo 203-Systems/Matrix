@@ -5,28 +5,21 @@
 #include "MatrixVariable.h"
 #include "MatrixParameter.h"
 #include "MatrixSystem.h"
+#include "USBmidi.h"
 #include <USBMIDI.h>
 
-class usbmidi : public USBMidi
-{
-public:
-  virtual void handleNoteOff(uint8 channel, uint8 note, uint8 velocity);
-  virtual void handleNoteOn(uint8 channel, uint8 note, uint8 velocity);
-};
+//usbmidi usbmidi;
 
 class MIDI
 {
 public:
-  usbmidi USBmidi;
   MIDI();
-  void begin();
-  void NoteOn(uint8 channel, uint8 note, uint8 velocity);
-  void NoteOff(uint8 channel, uint8 note, uint8 velocity);
+  void Begin();
+  void NoteOn(uint8_t channel, uint8_t note, uint8_t velocity);
+  void NoteOff(uint8_t channel, uint8_t note, uint8_t velocity);
   void Poll();
-  void SentNoteOn(uint8 channel, uint8 note, uint8 velocity);
-  void SentNoteOff(uint8 channel, uint8 note, uint8 velocity);
+  void SentNoteOn(uint8_t channel, uint8_t note, uint8_t velocity);
+  void SentNoteOff(uint8_t channel, uint8_t note, uint8_t velocity);
 };
-
-//extern MIDI Midi;
 
 #endif

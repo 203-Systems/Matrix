@@ -5,7 +5,12 @@ extern MatrixSystem Matrix;
 
 CDC::CDC()
 {
-  CompositeSerial.registerComponent();
+
+}
+
+void CDC::Begin()
+{
+    CompositeSerial.registerComponent();
 }
 
 void CDC::Poll()
@@ -30,7 +35,7 @@ void CDC::Poll()
 
 void CDC::Decode()
 {
-  switch (CompositeSerial.read()) //TODO UINT8 TO UINT4+UINT4
+  switch (CompositeSerial.read()) //TODO uint8_t TO UINT4+UINT4
   {
     case 0x00://0
     LED.Off(Matrix.XYtoIndex(CompositeSerial.read(), CompositeSerial.read()));

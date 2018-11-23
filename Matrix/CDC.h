@@ -12,6 +12,7 @@ class CDC
 {
 public:
   CDC();
+  void Begin();
   void Poll();
   void Decode();
   void SysexGet();

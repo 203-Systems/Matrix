@@ -4,14 +4,15 @@ LED::LED()
 {
   CRGB leds[NUM_TOTAL_LEDS];
   FastLED.addLeds<WS2812B, LED_PIN>(leds, NUM_TOTAL_LEDS);
-  // if(POWERCORD){
+  // if(POWERCORD)
+  //{
   //   CRGB pc_leds[NUM_POWERCORD_LEDS];
   //   FastLED.addLeds<WS2812B, POWERCORD_PIN>(pc_leds, NUM_POWERCORD_LEDS);
   // }
 };
 
 
-void LED::NoteOn(uint8 channel, uint8 note, uint8 velocity)
+void LED::NoteOn(uint8_t channel, uint8_t note, uint8_t velocity)
 {
 
   // if(POWERCORD)
@@ -19,42 +20,42 @@ void LED::NoteOn(uint8 channel, uint8 note, uint8 velocity)
   //
   // }
 }
-void LED::NoteOff(uint8 note)
+void LED::NoteOff(uint8_t note)
 {
   //TODO
 }
 
-void LED::Off(uint8 index)
+void LED::Off(uint8_t index)
 {
   //TODO
 }
 
-void LED::On(uint8 index)
+void LED::On(uint8_t index)
 {
   //TODO
 }
 
-void LED::SetW(uint8 index, uint8 w)
+void LED::SetW(uint8_t index, uint8_t w)
 {
   //TODO
 }
 
-void LED::SetRGB(uint8 index, uint8 R, uint8 G, uint8 B)
+void LED::SetRGB(uint8_t index, uint8_t R, uint8_t G, uint8_t B)
 {
   //TODO
 }
 
-void LED::SetWRGB(uint8 index, uint8 W, uint8 R, uint8 G, uint8 B)
+void LED::SetWRGB(uint8_t index, uint8_t W, uint8_t R, uint8_t G, uint8_t B)
 {
   //TODO
 }
 
-void LED::SetHEX(uint8 index, uint64 WRGB)
+void LED::SetHEX(uint8_t index, uint64_t WRGB)
 {
   //TODO
 }
 
-void LED::SetPallette(uint8 index, uint8 pallette, uint8 colour)
+void LED::SetPallette(uint8_t index, uint8_t pallette, uint8_t colour)
 {
   //TODO
 }

@@ -1,16 +1,19 @@
 #include <Arduino.h>
 #include <USBMIDI.h>
+#include <USBComposite.h>
 #include <FastLED.h>
 #include "MatrixSystem.h"
 #include "LED.h"
-#include "CDC.h"
+//#include "CDC.h"
+#include "USBmidi.h"
 #include "MIDI.h"
 #include "MatrixVariable.h"
 
-extern MIDI Midi;
-extern LED LED;
-extern CDC CDC;
-extern MatrixSystem Matrix;
+MIDI Midi;
+LED LED;
+//CDC CDC;
+MatrixSystem Matrix;
+//usbmidi usbmidi;
 
 void setup()
 {
@@ -23,7 +26,8 @@ void setup()
   USBComposite.setProductString(DEVICENAME);
   USBComposite.setVendorId(VID);
   USBComposite.setProductId(PID);
-
+  Midi.Begin();
+  //usbmidi.registerComponent();
   //  CDC.registerComponent();
 
   //LEDsetup();
@@ -33,8 +37,9 @@ void setup()
 
 void loop()
 {
+  //usbmidi.poll();
   if (MIDIEnable);
   Midi.Poll();
-  if (CDCEnable);
-  CDC.Poll();
+  // if (CDCEnable);
+  // CDC.Poll();
 }

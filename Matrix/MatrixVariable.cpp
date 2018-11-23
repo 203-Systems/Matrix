@@ -1,11 +1,11 @@
 #include "MatrixVariable.h"
 
 //DeviceInfo
-uint8 DeviceID = 0;
+uint8_t DeviceID = 0;
 
 //LED Setting
-uint8 Brightness = 64;
-uint64 colour[3][128] =     //WRGB Colour Pallette
+uint8_t Brightness = 64;
+uint64_t colour[3][128] =     //WRGB Colour Pallette
 {{                                 //MatrixColorPallette
   0x00000000, //0
   0x003F3F3F, //1
@@ -396,8 +396,8 @@ uint64 colour[3][128] =     //WRGB Colour Pallette
 };
 
 //KeyPad
-uint8 ScanRate = 120;
-uint8 KeyMap [8][8] =
+uint8_t ScanRate = 120;
+uint8_t KeyMap [8][8] =
 {{64, 65, 66, 67, 96, 97, 98, 99},
 {60, 61, 62, 63, 92, 93, 94, 95},
 {56, 57, 58, 59, 88, 89, 90, 91},
@@ -408,10 +408,10 @@ uint8 KeyMap [8][8] =
 {36, 37, 38, 39, 68, 69, 70, 71}};
 
 //TouchBar
-uint8 TouchSensitive = 0;
+uint8_t TouchSensitive = 0;
 
 //Sysex
-uint8 MIDIChannel = 1;
+uint8_t MIDIChannel = 1;
 bool MIDIEnable = true;
 bool CDCEnable = true;
 bool POWERCORD = false;

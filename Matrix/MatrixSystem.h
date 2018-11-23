@@ -35,8 +35,8 @@ public:
   void GetTouchSensitive();
 
   //Math
-  uint8 XYtoIndex(uint8 X,uint8 Y);
-  //uint8 XYtoIndex(uint8 X,uint8 Y);
+  uint8_t XYtoIndex(uint8_t X,uint8_t Y);
+  //uint8_t XYtoIndex(uint8_t X,uint8_t Y);
 };
 
 #endif
