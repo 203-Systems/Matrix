@@ -19,6 +19,7 @@ extern uint8 KeyMap [8][8];
 extern uint8 TouchSensitive; //0;
 
 //Sysex
+extern uint8 MIDIChannel;
 extern bool MIDIEnable; //true;
 extern bool CDCEnable; //true;
 extern bool POWERCORD; //false;

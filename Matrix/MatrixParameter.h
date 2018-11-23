@@ -46,8 +46,11 @@
 //LED
 #define NUM_LEDS 64
 #define NUM_BOTTOM_LEDS 32
+#define NUM_TOTAL_LEDS 96   //64+32
 #define NUM_POWERCORD_LEDS 60
 #define FPS 60
 
 //KeyPad
+#define KEYPADX 8
+#define KEYPADY 8
 #define SCAN_RATE 120

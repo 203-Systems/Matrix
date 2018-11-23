@@ -1,12 +1,13 @@
 #ifndef SYSTEM_H
 #define SYSTEM_H
 
-#include "Arduino.h"
+#include <Arduino.h>
 #include "MatrixVariable.h"
 #include "MatrixParameter.h"
 
 class MatrixSystem
 {
+public:
   MatrixSystem();
   //Sysex Set
   void reset();
@@ -32,6 +33,10 @@ class MatrixSystem
   void GetCustomKeyMap();
   void GetBrightness();
   void GetTouchSensitive();
+
+  //Math
+  uint8 XYtoIndex(uint8 X,uint8 Y);
+  //uint8 XYtoIndex(uint8 X,uint8 Y);
 };
 
 #endif

@@ -411,6 +411,7 @@ uint8 KeyMap [8][8] =
 uint8 TouchSensitive = 0;
 
 //Sysex
+uint8 MIDIChannel = 1;
 bool MIDIEnable = true;
 bool CDCEnable = true;
 bool POWERCORD = false;

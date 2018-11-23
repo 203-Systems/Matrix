@@ -1,6 +1,7 @@
 #include "CDC.h"
 
-LED LED;
+extern LED LED;
+extern MatrixSystem Matrix;
 
 CDC::CDC()
 {
@@ -29,25 +30,25 @@ void CDC::Poll()
 
 void CDC::Decode()
 {
-  switch (CompositeSerial.read())
+  switch (CompositeSerial.read()) //TODO UINT8 TO UINT4+UINT4
   {
     case 0x00://0
-    LED.Off(CompositeSerial.read(), CompositeSerial.read());
+    LED.Off(Matrix.XYtoIndex(CompositeSerial.read(), CompositeSerial.read()));
     break;
     case 0x01://1
-    LED.SetRGB(CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read()); //XYRGB
+    LED.SetRGB(Matrix.XYtoIndex(CompositeSerial.read(), CompositeSerial.read()), CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read()); //XYRGB
     break;
     case 0x02://2
-    LED.SetWRGB(CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read()); //XYWRGB
+    LED.SetWRGB(Matrix.XYtoIndex(CompositeSerial.read(), CompositeSerial.read()), CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read()); //XYWRGB
     break;
     case 0x03://3
-    LED.SetW(CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read()); //XYW
+    LED.SetW(Matrix.XYtoIndex(CompositeSerial.read(), CompositeSerial.read()), CompositeSerial.read()); //XYW
     break;
     case 0x04://4
-    LED.On(CompositeSerial.read(), CompositeSerial.read()); //XY
+    LED.On(Matrix.XYtoIndex(CompositeSerial.read(), CompositeSerial.read())); //XY
     break;
     case 0x05://5
-    LED.SetPallette(CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read()); //XYP
+    LED.SetPallette(Matrix.XYtoIndex(CompositeSerial.read(), CompositeSerial.read()),CompositeSerial.read(), CompositeSerial.read()); //XYP
     break;
     case 0x0D://14
     SysexSet();

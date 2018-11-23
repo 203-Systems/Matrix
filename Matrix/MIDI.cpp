@@ -1,13 +1,15 @@
 #include "MIDI.h"
 
-void usbmidi::handleNoteOff(unsigned int channel, unsigned int note, unsigned int velocity)
+extern MIDI Midi;
+
+void usbmidi::handleNoteOff(uint8 channel, uint8 note, uint8 velocity)
 {
-  //sMidi.NoteOff(channel, note, velocity);
+  Midi.NoteOff(channel, note, velocity);
 }
 
-void usbmidi::handleNoteOn(unsigned int channel, unsigned int note, unsigned int velocity)
+void usbmidi::handleNoteOn(uint8 channel, uint8 note, uint8 velocity)
 {
-  //Midi.NoteOn(channel, note, velocity);
+  Midi.NoteOn(channel, note, velocity);
 }
 
 MIDI::MIDI()
@@ -27,7 +29,7 @@ void MIDI::Poll()
   USBmidi.poll();
 }
 
-void MIDI::NoteOn(unsigned int channel, unsigned int note, unsigned int velocity)
+void MIDI::NoteOn(uint8 channel, uint8 note, uint8 velocity)
 {
   //LEDonMIDI(channel, note, velocity);
   if (RETURN)
@@ -44,7 +46,7 @@ void MIDI::NoteOn(unsigned int channel, unsigned int note, unsigned int velocity
   }
 }
 
-void MIDI::NoteOff(unsigned int channel, unsigned int note, unsigned int velocity)
+void MIDI::NoteOff(uint8 channel, uint8 note, uint8 velocity)
 {
   //LEDoffMIDI(note);
   if (RETURN)
@@ -59,4 +61,15 @@ void MIDI::NoteOff(unsigned int channel, unsigned int note, unsigned int velocit
     //   CDC.println(velocity);
     // }
   }
+}
+
+
+void MIDI::SentNoteOn(uint8 channel, uint8 note, uint8 velocity)
+{
+    USBmidi.sendNoteOff(channel, note, velocity);
+}
+
+void MIDI::SentNoteOff(uint8 channel, uint8 note, uint8 velocity)
+{
+    USBmidi.sendNoteOff(channel, note, velocity);
 }
