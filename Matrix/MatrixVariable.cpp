@@ -1,55 +1,9 @@
 #include "MatrixVariable.h"
 
-//HardwareMapping
-//LED
-uint8 LED_PIN = 23;           //PB7
-uint8 POWERCORD_PIN = 9;      //PA9
-//KeyPad
-uint8 SO_DATA = 30;           //PB12
-uint8 SO_CLOCK = 31;          //PB13
-uint8 SI_DATA = 8;            //PA8
-uint8 SI_CLOCK = 29;          //PB14
-uint8 SI_SCAN = 28;           //PB15
-uint8 FN_PIN = 34;            //PC15
-//Analog(TouchBar)
-uint8 Analog0 = 0;            //PA0
-uint8 Analog1 = 1;            //PA1
-uint8 Analog2 = 2;            //PA2
-uint8 Analog3 = 3;            //PA3
-uint8 Analog4 = 4;            //PA4
-uint8 Analog5 = 5;            //PA5
-uint8 Analog6 = 6;            //PA6
-uint8 Analog7 = 7;            //PA7
-uint8 Analog8 = 16;           //PB0
-uint8 Analog9 = 17;           //PB1
-//I2C
-uint8 I2C_SCL = 24;           //PB8
-uint8 I2C_SDA = 25;           //PB9
-//SPI
-uint8 SPI_SCK = 19;           //PB3
-uint8 SPI_MISO = 20;          //PB4
-uint8 SPI_MOSI = 21;          //PB5
-uint8 SPI_CS1 = 15;           //PA15
-uint8 SPI_CS2 = 22;           //PB6
-//Serial1 (USB-C)
-uint8 TX1 = 9;                //PA9
-uint8 RX1 = 10;               //PA10
-//Serial3 (Matrix Mod)
-uint8 TX3 = 26;               //PB10
-uint8 RX3 = 27;               //PB11
-//SYSYTM
-uint8 RESET_PIN = 32;         //PC13
-
 //DeviceInfo
-//String DeviceName = "Matrix Prototype";
 uint8 DeviceID = 0;
-uint16 VID = 0x0203;
-uint16 PID = 0x0803;
+
 //LED Setting
-const uint8 NUM_LEDS = 64;
-uint8 NUM_BOTTOM_LEDS = 32;
-uint8 NUM_POWERCORD_LEDS = 60;
-uint8 FPS = 60;
 uint8 Brightness = 64;
 uint64 colour[3][128] =     //WRGB Colour Pallette
 {{                                 //MatrixColorPallette

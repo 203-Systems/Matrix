@@ -3,6 +3,7 @@
 
 #include "Arduino.h"
 #include "MatrixVariable.h"
+#include "MatrixParameter.h"
 #include <USBMIDI.h>
 
 class usbmidi : public USBMidi

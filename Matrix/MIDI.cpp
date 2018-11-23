@@ -1,6 +1,4 @@
 #include "MIDI.h"
-#include <USBmidi.h>
-#include "MatrixVariable.h"
 
 void usbmidi::handleNoteOff(unsigned int channel, unsigned int note, unsigned int velocity)
 {
