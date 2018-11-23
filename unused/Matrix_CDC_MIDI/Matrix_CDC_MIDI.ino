@@ -1,42 +1,46 @@
 #include <USBMIDI.h>
 #include <USBComposite.h>
-#include <CDC.h>
-#include <LED.h>
-#include <MatrixVariable.h>
+#include "LED.h"
+#include "MatrixVariable.h"
+#include "MatrixSysex.h"
 
+USBCompositeSerial CDC;
 
 class usbmidi : public USBMidi {
     virtual void handleNoteOff(unsigned int channel, unsigned int note, unsigned int velocity) {
-      CompositeSerial.print(channel);
-      CompositeSerial.print("\toff\t");
-      CompositeSerial.print(note);
-      CompositeSerial.print("\t");
-      CompositeSerial.println(velocity);
+      MidiOn(channel,note,velocity)
     }
 
     virtual void handleNoteOn(unsigned int channel, unsigned int note, unsigned int velocity) {
-      CompositeSerial.print(channel);
-      CompositeSerial.print("\ton\t");
-      CompositeSerial.print(note);
-      CompositeSerial.print("\t");
-      CompositeSerial.println(velocity);
+      CDC.print(channel);
+      CDC.print("\ton\t");
+      CDC.print(note);
+      CDC.print("\t");
+      CDC.println(velocity);
     }
 };
 
-usbmidi midi;
+usbmidi MIDI;
 
-void setup() {
-  USBComposite.setProductString("Matrix CDC Proto");
-  USBComposite.setVendorId(0x203);
-  USBComposite.setProductId(0x802);
-  midi.registerComponent();
-  CompositeSerial.registerComponent();
+
+void setup()
+{
+  //String Name = DeviceName + " " + DeviceID;
+  //USBComposite.setProductString(Name);
+  USBComposite.setProductString("Matrix Prototype");
+  USBComposite.setVendorId(VID);
+  USBComposite.setProductId(PID);
+  CDC.registerComponent();
+  MIDI.registerComponent();
   USBComposite.begin();
 }
 
-void loop() {
+void loop()
+{
   if (MIDIEnable);
-  midi.poll();
+  MIDI.poll();
   if (CDCEnable);
-  CDCpull();
+  CDCpoll();
 }
+
+

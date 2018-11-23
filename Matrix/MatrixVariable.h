@@ -1,56 +1,62 @@
+#ifndef MATRIX_VARIABLE
+#define MATRIX_VARIABLE
+
+#include <Arduino.h>
+#include <stdint.h>
+
 //HardwareMapping
 //LED
-extern enum { LED_PIN = 23 };           //PB7
-extern enum { POWERCORD_PIN = 9 };      //PA9
+extern uint8 LED_PIN = 23;           //PB7
+extern uint8 POWERCORD_PIN = 9;      //PA9
 //KeyPad
-extern enum { SO_DATA = 30 };           //PB12
-extern enum { SO_CLOCK = 31 };          //PB13
-extern enum { SI_DATA = 8 };            //PA8
-extern enum { SI_CLOCK = 29 };          //PB14
-extern enum { SI_SCAN = 28 };           //PB15
-extern enum { FN_PIN = 34 };            //PC15
+extern uint8 SO_DATA = 30;           //PB12
+extern uint8 SO_CLOCK = 31;          //PB13
+extern uint8 SI_DATA = 8;            //PA8
+extern uint8 SI_CLOCK = 29;          //PB14
+extern uint8 SI_SCAN = 28;           //PB15
+extern uint8 FN_PIN = 34;            //PC15
 //Analog(TouchBar)
-extern enum { Analog0 = 0 };            //PA0
-extern enum { Analog1 = 1 };            //PA1
-extern enum { Analog2 = 2 };            //PA2
-extern enum { Analog3 = 3 };            //PA3
-extern enum { Analog4 = 4 };            //PA4
-extern enum { Analog5 = 5 };            //PA5
-extern enum { Analog6 = 6 };            //PA6
-extern enum { Analog7 = 7 };            //PA7
-extern enum { Analog8 = 16 };           //PB0
-extern enum { Analog9 = 17 };           //PB1
+extern uint8 Analog0 = 0;            //PA0
+extern uint8 Analog1 = 1;            //PA1
+extern uint8 Analog2 = 2;            //PA2
+extern uint8 Analog3 = 3;            //PA3
+extern uint8 Analog4 = 4;            //PA4
+extern uint8 Analog5 = 5;            //PA5
+extern uint8 Analog6 = 6;            //PA6
+extern uint8 Analog7 = 7;            //PA7
+extern uint8 Analog8 = 16;           //PB0
+extern uint8 Analog9 = 17;           //PB1
 //I2C
-extern enum { I2C_SCL = 24 };           //PB8
-extern enum { I2C_SDA = 25 };           //PB9
+extern uint8 I2C_SCL = 24;           //PB8
+extern uint8 I2C_SDA = 25;           //PB9
 //SPI
-extern enum { SPI_SCK = 19 };           //PB3
-extern enum { SPI_MISO = 20 };          //PB4
-extern enum { SPI_MOSI = 21 };          //PB5
-extern enum { SPI_CS1 = 15 };           //PA15
-extern enum { SPI_CS2 = 22 };           //PB6
+extern uint8 SPI_SCK = 19;           //PB3
+extern uint8 SPI_MISO = 20;          //PB4
+extern uint8 SPI_MOSI = 21;          //PB5
+extern uint8 SPI_CS1 = 15;           //PA15
+extern uint8 SPI_CS2 = 22;           //PB6
 //Serial1 (USB-C)
-extern enum { TX1 = 9 };                //PA9
-extern enum { RX1 = 10 };               //PA10
+extern uint8 TX1 = 9;                //PA9
+extern uint8 RX1 = 10;               //PA10
 //Serial3 (Matrix Mod)
-extern enum { TX3 = 26 };               //PB10
-extern enum { RX3 = 27 };               //PB11
+extern uint8 TX3 = 26;               //PB10
+extern uint8 RX3 = 27;               //PB11
 //SYSYTM
-extern enum { RESET_PIN = 32 };         //PC13
+extern uint8 RESET_PIN = 32;         //PC13
 
 //DeviceInfo
 //extern String DeviceName = "Matrix Prototype";
-extern char DeviceID = 0;
-extern int VID = 0x0203;
-extern int PID = 0x0803;
+extern uint8 DeviceID = 0;
+extern uint16 VID = 0x0203;
+extern uint16 PID = 0x0803;
 //LED Setting
-extern int NUM_LEDS = 64;
-extern int NUM_BOTTOM_LEDS = 32;
-extern int NUM_POWERCORD_LEDS = 60;
-extern int FPS = 60;
-extern int Brightness = 64;
-extern double colour[3][128] =     //WRGB Colour Pallette
-{{                                   //MatrixColorPallette
+extern const uint8 NUM_LEDS = 64;
+extern uint8 NUM_BOTTOM_LEDS = 32;
+extern uint8 NUM_POWERCORD_LEDS = 60;
+extern uint8 FPS = 60;
+extern uint8 Brightness = 64;
+extern uint64 colour[3][128] =     //WRGB Colour Pallette
+{{                                 //MatrixColorPallette
   0x00000000, //0
   0x003F3F3F, //1
   0x005F5F5F, //2
@@ -178,8 +184,8 @@ extern double colour[3][128] =     //WRGB Colour Pallette
   0x00FF0040, //124
   0x00FF4070, //125
   0x00FF80A0, //126
-  0x00FFC0D0},//127
-{ //LaunchpadColorPallette
+  0x00FFC0D0 //127
+},{ //LaunchpadColorPallette
   0x00000000, //0
   0x001E1E1E, //1
   0x007F7F7F, //2
@@ -307,8 +313,8 @@ extern double colour[3][128] =     //WRGB Colour Pallette
   0x00B9B000, //124
   0x003F3100, //125
   0x00B35F00, //126
-  0x004B1502},//127,
-  { //CustomColorPallette
+  0x004B1502  //127,
+},{ //CustomColorPallette
   0x00000000, //0
   0x001E1E1E, //1
   0x007F7F7F, //2
@@ -440,22 +446,24 @@ extern double colour[3][128] =     //WRGB Colour Pallette
 };
 
 //KeyPad
-extern int ScanRate = 120;
-extern char KeyMap [8][8] =
- {{64, 65, 66, 67, 96, 97, 98, 99},
-  {60, 61, 62, 63, 92, 93, 94, 95},
-  {56, 57, 58, 59, 88, 89, 90, 91},
-  {52, 53, 54, 55, 84, 85, 86, 87},
-  {48, 49, 50, 51, 80, 81, 82, 83},
-  {44, 45, 46, 47, 76, 77, 78, 79},
-  {40, 41, 42, 43, 72, 73, 74, 75},
-  {36, 37, 38, 39, 68, 69, 70, 71}};
+extern uint8 ScanRate = 120;
+extern uint8 KeyMap [8][8] =
+{{64, 65, 66, 67, 96, 97, 98, 99},
+{60, 61, 62, 63, 92, 93, 94, 95},
+{56, 57, 58, 59, 88, 89, 90, 91},
+{52, 53, 54, 55, 84, 85, 86, 87},
+{48, 49, 50, 51, 80, 81, 82, 83},
+{44, 45, 46, 47, 76, 77, 78, 79},
+{40, 41, 42, 43, 72, 73, 74, 75},
+{36, 37, 38, 39, 68, 69, 70, 71}};
 
 //TouchBar
-extern int TouchSensitive = 0;
+extern uint8 TouchSensitive = 0;
 
 //Sysex
-extern char MIDIEnable = 1;
-extern char CDCEnable = 1;
-extern char POWERCORD = 0;
-extern char RETURN = 0;
+extern bool MIDIEnable = true;
+extern bool CDCEnable = true;
+extern bool POWERCORD = false;
+extern bool RETURN = false;
+
+#endif

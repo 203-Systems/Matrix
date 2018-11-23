@@ -4,9 +4,8 @@
 
 LED::LED()
 {
-  CRGB leds[NUM_LEDS];
   FastLED.addLeds<WS2812B, LED_PIN>(leds, NUM_LEDS);
-}
+};
 
 LED:: LEDonNote(int pallette, int note, int velocity);
 LED:: LEDoffNote(int note);
