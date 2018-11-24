@@ -19,6 +19,7 @@ usbmidi USBmidi;
 
 unsigned long previousMillis = 0;
 
+
 void setup()
 {
   // LED();
@@ -39,6 +40,8 @@ void setup()
   //LEDsetup();
   //Midi.begin();
   USBComposite.begin();
+  //SetBrightness(Brightness);
+  FastLED.setBrightness(Brightness);
   LED.Fill(0);
 }
 
@@ -50,13 +53,64 @@ void loop()
   // if (CDCEnable)
   // CDC.Poll();
 
-  KeyPad.Scan();
 
   unsigned long currentMillis = millis();
-  if (currentMillis - previousMillis >= 2000)
+  if (currentMillis - previousMillis >= 1000/FPS)
   {
+    KeyPad.Scan();
     LED.Update();
+    //LED.Rainbow();
     CompositeSerial.println("Running");
     previousMillis = currentMillis;
   }
 }
+
+// test
+// void loop()
+// {
+//   for(int p = 0; p < 2; p++)
+//   {
+//     for(int n = 0; n < 2; n++)
+//     {
+//       for(int c = 0; c < 64; c++)
+//       {
+//         LED.SetPallette(p,c,c+n*64);
+//       }
+//       LED.Update();
+//       delay(1000);
+//       while(KeyPad.Scan() == 0)
+//       {
+//
+//       }
+//       while(KeyPad.Scan() == 0)
+//       {
+//
+//       }
+//     }
+//   }
+// }
+//
+// void loop()
+// {
+//   for(int n = 0; n < 2; n++)
+//   {
+//     for(int i = 0; i < 2; i++)
+//     {
+//       for(int c = 0; c < 64; c++)
+//       {
+//         LED.SetPallette(0,c,c+n*64);
+//       }
+//       LED.Update();
+//       delay(200);
+//       while(KeyPad.Scan() == 0)
+//       {
+//
+//       }
+//       while(KeyPad.Scan() == 0)
+//       {
+//
+//       }
+//       GammaEnable = !GammaEnable;
+//     }
+//   }
+// }

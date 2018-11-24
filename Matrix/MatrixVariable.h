@@ -21,9 +21,10 @@ extern uint8_t TouchSensitive; //0;
 //Sysex
 extern uint8_t Rotation;
 extern uint8_t MIDIChannel;
-extern bool MIDIEnable; //true;
-extern bool CDCEnable; //true;
-extern bool POWERCORD; //false;
-extern bool RETURN; //false;
+extern bool GammaEnable;
+extern bool MIDIEnable;
+extern bool CDCEnable;
+extern bool POWERCORD;
+extern bool RETURN; 
 
 #endif

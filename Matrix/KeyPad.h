@@ -12,7 +12,7 @@ class KeyPad
 {
 public:
   KeyPad();
-  void Scan();
+  bool Scan();
   void On(uint8_t X, uint8_t Y);
   void Off(uint8_t X, uint8_t Y);
   bool KeyPadStats[KEYPADX][KEYPADY];

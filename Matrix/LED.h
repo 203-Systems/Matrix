@@ -11,6 +11,7 @@ class LED
 {
 public:
   LED();
+  void SetBrightness(uint8_t b);
   void Fill(uint64_t WRGB);
   void Off(uint8_t index);
   void On(uint8_t index);
@@ -21,8 +22,6 @@ public:
   void SetPallette(uint8_t pallette, uint8_t index, uint8_t colour);
   void Update();
   void Rainbow();
-private:
-  CRGB leds;
   uint8_t LEDGamma[256] =
   { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  1,  1,  1,

@@ -13,10 +13,10 @@ KeyPad::KeyPad()
   pinMode(SI_DATA, INPUT_PULLDOWN);
 }
 
-void KeyPad::Scan()
+bool KeyPad::Scan()
 {
-  //bool changed = false;
-  for (int x = 0; x < KEYPADX; x++) //for 0 - 7 do
+  bool changed = false;
+  for (uint8_t x = 0; x < KEYPADX; x++) //for 0 - 7 do
   {
     //shiftOut(SO_DATA, SO_CLOCK, MSBFIRST, 1 << x); // bit shift a logic high (1) value by i
     if( x == 0)
@@ -32,7 +32,7 @@ void KeyPad::Scan()
     digitalWrite(SI_SCAN, HIGH);
 
 
-    for (int y = KEYPADY-1; y >= 0; y--)
+    for (int8_t y = KEYPADY-1; y >= 0; y--) //y could go negative so use int instead uint
     {
       digitalWrite(SI_CLOCK, LOW);
 
@@ -46,14 +46,14 @@ void KeyPad::Scan()
         {
           KeyPad::Off(x,y);
         }
-        //changed = true;
+        changed = true;
         KeyPadStats[x][y] = digitalRead(SI_DATA);
       }
 
       digitalWrite(SI_CLOCK, HIGH);
     }
   }
-  //return changed;
+  return changed;
 }
 
 void KeyPad::On(uint8 x, uint8 y)
