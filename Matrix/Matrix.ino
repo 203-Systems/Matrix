@@ -28,6 +28,7 @@ void setup()
   //String Name = DeviceName + " " + DeviceID;
   //USBComposite.setProductString(Name);
   USBmidi.registerComponent();
+  CompositeSerial.registerComponent();
   USBComposite.setProductString(DEVICENAME);
   USBComposite.setVendorId(VID);
   USBComposite.setProductId(PID);
@@ -52,9 +53,10 @@ void loop()
   KeyPad.Scan();
 
   unsigned long currentMillis = millis();
-  if (currentMillis - previousMillis >= 1000/FPS)
+  if (currentMillis - previousMillis >= 2000)
   {
     LED.Update();
+    CompositeSerial.println("Running");
     previousMillis = currentMillis;
   }
 }

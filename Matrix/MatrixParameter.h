@@ -5,38 +5,38 @@
 //KeyPad
 #define SO_DATA PB12
 #define SO_CLOCK PB13
-#define SI_DATA 8            //PA8
-#define SI_CLOCK 29          //PB14
-#define SI_SCAN 28           //PB15
-#define FN_PIN 34            //PC15
+#define SI_DATA PA8
+#define SI_CLOCK PB14
+#define SI_SCAN PB15
+#define FN_PIN PC15
 //Analog(TouchBar)
-#define Analog0 0            //PA0
-#define Analog1 1            //PA1
-#define Analog2 2            //PA2
-#define Analog3 3            //PA3
-#define Analog4 4            //PA4
-#define Analog5 5            //PA5
-#define Analog6 6            //PA6
-#define Analog7 7            //PA7
-#define Analog8 16           //PB0
-#define Analog9 17           //PB1
+#define Analog0 PA0
+#define Analog1 PA1
+#define Analog2 PA2
+#define Analog3 PA3
+#define Analog4 PA4
+#define Analog5 PA5
+#define Analog6 PA6
+#define Analog7 PA7
+#define Analog8 PB0
+#define Analog9 PB1
 //I2C
-#define I2C_SCL 24           //PB8
-#define I2C_SDA 25           //PB9
+#define I2C_SCL PB8
+#define I2C_SDA PB9
 //SPI
-#define SPI_SCK 19           //PB3
-#define SPI_MISO 20          //PB4
-#define SPI_MOSI 21          //PB5
-#define SPI_CS1 15           //PA15
-#define SPI_CS2 22           //PB6
+#define SPI_SCK PB3
+#define SPI_MISO PB4
+#define SPI_MOSI PB5
+#define SPI_CS1 PA15
+#define SPI_CS2 PB6
 //Serial1 (USB-C)
-#define TX1 9                //PA9
-#define RX1 10               //PA10
+#define TX1 PA9
+#define RX1 PA10
 //Serial3 (Matrix Mod)
-#define TX3 26               //PB10
-#define RX3 27               //PB11
+#define TX3 PB10
+#define RX3 PB11
 //SYSYTM
-#define RESET_PIN 32         //PC13
+#define RESET_PIN PC13
 
 //DeviceInfo
 #define DEVICENAME "Matrix Prototype 2"
