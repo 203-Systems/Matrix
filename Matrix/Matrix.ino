@@ -22,25 +22,28 @@ unsigned long previousMillis = 0;
 
 void setup()
 {
-  // LED();
-  //+ Powercord(true);
-  // Midi();
-  // CDC();
-  //String Name = DeviceName + " " + DeviceID;
-  //USBComposite.setProductString(Name);
+  if(DeviceID != 0)
+  {
+
+      USBComposite.setProductString((DEVICENAME + String(DeviceID)).c_str());
+      USBComposite.setVendorId(VID2);
+      USBComposite.setProductId(PID2+DeviceID);
+  }
+  else
+  {
+      USBComposite.setProductString(DEVICENAME);
+      USBComposite.setVendorId(VID);
+      USBComposite.setProductId(PID);
+  }
+
+  USBComposite.setManufacturerString(MAUNFACTURERNAME);
+  //USBComposite.setProductString(DEVICENAME);
+  USBComposite.setSerialString("unsigned");
+
   USBmidi.registerComponent();
   CompositeSerial.registerComponent();
-  USBComposite.setProductString(DEVICENAME);
-  USBComposite.setVendorId(VID);
-  USBComposite.setProductId(PID);
-  //Midi.Begin();
-  //usbmidi.registerComponent();
-  //  CDC.registerComponent();
-
-  //LEDsetup();
-  //Midi.begin();
   USBComposite.begin();
-  //SetBrightness(Brightness);
+
   FastLED.setBrightness(Brightness);
   LED.Fill(0);
 }
@@ -94,23 +97,23 @@ void loop()
 // {
 //   for(int n = 0; n < 2; n++)
 //   {
-//     for(int i = 0; i < 2; i++)
+//     // for(int i = 0; i < 2; i++)
+//     // {
+//     for(int c = 0; c < 64; c++)
 //     {
-//       for(int c = 0; c < 64; c++)
-//       {
-//         LED.SetPallette(0,c,c+n*64);
-//       }
-//       LED.Update();
-//       delay(200);
-//       while(KeyPad.Scan() == 0)
-//       {
-//
-//       }
-//       while(KeyPad.Scan() == 0)
-//       {
-//
-//       }
-//       GammaEnable = !GammaEnable;
+//       LED.SetPallette(0,c,c+n*64);
 //     }
+//     LED.Update();
+//     while(KeyPad.Scan() == 0)
+//     {
+//
+//     }
+//         delay(50);
+//     while(KeyPad.Scan() == 0)
+//     {
+//
+//     }
+//     //   GammaEnable = !GammaEnable;
+//     // }
 //   }
-// }
+//}

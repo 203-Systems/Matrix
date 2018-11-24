@@ -5,11 +5,12 @@
 #include "MatrixParameter.h"
 
 //DeviceInfo
-extern uint8_t DeviceID; //0;
+extern uint8_t DeviceID;
+extern uint32_t PID;
 
 //LED
-extern uint8_t Brightness; //64;
-extern uint64_t ColourPallette[3][128]; //    //WRGB Colour Pallette
+extern uint8_t Brightness;
+extern uint64_t ColourPallette[3][128];
 extern uint8_t BottomLEDMap[NUM_BOTTOM_LEDS];
 
 //KeyPad
@@ -25,6 +26,6 @@ extern bool GammaEnable;
 extern bool MIDIEnable;
 extern bool CDCEnable;
 extern bool POWERCORD;
-extern bool RETURN; 
+extern bool RETURN;
 
 #endif
