@@ -59,11 +59,11 @@ void KeyPad::Scan()
 void KeyPad::On(uint8 x, uint8 y)
 {
   CompositeSerial.println(Matrix.XYtoIndex(x,y)*10+1);
-  Midi.SentNoteOn(MIDIChannel,Matrix.XYtoIndex(x,y),127);
+  Midi.SentNoteOn(MIDIChannel,KeyMap[y][x],127);
 }
 
 void KeyPad::Off(uint8 x, uint8 y)
 {
   CompositeSerial.println(Matrix.XYtoIndex(x,y)*10);
-  Midi.SentNoteOff(MIDIChannel,Matrix.XYtoIndex(x,y),0);
+  Midi.SentNoteOff(MIDIChannel,KeyMap[y][x],0);
 }
