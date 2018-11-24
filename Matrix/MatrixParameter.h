@@ -1,10 +1,10 @@
 //HardwareMapping
 //LED
-#define LED_PIN 23           //PB7
-#define POWERCORD_PIN 9      //PA9
+#define LED_PIN PB7
+#define POWERCORD_PIN PA9
 //KeyPad
-#define SO_DATA 30           //PB12
-#define SO_CLOCK 31          //PB13
+#define SO_DATA PB12
+#define SO_CLOCK PB13
 #define SI_DATA 8            //PA8
 #define SI_CLOCK 29          //PB14
 #define SI_SCAN 28           //PB15
@@ -45,7 +45,7 @@
 
 //LED
 #define NUM_LEDS 64
-#define NUM_BOTTOM_LEDS 32
+#define NUM_BOTTOM_LEDS 36
 #define NUM_TOTAL_LEDS 96   //64+32
 #define NUM_POWERCORD_LEDS 60
 #define FPS 60

@@ -1,11 +1,18 @@
-#include "USBMIDI.h"
+#include "USBmidi.h"
 
-extern MIDI MIDI;
+extern MIDI Midi;
 
-void usbmidi::handleNoteOff(uint8_t channel, uint8_t note, uint8_t velocity){
-  MIDI.SentNoteOff(channel, note, velocity);
+void usbmidi::handleNoteOff(unsigned int channel, unsigned int note, unsigned int velocity)
+{
+  Midi.NoteOff(channel,note,velocity);
+  //USBMIDI.sendNoteOff(channel,note,velocity);
+  //leds[IndexInKeyMap(note)] = 0;
+  //CompositeSerial.println(channel + " off " + note + " " + velocity);
 }
 
-void usbmidi::handleNoteOn(uint8_t channel, uint8_t note, uint8_t velocity){
-  MIDI.SentNoteOn(channel, note, velocity);
+void usbmidi::handleNoteOn(unsigned int channel, unsigned int note, unsigned int velocity)
+{
+  Midi.NoteOn(channel,note,velocity);
+  //USBMIDI.sendNoteOn(channel,note,velocity);
+  //leds[IndexInKeyMap(note)] = colour[channel][velocity];
 }

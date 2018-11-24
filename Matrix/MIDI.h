@@ -2,11 +2,11 @@
 #define MIDI_H
 
 #include <Arduino.h>
+#include <USBMIDI.h>
 #include "MatrixVariable.h"
 #include "MatrixParameter.h"
 #include "MatrixSystem.h"
-//#include "USBmidi.h"
-#include <USBMIDI.h>
+#include "LED.h"
 
 //usbmidi usbmidi;
 

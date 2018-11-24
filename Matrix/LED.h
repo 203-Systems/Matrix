@@ -11,15 +11,16 @@ class LED
 {
 public:
   LED();
-  void NoteOn(uint8_t Channel, uint8_t note, uint8_t velocity);
-  void NoteOff(uint8_t note);
+  void Fill(uint64_t WRGB);
   void Off(uint8_t index);
   void On(uint8_t index);
   void SetW(uint8_t index, uint8_t w);
   void SetRGB(uint8_t index, uint8_t R, uint8_t G, uint8_t B);
   void SetWRGB(uint8_t index, uint8_t W, uint8_t R, uint8_t G, uint8_t B);
   void SetHEX(uint8_t index, uint64_t WRGB);
-  void SetPallette(uint8_t index, uint8_t pallette, uint8_t colour);
+  void SetPallette(uint8_t pallette, uint8_t index, uint8_t colour);
+  void Update();
+  void Rainbow();
 private:
   CRGB leds;
   uint8_t LEDGamma[256] =

@@ -2,8 +2,11 @@
 
 LED::LED()
 {
-  CRGB leds[NUM_TOTAL_LEDS];
-  FastLED.addLeds<WS2812B, LED_PIN>(leds, NUM_TOTAL_LEDS);
+  // CRGB leds[NUM_TOTAL_LEDS];
+  // FastLED.addLeds<NEOPIXEL, LED_PIN>(leds, NUM_TOTAL_LEDS);
+  // FastLED.setBrightness(Brightness);
+  // delay(50);
+  // LED::Fill(0);
   // if(POWERCORD)
   //{
   //   CRGB pc_leds[NUM_POWERCORD_LEDS];
@@ -11,33 +14,28 @@ LED::LED()
   // }
 };
 
-
-void LED::NoteOn(uint8_t channel, uint8_t note, uint8_t velocity)
+void LED::Fill(uint64_t WRGB)
 {
-
-  // if(POWERCORD)
-  // {
-  //
-  // }
+  //fill_solid(leds,NUM_TOTAL_LEDS,CRGB::Black);
+  for(int i = 0; i < NUM_TOTAL_LEDS; i++)
+  {
+    leds[i] = WRGB;
+  }
+  FastLED.show();
 }
-void LED::NoteOff(uint8_t note)
-{
-  //TODO
-}
-
 void LED::Off(uint8_t index)
 {
-  //TODO
+  leds[index] = 0;
 }
 
 void LED::On(uint8_t index)
 {
-  //TODO
+  leds[index] = 0xffffff;
 }
 
 void LED::SetW(uint8_t index, uint8_t w)
 {
-  //TODO
+  leds[index] = w;
 }
 
 void LED::SetRGB(uint8_t index, uint8_t R, uint8_t G, uint8_t B)
@@ -52,10 +50,29 @@ void LED::SetWRGB(uint8_t index, uint8_t W, uint8_t R, uint8_t G, uint8_t B)
 
 void LED::SetHEX(uint8_t index, uint64_t WRGB)
 {
-  //TODO
+  leds[index] = WRGB;
 }
 
-void LED::SetPallette(uint8_t index, uint8_t pallette, uint8_t colour)
+void LED::SetPallette(uint8_t pallette, uint8_t index, uint8_t colour)
 {
-  //TODO
+  LED::SetHEX(index,ColourPallette[pallette][colour]);
+}
+
+void LED::Update()
+{
+  FastLED.show();
+}
+
+void LED::Rainbow()
+{
+  // int hue = 0;
+  //
+  // while(true)
+  // {
+  //   fill_rainbow(leds, NUM_LEDS, hue++);
+  //   FastLED.show();
+  //   if(hue == 255)
+  //   hue = 1;
+  //   delay(5);
+  // }
 }

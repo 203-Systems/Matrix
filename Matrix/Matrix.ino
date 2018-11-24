@@ -5,35 +5,19 @@
 #include "MatrixSystem.h"
 #include "LED.h"
 //#include "CDC.h"
-//#include "USBmidi.h"
+#include "KeyPad.h"
+#include "USBmidi.h"
 #include "MIDI.h"
 #include "MatrixVariable.h"
 
 MIDI Midi;
-
-class usbmidi : public USBMidi
-{
-  virtual void handleNoteOff(unsigned int channel, unsigned int note, unsigned int velocity)
-  {
-    Midi.NoteOff(channel,note,velocity);
-    //USBMIDI.sendNoteOff(channel,note,velocity);
-    //leds[IndexInKeyMap(note)] = 0;
-    //CompositeSerial.println(channel + " off " + note + " " + velocity);
-  }
-
-  virtual void handleNoteOn(unsigned int channel, unsigned int note, unsigned int velocity)
-  {
-    Midi.NoteOn(channel,note,velocity);
-    //USBMIDI.sendNoteOn(channel,note,velocity);
-    //leds[IndexInKeyMap(note)] = colour[channel][velocity];
-  }
-};
-
-LED LED;
 //CDC CDC;
+LED LED;
+KeyPad KeyPad;
 MatrixSystem Matrix;
-//usbmidi usbmidi;
 usbmidi USBmidi;
+
+unsigned long previousMillis = 0;
 
 void setup()
 {
@@ -54,6 +38,7 @@ void setup()
   //LEDsetup();
   //Midi.begin();
   USBComposite.begin();
+  LED.Fill(0);
 }
 
 void loop()
@@ -61,6 +46,15 @@ void loop()
   //usbmidi.poll();
   if (MIDIEnable);
   USBmidi.poll();
-  // if (CDCEnable);
+  // if (CDCEnable)
   // CDC.Poll();
+
+  KeyPad.Scan();
+
+  unsigned long currentMillis = millis();
+  if (currentMillis - previousMillis >= 1000/FPS)
+  {
+    LED.Update();
+    previousMillis = currentMillis;
+  }
 }
