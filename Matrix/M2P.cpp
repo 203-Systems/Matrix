@@ -1,15 +1,15 @@
-#include "CDC.h"
+#include "M2P.h"
 
 extern LED LED;
 extern MatrixSystem Matrix;
 extern MIDI Midi;
 
-CDC::CDC()
+M2P::M2P()
 {
 
 }
 
-void CDC::Poll()
+void M2P::Poll()
 {
   if (CompositeSerial.available() > 0)
   {
@@ -29,7 +29,7 @@ void CDC::Poll()
   }
 }
 
-void CDC::Decode()
+void M2P::Decode()
 {
   if(CompositeSerial.peek() > 0x0f) //ERROR checking
   return;
@@ -66,7 +66,7 @@ void CDC::Decode()
   }
 }
 
-void CDC::SysexSet()
+void M2P::SysexSet()
 {
   switch (CompositeSerial.read() & 0x0F)
   {
@@ -105,7 +105,7 @@ void CDC::SysexSet()
   }
 }
 
-void CDC::SysexGet()
+void M2P::SysexGet()
 {
   switch(CompositeSerial.read() & 0x0F)
   {
@@ -142,7 +142,7 @@ void CDC::SysexGet()
   }
 }
 
-void CDC::MIDI()
+void M2P::MIDI()
 {
   int Mode = CompositeSerial.peek() >> 4;
   int Channel = CompositeSerial.read() & 0x0F;

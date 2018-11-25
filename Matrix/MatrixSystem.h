@@ -18,7 +18,7 @@ public:
   void UpdateColourPaletteRGB();
   void UpdateColourPaletteWRGB();
   void ResetColourPalette();
-  void SetGamma();
+  void SetGamma(bool g);
   void UpdateCustomKeyMap();
   void ResetCustomKeyMap();
   void SetBrightness(uint8_t b);

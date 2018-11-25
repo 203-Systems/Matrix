@@ -4,14 +4,14 @@
 #include <FastLED.h>
 #include "MatrixSystem.h"
 #include "LED.h"
-#include "CDC.h"
+#include "M2P.h"
 #include "KeyPad.h"
 #include "USBmidi.h"
 #include "MIDI.h"
 #include "MatrixVariable.h"
 
 MIDI Midi;
-CDC CDC;
+M2P M2P;
 LED LED;
 KeyPad KeyPad;
 MatrixSystem Matrix;

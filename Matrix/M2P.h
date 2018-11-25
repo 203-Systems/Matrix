@@ -1,5 +1,7 @@
-#ifndef CDC_H
-#define CDC_H
+#ifndef M2P_H
+#define M2P_H
+
+//M2P Stand for Matrix Massage Protocol
 
 #include <Arduino.h>
 #include "LED.h"
@@ -9,10 +11,10 @@
 #include "MatrixSystem.h"
 #include <USBComposite.h>
 
-class CDC
+class M2P
 {
 public:
-  CDC();
+  M2P();
   void Poll();
   void Decode();
   void SysexGet();

@@ -50,9 +50,9 @@ void MatrixSystem::ResetColourPalette()
   }
 }
 
-void MatrixSystem::SetGamma()
+void MatrixSystem::SetGamma(bool g)
 {
-  GammaEnable = (bol)CompositeSerial.read();
+  GammaEnable = g;
 }
 
 void MatrixSystem::UpdateCustomKeyMap()
@@ -79,7 +79,7 @@ void MatrixSystem::SetBrightness(uint8_t b)
   Brightness = b;
 }
 
-void MatrixSystem::SetTouchSensitive(uint8_b s)
+void MatrixSystem::SetTouchSensitive(uint8_t s)
 {
   TouchSensitive = s;
 }
@@ -116,7 +116,7 @@ void MatrixSystem::GetAllParameter()
 
 void MatrixSystem::GetColorPaletteRGB()
 {
-  CompositeSerial.write(static_cast<uint8_t>(0));
+  CompositeSerial.write((uint8_t)(0));
   CompositeSerial.write(14);
   CompositeSerial.write(20);
 
@@ -132,7 +132,7 @@ void MatrixSystem::GetColorPaletteRGB()
 
 void MatrixSystem::GetColorPaletteWRGB()
 {
-  CompositeSerial.write(static_cast<uint8_t>(0));
+  CompositeSerial.write((uint8_t)(0));
   CompositeSerial.write(14);
   CompositeSerial.write(21);
 
@@ -149,28 +149,28 @@ void MatrixSystem::GetColorPaletteWRGB()
 
 void MatrixSystem::GetGammaState()
 {
-  CompositeSerial.write(static_cast<uint8_t>(0));
+  CompositeSerial.write((uint8_t)(0));
   CompositeSerial.write(14);
   CompositeSerial.write(24);
 }
 
 void MatrixSystem::GetCustomKeyMap()
 {
-  CompositeSerial.write(static_cast<uint8_t>(0));
+  CompositeSerial.write((uint8_t)(0));
   CompositeSerial.write(14);
   CompositeSerial.write(25);
 }
 
 void MatrixSystem::GetBrightness()
 {
-  CompositeSerial.write(static_cast<uint8_t>(0));
+  CompositeSerial.write((uint8_t)(0));
   CompositeSerial.write(14);
   CompositeSerial.write(25);
 }
 
 void MatrixSystem::GetTouchSensitive()
 {
-  CompositeSerial.write(static_cast<uint8_t>(0));
+  CompositeSerial.write((uint8_t)(0));
   CompositeSerial.write(14);
   CompositeSerial.write(31);
   CompositeSerial.write(TouchSensitive);
