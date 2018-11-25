@@ -3,6 +3,8 @@
 
 CRGB leds[NUM_TOTAL_LEDS];
 
+extern MatrixSystem Matrix;
+
 LED::LED()
 {
   FastLED.addLeds<NEOPIXEL, LED_PIN>(leds, NUM_TOTAL_LEDS);
@@ -29,24 +31,66 @@ void LED::Fill(uint64_t WRGB)
   FastLED.show();
 }
 
+
+// XY
+void LED::Off(uint8_t x,uint8_t y)
+{
+  LED::SetHEX(x, y, 0);
+}
+
+void LED::On(uint8_t x,uint8_t y)
+{
+  LED::SetHEX(x, y, 0xFFFFFFFF);
+}
+
+void LED::SetW(uint8_t x, uint8_t y, uint8_t w)
+{
+  LED::SetHEX(x, y, w * 0x10000 + w * 0x100 + w);
+  //TODO WRGB
+}
+
+void LED::SetRGB(uint8_t x, uint8_t y, uint8_t R, uint8_t G, uint8_t B)
+{
+  LED::SetHEX(x, y, R * 0x10000 + G * 0x100 + B);
+}
+
+void LED::SetWRGB(uint8_t x, uint8_t y, uint8_t W, uint8_t R, uint8_t G, uint8_t B)
+{
+  //TODO
+}
+
+void LED::SetHEX(uint8_t x, uint8_t y, uint64_t WRGB)
+{
+
+  leds[Matrix.XYtoIndex(x,y)] = WRGB;
+}
+
+void LED::SetPallette(uint8_t pallette, uint8_t x, uint8_t y, uint8_t colour)
+{
+  LED::SetHEX(x, y, ColourPallette[pallette][colour]);
+}
+
+
+// Index
 void LED::Off(uint8_t index)
 {
-  leds[index] = 0;
+  LED::SetHEX(index, 0);
 }
 
 void LED::On(uint8_t index)
 {
-  leds[index] = 0xffffff;
+  LED::SetHEX(index, 0xFFFFFFFF);
 }
 
 void LED::SetW(uint8_t index, uint8_t w)
 {
-  leds[index] = w;
+  LED::SetHEX(index, w * 0x10000 + w * 0x100 + w);
+  //TODO WRGB
 }
 
 void LED::SetRGB(uint8_t index, uint8_t R, uint8_t G, uint8_t B)
 {
-  //TODO
+  LED::SetHEX(index, R * 0x10000 + G * 0x100 + B);
 }
 
 void LED::SetWRGB(uint8_t index, uint8_t W, uint8_t R, uint8_t G, uint8_t B)
@@ -56,19 +100,22 @@ void LED::SetWRGB(uint8_t index, uint8_t W, uint8_t R, uint8_t G, uint8_t B)
 
 void LED::SetHEX(uint8_t index, uint64_t WRGB)
 {
+
   leds[index] = WRGB;
 }
 
 void LED::SetPallette(uint8_t pallette, uint8_t index, uint8_t colour)
 {
-  LED::SetHEX(index,ColourPallette[pallette][colour]);
+  LED::SetHEX(index, ColourPallette[pallette][colour]);
 }
+
+
+//Processing
 
 void LED::Update()
 {
   FastLED.show();
 }
-
 
 uint64_t ApplyGamma(uint64_t WRGB)
 {
@@ -92,10 +139,10 @@ uint64_t ApplyGamma(uint64_t WRGB)
   };
 
   return
-    LEDGamma[(WRGB & 0xff000000)] *0x1000000 +
-    LEDGamma[(WRGB & 0x00ff0000)>> 16] *0x10000 +
-    LEDGamma[(WRGB & 0x0000ff00)>> 8] *0x100 +
-    LEDGamma[(WRGB & 0x000000ff)];
+  LEDGamma[(WRGB & 0xff000000)] *0x1000000 +
+  LEDGamma[(WRGB & 0x00ff0000)>> 16] *0x10000 +
+  LEDGamma[(WRGB & 0x0000ff00)>> 8] *0x100 +
+  LEDGamma[(WRGB & 0x000000ff)];
 }
 
 void LED::Rainbow()

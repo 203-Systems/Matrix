@@ -37,22 +37,22 @@ void M2P::Decode()
   switch (CompositeSerial.read()) //TODO uint8_t TO UINT4+UINT4
   {
     case 0x00://0
-    LED.Off(Matrix.XYtoIndex(CompositeSerial.read(), CompositeSerial.read()));
+    LED.Off(CompositeSerial.peek() & 0xF0, CompositeSerial.read() & 0x0F);
     break;
     case 0x01://1
-    LED.SetRGB(Matrix.XYtoIndex(CompositeSerial.read(), CompositeSerial.read()), CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read()); //XYRGB
+    LED.SetRGB(CompositeSerial.peek() & 0xF0, CompositeSerial.read() & 0x0F, CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read()); //XYRGB
     break;
     case 0x02://2
-    LED.SetWRGB(Matrix.XYtoIndex(CompositeSerial.read(), CompositeSerial.read()), CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read()); //XYWRGB
+    LED.SetWRGB(CompositeSerial.peek() & 0xF0, CompositeSerial.read() & 0x0F, CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read()); //XYWRGB
     break;
     case 0x03://3
-    LED.SetW(Matrix.XYtoIndex(CompositeSerial.read(), CompositeSerial.read()), CompositeSerial.read()); //XYW
+    LED.SetW(CompositeSerial.peek() & 0xF0, CompositeSerial.read() & 0x0F, CompositeSerial.read()); //XYW
     break;
     case 0x04://4
-    LED.On(Matrix.XYtoIndex(CompositeSerial.read(), CompositeSerial.read())); //XY
+    LED.On(CompositeSerial.peek() & 0xF0, CompositeSerial.read() & 0x0F); //XY
     break;
     case 0x05://5
-    LED.SetPallette(Matrix.XYtoIndex(CompositeSerial.read(), CompositeSerial.read()),CompositeSerial.read(), CompositeSerial.read()); //XYP
+    LED.SetPallette(CompositeSerial.peek() & 0xF0, CompositeSerial.read() & 0x0F,CompositeSerial.read(), CompositeSerial.read()); //XYP
     break;
     case 0x0D://14
     SysexSet();

@@ -26,14 +26,14 @@ void MIDI::NoteOn(uint8_t channel, uint8_t note, uint8_t velocity)
       for(uint8_t x = 0; x < KEYPADX; x++)
       {
         if(note == KeyMap[y][x])
-          LED.SetPallette(channel,Matrix.XYtoIndex(x,y),velocity);
+          LED.SetPallette(channel, x, y, velocity);
       }
   }
   //BottomLED
   for(uint8_t i = 0;i < NUM_BOTTOM_LEDS; i++)
   {
         if(note == BottomLEDMap[i])
-          LED.SetPallette(channel,i+NUM_LEDS,velocity);
+          LED.SetPallette(channel, i+NUM_LEDS ,velocity);
   }
 
   if (RETURN)
@@ -58,7 +58,7 @@ void MIDI::NoteOff(uint8_t channel, uint8_t note, uint8_t velocity)
       for(uint8_t x = 0; x < KEYPADX; x++)
       {
         if(note == KeyMap[y][x])
-          LED.Off(Matrix.XYtoIndex(x,y));
+          LED.Off(x,y);
       }
   }
   //BottomLED

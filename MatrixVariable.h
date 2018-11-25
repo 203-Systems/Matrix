@@ -10,11 +10,12 @@ extern uint8_t DeviceID;
 //LED
 extern uint8_t Brightness;
 extern uint64_t ColourPallette[3][128];
+extern uint64_t DefaultColourPallette[2][128] PROGMEM;
 extern uint8_t BottomLEDMap[NUM_BOTTOM_LEDS];
 
 //KeyPad
 extern uint8_t KeyMap [KEYPADY][KEYPADX];
-extern uint8_t DefaultKeyMap [KEYPADY][KEYPADX];
+extern uint8_t DefaultKeyMap [KEYPADY][KEYPADX] PROGMEM;
 
 //TouchBar
 extern uint8_t TouchSensitive; //0;

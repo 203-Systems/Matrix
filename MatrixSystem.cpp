@@ -4,6 +4,12 @@ MatrixSystem::MatrixSystem()
 {
 }
 
+void MatrixSystem::VariableLoad()
+{
+
+}
+
+
 //Sysex Set
 void MatrixSystem::Reset()
 {
@@ -13,6 +19,7 @@ void MatrixSystem::Reset()
 void MatrixSystem::SetDeviceID()
 {
   DeviceID = CompositeSerial.read();
+  MatrixSystem::Reset();
 }
 
 
@@ -77,7 +84,9 @@ void MatrixSystem::ResetCustomKeyMap()
 void MatrixSystem::SetBrightness(uint8_t b)
 {
   Brightness = b;
+  MatrixSystem::Reset();
 }
+
 
 void MatrixSystem::SetTouchSensitive(uint8_t s)
 {
@@ -184,5 +193,16 @@ uint8_t MatrixSystem::WRGBtoHEX(uint8_t W, uint8_t R, uint8_t G, uint8_t B)
 
 uint8_t MatrixSystem::XYtoIndex(uint8_t X, uint8_t Y)
 {
-  return X+Y*KEYPADX;
+
+  switch (Rotation)
+  {
+    case 1: //90
+    return (KEYPADY - Y - 1) + X * KEYPADX;
+    case 2: //180
+    return (KEYPADX - X - 1) + (KEYPADY - Y - 1) * KEYPADY;
+    case 3: //270
+    return Y + (KEYPADX - X - 1) * KEYPADX;
+    default:
+    return X+Y*KEYPADX;
+  }
 }

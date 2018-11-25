@@ -50,7 +50,7 @@ void setup()
   {
       LED.Fill(CRGB::Red);
   }
-          LED.Fill(CRGB::Cyan);
+          LED.Fill(CRGB::Black);
 }
 
 void loop()

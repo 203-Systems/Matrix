@@ -2,6 +2,7 @@
 #define SYSTEM_H
 
 #include <Arduino.h>
+#include <EEPROM.h>
 #include <USBComposite.h>
 #include "MatrixVariable.h"
 #include "MatrixParameter.h"
@@ -10,6 +11,8 @@ class MatrixSystem
 {
 public:
   MatrixSystem();
+
+  void VariableLoad();
   //Sysex Set
   void Reset();
   void SetDeviceID();

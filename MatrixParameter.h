@@ -42,9 +42,10 @@
 #define DEVICENAME "Matrix "
 #define MAUNFACTURERNAME "203 Industries"
 #define VID  0x0203
-#define VID2 0x0203 // for device ID USE 
+#define VID2 0x0203 // for device ID USE
 #define PID  0x1000
 #define PID2 0x1000 // for device ID USE
+#define SUPPORT_WRGB false
 //LED
 #define NUM_LEDS 64
 #define NUM_BOTTOM_LEDS 36
