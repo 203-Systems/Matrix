@@ -7,6 +7,13 @@
 #include "MatrixSystem.h"
 #include <FastLED.h>
 
+struct Animation
+{
+  uint8_t Mode; //0 for full array are NUM_LEDS * FPS | 1 for xy mode XY+
+  uint8_t AnimationFPS;
+  char* AnimationData;
+};
+
 class LED
 {
 public:
@@ -22,6 +29,7 @@ public:
   void SetPallette(uint8_t pallette, uint8_t index, uint8_t colour);
   void Update();
   void Rainbow();
+  void PlayAnimation(Animation a);
   uint64_t ApplyGamma(uint64_t WRGB);
 };
 

@@ -18,7 +18,7 @@ MatrixSystem Matrix;
 usbmidi USBmidi;
 
 unsigned long previousMillis = 0;
-
+unsigned long currentMillis = 0;
 
 void setup()
 {
@@ -45,7 +45,12 @@ void setup()
   USBComposite.begin();
 
   FastLED.setBrightness(Brightness);
-  LED.Fill(0);
+
+  while(!USBComposite.isReady())
+  {
+      LED.Fill(CRGB::Red);
+  }
+          LED.Fill(CRGB::Cyan);
 }
 
 void loop()
@@ -57,7 +62,7 @@ void loop()
   // CDC.Poll();
 
 
-  unsigned long currentMillis = millis();
+  currentMillis = millis();
   if (currentMillis - previousMillis >= 1000/FPS)
   {
     KeyPad.Scan();
