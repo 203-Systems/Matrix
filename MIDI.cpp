@@ -33,7 +33,7 @@ void MIDI::NoteOn(uint8_t channel, uint8_t note, uint8_t velocity)
   for(uint8_t i = 0;i < NUM_BOTTOM_LEDS; i++)
   {
         if(note == BottomLEDMap[i])
-          LED.SetPallette(channel, i+NUM_LEDS ,velocity);
+          LED.SetPallette(channel, Matrix.BottomLEDindexRotation(i+NUM_LEDS) ,velocity);
   }
 
   if (RETURN)

@@ -43,6 +43,7 @@ public:
   //Math
   uint8_t WRGBtoHEX(uint8_t W, uint8_t R, uint8_t G, uint8_t B);
   uint8_t XYtoIndex(uint8_t X, uint8_t Y);
+  uint8_t BottomLEDindexRotation(int index);
   //uint8_t XYtoIndex(uint8_t X,uint8_t Y);
 };
 

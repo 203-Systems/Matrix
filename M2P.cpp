@@ -40,21 +40,42 @@ void M2P::Decode()
     LED.Off(CompositeSerial.peek() & 0xF0, CompositeSerial.read() & 0x0F);
     break;
     case 0x01://1
-    LED.SetRGB(CompositeSerial.peek() & 0xF0, CompositeSerial.read() & 0x0F, CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read()); //XYRGB
+    LED.Off(CompositeSerial.read());
     break;
     case 0x02://2
-    LED.SetWRGB(CompositeSerial.peek() & 0xF0, CompositeSerial.read() & 0x0F, CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read()); //XYWRGB
+    LED.SetRGB(CompositeSerial.peek() & 0xF0, CompositeSerial.read() & 0x0F, CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read()); //XYRGB
     break;
     case 0x03://3
-    LED.SetW(CompositeSerial.peek() & 0xF0, CompositeSerial.read() & 0x0F, CompositeSerial.read()); //XYW
+    LED.SetRGB(CompositeSerial.read() CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read()); //XYRGB
     break;
     case 0x04://4
-    LED.On(CompositeSerial.peek() & 0xF0, CompositeSerial.read() & 0x0F); //XY
+    LED.SetWRGB(CompositeSerial.peek() & 0xF0, CompositeSerial.read() & 0x0F, CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read()); //XYWRGB
     break;
     case 0x05://5
+    LED.SetWRGB(CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read()); //XYWRGB
+    break;
+    case 0x06://6
+    LED.SetW(CompositeSerial.peek() & 0xF0, CompositeSerial.read() & 0x0F, CompositeSerial.read()); //XYW
+    break;
+    case 0x07://7
+    LED.SetW(CompositeSerial.read(), CompositeSerial.read()); //XYW
+    break;
+    case 0x08://8
+    LED.On(CompositeSerial.read()); //XY
+    break;
+    case 0x09://9
+    LED.On(CompositeSerial.read()); //XY
+    break;
+    case 0x0A://10
     LED.SetPallette(CompositeSerial.peek() & 0xF0, CompositeSerial.read() & 0x0F,CompositeSerial.read(), CompositeSerial.read()); //XYP
     break;
-    case 0x0D://14
+    case 0x0B://11
+    LED.SetPallette(CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read()); //XYP
+    break;
+    case 0x0C://12
+    //Well... Nothing yet XD
+    break;
+    case 0x0D://13
     SysexSet();
     break;
     case 0x0E://14

@@ -206,3 +206,30 @@ uint8_t MatrixSystem::XYtoIndex(uint8_t X, uint8_t Y)
     return X+Y*KEYPADX;
   }
 }
+
+uint8_t BottomLEDindexRotation(int index)
+{
+  switch (Rotation)
+  {
+    case 1: //90
+    if(index >= NUM_BOTTOM_LEDS/4 * 3 - 1)
+    {
+      return index - NUM_BOTTOM_LEDS/4 * 3;
+    }
+    return index + NUM_BOTTOM_LEDS/4 * 1;
+    case 2: //180
+    if(index >= NUM_BOTTOM_LEDS/4 * 2 - 1)
+    {
+      return index - NUM_BOTTOM_LEDS/4 * 2;
+    }
+    return index + NUM_BOTTOM_LEDS/4 * 2;
+    case 3: //270
+    if(index >= NUM_BOTTOM_LEDS/4 * 1 - 1)
+    {
+      return index - NUM_BOTTOM_LEDS/4 * 1;
+    }
+    return index + NUM_BOTTOM_LEDS/4 * 3;
+    default:
+    return index;
+  }
+}
