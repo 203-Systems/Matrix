@@ -2,15 +2,11 @@
 
 extern LED LED;
 extern MatrixSystem Matrix;
+extern MIDI Midi;
 
 CDC::CDC()
 {
 
-}
-
-void CDC::Begin()
-{
-    CompositeSerial.registerComponent();
 }
 
 void CDC::Poll()
@@ -28,13 +24,16 @@ void CDC::Poll()
     }
     else
     {
-      //Corrupt Packet
+      //ERROR checking
     }
   }
 }
 
 void CDC::Decode()
 {
+  if(CompositeSerial.peek() > 0x0f) //ERROR checking
+  return;
+
   switch (CompositeSerial.read()) //TODO uint8_t TO UINT4+UINT4
   {
     case 0x00://0
@@ -71,36 +70,38 @@ void CDC::SysexSet()
 {
   switch (CompositeSerial.read() & 0x0F)
   {
-    // case 8:
-    // reset();
-    // break;
-    // case 9:
-    // Matrix.EnterBootloader();
-    // break;
-    // case 10:
-    // Matrix.InitializeDevice();
-    // break;
-    // case 20:
-    // Matrix.UpdateColourPaletteRGB();
-    // break;
-    // case 21:
-    // Matrix.UpdateColourPaletteRGBW();
-    // break;
-    // case 22:
-    // Matrix.ResetColourPalette();
-    // break;
-    // case 25:
-    // Matrix.UpdateCustomKeyMap();
-    // break;
-    // case 26:
-    // Matrix.ResetCustomKeyMap();
-    // break;
-    // case 30:
-    // Matrix.SetBrightness(CompositeSerial.read());
-    // break;
-    // case 31:
-    // Matrix.SetTouchSensitive(CompositeSerial.read());
-    // break;
+    case 8:
+    Matrix.Reset();
+    break;
+    case 9:
+    Matrix.EnterBootloader();
+    break;
+    case 10:
+    Matrix.InitializeDevice();
+    break;
+    case 20:
+    Matrix.UpdateColourPaletteRGB();
+    break;
+    case 21:
+    Matrix.UpdateColourPaletteWRGB();
+    break;
+    case 22:
+    Matrix.ResetColourPalette();
+    break;
+    case 24:
+    Matrix.SetGamma((bool)CompositeSerial.read());
+    case 25:
+    Matrix.UpdateCustomKeyMap();
+    break;
+    case 26:
+    Matrix.ResetCustomKeyMap();
+    break;
+    case 30:
+    Matrix.SetBrightness(CompositeSerial.read());
+    break;
+    case 31:
+    Matrix.SetTouchSensitive(CompositeSerial.read());
+    break;
   }
 }
 
@@ -108,7 +109,36 @@ void CDC::SysexGet()
 {
   switch(CompositeSerial.read() & 0x0F)
   {
-
+    case 0:
+    Matrix.GetDeviceInfo();
+    break;
+    case 1:
+    Matrix.GetModuleCount();
+    break;
+    case 2:
+    Matrix.GetModuleInfo();
+    break;
+    case 5:
+    Matrix.GetAllParameter();
+    break;
+    case 20:
+    Matrix.GetColorPaletteRGB();
+    break;
+    case 21:
+    Matrix.GetColorPaletteWRGB();
+    break;
+    case 24:
+    Matrix.GetGammaState();
+    break;
+    case 25:
+    Matrix.GetCustomKeyMap();
+    break;
+    case 30:
+    Matrix.GetBrightness();
+    break;
+    case 31:
+    Matrix.GetTouchSensitive();
+    break;
   }
 }
 
@@ -118,10 +148,10 @@ void CDC::MIDI()
   int Channel = CompositeSerial.read() & 0x0F;
   int Note = CompositeSerial.read();
   int Velocity = CompositeSerial.read();
-  //  switch (Mode) {
-  //    case 8:
-  //      midi.handleNoteOff(Channel, Note, Velocity);
-  //    case 9:
-  //      midi.handleNoteOff(Channel, Note, Velocity);
-  //  }
+  switch (Mode) {
+    case 8:
+    Midi.SentNoteOff(Channel, Note, Velocity);
+    case 9:
+    Midi.SentNoteOn(Channel, Note, Velocity);
+  }
 }

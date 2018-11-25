@@ -2,19 +2,23 @@
 
 MatrixSystem::MatrixSystem()
 {
-  //TODO
 }
 
 //Sysex Set
-void MatrixSystem::reset()
+void MatrixSystem::Reset()
 {
-  //TODO
+  digitalWrite(RESET_PIN,LOW);
+}
+
+void MatrixSystem::SetDeviceID()
+{
+  DeviceID = CompositeSerial.read();
 }
 
 
 void MatrixSystem::EnterBootloader()
 {
-  //TODO
+  MatrixSystem::Reset();
 }
 
 void MatrixSystem::InitializeDevice()
@@ -24,42 +28,60 @@ void MatrixSystem::InitializeDevice()
 
 void MatrixSystem::UpdateColourPaletteRGB()
 {
-  //TODO
+  while(CompositeSerial.peek() != 255)
+  {
+    ColourPallette[3][CompositeSerial.read()] = MatrixSystem::WRGBtoHEX(0,CompositeSerial.read(),CompositeSerial.read(),CompositeSerial.read());
+  }
 }
 
 void MatrixSystem::UpdateColourPaletteWRGB()
 {
-  //TODO
+  while(CompositeSerial.peek() != 255)
+  {
+    ColourPallette[2][CompositeSerial.read()] = MatrixSystem::WRGBtoHEX(CompositeSerial.read(),CompositeSerial.read(),CompositeSerial.read(),CompositeSerial.read());
+  }
 }
 
 void MatrixSystem::ResetColourPalette()
 {
-  //TODO
+  for(int i = 0; i < sizeof(ColourPallette[0]); i++)
+  {
+    ColourPallette[2][i] = ColourPallette[0][i];
+  }
 }
 
-void MatrixSystem::setGamma(bool state)
+void MatrixSystem::SetGamma()
 {
-  //TODO
+  GammaEnable = (bol)CompositeSerial.read();
 }
 
 void MatrixSystem::UpdateCustomKeyMap()
 {
-  //TODO
+  while(CompositeSerial.peek() != 255)
+  {
+    KeyMap[CompositeSerial.read()][CompositeSerial.read()] = CompositeSerial.read();
+  }
 }
 
 void MatrixSystem::ResetCustomKeyMap()
 {
-  //TODO
+  for(int x = 0; x < KEYPADX; x++)
+  {
+    for(int y = 0; y < KEYPADY; y++)
+    {
+      KeyMap[x][y] = DefaultKeyMap[x][y];
+    }
+  }
 }
 
-void MatrixSystem::SetBrightness(int Brightness)
+void MatrixSystem::SetBrightness(uint8_t b)
 {
-  //TODO
+  Brightness = b;
 }
 
-void MatrixSystem::SetTouchSensitive(int Sensitive)
+void MatrixSystem::SetTouchSensitive(uint8_b s)
 {
-  //TODO
+  TouchSensitive = s;
 }
 
 //Sysex Get
@@ -75,8 +97,17 @@ void MatrixSystem::GetModuleCount()
 
 void MatrixSystem::GetModuleInfo()
 {
-  //TODO
+
 }
+
+void MatrixSystem::GetDeviceID()
+{
+  CompositeSerial.write((uint8_t)0);
+  CompositeSerial.write(14);
+  CompositeSerial.write(3);
+  CompositeSerial.write(DeviceID);
+}
+
 
 void MatrixSystem::GetAllParameter()
 {
@@ -85,36 +116,73 @@ void MatrixSystem::GetAllParameter()
 
 void MatrixSystem::GetColorPaletteRGB()
 {
-  //TODO
+  CompositeSerial.write(static_cast<uint8_t>(0));
+  CompositeSerial.write(14);
+  CompositeSerial.write(20);
+
+  for(uint8_t i = 0; i < sizeof(ColourPallette[3]); i++)
+  {
+    CompositeSerial.write(i);
+    CompositeSerial.write(ColourPallette[i] && 0xFF0000);
+    CompositeSerial.write(ColourPallette[i] && 0xFF00);
+    CompositeSerial.write(ColourPallette[i] && 0xFF);
+  }
+  CompositeSerial.write(255);
 }
 
 void MatrixSystem::GetColorPaletteWRGB()
 {
-  //TODO
+  CompositeSerial.write(static_cast<uint8_t>(0));
+  CompositeSerial.write(14);
+  CompositeSerial.write(21);
+
+  for(uint8_t i = 0; i < sizeof(ColourPallette[3]); i++)
+  {
+    CompositeSerial.write(i);
+    CompositeSerial.write(ColourPallette[i] && 0xFF000000);
+    CompositeSerial.write(ColourPallette[i] && 0xFF0000);
+    CompositeSerial.write(ColourPallette[i] && 0xFF00);
+    CompositeSerial.write(ColourPallette[i] && 0xFF);
+  }
+  CompositeSerial.write(255);
 }
 
 void MatrixSystem::GetGammaState()
 {
-  //TODO
+  CompositeSerial.write(static_cast<uint8_t>(0));
+  CompositeSerial.write(14);
+  CompositeSerial.write(24);
 }
 
 void MatrixSystem::GetCustomKeyMap()
 {
-  //TODO
+  CompositeSerial.write(static_cast<uint8_t>(0));
+  CompositeSerial.write(14);
+  CompositeSerial.write(25);
 }
 
 void MatrixSystem::GetBrightness()
 {
-  //TODO
+  CompositeSerial.write(static_cast<uint8_t>(0));
+  CompositeSerial.write(14);
+  CompositeSerial.write(25);
 }
 
 void MatrixSystem::GetTouchSensitive()
 {
-  //TODO
+  CompositeSerial.write(static_cast<uint8_t>(0));
+  CompositeSerial.write(14);
+  CompositeSerial.write(31);
+  CompositeSerial.write(TouchSensitive);
 }
 
 //Math
-uint8_t MatrixSystem::XYtoIndex(uint8_t X,uint8_t Y)
+uint8_t MatrixSystem::WRGBtoHEX(uint8_t W, uint8_t R, uint8_t G, uint8_t B)
+{
+  return W*0x10000000+R*0x10000+G*0x100+B;
+}
+
+uint8_t MatrixSystem::XYtoIndex(uint8_t X, uint8_t Y)
 {
   return X+Y*KEYPADX;
 }

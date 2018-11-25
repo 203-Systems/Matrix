@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 #include "LED.h"
+#include "MIDI.h"
 #include "MatrixVariable.h"
 #include "MatrixParameter.h"
 #include "MatrixSystem.h"
@@ -12,7 +13,6 @@ class CDC
 {
 public:
   CDC();
-  void Begin();
   void Poll();
   void Decode();
   void SysexGet();

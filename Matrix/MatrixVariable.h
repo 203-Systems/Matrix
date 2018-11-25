@@ -6,7 +6,6 @@
 
 //DeviceInfo
 extern uint8_t DeviceID;
-extern uint32_t PID;
 
 //LED
 extern uint8_t Brightness;
@@ -15,6 +14,7 @@ extern uint8_t BottomLEDMap[NUM_BOTTOM_LEDS];
 
 //KeyPad
 extern uint8_t KeyMap [KEYPADY][KEYPADX];
+extern uint8_t DefaultKeyMap [KEYPADY][KEYPADX];
 
 //TouchBar
 extern uint8_t TouchSensitive; //0;
