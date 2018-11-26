@@ -46,7 +46,7 @@ void M2P::Decode()
     LED.SetRGB(CompositeSerial.peek() & 0xF0, CompositeSerial.read() & 0x0F, CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read()); //XYRGB
     break;
     case 0x03://3
-    LED.SetRGB(CompositeSerial.read() CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read()); //XYRGB
+    LED.SetRGB(CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read()); //XYRGB
     break;
     case 0x04://4
     LED.SetWRGB(CompositeSerial.peek() & 0xF0, CompositeSerial.read() & 0x0F, CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read()); //XYWRGB

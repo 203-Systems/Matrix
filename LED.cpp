@@ -101,7 +101,14 @@ void LED::SetWRGB(uint8_t index, uint8_t W, uint8_t R, uint8_t G, uint8_t B)
 void LED::SetHEX(uint8_t index, uint64_t WRGB)
 {
 
-  leds[index] = WRGB;
+  if(index < NUM_BOTTOM_LEDS)
+  {
+    leds[Matrix.BottomLEDindexRotation(index)] = WRGB;
+  }
+  else
+  {
+    leds[index] = WRGB;
+  }
 }
 
 void LED::SetPallette(uint8_t pallette, uint8_t index, uint8_t colour)

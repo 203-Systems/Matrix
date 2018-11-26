@@ -1,3 +1,13 @@
+/*
+Project Matrix (c) 203 Industries
+
+TODO
+Load variable from flash
+FN key menu
+Play Animation
+Play Text
+
+*/
 #include <Arduino.h>
 #include <USBMIDI.h>
 #include <USBComposite.h>

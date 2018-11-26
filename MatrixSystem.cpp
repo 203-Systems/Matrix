@@ -35,17 +35,25 @@ void MatrixSystem::InitializeDevice()
 
 void MatrixSystem::UpdateColourPaletteRGB()
 {
-  while(CompositeSerial.peek() != 255)
+  if(CompositeSerial.peek() < 128)
   {
-    ColourPallette[3][CompositeSerial.read()] = MatrixSystem::WRGBtoHEX(0,CompositeSerial.read(),CompositeSerial.read(),CompositeSerial.read());
+    ColourPallette[2][CompositeSerial.read()] = MatrixSystem::WRGBtoHEX(0,CompositeSerial.read(),CompositeSerial.read(),CompositeSerial.read());
+  }
+  else if(CompositeSerial.peek() == 255)
+  {
+    return;
   }
 }
 
 void MatrixSystem::UpdateColourPaletteWRGB()
 {
-  while(CompositeSerial.peek() != 255)
+  if(CompositeSerial.peek() < 128)
   {
     ColourPallette[2][CompositeSerial.read()] = MatrixSystem::WRGBtoHEX(CompositeSerial.read(),CompositeSerial.read(),CompositeSerial.read(),CompositeSerial.read());
+  }
+  else if(CompositeSerial.peek() == 255)
+  {
+    return;
   }
 }
 
