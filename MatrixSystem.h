@@ -13,7 +13,7 @@ public:
   MatrixSystem();
 
   void VariableLoad();
-  //Sysex Set
+  //Sysex set
   void Reset();
   void SetDeviceID();
   void EnterBootloader();

@@ -10,7 +10,7 @@ void MatrixSystem::VariableLoad()
 }
 
 
-//Sysex Set
+//Sysex set
 void MatrixSystem::Reset()
 {
   digitalWrite(RESET_PIN,LOW);

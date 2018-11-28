@@ -35,15 +35,15 @@ void setup()
   if(DeviceID != 0)
   {
 
-      USBComposite.setProductString((DEVICENAME + String(DeviceID)).c_str());
-      USBComposite.setVendorId(VID2);
-      USBComposite.setProductId(PID2+DeviceID);
+    USBComposite.setProductString((DEVICENAME + String(DeviceID)).c_str());
+    USBComposite.setVendorId(VID2);
+    USBComposite.setProductId(PID2+DeviceID);
   }
   else
   {
-      USBComposite.setProductString(DEVICENAME);
-      USBComposite.setVendorId(VID);
-      USBComposite.setProductId(PID);
+    USBComposite.setProductString(DEVICENAME);
+    USBComposite.setVendorId(VID);
+    USBComposite.setProductId(PID);
   }
 
   USBComposite.setManufacturerString(MAUNFACTURERNAME);
@@ -58,9 +58,32 @@ void setup()
 
   while(!USBComposite.isReady())
   {
-      LED.Fill(CRGB::Red);
+    LED.Fill(CRGB::Red);
   }
-          LED.Fill(CRGB::Black);
+  LED.Fill(CRGB::Black);
+}
+
+void SentKey()
+{
+  if (KeyPad.Scan())
+  {
+    for(int i = 0; i < MULTIPRESS; i++)
+    {
+      if(KeyPad.list[i].velocity == 255)
+      return;
+      if(KeyPad.list[i].velocity > 0)
+      {
+        if(MIDIEnable)
+        {
+          Midi.SentXYon(KeyPad.list[i].xy && 0xF0, KeyPad.list[i].xy && 0xF0, KeyPad.list[i].velocity);
+        }
+        else
+        {
+          Midi.SentXYon(KeyPad.list[i].xy && 0xF0, KeyPad.list[i].xy && 0xF0, 0);
+        }
+      }
+    }
+  }
 }
 
 void loop()
@@ -71,14 +94,16 @@ void loop()
   // if (CDCEnable)
   // CDC.Poll();
 
+  SentKey();
+
+
 
   currentMillis = millis();
   if (currentMillis - previousMillis >= 1000/FPS)
   {
-    KeyPad.Scan();
     LED.Update();
     //LED.Rainbow();
-    CompositeSerial.println("Running");
+    //CompositeSerial.println("Running");
     previousMillis = currentMillis;
   }
 }
@@ -92,7 +117,7 @@ void loop()
 //     {
 //       for(int c = 0; c < 64; c++)
 //       {
-//         LED.SetPallette(p,c,c+n*64);
+//         LED.setPallette(p,c,c+n*64);
 //       }
 //       LED.Update();
 //       delay(1000);
@@ -116,7 +141,7 @@ void loop()
 //     // {
 //     for(int c = 0; c < 64; c++)
 //     {
-//       LED.SetPallette(0,c,c+n*64);
+//       LED.setPallette(0,c,c+n*64);
 //     }
 //     LED.Update();
 //     while(KeyPad.Scan() == 0)

@@ -1,11 +1,11 @@
 #include "MatrixVariable.h"
 
 //DeviceInfo
-uint8_t DeviceID = 203; //0~255 0 for off
+uint8_t deviceID = 203; //0~255 0 for off
 
-//LED Setting
-uint8_t Brightness = 64;  //VeryDim - 32 | Dim - 64 | Normal - 96 | Bright(Default) - 128 | VeyBriight - 160 | Bright AF - 192  (Higher then 192 could result in USB resettable fuse disconnect(500ma))
-uint64_t DefaultColourPallette[2][128] =     //WRGB Colour Pallette
+//LED setting
+uint8_t brightness = 64;  //VeryDim - 32 | Dim - 64 | Normal - 96 | Bright(Default) - 128 | VeyBriight - 160 | Bright AF - 192  (Higher then 192 could result in USB resettable fuse disconnect(500ma))
+uint64_t colour_pallette[2][128] =     //WRGB Colour Pallette
 {{                                 //MatrixColorPallette
   0x00000000, //0
   0x00050505, //1
@@ -266,12 +266,11 @@ uint64_t DefaultColourPallette[2][128] =     //WRGB Colour Pallette
   0x004B1502  //127,
 }};
 
-uint8_t BottomLEDMap [NUM_BOTTOM_LEDS] =
+uint8_t bottomledmap [NUM_BOTTOM_LEDS] =
 {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35};
 
 //KeyPad
-uint8_t ScanRate = 120;
-uint8_t KeyMap [KEYPADY][KEYPADX] =
+uint8_t keymap [KEYPADY][KEYPADX] =
 {{64, 65, 66, 67, 96, 97, 98, 99},
 {60, 61, 62, 63, 92, 93, 94, 95},
 {56, 57, 58, 59, 88, 89, 90, 91},
@@ -280,7 +279,7 @@ uint8_t KeyMap [KEYPADY][KEYPADX] =
 {44, 45, 46, 47, 76, 77, 78, 79},
 {40, 41, 42, 43, 72, 73, 74, 75},
 {36, 37, 38, 39, 68, 69, 70, 71}};
-uint8_t DefaultKeyMap [KEYPADY][KEYPADX] =
+uint8_t defaultKeyMap [KEYPADY][KEYPADX] =
 {{64, 65, 66, 67, 96, 97, 98, 99},
 {60, 61, 62, 63, 92, 93, 94, 95},
 {56, 57, 58, 59, 88, 89, 90, 91},
@@ -291,13 +290,13 @@ uint8_t DefaultKeyMap [KEYPADY][KEYPADX] =
 {36, 37, 38, 39, 68, 69, 70, 71}};
 
 //TouchBar
-uint8_t TouchSensitive = 0;
+uint8_t touch_sensitive = 0;
 
 //Sysex
-uint8_t Rotation = 2;
-uint8_t MIDIChannel = 1;
-bool GammaEnable = false; //Wont effect colour pallette
-bool MIDIEnable = true;
-bool CDCEnable = true;
-bool POWERCORD = false;
-bool RETURN = true;
+uint8_t rotation = 2;
+uint8_t midi_channel = 1;
+bool gamma_enable = false; //Wont effect colour pallette
+bool midi_enable = true;
+bool cdc_enable = true;
+bool powercord_enable = false;
+bool massage_return = true;

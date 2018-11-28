@@ -18,7 +18,7 @@ public:
   void Poll();
   void Decode();
   void SysexGet();
-  void SysexSet();
+  void Sysexset();
   void MIDI();
 };
 

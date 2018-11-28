@@ -76,7 +76,7 @@ void M2P::Decode()
     //Well... Nothing yet XD
     break;
     case 0x0D://13
-    SysexSet();
+    Sysexset();
     break;
     case 0x0E://14
     SysexGet();
@@ -87,7 +87,7 @@ void M2P::Decode()
   }
 }
 
-void M2P::SysexSet()
+void M2P::Sysexset()
 {
   switch (CompositeSerial.read() & 0x0F)
   {

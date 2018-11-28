@@ -9,17 +9,17 @@
 #define SI_CLOCK PB14
 #define SI_SCAN PB15
 #define FN_PIN PC15
-//Analog(TouchBar)
-#define Analog0 PA0
-#define Analog1 PA1
-#define Analog2 PA2
-#define Analog3 PA3
-#define Analog4 PA4
-#define Analog5 PA5
-#define Analog6 PA6
-#define Analog7 PA7
-#define Analog8 PB0
-#define Analog9 PB1
+//ANALOG(TouchBar)
+#define ANALOG0 PA0
+#define ANALOG1 PA1
+#define ANALOG2 PA2
+#define ANALOG3 PA3
+#define ANALOG4 PA4
+#define ANALOG5 PA5
+#define ANALOG6 PA6
+#define ANALOG7 PA7
+#define ANALOG8 PB0
+#define ANALOG9 PB1
 //I2C
 #define I2C_SCL PB8
 #define I2C_SDA PB9
@@ -55,5 +55,5 @@
 
 //KeyPad
 #define KEYPADX 8
-#define KEYPADY 8
-#define SCAN_RATE 120
+#define KEYPADY 8 //Cantchange due to KeyPad 16*16 as 8*32 instead
+#define MULTIPRESS 10 //KeyPressProcessAtOnce
