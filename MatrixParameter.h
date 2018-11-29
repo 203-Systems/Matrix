@@ -46,6 +46,7 @@
 #define PID  0x1000
 #define PID2 0x1000 // for device ID USE
 #define SUPPORT_WRGB false
+#define FWVERSION "0.1 Alpha"
 //LED
 #define NUM_LEDS 64
 #define NUM_BOTTOM_LEDS 36
@@ -57,3 +58,4 @@
 #define KEYPADX 8
 #define KEYPADY 8 //Cantchange due to KeyPad 16*16 as 8*32 instead
 #define MULTIPRESS 10 //KeyPressProcessAtOnce
+#define MULTITAP_THRESHOLD 200

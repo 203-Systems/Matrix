@@ -5,6 +5,7 @@ uint8_t deviceID = 203; //0~255 0 for off
 
 //LED setting
 uint8_t brightness = 64;  //VeryDim - 32 | Dim - 64 | Normal - 96 | Bright(Default) - 128 | VeyBriight - 160 | Bright AF - 192  (Higher then 192 could result in USB resettable fuse disconnect(500ma))
+bool LEDwrite = false; //MakeLEDdisable for incomming massage
 uint64_t colour_pallette[2][128] =     //WRGB Colour Pallette
 {{                                 //MatrixColorPallette
   0x00000000, //0

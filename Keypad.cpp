@@ -11,6 +11,8 @@ KeyPad::KeyPad()
   pinMode(SI_SCAN, OUTPUT);
   pinMode(SI_CLOCK, OUTPUT);
   pinMode(SI_DATA, INPUT_PULLDOWN);
+
+  pinMode(FN_PIN, INPUT_PULLDOWN);
 }
 
 bool KeyPad::Scan()
@@ -56,6 +58,41 @@ bool KeyPad::Scan()
       }
       digitalWrite(SI_CLOCK, HIGH);
     }
+
+
+  }
+
+  if(digitalRead(FN_PIN) != FNcache)
+  {
+    changed = true;
+    fnChanged = true;
+    FNcache = digitalRead(FN_PIN);
+    if(FNcache)
+    {
+      // if(lastFNpressed == 0)
+      // lastFNpressed = millis();
+      if(millis() - lastFNpressed <= MULTITAP_THRESHOLD)
+      {
+        timesFNpressed ++;
+      }
+      else
+      {
+        timesFNpressed = 0;
+      }
+
+      //FNholded = millis() - lastFNpressed;
+      lastFNpressed = millis();
+
+      fn = true;
+    }
+    else
+    {
+      fn = false;
+    }
+  }
+  else
+  {
+    fnChanged = false;
   }
   if(changed)
   UpdateList();
@@ -76,7 +113,7 @@ void KeyPad::UpdateList()
     for(int x = 0; x < KEYPADX; x++)
     {
       if(i == MULTIPRESS)
-        return;
+      return;
       if(bitRead(KeyPadChange[x], y) == true)
       {
         if(bitRead(KeyPadStats[x], y) == true)

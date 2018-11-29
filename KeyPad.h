@@ -21,11 +21,18 @@ class KeyPad
 public:
   KeyPad();
   bool Scan();
+
   Key list[MULTIPRESS];
+  //uint32_t FNholded = 0;
+  bool fn;
+  bool fnChanged;
+  uint32_t lastFNpressed = 0;
+  uint8_t timesFNpressed = 0;
 private:
   void UpdateList();
   // void On(uint8_t X, uint8_t Y);
   // void Off(uint8_t X, uint8_t Y);
+  bool FNcache;
   byte KeyPadStats[KEYPADX]; // const Y is 8, allow configuration like 8*16 or 16*16 as 8*32 in the future.
   byte KeyPadChange[KEYPADX];
 };

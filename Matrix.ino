@@ -13,12 +13,15 @@ Play Text
 #include <USBComposite.h>
 #include <FastLED.h>
 #include "MatrixSystem.h"
-#include "LED.h"
-#include "M2P.h"
+#include "MatrixVariable.h"
+//#include "Serials.h"
 #include "KeyPad.h"
+#include "LED.h"
 #include "USBmidi.h"
 #include "MIDI.h"
-#include "MatrixVariable.h"
+#include "M2P.h"
+//#include "UI.h"
+
 
 MIDI Midi;
 M2P M2P;
@@ -35,7 +38,7 @@ void setup()
   if(DeviceID != 0)
   {
 
-    USBComposite.setProductString((DEVICENAME + String(DeviceID)).c_str());
+    USBComposite.setProductString((DEVICENAME + String(' ' + DeviceID)).c_str());
     USBComposite.setVendorId(VID2);
     USBComposite.setProductId(PID2+DeviceID);
   }
@@ -63,10 +66,17 @@ void setup()
   LED.Fill(CRGB::Black);
 }
 
-void SentKey()
+void ReadKey()
 {
   if (KeyPad.Scan())
   {
+    if(KeyPad.timesFNpressed == 5)
+    UI.ShowDeviceInfo();
+    if(KeyPad.timesFNpressed == 10)
+    UI.EasterEgg();
+    if(KeyPad.fn)
+    UI.EnterFNmenu();
+
     for(int i = 0; i < MULTIPRESS; i++)
     {
       if(KeyPad.list[i].velocity == 255)
@@ -94,7 +104,7 @@ void loop()
   // if (CDCEnable)
   // CDC.Poll();
 
-  SentKey();
+  ReadKey();
 
 
 
