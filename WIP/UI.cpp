@@ -18,9 +18,9 @@ void UI::FNmenu()
   while(1)
   {
 
-    if (MIDIEnable);
+    if (midi_enable);
     USBmidi.poll();
-    // if (CDCEnable)
+    // if (m2p_enable)
     // CDC.Poll();
 
     if(KeyPad.Scan())

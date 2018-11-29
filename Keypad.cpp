@@ -138,19 +138,19 @@ void KeyPad::UpdateList()
 // {
 //   CompositeSerial.println(Matrix.XYtoIndex(x,y)*10+1);
 //
-//   switch (Rotation)
+//   switch (rotation)
 //   {
 //     case 1: //90
-//     Midi.SentNoteOn(MIDIChannel, KeyMap[x][KEYPADY - y - 1], 127);
+//     Midi.SentNoteOn(MIDIChannel, keymap[x][KEYPADY - y - 1], 127);
 //     break;
 //     case 2: //180
-//     Midi.SentNoteOn(MIDIChannel, KeyMap[KEYPADY - y - 1][KEYPADX - x - 1], 127);
+//     Midi.SentNoteOn(MIDIChannel, keymap[KEYPADY - y - 1][KEYPADX - x - 1], 127);
 //     break;
 //     case 3: //270
-//     Midi.SentNoteOn(MIDIChannel, KeyMap[KEYPADX - x - 1][y], 127);
+//     Midi.SentNoteOn(MIDIChannel, keymap[KEYPADX - x - 1][y], 127);
 //     break;
 //     default: //0
-//     Midi.SentNoteOn(MIDIChannel, KeyMap[y][x], 127);
+//     Midi.SentNoteOn(MIDIChannel, keymap[y][x], 127);
 //   }
 // }
 //
@@ -158,18 +158,18 @@ void KeyPad::UpdateList()
 // {
 //   CompositeSerial.println(Matrix.XYtoIndex(x,y)*10);
 //
-//   switch (Rotation)
+//   switch (rotation)
 //   {
 //     case 1: //90
-//     Midi.SentNoteOff(MIDIChannel, KeyMap[x][KEYPADY - y - 1], 0);
+//     Midi.SentNoteOff(MIDIChannel, keymap[x][KEYPADY - y - 1], 0);
 //     break;
 //     case 2: //180
-//     Midi.SentNoteOff(MIDIChannel, KeyMap[KEYPADY - y - 1][KEYPADX - x - 1], 0);
+//     Midi.SentNoteOff(MIDIChannel, keymap[KEYPADY - y - 1][KEYPADX - x - 1], 0);
 //     break;
 //     case 3: //270
-//     Midi.SentNoteOff(MIDIChannel, KeyMap[KEYPADX - x - 1][y], 0);
+//     Midi.SentNoteOff(MIDIChannel, keymap[KEYPADX - x - 1][y], 0);
 //     break;
 //     default: //0
-//     Midi.SentNoteOff(MIDIChannel, KeyMap[y][x], 0);
+//     Midi.SentNoteOff(MIDIChannel, keymap[y][x], 0);
 //   }
 // }

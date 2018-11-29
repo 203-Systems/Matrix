@@ -39,7 +39,7 @@
 #define RESET_PIN PC13
 
 //DeviceInfo
-#define DEVICENAME "Matrix "
+#define DEVICENAME "Matrix"
 #define MAUNFACTURERNAME "203 Industries"
 #define VID  0x0203
 #define VID2 0x0203 // for device ID USE

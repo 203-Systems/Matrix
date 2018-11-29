@@ -35,12 +35,12 @@ unsigned long currentMillis = 0;
 
 void setup()
 {
-  if(DeviceID != 0)
+  if(device_id != 0)
   {
 
-    USBComposite.setProductString((DEVICENAME + String(' ' + DeviceID)).c_str());
+    USBComposite.setProductString((DEVICENAME + String(' ' + device_id)).c_str());
     USBComposite.setVendorId(VID2);
-    USBComposite.setProductId(PID2+DeviceID);
+    USBComposite.setProductId(PID2+device_id);
   }
   else
   {
@@ -57,7 +57,7 @@ void setup()
   CompositeSerial.registerComponent();
   USBComposite.begin();
 
-  FastLED.setBrightness(Brightness);
+  FastLED.setBrightness(brightness);
 
   while(!USBComposite.isReady())
   {
@@ -70,12 +70,12 @@ void ReadKey()
 {
   if (KeyPad.Scan())
   {
-    if(KeyPad.timesFNpressed == 5)
-    UI.ShowDeviceInfo();
-    if(KeyPad.timesFNpressed == 10)
-    UI.EasterEgg();
-    if(KeyPad.fn)
-    UI.EnterFNmenu();
+    // if(KeyPad.timesFNpressed == 5)
+    // UI.ShowDeviceInfo();
+    // if(KeyPad.timesFNpressed == 10)
+    // UI.EasterEgg();
+    // if(KeyPad.fn)
+    // UI.EnterFNmenu();
 
     for(int i = 0; i < MULTIPRESS; i++)
     {
@@ -83,7 +83,7 @@ void ReadKey()
       return;
       if(KeyPad.list[i].velocity > 0)
       {
-        if(MIDIEnable)
+        if(midi_enable)
         {
           Midi.SentXYon(KeyPad.list[i].xy && 0xF0, KeyPad.list[i].xy && 0xF0, KeyPad.list[i].velocity);
         }
@@ -99,9 +99,9 @@ void ReadKey()
 void loop()
 {
   //usbmidi.poll();
-  if (MIDIEnable);
+  if (midi_enable);
   USBmidi.poll();
-  // if (CDCEnable)
+  // if (m2p_enable)
   // CDC.Poll();
 
   ReadKey();
@@ -163,7 +163,7 @@ void loop()
 //     {
 //
 //     }
-//     //   GammaEnable = !GammaEnable;
+//     //   gamma_enable = !gamma_enable;
 //     // }
 //   }
 //}

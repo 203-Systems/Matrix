@@ -5,28 +5,31 @@
 #include "MatrixParameter.h"
 
 //DeviceInfo
-extern uint8_t DeviceID;
+extern uint8_t device_id;
 
-//LED
-extern uint8_t Brightness;
-extern uint64_t ColourPallette[3][128];
-extern uint64_t DefaultColourPallette[2][128] PROGMEM;
-extern uint8_t BottomLEDMap[NUM_BOTTOM_LEDS];
+//LED setting
+extern uint8_t brightness;
+extern bool LEDwrite;
+extern uint64_t colour_pallette[2][128];
+
+extern uint8_t bottomledmap [NUM_BOTTOM_LEDS];
 
 //KeyPad
-extern uint8_t KeyMap [KEYPADY][KEYPADX];
-extern uint8_t DefaultKeyMap [KEYPADY][KEYPADX] PROGMEM;
+extern uint8_t keymap [KEYPADY][KEYPADX];
+
+extern uint8_t defaultkeymap [KEYPADY][KEYPADX];
 
 //TouchBar
-extern uint8_t TouchSensitive; //0;
+extern uint8_t touch_sensitive;
 
 //Sysex
-extern uint8_t Rotation;
-extern uint8_t MIDIChannel;
-extern bool GammaEnable;
-extern bool MIDIEnable;
-extern bool CDCEnable;
-extern bool POWERCORD;
-extern bool RETURN;
+extern uint8_t rotation;
+extern uint8_t midi_channel;
+extern bool gamma_enable;
+extern bool midi_enable;
+extern bool m2p_enable;
+extern bool powercord_enable;
+extern bool massage_return;
+
 
 #endif

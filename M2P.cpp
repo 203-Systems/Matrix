@@ -112,10 +112,10 @@ void M2P::Sysexset()
     case 24:
     Matrix.SetGamma((bool)CompositeSerial.read());
     case 25:
-    Matrix.UpdateCustomKeyMap();
+    Matrix.UpdateCustomKeymap();
     break;
     case 26:
-    Matrix.ResetCustomKeyMap();
+    Matrix.ResetCustomKeymap();
     break;
     case 30:
     Matrix.SetBrightness(CompositeSerial.read());
@@ -152,7 +152,7 @@ void M2P::SysexGet()
     Matrix.GetGammaState();
     break;
     case 25:
-    Matrix.GetCustomKeyMap();
+    Matrix.GetCustomKeymap();
     break;
     case 30:
     Matrix.GetBrightness();

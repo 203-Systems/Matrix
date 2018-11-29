@@ -8,7 +8,7 @@ extern MatrixSystem Matrix;
 LED::LED()
 {
   FastLED.addLeds<NEOPIXEL, LED_PIN>(leds, NUM_TOTAL_LEDS);
-  //LED::SetBrightness(Brightness);
+  //LED::SetBrightness(brightness);
   // if(POWERCORD)
   //{
   //   CRGB pc_leds[NUM_POWERCORD_LEDS];
@@ -29,6 +29,39 @@ void LED::Fill(uint64_t WRGB)
     leds[i] = WRGB;
   }
   FastLED.show();
+}
+
+void LED::SetLED(INDEXMODE indexmode, LEDMODE ledmode, uint8_t x, uint8_t y = 0, uint64_t p1 = 0, uint8_t p2 = 0, uint8_t p3 = 0, uint8_t p4 = 0)
+{
+  uint8_t index = x;
+  if(ledmode == XY)
+  uint8_t index = Matrix.XYtoIndex(x,y);
+
+  switch (ledmode)
+  {
+    case off:
+    LED::Off(index);
+    break;
+    case on:
+    LED::On(index);
+    break;
+    case w:
+    LED::SetW(index, p1);
+    break;
+    case rgb:
+    LED::SetRGB(index, p1, p2, p3);
+    break;
+    case wrgb:
+    LED::SetWRGB(index, p1, p2, p3, p4);
+    break;
+    case hex:
+    LED::SetHEX(index, p1);
+    break;
+    case pallette:
+    LED::SetPallette(index, p1, p2);
+    break;
+  }
+
 }
 
 
@@ -65,9 +98,9 @@ void LED::SetHEX(uint8_t x, uint8_t y, uint64_t WRGB)
   leds[Matrix.XYtoIndex(x,y)] = WRGB;
 }
 
-void LED::SetPallette(uint8_t pallette, uint8_t x, uint8_t y, uint8_t colour)
+void LED::SetPallette(uint8_t x, uint8_t y, uint8_t pallette, uint8_t colour)
 {
-  LED::SetHEX(x, y, ColourPallette[pallette][colour]);
+  LED::SetHEX(x, y, colour_pallette[pallette][colour]);
 }
 
 
@@ -103,7 +136,7 @@ void LED::SetHEX(uint8_t index, uint64_t WRGB)
 
   if(index < NUM_BOTTOM_LEDS)
   {
-    leds[Matrix.BottomLEDindexRotation(index)] = WRGB;
+    leds[Matrix.BottomLEDrotation(index)] = WRGB;
   }
   else
   {
@@ -111,9 +144,9 @@ void LED::SetHEX(uint8_t index, uint64_t WRGB)
   }
 }
 
-void LED::SetPallette(uint8_t pallette, uint8_t index, uint8_t colour)
+void LED::SetPallette(uint8_t index, uint8_t pallette, uint8_t colour)
 {
-  LED::SetHEX(index, ColourPallette[pallette][colour]);
+  LED::SetHEX(index, colour_pallette[pallette][colour]);
 }
 
 
@@ -124,7 +157,42 @@ void LED::Update()
   FastLED.show();
 }
 
-uint64_t ApplyGamma(uint64_t WRGB)
+void LED::Rainbow()
+{
+  int hue = 0;
+  while(hue != 255)
+  {
+    fill_rainbow(leds, NUM_LEDS, hue++);
+    FastLED.show();
+  }
+}
+
+void LED::FillRegion(LEDMODE ledmode, uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint64_t p1 = 0, uint8_t p2 = 0, uint8_t p3 = 0, uint8_t p4 = 0)
+{
+  //Reorder
+  if(x1 > x2)
+  {
+    uint8_t c = x1;
+    x1 = x2;
+    x2 = c;
+  }
+  if(y1 > y2)
+  {
+    uint8_t c = y1;
+    y1 = y2;
+    y2 = c;
+  }
+
+  for(x1; x1 <= x2; x1++)
+  {
+    for(y1; y1 <= y2; y1++)
+    {
+      LED::SetLED(XY, ledmode, x1, y1, p1, p2, p3, p4);
+    }
+  }
+}
+
+uint64_t LED::ApplyGamma(uint64_t WRGB)
 {
   uint8_t LEDGamma[256] =
   { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
@@ -150,14 +218,4 @@ uint64_t ApplyGamma(uint64_t WRGB)
   LEDGamma[(WRGB & 0x00ff0000)>> 16] *0x10000 +
   LEDGamma[(WRGB & 0x0000ff00)>> 8] *0x100 +
   LEDGamma[(WRGB & 0x000000ff)];
-}
-
-void LED::Rainbow()
-{
-  int hue = 0;
-  while(hue != 255)
-  {
-    fill_rainbow(leds, NUM_LEDS, hue++);
-    FastLED.show();
-  }
 }

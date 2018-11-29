@@ -1,7 +1,7 @@
 #include "MatrixVariable.h"
 
 //DeviceInfo
-uint8_t deviceID = 203; //0~255 0 for off
+uint8_t device_id = 203; //0~255 0 for off
 
 //LED setting
 uint8_t brightness = 64;  //VeryDim - 32 | Dim - 64 | Normal - 96 | Bright(Default) - 128 | VeyBriight - 160 | Bright AF - 192  (Higher then 192 could result in USB resettable fuse disconnect(500ma))
@@ -280,7 +280,7 @@ uint8_t keymap [KEYPADY][KEYPADX] =
 {44, 45, 46, 47, 76, 77, 78, 79},
 {40, 41, 42, 43, 72, 73, 74, 75},
 {36, 37, 38, 39, 68, 69, 70, 71}};
-uint8_t defaultKeyMap [KEYPADY][KEYPADX] =
+uint8_t defaultKeymap [KEYPADY][KEYPADX] =
 {{64, 65, 66, 67, 96, 97, 98, 99},
 {60, 61, 62, 63, 92, 93, 94, 95},
 {56, 57, 58, 59, 88, 89, 90, 91},
