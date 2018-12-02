@@ -2,10 +2,10 @@
 #define KEYPAD_H
 
 #include "Arduino.h"
-//#include "MatrixVariable.h"
-#include "MatrixParameter.h"
+//#include "../parameter/MatrixVariable.h"
+#include "../parameter/MatrixParameter.h"
 //#include "MatrixSystem.h"
-//#include "MIDI.h"
+//#include "../protocol/MIDI.h"
 //#include <USBComposite.h>
 
 //typedef enum{ IDLE, PRESSED, HOLD, RELEASED } KeyState;

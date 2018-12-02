@@ -1,4 +1,4 @@
-#include "Serials.h"
+#include "SerialComposite.h"
 
 void begin()
 {
@@ -9,7 +9,8 @@ void begin()
 }
 uint32_t available(SERIALS selector = USBCDC)
 {
-  switch (selector) {
+  switch (selector)
+  {
     case USBCDC:
     return CompositeSerial.available();
     case USBSB:
@@ -21,23 +22,26 @@ uint32_t available(SERIALS selector = USBCDC)
     return Serial3.available();
   }
 }
-uint32_t read(uint8 * buf, uint32 len, SERIALS selector = USBCDC)
-{
-  switch (selector) {
-    case USBCDC:
-    return CompositeSerial.read(buf, len);
-    case USBSB:
-    if(!powercord_enable)
-    return Serial1.read(buf, len);
-    // case SERIAL2:
-    // return Serial2.read(buf, len);
-    case MATRIXMOD:
-    return Serial3.read(buf, len);
-}
+// uint32_t read(uint8 * buf, uint32 len, SERIALS selector = USBCDC)
+// {
+//   switch (selector)
+//   {
+//     case USBCDC:
+//     return CompositeSerial.read(buf, len);
+//     case USBSB:
+//     if(!powercord_enable)
+//     return Serial1.read(buf, len);
+//     // case SERIAL2:
+//     // return Serial2.read(buf, len);
+//     case MATRIXMOD:
+//     return Serial3.read(buf, len);
+//   }
+// }
 
 int peek(SERIALS selector = USBCDC)
 {
-  switch (selector) {
+  switch (selector)
+  {
     case USBCDC:
     return CompositeSerial.peek();
     case USBSB:
@@ -52,7 +56,8 @@ int peek(SERIALS selector = USBCDC)
 
 int read(SERIALS selector = USBCDC)
 {
-  switch (selector) {
+  switch (selector)
+  {
     case USBCDC:
     return CompositeSerial.read();
     case USBSB:
@@ -67,7 +72,8 @@ int read(SERIALS selector = USBCDC)
 
 int availableForWrite(SERIALS selector = USBCDC)
 {
-  switch (selector) {
+  switch (selector)
+  {
     case USBCDC:
     return CompositeSerial.availableForWrite();
     case USBSB:
@@ -82,7 +88,8 @@ int availableForWrite(SERIALS selector = USBCDC)
 
 void flush(SERIALS selector = USBCDC)
 {
-  switch (selector) {
+  switch (selector)
+  {
     case USBCDC:
     return CompositeSerial.flush();
     case USBSB:
@@ -97,7 +104,8 @@ void flush(SERIALS selector = USBCDC)
 
 size_t write(uint8 byte, SERIALS selector = USBCDC)
 {
-  switch (selector) {
+  switch (selector)
+  {
     case USBCDC:
     return CompositeSerial.write(byte);
     case USBSB:
@@ -112,7 +120,8 @@ size_t write(uint8 byte, SERIALS selector = USBCDC)
 
 size_t write(const char *str, SERIALS selector = USBCDC)
 {
-  switch (selector) {
+  switch (selector)
+  {
     case USBCDC:
     return CompositeSerial.write(*str);
     case USBSB:
@@ -125,17 +134,18 @@ size_t write(const char *str, SERIALS selector = USBCDC)
   }
 }
 
-size_t write(const uint8 * buf, uint32 len, SERIALS selector = USBCDC)
-{
-  switch (selector) {
-    case USBCDC:
-    return CompositeSerial.write(buf, len);
-    case USBSB:
-    if(!powercord_enable)
-    return Serial1.write(buf, len);
-    // case SERIAL2:
-    // return Serial2.write(byte, len);
-    case MATRIXMOD:
-    return Serial3.write(buf, len);
-  }
-}
+// size_t write(const uint8 * buf, uint32 len, SERIALS selector = USBCDC)
+// {
+//   switch (selector)
+//   {
+//     case USBCDC:
+//     return CompositeSerial.write(buf, len);
+//     case USBSB:
+//     if(!powercord_enable)
+//     return Serial1.write(buf, len);
+//     // case SERIAL2:
+//     // return Serial2.write(byte, len);
+//     case MATRIXMOD:
+//     return Serial3.write(buf, len);
+//   }
+// }

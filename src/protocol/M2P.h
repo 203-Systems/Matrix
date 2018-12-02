@@ -4,11 +4,12 @@
 //M2P Stand for Matrix Massage Protocol
 
 #include <Arduino.h>
-#include "LED.h"
-#include "MIDI.h"
-#include "MatrixVariable.h"
-#include "MatrixParameter.h"
-#include "MatrixSystem.h"
+#include "../core/LED.h"
+#include "../core/SerialComposite.h"
+#include "../protocol/MIDI.h"
+#include "../parameter/MatrixVariable.h"
+#include "../parameter/MatrixParameter.h"
+#include "../core/MatrixSystem.h"
 #include <USBComposite.h>
 
 class M2P

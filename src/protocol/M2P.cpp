@@ -3,6 +3,7 @@
 extern LED LED;
 extern MatrixSystem Matrix;
 extern MIDI Midi;
+extern SerialComposite Serials;
 
 M2P::M2P()
 {

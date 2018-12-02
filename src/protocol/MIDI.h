@@ -3,10 +3,10 @@
 
 #include <Arduino.h>
 #include <USBMIDI.h>
-#include "MatrixVariable.h"
-#include "MatrixParameter.h"
-#include "MatrixSystem.h"
-#include "LED.h"
+#include "../core/LED.h"
+#include "../parameter/MatrixVariable.h"
+#include "../parameter/MatrixParameter.h"
+#include "../core/MatrixSystem.h"
 
 //usbmidi usbmidi;
 

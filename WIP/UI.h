@@ -2,14 +2,21 @@
 #define UI_H
 
 #include "Arduino.h"
-#include "MatrixVariable.h"
-#include "MatrixParameter.h"
-#include "MatrixSystem.h"
-#include "KeyPad.h"
-//#include "MIDI.h"
+#include "../parameter/MatrixVariable.h"
+#include "../parameter/MatrixParameter.h"
+#include "../core/MatrixSystem.h"
+#include "../core/KeyPad.h"
+//#include "../protocol/MIDI.h"
 //#include <USBComposite.h>
 
 struct Animation
+{
+  uint8_t Mode; //0 for full array are NUM_LEDS * FPS | 1 for xy mode XY+
+  uint8_t AnimationFPS;
+  char* AnimationData;
+};
+
+struct Key
 {
   uint8_t Mode; //0 for full array are NUM_LEDS * FPS | 1 for xy mode XY+
   uint8_t AnimationFPS;
@@ -20,10 +27,17 @@ class UI
 {
 public:
   UI();
-  void FN();
+  void EnterFNmenu();
+  void FNmenu();
+  void ExitFNmenu();
+  void FNkeyAction();
+  void FNrender();
   void ShowDeviceInfo()
   void ShowASCII(char* ascii)
+  void NexusRevamped()
   void PlayAnimation(Animation a)
   void EasterEgg()
 private:
-}
+};
+
+class

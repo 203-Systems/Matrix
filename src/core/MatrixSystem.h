@@ -4,8 +4,8 @@
 #include <Arduino.h>
 #include <EEPROM.h>
 #include <USBComposite.h>
-#include "MatrixVariable.h"
-#include "MatrixParameter.h"
+#include "../parameter/MatrixVariable.h"
+#include "../parameter/MatrixParameter.h"
 
 class MatrixSystem
 {

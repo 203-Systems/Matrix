@@ -8,19 +8,21 @@ Play Animation
 Play Text
 
 */
+
 #include <Arduino.h>
 #include <USBMIDI.h>
 #include <USBComposite.h>
 #include <FastLED.h>
-#include "MatrixSystem.h"
-#include "MatrixVariable.h"
-//#include "Serials.h"
-#include "KeyPad.h"
-#include "LED.h"
-#include "USBmidi.h"
-#include "MIDI.h"
-#include "M2P.h"
-//#include "UI.h"
+#include "src/parameter/MatrixVariable.h"
+#include "src/parameter/MatrixParameter.h"
+//#include "../Serials.h"
+#include "src/core/MatrixSystem.h"
+#include "src/core/KeyPad.h"
+#include "src/core/LED.h"
+#include "src/core/USBmidi.h"
+#include "src/protocol/MIDI.h"
+#include "src/protocol/M2P.h"
+//#include "..UI.h"
 
 
 MIDI Midi;
@@ -61,9 +63,9 @@ void setup()
 
   while(!USBComposite.isReady())
   {
-    LED.Fill(CRGB::Red);
+    LED.Fill(0xff0000);
   }
-  LED.Fill(CRGB::Black);
+  LED.Fill(0x000000);
 }
 
 void ReadKey()

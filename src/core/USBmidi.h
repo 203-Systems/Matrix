@@ -1,7 +1,7 @@
 #ifndef USBMIDI_H
 #define USBMIDI_H
 
-#include "MIDI.h"
+#include "../protocol/MIDI.h"
 #include <USBMIDI.h>
 
 class usbmidi : public USBMidi
