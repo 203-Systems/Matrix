@@ -36,6 +36,8 @@ unsigned long currentMillis = 0;
 
 void setup()
 {
+  variableLoad();
+  
   if(device_id != 0)
   {
 

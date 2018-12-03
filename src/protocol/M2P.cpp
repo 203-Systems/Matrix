@@ -3,7 +3,7 @@
 extern LED LED;
 
 extern MIDI Midi;
-extern SerialComposite Serials;
+//extern SerialComposite Serials;
 
 M2P::M2P()
 {
@@ -102,13 +102,13 @@ void M2P::sysexSet()
     initializeDevice();
     break;
     case 20:
-    updateColourPaletteRGB();
+    updatePaletteRGB();
     break;
     case 21:
-    updateColourPaletteWRGB();
+    updatePaletteWRGB();
     break;
     case 22:
-    resetColourPalette();
+    resetPalette();
     break;
     case 24:
     setGamma((bool)CompositeSerial.read());
@@ -144,10 +144,10 @@ void M2P::sysexGet()
     getAllParameter();
     break;
     case 20:
-    getColorPaletteRGB();
+    getPaletteRGB();
     break;
     case 21:
-    getColorPaletteWRGB();
+    getPaletteWRGB();
     break;
     case 24:
     getGammaState();

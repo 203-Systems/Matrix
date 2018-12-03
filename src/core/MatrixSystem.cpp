@@ -2,7 +2,31 @@
 
 void variableLoad()
 {
+  EEPROM.PageBase0 = 0x800F7FF;
+  EEPROM.PageBase1 = 0x800FBFF;
+  EEPROM.PageSize  = 0x400;
+  if(EEPROM.read(0) & B00000001 > 0)
+  loadPalette();
 
+  if(EEPROM.read(0) & B00000010 > 0)
+  loadKeymap();
+
+  //EEPROM.read(0x00) & b00000100;
+
+  gamma_enable = EEPROM.read(0) & B00001000 > 0;
+  powercord_enable = EEPROM.read(0) & B00010000 >  0;
+  midi_enable = EEPROM.read(0) & B00100000 > 0;
+  m2p_enable = EEPROM.read(0) & B01000000 > 0;
+  massage_return = EEPROM.read(0) & B10000000 > 0;
+
+  rotation = EEPROM.read(579);
+  device_id = EEPROM.read(580);
+
+  if(EEPROM.read(581) > 0)
+  brightness = EEPROM.read(581);
+
+  if(EEPROM.read(582) > 0)
+  touch_sensitive = EEPROM.read(582);
 }
 
 
@@ -26,14 +50,53 @@ void enterBootloader()
 
 void initializeDevice()
 {
-  //TODO
+  formatEEPROM();
+  EEPROM.write(0x00, B0000011); //customPalette,customKeymap,customtouchbar,gamma,powercord,MIDI,M2P
 }
 
-void updateColourPaletteRGB()
+void formatEEPROM()
+{
+  EEPROM.format();
+}
+
+void loadPalette()
+{
+  for(int i = 0; i < 128; i++)
+  {
+    palette[2][i] =
+    EEPROM.read(i * 4 + 1)*0x1000000 + //W
+    EEPROM.read(i * 4 + 2)*0x10000 + //R
+    EEPROM.read(i * 4 + 3)*0x100 + //G
+    EEPROM.read(i * 4 + 4); //B
+  }
+}
+
+void loadKeymap()
+{
+  for(int y = 0; y < KEYPADY; y++)
+  {
+    for(int x = 0; x < KEYPADX; x++)
+    {
+      keymap[y][x] = EEPROM.read(y * KEYPADX + x + 514);
+    }
+  }
+}
+
+void updatePaletteRGB()
 {
   if(CompositeSerial.peek() < 128)
   {
-    palette[2][CompositeSerial.read()] = wrgbToHEX(0,CompositeSerial.read(),CompositeSerial.read(),CompositeSerial.read());
+    u8 colour = CompositeSerial.read();
+    EEPROM.write(colour * 4, 0x00);
+    EEPROM.write(colour * 4 + 1, CompositeSerial.read());
+    EEPROM.write(colour * 4 + 2, CompositeSerial.read());
+    EEPROM.write(colour * 4 + 3, CompositeSerial.read());
+
+    palette[2][colour] =
+    EEPROM.read(colour * 4) * 0x1000000 +
+    EEPROM.read(colour * 4 + 1) * 0x10000 +
+    EEPROM.read(colour * 4 + 2) * 0x100 +
+    EEPROM.read(colour * 4 + 3);
   }
   else if(CompositeSerial.peek() == 255)
   {
@@ -41,11 +104,21 @@ void updateColourPaletteRGB()
   }
 }
 
-void updateColourPaletteWRGB()
+void updatePaletteWRGB()
 {
   if(CompositeSerial.peek() < 128)
   {
-    palette[2][CompositeSerial.read()] = wrgbToHEX(CompositeSerial.read(),CompositeSerial.read(),CompositeSerial.read(),CompositeSerial.read());
+    u8 colour = CompositeSerial.read();
+    EEPROM.write(colour * 4, CompositeSerial.read());
+    EEPROM.write(colour * 4 + 1, CompositeSerial.read());
+    EEPROM.write(colour * 4 + 2, CompositeSerial.read());
+    EEPROM.write(colour * 4 + 3, CompositeSerial.read());
+
+    palette[2][colour] =
+    EEPROM.read(colour * 4) * 0x1000000 +
+    EEPROM.read(colour * 4 + 1) * 0x10000 +
+    EEPROM.read(colour * 4 + 2) * 0x100 +
+    EEPROM.read(colour * 4 + 3);
   }
   else if(CompositeSerial.peek() == 255)
   {
@@ -53,8 +126,9 @@ void updateColourPaletteWRGB()
   }
 }
 
-void resetColourPalette()
+void resetPalette()
 {
+  EEPROM.write(0, EEPROM.read(0) & B01111111);
   // for(int i = 0; i < sizeof(palette[0]); i++)
   // {
   //   palette[2][i] = palette[0][i];
@@ -63,6 +137,7 @@ void resetColourPalette()
 
 void setGamma(bool g)
 {
+
   gamma_enable = g;
 }
 
@@ -70,12 +145,18 @@ void updateCustomKeymap()
 {
   while(CompositeSerial.peek() != 255)
   {
-    keymap[CompositeSerial.read()][CompositeSerial.read()] = CompositeSerial.read();
+    u8 x = CompositeSerial.read();
+    u8 y = CompositeSerial.read();
+
+    EEPROM.write(y * KEYPADX + x + 514, CompositeSerial.read());
+
+    keymap[y][x] = EEPROM.read(y * KEYPADX + x + 514);
   }
 }
 
 void resetCustomKeymap()
 {
+
   // for(int x = 0; x < KEYPADX; x++)
   // {
   //   for(int y = 0; y < KEYPADY; y++)
@@ -87,6 +168,7 @@ void resetCustomKeymap()
 
 void setBrightness(u8 b)
 {
+  EEPROM.write(581, b);
   brightness = b;
   reset();
 }
@@ -94,6 +176,7 @@ void setBrightness(u8 b)
 
 void setTouchSensitive(u8 s)
 {
+  EEPROM.write(582, s);
   touch_sensitive = s;
 }
 
@@ -127,7 +210,7 @@ void getAllParameter()
   //TODO
 }
 
-void getColorPaletteRGB()
+void getPaletteRGB()
 {
   CompositeSerial.write((u8)(0));
   CompositeSerial.write(14);
@@ -143,7 +226,7 @@ void getColorPaletteRGB()
   CompositeSerial.write(255);
 }
 
-void getColorPaletteWRGB()
+void getPaletteWRGB()
 {
   CompositeSerial.write((u8)(0));
   CompositeSerial.write(14);

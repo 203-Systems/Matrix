@@ -5,7 +5,7 @@
 
 #include <Arduino.h>
 #include "../core/LED.h"
-#include "../core/SerialComposite.h"
+// #include "../core/SerialComposite.h"
 #include "../protocol/MIDI.h"
 #include "../parameter/MatrixVariable.h"
 #include "../parameter/MatrixParameter.h"

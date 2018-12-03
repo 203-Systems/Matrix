@@ -14,14 +14,20 @@
 // }
 
   void variableLoad();
+
+  //load from EEPROM
+  void loadPalette();
+  void loadKeymap();
+
   //Sysex set
   void reset();
   void setDeviceID();
   void enterBootloader();
   void initializeDevice();
-  void updateColourPaletteRGB();
-  void updateColourPaletteWRGB();
-  void resetColourPalette();
+  void formatEEPROM();
+  void updatePaletteRGB();
+  void updatePaletteWRGB();
+  void resetPalette();
   void setGamma(bool g);
   void updateCustomKeymap();
   void resetCustomKeymap();
@@ -34,8 +40,8 @@
   void getModuleInfo();
   void getdevice_id();
   void getAllParameter();
-  void getColorPaletteRGB();
-  void getColorPaletteWRGB();
+  void getPaletteRGB();
+  void getPaletteWRGB();
   void getGammaState();
   void getCustomKeymap();
   void getBrightness();
