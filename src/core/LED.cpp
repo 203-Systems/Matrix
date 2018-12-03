@@ -224,9 +224,9 @@ u64 LED::applyGamma(u64 WRGB)
   };
 
   return
-  LEDGamma[(WRGB & 0xff000000)] *0x1000000 +
-  LEDGamma[(WRGB & 0x00ff0000)>> 16] *0x10000 +
-  LEDGamma[(WRGB & 0x0000ff00)>> 8] *0x100 +
+  LEDGamma[(WRGB & 0xff000000) >> 24] * 0x1000000 +
+  LEDGamma[(WRGB & 0x00ff0000) >> 16] *0x10000 +
+  LEDGamma[(WRGB & 0x0000ff00) >> 8] *0x100 +
   LEDGamma[(WRGB & 0x000000ff)];
 }
 

@@ -80,18 +80,23 @@ void ReadKey()
 
     for(int i = 0; i < MULTIPRESS; i++)
     {
-      if(KeyPad.list[i].velocity == 255)
+      if(KeyPad.list[i].velocity > 128)
       return;
       if(KeyPad.list[i].velocity > 0)
       {
         if(midi_enable)
         {
-          Midi.sentXYon(KeyPad.list[i].xy && 0xF0, KeyPad.list[i].xy && 0xF0, KeyPad.list[i].velocity);
+          Midi.sentXYon(KeyPad.list[i].xy >> 4, KeyPad.list[i].xy & 0x0F, KeyPad.list[i].velocity);
+          CompositeSerial.print(KeyPad.list[i].xy);
+          CompositeSerial.print(' ');
+          CompositeSerial.print(KeyPad.list[i].xy & 0xF0 >> 4 );
+          CompositeSerial.print(' ');
+          CompositeSerial.println(KeyPad.list[i].xy & 0x0F );
         }
-        else
-        {
-          Midi.sentXYon(KeyPad.list[i].xy && 0xF0, KeyPad.list[i].xy && 0xF0, 0);
-        }
+      }
+      else
+      {
+        Midi.sentXYoff(KeyPad.list[i].xy >> 4, KeyPad.list[i].xy & 0x0F, 0);
       }
     }
   }
@@ -104,11 +109,10 @@ void loop()
   // if (m2p_enable)
   // CDC.Poll();
 
-  ReadKey();
-
   currentMillis = millis();
   if (currentMillis - previousMillis >= 1000/FPS)
   {
+    ReadKey();
     LED.update();
     //LED.Rainbow();
     //CompositeSerial.println("Running");

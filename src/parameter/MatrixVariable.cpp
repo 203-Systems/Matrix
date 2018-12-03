@@ -419,4 +419,4 @@ bool gamma_enable = false; //Wont effect colour palette
 bool midi_enable = true;
 bool cdc_enable = true;
 bool powercord_enable = false;
-bool massage_return = true;
+bool massage_return = false;

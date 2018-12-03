@@ -20,14 +20,14 @@ void MIDI::noteOn(u8 channel, u8 note, u8 velocity)
     for(u8 x = 0; x < KEYPADX; x++)
     {
       if(note == keymap[y][x])
-      LED.setXYPalette(channel, x, y, velocity);
+      LED.setXYPalette(x, y, channel, velocity);
     }
   }
   //BottomLED
   for(u8 i = 0;i < NUM_BOTTOM_LEDS; i++)
   {
     if(note == bottomLEDmap[i])
-    LED.setPalette(channel, i+NUM_LEDS ,velocity);
+    LED.setPalette(i+NUM_LEDS, channel ,velocity);
   }
 
   if (massage_return)
@@ -61,7 +61,7 @@ void MIDI::noteOff(u8 channel, u8 note, u8 velocity)
     if(note == bottomLEDmap[i])
     LED.off(i+NUM_LEDS);
   }
-  
+
   if (massage_return)
   {
     MIDI::sentNoteOff(channel, note, velocity);

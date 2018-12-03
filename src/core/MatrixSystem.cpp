@@ -133,12 +133,12 @@ void getColorPaletteRGB()
   CompositeSerial.write(14);
   CompositeSerial.write(20);
 
-  for(u8 i = 0; i < sizeof(palette[3]); i++)
+  for(u8 i = 0; i < sizeof(palette[2]); i++)
   {
     CompositeSerial.write(i);
-    CompositeSerial.write(palette[i] && 0xFF0000);
-    CompositeSerial.write(palette[i] && 0xFF00);
-    CompositeSerial.write(palette[i] && 0xFF);
+    CompositeSerial.write(palette[2][i] & 0xFF0000 >> 16);
+    CompositeSerial.write(palette[2][i] & 0xFF00 >> 8);
+    CompositeSerial.write(palette[2][i] & 0xFF);
   }
   CompositeSerial.write(255);
 }
@@ -149,13 +149,13 @@ void getColorPaletteWRGB()
   CompositeSerial.write(14);
   CompositeSerial.write(21);
 
-  for(u8 i = 0; i < sizeof(palette[3]); i++)
+  for(u8 i = 0; i < sizeof(palette[2]); i++)
   {
     CompositeSerial.write(i);
-    CompositeSerial.write(palette[i] && 0xFF000000);
-    CompositeSerial.write(palette[i] && 0xFF0000);
-    CompositeSerial.write(palette[i] && 0xFF00);
-    CompositeSerial.write(palette[i] && 0xFF);
+    CompositeSerial.write(palette[2][i] & 0xFF000000 >> 24);
+    CompositeSerial.write(palette[2][i] & 0xFF0000 >> 16);
+    CompositeSerial.write(palette[2][i] & 0xFF00 >> 8);
+    CompositeSerial.write(palette[2][i] & 0xFF);
   }
   CompositeSerial.write(255);
 }
