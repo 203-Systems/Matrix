@@ -1,7 +1,7 @@
 #include "M2P.h"
 
 extern LED LED;
-extern MatrixSystem Matrix;
+
 extern MIDI Midi;
 extern SerialComposite Serials;
 
@@ -93,36 +93,36 @@ void M2P::sysexSet()
   switch (CompositeSerial.read() & 0x0F)
   {
     case 8:
-    Matrix.reset();
+    reset();
     break;
     case 9:
-    Matrix.enterBootloader();
+    enterBootloader();
     break;
     case 10:
-    Matrix.initializeDevice();
+    initializeDevice();
     break;
     case 20:
-    Matrix.updateColourPaletteRGB();
+    updateColourPaletteRGB();
     break;
     case 21:
-    Matrix.updateColourPaletteWRGB();
+    updateColourPaletteWRGB();
     break;
     case 22:
-    Matrix.resetColourPalette();
+    resetColourPalette();
     break;
     case 24:
-    Matrix.setGamma((bool)CompositeSerial.read());
+    setGamma((bool)CompositeSerial.read());
     case 25:
-    Matrix.updateCustomKeymap();
+    updateCustomKeymap();
     break;
     case 26:
-    Matrix.resetCustomKeymap();
+    resetCustomKeymap();
     break;
     case 30:
-    Matrix.setBrightness(CompositeSerial.read());
+    setBrightness(CompositeSerial.read());
     break;
     case 31:
-    Matrix.setTouchSensitive(CompositeSerial.read());
+    setTouchSensitive(CompositeSerial.read());
     break;
   }
 }
@@ -132,34 +132,34 @@ void M2P::sysexGet()
   switch(CompositeSerial.read() & 0x0F)
   {
     case 0:
-    Matrix.getDeviceInfo();
+    getDeviceInfo();
     break;
     case 1:
-    Matrix.getModuleCount();
+    getModuleCount();
     break;
     case 2:
-    Matrix.getModuleInfo();
+    getModuleInfo();
     break;
     case 5:
-    Matrix.getAllParameter();
+    getAllParameter();
     break;
     case 20:
-    Matrix.getColorPaletteRGB();
+    getColorPaletteRGB();
     break;
     case 21:
-    Matrix.getColorPaletteWRGB();
+    getColorPaletteWRGB();
     break;
     case 24:
-    Matrix.getGammaState();
+    getGammaState();
     break;
     case 25:
-    Matrix.getCustomKeymap();
+    getCustomKeymap();
     break;
     case 30:
-    Matrix.getBrightness();
+    getBrightness();
     break;
     case 31:
-    Matrix.getTouchSensitive();
+    getTouchSensitive();
     break;
   }
 }
@@ -172,8 +172,8 @@ void M2P::toMIDI()
   int Velocity = CompositeSerial.read();
   switch (Mode) {
     case 8:
-    Midi.sentNoteoff(Channel, Note, Velocity);
+    Midi.sentNoteOff(Channel, Note, Velocity);
     case 9:
-    Midi.sentNoteon(Channel, Note, Velocity);
+    Midi.sentNoteOn(Channel, Note, Velocity);
   }
 }

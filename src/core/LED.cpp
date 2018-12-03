@@ -1,7 +1,7 @@
 #include "LED.h"
 #include <FastLED.h>
 
-extern MatrixSystem Matrix;
+
 
 LED::LED()
 {
@@ -40,7 +40,7 @@ void LED::fill(u64 WRGB, bool overlay /*= false*/)
 // {
 //   u8 index = x;
 //   if(ledmode == XY)
-//   u8 index = Matrix.xyToIndex(x,y);
+//   u8 index = xyToIndex(x,y);
 //
 //   switch (ledmode)
 //   {
@@ -100,11 +100,11 @@ void LED::setHEX(u8 index, u64 WRGB, bool overlay /*= false*/)
 {
   if(!overlay_mode || overlay)
   {
-    leds[Matrix.indexRotation(index)] = WRGB;
+    leds[indexRotation(index)] = WRGB;
   }
   else
   {
-    buffer[Matrix.indexRotation(index)] = WRGB;
+    buffer[indexRotation(index)] = WRGB;
   }
 }
 
@@ -147,11 +147,11 @@ void LED::setXYHEX(u8 x, u8 y, u64 WRGB, bool overlay /*= false*/)
 {
   if(!overlay_mode || overlay)
   {
-    leds[Matrix.xyToIndex(x,y)] = WRGB;
+    leds[xyToIndex(x,y)] = WRGB;
   }
   else
   {
-    buffer[Matrix.xyToIndex(x,y)] = WRGB;
+    buffer[xyToIndex(x,y)] = WRGB;
   }
 }
 

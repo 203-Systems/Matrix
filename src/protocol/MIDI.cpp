@@ -1,7 +1,7 @@
 #include "MIDI.h"
 
 extern LED LED;
-extern MatrixSystem Matrix;
+
 
 MIDI::MIDI()
 {
@@ -15,22 +15,19 @@ void MIDI::poll()
 
 void MIDI::noteOn(u8 channel, u8 note, u8 velocity)
 {
-  if(LEDwrite)
+  for(u8 y = 0; y < KEYPADY; y++)
   {
-    for(u8 y = 0; y < KEYPADY; y++)
+    for(u8 x = 0; x < KEYPADX; x++)
     {
-      for(u8 x = 0; x < KEYPADX; x++)
-      {
-        if(note == keymap[y][x])
-        LED.setXYPalette(channel, x, y, velocity);
-      }
+      if(note == keymap[y][x])
+      LED.setXYPalette(channel, x, y, velocity);
     }
-    //BottomLED
-    for(u8 i = 0;i < NUM_BOTTOM_LEDS; i++)
-    {
-      if(note == bottomLEDmap[i])
-      LED.setPalette(channel, i+NUM_LEDS ,velocity);
-    }
+  }
+  //BottomLED
+  for(u8 i = 0;i < NUM_BOTTOM_LEDS; i++)
+  {
+    if(note == bottomLEDmap[i])
+    LED.setPalette(channel, i+NUM_LEDS ,velocity);
   }
 
   if (massage_return)
@@ -47,26 +44,24 @@ void MIDI::noteOn(u8 channel, u8 note, u8 velocity)
   }
 }
 
+
 void MIDI::noteOff(u8 channel, u8 note, u8 velocity)
 {
-  if(LEDwrite)
+  for(u8 y = 0; y < KEYPADY; y++)
   {
-    for(u8 y = 0; y < KEYPADY; y++)
+    for(u8 x = 0; x < KEYPADX; x++)
     {
-      for(u8 x = 0; x < KEYPADX; x++)
-      {
-        if(note == keymap[y][x])
-        LED.offXY(x,y);
-      }
-    }
-    //BottomLED
-    for(u8 i = 0;i < NUM_BOTTOM_LEDS; i++)
-    {
-      if(note == bottomLEDmap[i])
-      LED.off(i+NUM_LEDS);
+      if(note == keymap[y][x])
+      LED.offXY(x,y);
     }
   }
-
+  //BottomLED
+  for(u8 i = 0;i < NUM_BOTTOM_LEDS; i++)
+  {
+    if(note == bottomLEDmap[i])
+    LED.off(i+NUM_LEDS);
+  }
+  
   if (massage_return)
   {
     MIDI::sentNoteOff(channel, note, velocity);

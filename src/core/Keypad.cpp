@@ -1,7 +1,7 @@
 #include "KeyPad.h"
 
 // extern MIDI Midi;
-// extern MatrixSystem Matrix;
+// 
 
 KeyPad::KeyPad()
 {
@@ -136,7 +136,7 @@ void KeyPad::updateList()
 
 // void KeyPad::On(uint8 x, uint8 y)
 // {
-//   CompositeSerial.println(Matrix.xyToIndex(x,y)*10+1);
+//   CompositeSerial.println(xyToIndex(x,y)*10+1);
 //
 //   switch (rotation)
 //   {
@@ -156,7 +156,7 @@ void KeyPad::updateList()
 //
 // void KeyPad::Off(uint8 x, uint8 y)
 // {
-//   CompositeSerial.println(Matrix.xyToIndex(x,y)*10);
+//   CompositeSerial.println(xyToIndex(x,y)*10);
 //
 //   switch (rotation)
 //   {

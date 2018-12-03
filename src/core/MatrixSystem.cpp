@@ -1,43 +1,39 @@
 #include "MatrixSystem.h"
 
-MatrixSystem::MatrixSystem()
-{
-}
-
-void MatrixSystem::variableLoad()
+void variableLoad()
 {
 
 }
 
 
 //Sysex set
-void MatrixSystem::reset()
+void reset()
 {
   digitalWrite(RESET_PIN,LOW);
 }
 
-void MatrixSystem::setDeviceID()
+void setDeviceID()
 {
   device_id = CompositeSerial.read();
-  MatrixSystem::reset();
+  reset();
 }
 
 
-void MatrixSystem::enterBootloader()
+void enterBootloader()
 {
-  MatrixSystem::reset();
+  reset();
 }
 
-void MatrixSystem::initializeDevice()
+void initializeDevice()
 {
   //TODO
 }
 
-void MatrixSystem::updateColourPaletteRGB()
+void updateColourPaletteRGB()
 {
   if(CompositeSerial.peek() < 128)
   {
-    palette[2][CompositeSerial.read()] = MatrixSystem::wrgbToHEX(0,CompositeSerial.read(),CompositeSerial.read(),CompositeSerial.read());
+    palette[2][CompositeSerial.read()] = wrgbToHEX(0,CompositeSerial.read(),CompositeSerial.read(),CompositeSerial.read());
   }
   else if(CompositeSerial.peek() == 255)
   {
@@ -45,11 +41,11 @@ void MatrixSystem::updateColourPaletteRGB()
   }
 }
 
-void MatrixSystem::updateColourPaletteWRGB()
+void updateColourPaletteWRGB()
 {
   if(CompositeSerial.peek() < 128)
   {
-    palette[2][CompositeSerial.read()] = MatrixSystem::wrgbToHEX(CompositeSerial.read(),CompositeSerial.read(),CompositeSerial.read(),CompositeSerial.read());
+    palette[2][CompositeSerial.read()] = wrgbToHEX(CompositeSerial.read(),CompositeSerial.read(),CompositeSerial.read(),CompositeSerial.read());
   }
   else if(CompositeSerial.peek() == 255)
   {
@@ -57,7 +53,7 @@ void MatrixSystem::updateColourPaletteWRGB()
   }
 }
 
-void MatrixSystem::resetColourPalette()
+void resetColourPalette()
 {
   // for(int i = 0; i < sizeof(palette[0]); i++)
   // {
@@ -65,12 +61,12 @@ void MatrixSystem::resetColourPalette()
   // }
 }
 
-void MatrixSystem::setGamma(bool g)
+void setGamma(bool g)
 {
   gamma_enable = g;
 }
 
-void MatrixSystem::updateCustomKeymap()
+void updateCustomKeymap()
 {
   while(CompositeSerial.peek() != 255)
   {
@@ -78,7 +74,7 @@ void MatrixSystem::updateCustomKeymap()
   }
 }
 
-void MatrixSystem::resetCustomKeymap()
+void resetCustomKeymap()
 {
   // for(int x = 0; x < KEYPADX; x++)
   // {
@@ -89,35 +85,35 @@ void MatrixSystem::resetCustomKeymap()
   // }
 }
 
-void MatrixSystem::setBrightness(u8 b)
+void setBrightness(u8 b)
 {
   brightness = b;
-  MatrixSystem::reset();
+  reset();
 }
 
 
-void MatrixSystem::setTouchSensitive(u8 s)
+void setTouchSensitive(u8 s)
 {
   touch_sensitive = s;
 }
 
 //Sysex get
-void MatrixSystem::getDeviceInfo()
+void getDeviceInfo()
 {
   //TODO
 }
 
-void MatrixSystem::getModuleCount()
+void getModuleCount()
 {
   //TODO
 }
 
-void MatrixSystem::getModuleInfo()
+void getModuleInfo()
 {
 
 }
 
-void MatrixSystem::getdevice_id()
+void getdevice_id()
 {
   CompositeSerial.write((u8)0);
   CompositeSerial.write(14);
@@ -126,12 +122,12 @@ void MatrixSystem::getdevice_id()
 }
 
 
-void MatrixSystem::getAllParameter()
+void getAllParameter()
 {
   //TODO
 }
 
-void MatrixSystem::getColorPaletteRGB()
+void getColorPaletteRGB()
 {
   CompositeSerial.write((u8)(0));
   CompositeSerial.write(14);
@@ -147,7 +143,7 @@ void MatrixSystem::getColorPaletteRGB()
   CompositeSerial.write(255);
 }
 
-void MatrixSystem::getColorPaletteWRGB()
+void getColorPaletteWRGB()
 {
   CompositeSerial.write((u8)(0));
   CompositeSerial.write(14);
@@ -164,21 +160,21 @@ void MatrixSystem::getColorPaletteWRGB()
   CompositeSerial.write(255);
 }
 
-void MatrixSystem::getGammaState()
+void getGammaState()
 {
   CompositeSerial.write((u8)(0));
   CompositeSerial.write(14);
   CompositeSerial.write(24);
 }
 
-void MatrixSystem::getCustomKeymap()
+void getCustomKeymap()
 {
   CompositeSerial.write((u8)(0));
   CompositeSerial.write(14);
   CompositeSerial.write(25);
 }
 
-void MatrixSystem::getBrightness()
+void getBrightness()
 {
   CompositeSerial.write((u8)(0));
   CompositeSerial.write(14);
@@ -186,7 +182,7 @@ void MatrixSystem::getBrightness()
   CompositeSerial.write(brightness);
 }
 
-void MatrixSystem::getTouchSensitive()
+void getTouchSensitive()
 {
   CompositeSerial.write((u8)(0));
   CompositeSerial.write(14);
@@ -195,12 +191,12 @@ void MatrixSystem::getTouchSensitive()
 }
 
 //Math
-u8 MatrixSystem::wrgbToHEX(u8 w, u8 r, u8 g, u8 b)
+u8 wrgbToHEX(u8 w, u8 r, u8 g, u8 b)
 {
   return w * 0x10000000 + r * 0x10000 + g * 0x100 + b;
 }
 
-u8 MatrixSystem::xyToIndex(u8 x, u8 y)
+u8 xyToIndex(u8 x, u8 y)
 {
 
   switch (rotation)
@@ -229,7 +225,7 @@ u8 indexRotation(int index)
   // XY xy = indexToXY(index);
   if(index < NUM_LEDS)
   {
-    return xyToIndex(index % KEYPADX, index / KEYPADX)
+    return xyToIndex(index % KEYPADX, index / KEYPADX);
   }
   else if(index >= NUM_LEDS && index < NUM_TOTAL_LEDS)
   {

@@ -29,7 +29,6 @@ MIDI Midi;
 M2P M2P;
 LED LED;
 KeyPad KeyPad;
-MatrixSystem Matrix;
 usbmidi USBmidi;
 
 unsigned long previousMillis = 0;

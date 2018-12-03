@@ -13,11 +13,6 @@
 //   u8 y;
 // }
 
-class MatrixSystem
-{
-public:
-  MatrixSystem();
-
   void variableLoad();
   //Sysex set
   void reset();
@@ -53,6 +48,5 @@ public:
   u8 indexRotation(int index);
   u8 bottomLEDrotation(int index);
   //u8 xyToIndex(u8 X,u8 Y);
-};
 
 #endif
