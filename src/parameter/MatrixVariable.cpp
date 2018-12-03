@@ -1,11 +1,11 @@
 #include "MatrixVariable.h"
 
 //DeviceInfo
-uint8_t device_id = 0; //0~255 0 for off
+u8 device_id = 0; //0~255 0 for off
 
 //LED setting
-uint8_t brightness = 64;  //VeryDim - 32 | Dim - 64 | Normal - 96 | Bright(Default) - 128 | VeyBriight - 160 | Bright AF - 192  (Higher then 192 could result in USB resettable fuse disconnect(500ma))
-uint64_t palette[3][128] =     //WRGB Colour Palette
+u8 brightness = 64;  //VeryDim - 32 | Dim - 64 | Normal - 96 | Bright(Default) - 128 | VeyBriight - 160 | Bright AF - 192  (Higher then 192 could result in USB resettable fuse disconnect(500ma))
+u64 palette[3][128] =     //WRGB Colour Palette
 {{            //MatrixColorPalette
   0x00000000, //0
   0x00050505, //1
@@ -264,7 +264,7 @@ uint64_t palette[3][128] =     //WRGB Colour Palette
   0x003F3100, //125
   0x00B35F00, //126
   0x004B1502  //127,
-};{           //Custom Colour palette default use 203 palette
+},{           //Custom Colour palette default use 203 palette
   0x00000000, //0
   0x00050505, //1
   0x00101010, //2
@@ -395,11 +395,11 @@ uint64_t palette[3][128] =     //WRGB Colour Palette
   0x00FF3F6F //127
 }};
 
-uint8_t bottomLEDmap [NUM_BOTTOM_LEDS] =
+u8 bottomLEDmap [NUM_BOTTOM_LEDS] =
 {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35};
 
 //KeyPad
-uint8_t keymap [KEYPADY][KEYPADX] =
+u8 keymap [KEYPADY][KEYPADX] =
 {{64, 65, 66, 67, 96, 97, 98, 99},
 {60, 61, 62, 63, 92, 93, 94, 95},
 {56, 57, 58, 59, 88, 89, 90, 91},
@@ -410,11 +410,11 @@ uint8_t keymap [KEYPADY][KEYPADX] =
 {36, 37, 38, 39, 68, 69, 70, 71}};
 
 //TouchBar
-uint8_t touch_sensitive = 0;
+u8 touch_sensitive = 0;
 
 //Sysex
-uint8_t rotation = 0;
-uint8_t midi_channel = 0;
+u8 rotation = 0;
+u8 midi_channel = 0;
 bool gamma_enable = false; //Wont effect colour palette
 bool midi_enable = true;
 bool cdc_enable = true;

@@ -52,7 +52,7 @@ void UI::fnMenu()
     }
   }
 
-  uint32_t currentMillis = millis();
+  u32 currentMillis = millis();
   if (currentMillis - previousMillis >= 1000/FPS)
   {
     UI::fnrender();

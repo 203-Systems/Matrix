@@ -63,14 +63,14 @@ void setup()
 
   while(!USBComposite.isReady())
   {
-    LED.Fill(0xff0000);
+    LED.fill(0xff0000);
   }
-  LED.Fill(0x000000);
+  LED.fill(0x000000);
 }
 
 void ReadKey()
 {
-  if (KeyPad.Scan())
+  if (KeyPad.scan())
   {
     // if(KeyPad.timesFNpressed == 5)
     // UI.ShowDeviceInfo();
@@ -87,11 +87,11 @@ void ReadKey()
       {
         if(midi_enable)
         {
-          Midi.SentXYon(KeyPad.list[i].xy && 0xF0, KeyPad.list[i].xy && 0xF0, KeyPad.list[i].velocity);
+          Midi.sentXYon(KeyPad.list[i].xy && 0xF0, KeyPad.list[i].xy && 0xF0, KeyPad.list[i].velocity);
         }
         else
         {
-          Midi.SentXYon(KeyPad.list[i].xy && 0xF0, KeyPad.list[i].xy && 0xF0, 0);
+          Midi.sentXYon(KeyPad.list[i].xy && 0xF0, KeyPad.list[i].xy && 0xF0, 0);
         }
       }
     }
@@ -110,7 +110,7 @@ void loop()
   currentMillis = millis();
   if (currentMillis - previousMillis >= 1000/FPS)
   {
-    LED.Update();
+    LED.update();
     //LED.Rainbow();
     //CompositeSerial.println("Running");
     previousMillis = currentMillis;
@@ -128,13 +128,13 @@ void loop()
 //       {
 //         LED.setPalette(p,c,c+n*64);
 //       }
-//       LED.Update();
+//       LED.update();
 //       delay(1000);
-//       while(KeyPad.Scan() == 0)
+//       while(KeyPad.scan() == 0)
 //       {
 //
 //       }
-//       while(KeyPad.Scan() == 0)
+//       while(KeyPad.scan() == 0)
 //       {
 //
 //       }
@@ -152,13 +152,13 @@ void loop()
 //     {
 //       LED.setPalette(0,c,c+n*64);
 //     }
-//     LED.Update();
-//     while(KeyPad.Scan() == 0)
+//     LED.update();
+//     while(KeyPad.scan() == 0)
 //     {
 //
 //     }
 //         delay(50);
-//     while(KeyPad.Scan() == 0)
+//     while(KeyPad.scan() == 0)
 //     {
 //
 //     }

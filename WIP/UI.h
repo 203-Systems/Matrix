@@ -11,15 +11,15 @@
 
 struct Animation
 {
-  uint8_t Mode; //0 for full array are NUM_LEDS * FPS | 1 for xy mode XY+
-  uint8_t AnimationFPS;
+  u8 Mode; //0 for full array are NUM_LEDS * FPS | 1 for xy mode XY+
+  u8 AnimationFPS;
   char* AnimationData;
 };
 
 struct Key
 {
-  uint8_t Mode; //0 for full array are NUM_LEDS * FPS | 1 for xy mode XY+
-  uint8_t AnimationFPS;
+  u8 Mode; //0 for full array are NUM_LEDS * FPS | 1 for xy mode XY+
+  u8 AnimationFPS;
   char* AnimationData;
 };
 

@@ -7,6 +7,12 @@
 #include "../parameter/MatrixVariable.h"
 #include "../parameter/MatrixParameter.h"
 
+// struct XY
+// {
+//   u8 x;
+//   u8 y;
+// }
+
 class MatrixSystem
 {
 public:
@@ -16,16 +22,16 @@ public:
   //Sysex set
   void reset();
   void setDeviceID();
-  void EnterBootloader();
-  void InitializeDevice();
+  void enterBootloader();
+  void initializeDevice();
   void updateColourPaletteRGB();
   void updateColourPaletteWRGB();
   void resetColourPalette();
   void setGamma(bool g);
   void updateCustomKeymap();
-  void ResetCustomKeymap();
-  void setBrightness(uint8_t b);
-  void setTouchSensitive(uint8_t s);
+  void resetCustomKeymap();
+  void setBrightness(u8 b);
+  void setTouchSensitive(u8 s);
 
   //Sysex get
   void getDeviceInfo();
@@ -41,10 +47,12 @@ public:
   void getTouchSensitive();
 
   //Math
-  uint8_t WRGBtoHEX(uint8_t W, uint8_t R, uint8_t G, uint8_t B);
-  uint8_t XYtoIndex(uint8_t X, uint8_t Y);
-  uint8_t bottomLEDrotation(int index);
-  //uint8_t XYtoIndex(uint8_t X,uint8_t Y);
+  u8 wrgbToHEX(u8 w, u8 r, u8 g, u8 b);
+  u8 xyToIndex(u8 x, u8 y);
+  // XY indexToXY(u8 index);
+  u8 indexRotation(int index);
+  u8 bottomLEDrotation(int index);
+  //u8 xyToIndex(u8 X,u8 Y);
 };
 
 #endif

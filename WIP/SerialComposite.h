@@ -16,8 +16,8 @@ public:
   SerialComposite();
   void begin();
   bool isReady();
-  uint32_t available(SERIALS selector);
-  //uint32_t read(uint8 * buf, uint32 len, SERIALS selector);
+  u32 available(SERIALS selector);
+  //u32 read(uint8 * buf, uint32 len, SERIALS selector);
   int peek(SERIALS selector);
   int read(SERIALS selector);
   int availableForWrite(SERIALS selector);

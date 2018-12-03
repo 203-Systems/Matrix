@@ -14,13 +14,13 @@ class MIDI
 {
 public:
   MIDI();
-  void noteOn(uint8_t channel, uint8_t note, uint8_t velocity);
-  void noteOff(uint8_t channel, uint8_t note, uint8_t velocity);
+  void noteOn(u8 channel, u8 note, u8 velocity);
+  void noteOff(u8 channel, u8 note, u8 velocity);
   void poll();
-  void sentXYon(uint8_t x, uint8_t y, uint8_t velocity);
-  void sentXYoff(uint8_t x, uint8_t y, uint8_t velocity);
-  void sentNoteOn(uint8_t channel, uint8_t note, uint8_t velocity);
-  void sentNoteOff(uint8_t channel, uint8_t note, uint8_t velocity);
+  void sentXYon(u8 x, u8 y, u8 velocity);
+  void sentXYoff(u8 x, u8 y, u8 velocity);
+  void sentNoteOn(u8 channel, u8 note, u8 velocity);
+  void sentNoteOff(u8 channel, u8 note, u8 velocity);
 };
 
 #endif

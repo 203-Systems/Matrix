@@ -35,43 +35,43 @@ void M2P::decode()
   if(CompositeSerial.peek() > 0x0f) //ERRoR checking
   return;
 
-  switch (CompositeSerial.read()) //ToDo uint8_t To UINT4+UINT4
+  switch (CompositeSerial.read()) //ToDo u8 To UINT4+UINT4
   {
     case 0x00://0
-    LED.off(CompositeSerial.peek() & 0xF0, CompositeSerial.read() & 0x0F);
+    LED.off(CompositeSerial.peek() & 0xF0, CompositeSerial.read() & 0x0F); //XY off
     break;
     case 0x01://1
-    LED.off(CompositeSerial.read());
+    LED.off(CompositeSerial.read()); //index Off
     break;
     case 0x02://2
-    LED.setRGB(CompositeSerial.peek() & 0xF0, CompositeSerial.read() & 0x0F, CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read()); //XYRGB
+    LED.setXYRGB(CompositeSerial.peek() & 0xF0, CompositeSerial.read() & 0x0F, CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read()); //XY RGB
     break;
     case 0x03://3
-    LED.setRGB(CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read()); //XYRGB
+    LED.setRGB(CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read()); //index RGB
     break;
     case 0x04://4
-    LED.setWRGB(CompositeSerial.peek() & 0xF0, CompositeSerial.read() & 0x0F, CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read()); //XYWRGB
+    LED.setXYWRGB(CompositeSerial.peek() & 0xF0, CompositeSerial.read() & 0x0F, CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read()); //index WRGB
     break;
     case 0x05://5
-    LED.setWRGB(CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read()); //XYWRGB
+    LED.setWRGB(CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read()); //XY WRGB
     break;
     case 0x06://6
-    LED.setW(CompositeSerial.peek() & 0xF0, CompositeSerial.read() & 0x0F, CompositeSerial.read()); //XYW
+    LED.setXYW(CompositeSerial.peek() & 0xF0, CompositeSerial.read() & 0x0F, CompositeSerial.read()); //XY W
     break;
     case 0x07://7
-    LED.setW(CompositeSerial.read(), CompositeSerial.read()); //XYW
+    LED.setW(CompositeSerial.read(), CompositeSerial.read()); //index W
     break;
     case 0x08://8
-    LED.on(CompositeSerial.read()); //XY
+    LED.onXY(CompositeSerial.peek() & 0xF0, CompositeSerial.read() & 0x0F); //XY On
     break;
     case 0x09://9
-    LED.on(CompositeSerial.read()); //XY
+    LED.on(CompositeSerial.read()); //index On
     break;
     case 0x0A://10
-    LED.setPalette(CompositeSerial.peek() & 0xF0, CompositeSerial.read() & 0x0F,CompositeSerial.read(), CompositeSerial.read()); //XYP
+    LED.setXYPalette(CompositeSerial.peek() & 0xF0, CompositeSerial.read() & 0x0F,CompositeSerial.read(), CompositeSerial.read()); //XY Palette
     break;
     case 0x0B://11
-    LED.setPalette(CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read()); //XYP
+    LED.setPalette(CompositeSerial.read(), CompositeSerial.read(), CompositeSerial.read()); //index Palette
     break;
     case 0x0C://12
     //Well... Nothing yet XD

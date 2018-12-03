@@ -13,23 +13,23 @@ void MIDI::poll()
   USBMIDI.poll();
 }
 
-void MIDI::noteOn(uint8_t channel, uint8_t note, uint8_t velocity)
+void MIDI::noteOn(u8 channel, u8 note, u8 velocity)
 {
   if(LEDwrite)
   {
-    for(uint8_t y = 0; y < KEYPADY; y++)
+    for(u8 y = 0; y < KEYPADY; y++)
     {
-      for(uint8_t x = 0; x < KEYPADX; x++)
+      for(u8 x = 0; x < KEYPADX; x++)
       {
         if(note == keymap[y][x])
-        LED.setPalette(channel, x, y, velocity);
+        LED.setXYPalette(channel, x, y, velocity);
       }
     }
     //BottomLED
-    for(uint8_t i = 0;i < NUM_BOTTOM_LEDS; i++)
+    for(u8 i = 0;i < NUM_BOTTOM_LEDS; i++)
     {
       if(note == bottomLEDmap[i])
-      LED.setPalette(channel, Matrix.bottomLEDrotation(i+NUM_LEDS) ,velocity);
+      LED.setPalette(channel, i+NUM_LEDS ,velocity);
     }
   }
 
@@ -47,20 +47,20 @@ void MIDI::noteOn(uint8_t channel, uint8_t note, uint8_t velocity)
   }
 }
 
-void MIDI::noteOff(uint8_t channel, uint8_t note, uint8_t velocity)
+void MIDI::noteOff(u8 channel, u8 note, u8 velocity)
 {
   if(LEDwrite)
   {
-    for(uint8_t y = 0; y < KEYPADY; y++)
+    for(u8 y = 0; y < KEYPADY; y++)
     {
-      for(uint8_t x = 0; x < KEYPADX; x++)
+      for(u8 x = 0; x < KEYPADX; x++)
       {
         if(note == keymap[y][x])
-        LED.off(x,y);
+        LED.offXY(x,y);
       }
     }
     //BottomLED
-    for(uint8_t i = 0;i < NUM_BOTTOM_LEDS; i++)
+    for(u8 i = 0;i < NUM_BOTTOM_LEDS; i++)
     {
       if(note == bottomLEDmap[i])
       LED.off(i+NUM_LEDS);
@@ -81,7 +81,7 @@ void MIDI::noteOff(uint8_t channel, uint8_t note, uint8_t velocity)
   }
 }
 
-void MIDI::sentXYon(uint8_t x, uint8_t y, uint8_t velocity)
+void MIDI::sentXYon(u8 x, u8 y, u8 velocity)
 {
   switch (rotation)
   {
@@ -99,7 +99,7 @@ void MIDI::sentXYon(uint8_t x, uint8_t y, uint8_t velocity)
   }
 }
 
-void MIDI::sentXYoff(uint8_t x, uint8_t y, uint8_t velocity)
+void MIDI::sentXYoff(u8 x, u8 y, u8 velocity)
 {
   switch (rotation)
   {
@@ -117,12 +117,12 @@ void MIDI::sentXYoff(uint8_t x, uint8_t y, uint8_t velocity)
   }
 }
 
-void MIDI::sentNoteOn(uint8_t channel, uint8_t note, uint8_t velocity)
+void MIDI::sentNoteOn(u8 channel, u8 note, u8 velocity)
 {
   USBMIDI.sendNoteOn(channel, note, velocity);
 }
 
-void MIDI::sentNoteOff(uint8_t channel, uint8_t note, uint8_t velocity)
+void MIDI::sentNoteOff(u8 channel, u8 note, u8 velocity)
 {
   USBMIDI.sendNoteOff(channel, note, velocity);
 }

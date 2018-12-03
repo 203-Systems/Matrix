@@ -11,8 +11,8 @@
 //typedef enum{ IDLE, PRESSED, HOLD, RELEASED } KeyState;
 
 struct Key {
-  uint8_t xy = 0;
-  uint8_t velocity = 0;
+  u8 xy = 0;
+  u8 velocity = 0;
   //KeyState kstate = IDLE;
 };
 
@@ -23,15 +23,15 @@ public:
   bool scan();
 
   Key list[MULTIPRESS];
-  //uint32_t FNholded = 0;
+  //u32 FNholded = 0;
   bool fn;
   bool fnChanged;
-  uint32_t lastFNpressed = 0;
-  uint8_t timesFNpressed = 0;
+  u32 lastFNpressed = 0;
+  u8 timesFNpressed = 0;
 private:
   void updateList();
-  // void On(uint8_t X, uint8_t Y);
-  // void Off(uint8_t X, uint8_t Y);
+  // void On(u8 X, u8 Y);
+  // void Off(u8 X, u8 Y);
   bool fnCache;
   byte keypadStats[KEYPADX]; // const Y is 8, allow configuration like 8*16 or 16*16 as 8*32 in the future.
   byte keypadChanged[KEYPADX];
