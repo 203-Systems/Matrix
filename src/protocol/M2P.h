@@ -16,11 +16,11 @@ class M2P
 {
 public:
   M2P();
-  void Poll();
-  void Decode();
-  void SysexGet();
-  void Sysexset();
-  void MIDI();
+  void poll();
+  void decode();
+  void sysexGet();
+  void sysexSet();
+  void toMIDI();
 };
 
 #endif

@@ -12,38 +12,38 @@ class MatrixSystem
 public:
   MatrixSystem();
 
-  void VariableLoad();
+  void variableLoad();
   //Sysex set
-  void Reset();
-  void Setdevice_id();
+  void reset();
+  void setDeviceID();
   void EnterBootloader();
   void InitializeDevice();
-  void UpdateColourPaletteRGB();
-  void UpdateColourPaletteWRGB();
-  void ResetColourPalette();
-  void SetGamma(bool g);
-  void UpdateCustomKeymap();
+  void updateColourPaletteRGB();
+  void updateColourPaletteWRGB();
+  void resetColourPalette();
+  void setGamma(bool g);
+  void updateCustomKeymap();
   void ResetCustomKeymap();
-  void SetBrightness(uint8_t b);
-  void SetTouchSensitive(uint8_t s);
+  void setBrightness(uint8_t b);
+  void setTouchSensitive(uint8_t s);
 
-  //Sysex Get
-  void GetDeviceInfo();
-  void GetModuleCount();
-  void GetModuleInfo();
-  void Getdevice_id();
-  void GetAllParameter();
-  void GetColorPaletteRGB();
-  void GetColorPaletteWRGB();
-  void GetGammaState();
-  void GetCustomKeymap();
-  void GetBrightness();
-  void GetTouchSensitive();
+  //Sysex get
+  void getDeviceInfo();
+  void getModuleCount();
+  void getModuleInfo();
+  void getdevice_id();
+  void getAllParameter();
+  void getColorPaletteRGB();
+  void getColorPaletteWRGB();
+  void getGammaState();
+  void getCustomKeymap();
+  void getBrightness();
+  void getTouchSensitive();
 
   //Math
   uint8_t WRGBtoHEX(uint8_t W, uint8_t R, uint8_t G, uint8_t B);
   uint8_t XYtoIndex(uint8_t X, uint8_t Y);
-  uint8_t BottomLEDrotation(int index);
+  uint8_t bottomLEDrotation(int index);
   //uint8_t XYtoIndex(uint8_t X,uint8_t Y);
 };
 

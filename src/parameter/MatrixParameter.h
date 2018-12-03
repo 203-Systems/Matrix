@@ -41,6 +41,7 @@
 //DeviceInfo
 #define DEVICENAME "Matrix"
 #define MAUNFACTURERNAME "203 Industries"
+#define SERIALSTRING "unsigned"
 #define VID  0x0203
 #define VID2 0x0203 // for device ID USE
 #define PID  0x1000
@@ -57,5 +58,5 @@
 //KeyPad
 #define KEYPADX 8
 #define KEYPADY 8 //Cantchange due to KeyPad 16*16 as 8*32 instead
-#define MULTIPRESS 10 //KeyPressProcessAtOnce
+#define MULTIPRESS 10 //Key Press Process At Once
 #define MULTITAP_THRESHOLD 200

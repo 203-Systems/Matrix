@@ -8,12 +8,12 @@ MIDI::MIDI()
   //usbmidi usbmidi;
 }
 
-void MIDI::Poll()
+void MIDI::poll()
 {
   USBMIDI.poll();
 }
 
-void MIDI::NoteOn(uint8_t channel, uint8_t note, uint8_t velocity)
+void MIDI::noteOn(uint8_t channel, uint8_t note, uint8_t velocity)
 {
   if(LEDwrite)
   {
@@ -22,20 +22,20 @@ void MIDI::NoteOn(uint8_t channel, uint8_t note, uint8_t velocity)
       for(uint8_t x = 0; x < KEYPADX; x++)
       {
         if(note == keymap[y][x])
-        LED.SetPallette(channel, x, y, velocity);
+        LED.setPalette(channel, x, y, velocity);
       }
     }
     //BottomLED
     for(uint8_t i = 0;i < NUM_BOTTOM_LEDS; i++)
     {
-      if(note == bottomledmap[i])
-      LED.SetPallette(channel, Matrix.BottomLEDrotation(i+NUM_LEDS) ,velocity);
+      if(note == bottomLEDmap[i])
+      LED.setPalette(channel, Matrix.bottomLEDrotation(i+NUM_LEDS) ,velocity);
     }
   }
 
   if (massage_return)
   {
-    MIDI::SentNoteOn(channel, note, velocity);
+    MIDI::sentNoteOn(channel, note, velocity);
     // if (CDCenable)
     // {
     //   CDC.print(channel);
@@ -47,7 +47,7 @@ void MIDI::NoteOn(uint8_t channel, uint8_t note, uint8_t velocity)
   }
 }
 
-void MIDI::NoteOff(uint8_t channel, uint8_t note, uint8_t velocity)
+void MIDI::noteOff(uint8_t channel, uint8_t note, uint8_t velocity)
 {
   if(LEDwrite)
   {
@@ -56,20 +56,20 @@ void MIDI::NoteOff(uint8_t channel, uint8_t note, uint8_t velocity)
       for(uint8_t x = 0; x < KEYPADX; x++)
       {
         if(note == keymap[y][x])
-        LED.Off(x,y);
+        LED.off(x,y);
       }
     }
     //BottomLED
     for(uint8_t i = 0;i < NUM_BOTTOM_LEDS; i++)
     {
-      if(note == bottomledmap[i])
-      LED.Off(i+NUM_LEDS);
+      if(note == bottomLEDmap[i])
+      LED.off(i+NUM_LEDS);
     }
   }
 
   if (massage_return)
   {
-    MIDI::SentNoteOff(channel, note, velocity);
+    MIDI::sentNoteOff(channel, note, velocity);
     // if (CDCenable)
     // {
     //   CDC.print(channel);
@@ -81,48 +81,48 @@ void MIDI::NoteOff(uint8_t channel, uint8_t note, uint8_t velocity)
   }
 }
 
-void MIDI::SentXYon(uint8_t x, uint8_t y, uint8_t velocity)
+void MIDI::sentXYon(uint8_t x, uint8_t y, uint8_t velocity)
 {
   switch (rotation)
   {
     case 1: //90
-    MIDI::SentNoteOn(midi_channel, keymap[x][KEYPADY - y - 1], 127);
+    MIDI::sentNoteOn(midi_channel, keymap[x][KEYPADY - y - 1], 127);
     break;
     case 2: //180
-    MIDI::SentNoteOn(midi_channel, keymap[KEYPADY - y - 1][KEYPADX - x - 1], 127);
+    MIDI::sentNoteOn(midi_channel, keymap[KEYPADY - y - 1][KEYPADX - x - 1], 127);
     break;
     case 3: //270
-    MIDI::SentNoteOn(midi_channel, keymap[KEYPADX - x - 1][y], 127);
+    MIDI::sentNoteOn(midi_channel, keymap[KEYPADX - x - 1][y], 127);
     break;
     default: //0
-    MIDI::SentNoteOn(midi_channel, keymap[y][x], 127);
+    MIDI::sentNoteOn(midi_channel, keymap[y][x], 127);
   }
 }
 
-void MIDI::SentXYoff(uint8_t x, uint8_t y, uint8_t velocity)
+void MIDI::sentXYoff(uint8_t x, uint8_t y, uint8_t velocity)
 {
   switch (rotation)
   {
     case 1: //90
-    MIDI::SentNoteOff(midi_channel, keymap[x][KEYPADY - y - 1], 0);
+    MIDI::sentNoteOff(midi_channel, keymap[x][KEYPADY - y - 1], 0);
     break;
     case 2: //180
-    MIDI::SentNoteOff(midi_channel, keymap[KEYPADY - y - 1][KEYPADX - x - 1], 0);
+    MIDI::sentNoteOff(midi_channel, keymap[KEYPADY - y - 1][KEYPADX - x - 1], 0);
     break;
     case 3: //270
-    MIDI::SentNoteOff(midi_channel, keymap[KEYPADX - x - 1][y], 0);
+    MIDI::sentNoteOff(midi_channel, keymap[KEYPADX - x - 1][y], 0);
     break;
     default: //0
-    MIDI::SentNoteOff(midi_channel, keymap[y][x], 0);
+    MIDI::sentNoteOff(midi_channel, keymap[y][x], 0);
   }
 }
 
-void MIDI::SentNoteOn(uint8_t channel, uint8_t note, uint8_t velocity)
+void MIDI::sentNoteOn(uint8_t channel, uint8_t note, uint8_t velocity)
 {
   USBMIDI.sendNoteOn(channel, note, velocity);
 }
 
-void MIDI::SentNoteOff(uint8_t channel, uint8_t note, uint8_t velocity)
+void MIDI::sentNoteOff(uint8_t channel, uint8_t note, uint8_t velocity)
 {
   USBMIDI.sendNoteOff(channel, note, velocity);
 }

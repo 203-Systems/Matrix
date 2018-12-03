@@ -4,40 +4,40 @@ MatrixSystem::MatrixSystem()
 {
 }
 
-void MatrixSystem::VariableLoad()
+void MatrixSystem::variableLoad()
 {
 
 }
 
 
 //Sysex set
-void MatrixSystem::Reset()
+void MatrixSystem::reset()
 {
-  digitalWrite(RESET_PIN,LOW);
+  digitalWrite(REset_PIN,LOW);
 }
 
-void MatrixSystem::Setdevice_id()
+void MatrixSystem::setDeviceID()
 {
   device_id = CompositeSerial.read();
   MatrixSystem::Reset();
 }
 
 
-void MatrixSystem::EnterBootloader()
+void MatrixSystem::enterBootloader()
 {
   MatrixSystem::Reset();
 }
 
-void MatrixSystem::InitializeDevice()
+void MatrixSystem::initializeDevice()
 {
   //TODO
 }
 
-void MatrixSystem::UpdateColourPaletteRGB()
+void MatrixSystem::updateColourPaletteRGB()
 {
   if(CompositeSerial.peek() < 128)
   {
-    colour_pallette[2][CompositeSerial.read()] = MatrixSystem::WRGBtoHEX(0,CompositeSerial.read(),CompositeSerial.read(),CompositeSerial.read());
+    palette[2][CompositeSerial.read()] = MatrixSystem::WRGBtoHEX(0,CompositeSerial.read(),CompositeSerial.read(),CompositeSerial.read());
   }
   else if(CompositeSerial.peek() == 255)
   {
@@ -45,11 +45,11 @@ void MatrixSystem::UpdateColourPaletteRGB()
   }
 }
 
-void MatrixSystem::UpdateColourPaletteWRGB()
+void MatrixSystem::updateColourPaletteWRGB()
 {
   if(CompositeSerial.peek() < 128)
   {
-    colour_pallette[2][CompositeSerial.read()] = MatrixSystem::WRGBtoHEX(CompositeSerial.read(),CompositeSerial.read(),CompositeSerial.read(),CompositeSerial.read());
+    palette[2][CompositeSerial.read()] = MatrixSystem::WRGBtoHEX(CompositeSerial.read(),CompositeSerial.read(),CompositeSerial.read(),CompositeSerial.read());
   }
   else if(CompositeSerial.peek() == 255)
   {
@@ -57,20 +57,20 @@ void MatrixSystem::UpdateColourPaletteWRGB()
   }
 }
 
-void MatrixSystem::ResetColourPalette()
+void MatrixSystem::resetColourPalette()
 {
-  for(int i = 0; i < sizeof(colour_pallette[0]); i++)
+  for(int i = 0; i < sizeof(palette[0]); i++)
   {
-    colour_pallette[2][i] = colour_pallette[0][i];
+    palette[2][i] = palette[0][i];
   }
 }
 
-void MatrixSystem::SetGamma(bool g)
+void MatrixSystem::setGamma(bool g)
 {
   gamma_enable = g;
 }
 
-void MatrixSystem::UpdateCustomKeymap()
+void MatrixSystem::updateCustomKeymap()
 {
   while(CompositeSerial.peek() != 255)
   {
@@ -78,46 +78,46 @@ void MatrixSystem::UpdateCustomKeymap()
   }
 }
 
-void MatrixSystem::ResetCustomKeymap()
+void MatrixSystem::resetCustomKeymap()
 {
   for(int x = 0; x < KEYPADX; x++)
   {
     for(int y = 0; y < KEYPADY; y++)
     {
-      keymap[x][y] = defaultkeymap[x][y];
+      keymap[x][y] = defaultKeymap[x][y];
     }
   }
 }
 
-void MatrixSystem::SetBrightness(uint8_t b)
+void MatrixSystem::setBrightness(uint8_t b)
 {
   brightness = b;
-  MatrixSystem::Reset();
+  MatrixSystem::reset();
 }
 
 
-void MatrixSystem::SetTouchSensitive(uint8_t s)
+void MatrixSystem::setTouchSensitive(uint8_t s)
 {
   touch_sensitive = s;
 }
 
-//Sysex Get
-void MatrixSystem::GetDeviceInfo()
+//Sysex get
+void MatrixSystem::getDeviceInfo()
 {
   //TODO
 }
 
-void MatrixSystem::GetModuleCount()
+void MatrixSystem::getModuleCount()
 {
   //TODO
 }
 
-void MatrixSystem::GetModuleInfo()
+void MatrixSystem::getModuleInfo()
 {
 
 }
 
-void MatrixSystem::Getdevice_id()
+void MatrixSystem::getdevice_id()
 {
   CompositeSerial.write((uint8_t)0);
   CompositeSerial.write(14);
@@ -126,59 +126,59 @@ void MatrixSystem::Getdevice_id()
 }
 
 
-void MatrixSystem::GetAllParameter()
+void MatrixSystem::getAllParameter()
 {
   //TODO
 }
 
-void MatrixSystem::GetColorPaletteRGB()
+void MatrixSystem::getColorPaletteRGB()
 {
   CompositeSerial.write((uint8_t)(0));
   CompositeSerial.write(14);
   CompositeSerial.write(20);
 
-  for(uint8_t i = 0; i < sizeof(colour_pallette[3]); i++)
+  for(uint8_t i = 0; i < sizeof(palette[3]); i++)
   {
     CompositeSerial.write(i);
-    CompositeSerial.write(colour_pallette[i] && 0xFF0000);
-    CompositeSerial.write(colour_pallette[i] && 0xFF00);
-    CompositeSerial.write(colour_pallette[i] && 0xFF);
+    CompositeSerial.write(palette[i] && 0xFF0000);
+    CompositeSerial.write(palette[i] && 0xFF00);
+    CompositeSerial.write(palette[i] && 0xFF);
   }
   CompositeSerial.write(255);
 }
 
-void MatrixSystem::GetColorPaletteWRGB()
+void MatrixSystem::getColorPaletteWRGB()
 {
   CompositeSerial.write((uint8_t)(0));
   CompositeSerial.write(14);
   CompositeSerial.write(21);
 
-  for(uint8_t i = 0; i < sizeof(colour_pallette[3]); i++)
+  for(uint8_t i = 0; i < sizeof(palette[3]); i++)
   {
     CompositeSerial.write(i);
-    CompositeSerial.write(colour_pallette[i] && 0xFF000000);
-    CompositeSerial.write(colour_pallette[i] && 0xFF0000);
-    CompositeSerial.write(colour_pallette[i] && 0xFF00);
-    CompositeSerial.write(colour_pallette[i] && 0xFF);
+    CompositeSerial.write(palette[i] && 0xFF000000);
+    CompositeSerial.write(palette[i] && 0xFF0000);
+    CompositeSerial.write(palette[i] && 0xFF00);
+    CompositeSerial.write(palette[i] && 0xFF);
   }
   CompositeSerial.write(255);
 }
 
-void MatrixSystem::GetGammaState()
+void MatrixSystem::getGammaState()
 {
   CompositeSerial.write((uint8_t)(0));
   CompositeSerial.write(14);
   CompositeSerial.write(24);
 }
 
-void MatrixSystem::GetCustomKeymap()
+void MatrixSystem::getCustomKeymap()
 {
   CompositeSerial.write((uint8_t)(0));
   CompositeSerial.write(14);
   CompositeSerial.write(25);
 }
 
-void MatrixSystem::GetBrightness()
+void MatrixSystem::getBrightness()
 {
   CompositeSerial.write((uint8_t)(0));
   CompositeSerial.write(14);
@@ -186,7 +186,7 @@ void MatrixSystem::GetBrightness()
     CompositeSerial.write(brightness);
 }
 
-void MatrixSystem::GetTouchSensitive()
+void MatrixSystem::getTouchSensitive()
 {
   CompositeSerial.write((uint8_t)(0));
   CompositeSerial.write(14);
@@ -216,7 +216,7 @@ uint8_t MatrixSystem::XYtoIndex(uint8_t X, uint8_t Y)
   }
 }
 
-uint8_t BottomLEDrotation(int index)
+uint8_t bottomLEDrotation(int index)
 {
   switch (rotation)
   {

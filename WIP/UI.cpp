@@ -8,13 +8,13 @@ UI::UI()
 
 }
 
-void UI::EnterFNmenu()
+void UI::enterFNmenu()
 {
-  LEDwrite = false;
+  LED.enableOverlayMode();
   FNmenu();
 }
 
-void UI::FNmenu()
+void UI::fnMenu()
 {
   while(1)
   {
@@ -24,94 +24,73 @@ void UI::FNmenu()
     // if (m2p_enable)
     // CDC.Poll();
 
-    if(KeyPad.Scan())
+    if(KeyPad.scan())
     {
-      if(KeyPad.fnChanged)
+      if(KeyPad.fnchanged)
       {
 
-        if(KeyPad.timesFNpressed == 5)
+        if(KeyPad.timesfnpressed == 5)
         UI.ShowDeviceInfo();
-        if(KeyPad.timesFNpressed == 10)
+        if(KeyPad.timesfnpressed == 10)
         UI.EasterEgg();
 
-        if(KeyPad.FN)
+        if(KeyPad.fn)
         {
-          UI::ExitFNmenu();
+          UI::exitFNmenu();
           return;
         }
         else
         {
-          if(millis() - KeyPad.lastFNpressed > MULTITAP_THRESHOLD)
+          if(millis() - KeyPad.lastfnpressed > MULTITAP_THRESHOLD)
           {
-            UI::ExitFNmenu();
+            UI::exitfnmenu();
             return;
           }
         }
       }
-      FNkeyAction();
+      fnKeyAction();
     }
   }
 
   uint32_t currentMillis = millis();
   if (currentMillis - previousMillis >= 1000/FPS)
   {
-    UI::FNrender();
+    UI::fnrender();
     previousMillis = currentMillis;
   }
 }
 
-void UI::ExitFNmenu()
+void UI::exitFNmenu()
 {
-  LEDwrite = true;
+  LED.disableOverlayMode();
 }
 
-void UI::FNkeyAction()
-{
-
-}
-
-void UI::FNrender()
+void UI::fnKeyAction()
 {
 
 }
 
-void UI::ShowDeviceInfo()
+void UI::fnRender()
 {
 
 }
 
-void UI::ShowASCII(char* ascii)
+void UI::showDeviceInfo()
 {
 
 }
 
-void NexusRevamped()
-{
-  struct NexusElement
-  {
-    uint8_t spawn; //location of spawn 0~8 top down, 
-    uint8_t hue; //0~15 203pallette
-    uint8_t ttl = 0; //time to live
-  }
-
-  uint32_t randertimer = 0;
-  uint32_t spawntimer = 0;
-
-  while (/*!Serials*/) {
-    if(mills() - randertimer >= 1000/FPS)
-    {
-
-    }
-  }
-
-}
-
-void UI::PlayAnimation(Animation a)
+void UI::showASCII(char* ascii)
 {
 
 }
 
-void UI::EasterEgg()
+void UI::playAnimation(Animation a)
+{
+
+}
+
+void UI::easterEgg()
 {
 
 }

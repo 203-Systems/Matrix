@@ -15,7 +15,7 @@ KeyPad::KeyPad()
   pinMode(FN_PIN, INPUT_PULLDOWN);
 }
 
-bool KeyPad::Scan()
+bool KeyPad::scan()
 {
   bool changed = false;
   for (uint8_t x = 0; x < KEYPADX; x++) //for 0 - 7 do
@@ -38,7 +38,7 @@ bool KeyPad::Scan()
     {
       digitalWrite(SI_CLOCK, LOW);
 
-      if (digitalRead(SI_DATA) != bitRead(KeyPadStats[y],x))
+      if (digitalRead(SI_DATA) != bitRead(keypadStats[y],x))
       {
         // if (digitalRead(SI_DATA))
         // {
@@ -49,12 +49,12 @@ bool KeyPad::Scan()
         //   KeyPad::Off(x,y);
         // }
         changed = true;
-        bitWrite(KeyPadStats[y], x, digitalRead(SI_DATA));
-        bitWrite(KeyPadChange[y], x, 1);
+        bitWrite(keypadStats[y], x, digitalRead(SI_DATA));
+        bitWrite(keypadChanged[y], x, 1);
       }
       else
       {
-        bitWrite(KeyPadChange[y], x, 0);
+        bitWrite(keypadChanged[y], x, 0);
       }
       digitalWrite(SI_CLOCK, HIGH);
     }
@@ -62,12 +62,12 @@ bool KeyPad::Scan()
 
   }
 
-  if(digitalRead(FN_PIN) != FNcache)
+  if(digitalRead(FN_PIN) != fnCache)
   {
     changed = true;
     fnChanged = true;
-    FNcache = digitalRead(FN_PIN);
-    if(FNcache)
+    fnCache = digitalRead(FN_PIN);
+    if(fnCache)
     {
       // if(lastFNpressed == 0)
       // lastFNpressed = millis();
@@ -100,7 +100,7 @@ bool KeyPad::Scan()
   return changed;
 }
 
-void KeyPad::UpdateList()
+void KeyPad::updateList()
 {
   for(int i = 0; i < MULTIPRESS; i++)
   {
@@ -114,9 +114,9 @@ void KeyPad::UpdateList()
     {
       if(i == MULTIPRESS)
       return;
-      if(bitRead(KeyPadChange[x], y) == true)
+      if(bitRead(keypadChanged[x], y) == true)
       {
-        if(bitRead(KeyPadStats[x], y) == true)
+        if(bitRead(keypadStats[x], y) == true)
         {
           list[i].xy = x << 4 + y;
           list[i].velocity = 127;
@@ -128,7 +128,7 @@ void KeyPad::UpdateList()
           list[i].velocity = 0;
           i++;
         }
-        bitWrite(KeyPadChange[x], y, 0);
+        bitWrite(keypadChanged[x], y, 0);
       }
     }
   }

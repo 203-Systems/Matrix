@@ -53,7 +53,7 @@ void setup()
 
   USBComposite.setManufacturerString(MAUNFACTURERNAME);
   //USBComposite.setProductString(DEVICENAME);
-  USBComposite.setSerialString("unsigned");
+  USBComposite.setSerialString(SERIALSTRING);
 
   USBmidi.registerComponent();
   CompositeSerial.registerComponent();
@@ -100,15 +100,12 @@ void ReadKey()
 
 void loop()
 {
-  //usbmidi.poll();
   if (midi_enable);
   USBmidi.poll();
   // if (m2p_enable)
   // CDC.Poll();
 
   ReadKey();
-
-
 
   currentMillis = millis();
   if (currentMillis - previousMillis >= 1000/FPS)
@@ -129,7 +126,7 @@ void loop()
 //     {
 //       for(int c = 0; c < 64; c++)
 //       {
-//         LED.setPallette(p,c,c+n*64);
+//         LED.setPalette(p,c,c+n*64);
 //       }
 //       LED.Update();
 //       delay(1000);
@@ -153,7 +150,7 @@ void loop()
 //     // {
 //     for(int c = 0; c < 64; c++)
 //     {
-//       LED.setPallette(0,c,c+n*64);
+//       LED.setPalette(0,c,c+n*64);
 //     }
 //     LED.Update();
 //     while(KeyPad.Scan() == 0)

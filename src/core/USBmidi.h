@@ -7,8 +7,8 @@
 class usbmidi : public USBMidi
 {
 public:
-  void handleNoteOff(unsigned int channel, unsigned int note, unsigned int velocity);
-  void handleNoteOn(unsigned int channel, unsigned int note, unsigned int velocity);
+  void handleNoteOff(unsigned int channel, unsigned int note, unsigned int velocity) override;
+  void handleNoteOn(unsigned int channel, unsigned int note, unsigned int velocity) override;
 };
 
 extern usbmidi USBmidi;
