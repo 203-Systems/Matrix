@@ -29,4 +29,5 @@ extern bool m2p_enable;
 extern bool powercord_enable;
 extern bool massage_return;
 
+extern u8 text_bitmap[96][6] PROGMEM;
 #endif

@@ -23,30 +23,31 @@ public:
   void off(u8 index, bool overlay = false);
   void on(u8 index, bool overlay = false);
   void setW(u8 index, u8 w, bool overlay = false);
-  void setRGB(u8 index, u8 R, u8 G, u8 B, bool overlay = false);
-  void setWRGB(u8 index, u8 W, u8 R, u8 G, u8 B, bool overlay = false);
-  void setHEX(u8 index, u64 WRGB, bool overlay = false);
+  void setRGB(u8 index, u8 r, u8 g, u8 b, bool overlay = false);
+  void setWRGB(u8 index, u8 w, u8 r, u8 g, u8 b, bool overlay = false);
+  void setHEX(u8 index, u64 hex, bool overlay = false, bool ignore_gamma = false);
   void setPalette(u8 index, u8 pick_palette, u8 colour, bool overlay = false);
 
   //XY
   void offXY(u8 x, u8 y, bool overlay = false);
   void onXY(u8 x, u8 y, bool overlay = false);
   void setXYW(u8 x, u8 y, u8 w, bool overlay = false);
-  void setXYRGB(u8 x, u8 y, u8 R, u8 G, u8 B, bool overlay = false);
-  void setXYWRGB(u8 x, u8 y, u8 W, u8 R, u8 G, u8 B, bool overlay = false);
-  void setXYHEX(u8 x, u8 y, u64 WRGB, bool overlay = false);
+  void setXYRGB(u8 x, u8 y, u8 w, u8 g, u8 b, bool overlay = false);
+  void setXYWRGB(u8 x, u8 y, u8 w, u8 r, u8 g, u8 b, bool overlay = false);
+  void setXYHEX(u8 x, u8 y, u64 WRGB, bool overlay = false, bool ignore_gamma = false);
   void setXYPalette(u8 x, u8 y, u8 pick_palette, u8 colour, bool overlay = false);
 
   //Processing
   void update();
   void rainbow();
-  void fillRegion(u8 x1, u8 y1, u8 x2, u8 y2, u64 WRGB, bool overlay = false);
-  void fillRegion(u8 x1, u8 y1, u8 x2, u8 y2, u8 W, bool overlay = false);
-  void fillRegion(u8 x1, u8 y1, u8 x2, u8 y2, u8 P, u8 C, bool overlay = false);
-  void fillRegion(u8 x1, u8 y1, u8 x2, u8 y2, u8 W, u8 R, u8 G, u8 B, bool overlay = false);
-  void fillRegion(u8 x1, u8 y1, u8 x2, u8 y2, u8 R, u8 G, u8 B, bool overlay = false);
-  u64 applyGamma(u64 WRGB);
-
+  void fillRegionOff(u8 x1, u8 y1, u8 x2, u8 y2, bool overlay = false);
+  void fillRegionOn(u8 x1, u8 y1, u8 x2, u8 y2, bool overlay = false);
+  void fillRegionW(u8 x1, u8 y1, u8 x2, u8 y2, u8 w, bool overlay = false);
+  void fillRegionWRGB(u8 x1, u8 y1, u8 x2, u8 y2, u8 w, u8 r, u8 g, u8 b, bool overlay = false);
+  void fillRegionRGB(u8 x1, u8 y1, u8 x2, u8 y2, u8 r, u8 g, u8 b, bool overlay = false);
+  void fillRegionHEX(u8 x1, u8 y1, u8 x2, u8 y2, u64 hex, bool overlay = false , bool ignore_gamma = false);
+  void fillRegionPalette(u8 x1, u8 y1, u8 x2, u8 y2, u8 p, u8 c, bool overlay = false);
+  u64 applyGamma(u64 hex);
   void enableOverlayMode();
   void disableOverlayMode();
 

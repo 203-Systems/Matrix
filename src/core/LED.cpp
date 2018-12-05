@@ -82,35 +82,47 @@ void LED::on(u8 index, bool overlay /*= false*/)
 void LED::setW(u8 index, u8 w, bool overlay /*= false*/)
 {
   LED::setHEX(index, w * 0x10000 + w * 0x100 + w, overlay);
-  //TODO WRGB
 }
 
-void LED::setRGB(u8 index, u8 R, u8 G, u8 B, bool overlay /*= false*/)
+void LED::setRGB(u8 index, u8 r, u8 g, u8 b, bool overlay /*= false*/)
 {
-  LED::setHEX(index, R * 0x10000 + G * 0x100 + B, overlay);
+  LED::setHEX(index, r * 0x10000 + g * 0x100 + b, overlay);
 }
 
-void LED::setWRGB(u8 index, u8 W, u8 R, u8 G, u8 B, bool overlay /*= false*/)
+void LED::setWRGB(u8 index, u8 w, u8 r, u8 g, u8 b, bool overlay /*= false*/)
 {
-  //TODO
-  LED::setRGB(index, R, G, B, overlay);
+  LED::setHEX(index, w * 0x1000000 + r * 0x10000 + g * 0x100 + b, overlay);
 }
 
-void LED::setHEX(u8 index, u64 WRGB, bool overlay /*= false*/)
+void LED::setHEX(u8 index, u64 hex, bool overlay /*= false*/, bool ignore_gamma /*= false*/)
 {
   if(!overlay_mode || overlay)
   {
-    leds[indexRotation(index)] = WRGB;
+    if(gamma_enable && !ignore_gamma)
+    {
+      leds[indexRotation(index)] = hex;
+    }
+    else
+    {
+      leds[indexRotation(index)] = applyGamma(hex);
+    }
   }
   else
   {
-    buffer[indexRotation(index)] = WRGB;
+    if(gamma_enable && !ignore_gamma)
+    {
+      buffer[indexRotation(index)] = hex;
+    }
+    else
+    {
+      buffer[indexRotation(index)] = applyGamma(hex);
+    }
   }
 }
 
 void LED::setPalette(u8 index, u8 pick_palette, u8 colour, bool overlay /*= false*/)
 {
-  LED::setHEX(index, palette[pick_palette][colour], overlay);
+  LED::setHEX(index, palette[pick_palette][colour], overlay, true);
 }
 
 
@@ -128,36 +140,48 @@ void LED::onXY(u8 x,u8 y, bool overlay /*= false*/)
 void LED::setXYW(u8 x, u8 y, u8 w, bool overlay /*= false*/)
 {
   LED::setXYHEX(x, y, w * 0x10000 + w * 0x100 + w, overlay);
-  //TODO WRGB
 }
 
-void LED::setXYRGB(u8 x, u8 y, u8 R, u8 G, u8 B, bool overlay /*= false*/)
+void LED::setXYRGB(u8 x, u8 y, u8 r, u8 g, u8 b, bool overlay /*= false*/)
 {
-  LED::setXYHEX(x, y, R * 0x10000 + G * 0x100 + B, overlay);
+  LED::setXYHEX(x, y, r * 0x10000 + g * 0x100 + b, overlay);
 }
 
-void LED::setXYWRGB(u8 x, u8 y, u8 W, u8 R, u8 G, u8 B, bool overlay /*= false*/)
+void LED::setXYWRGB(u8 x, u8 y, u8 w, u8 r, u8 g, u8 b, bool overlay /*= false*/)
 {
-  //TODO
-  LED::setXYRGB(x, y, R, G, B, overlay);
+  LED::setXYHEX(x, y, w * 0x1000000 + r * 0x10000 + g * 0x100 + b, overlay);
 }
 
 
-void LED::setXYHEX(u8 x, u8 y, u64 WRGB, bool overlay /*= false*/)
+void LED::setXYHEX(u8 x, u8 y, u64 WRGB, bool overlay /*= false*/, bool ignore_gamma /*= false*/)
 {
   if(!overlay_mode || overlay)
   {
-    leds[xyToIndex(x,y)] = WRGB;
+    if(gamma_enable && !ignore_gamma)
+    {
+      leds[xyToIndex(x,y)] = applyGamma(WRGB);
+    }
+    else
+    {
+      leds[xyToIndex(x,y)] = WRGB;
+    }
   }
   else
   {
-    buffer[xyToIndex(x,y)] = WRGB;
+    if(gamma_enable && !ignore_gamma)
+    {
+      buffer[xyToIndex(x,y)] = applyGamma(WRGB);
+    }
+    else
+    {
+      buffer[xyToIndex(x,y)] = WRGB;
+    }
   }
 }
 
 void LED::setXYPalette(u8 x, u8 y, u8 pick_palette, u8 colour, bool overlay /*= false*/)
 {
-  LED::setXYHEX(x, y, palette[pick_palette][colour], overlay);
+  LED::setXYHEX(x, y, palette[pick_palette][colour], overlay, true);
 }
 
 //Processing
@@ -177,7 +201,32 @@ void LED::rainbow()
   }
 }
 
-void LED::fillRegion(u8 x1, u8 y1, u8 x2, u8 y2, u8 colour, bool overlay /*= false*/)
+void LED::fillRegionOff(u8 x1, u8 y1, u8 x2, u8 y2, bool overlay /*= false*/)
+{
+  LED::fillRegionHEX(x1, y1, y1, y2, 0, overlay);
+}
+
+void LED::fillRegionOn(u8 x1, u8 y1, u8 x2, u8 y2, bool overlay /*= false*/)
+{
+  LED::fillRegionHEX(x1, y1, y1, y2, 0xFFFFFFFF, overlay);
+}
+
+void LED::fillRegionW(u8 x1, u8 y1, u8 x2, u8 y2, u8 w, bool overlay /*= false*/)
+{
+  LED::fillRegionHEX(x1, y1, y1, y2, w * 0x10000 + w * 0x100 + w, overlay);
+}
+
+void LED::fillRegionRGB(u8 x1, u8 y1, u8 x2, u8 y2, u8 r, u8 g, u8 b, bool overlay /*= false*/)
+{
+  LED::fillRegionHEX(x1, y1, y1, y2, r * 0x10000 + g * 0x100 + b, overlay);
+}
+
+void LED::fillRegionWRGB(u8 x1, u8 y1, u8 x2, u8 y2, u8 w, u8 r, u8 g, u8 b, bool overlay /*= false*/)
+{
+  LED::fillRegionHEX(x1, y1, y1, y2, w *  0x1000000 + r * 0x10000 + g * 0x100 + b, overlay);
+}
+
+void LED::fillRegionHEX(u8 x1, u8 y1, u8 x2, u8 y2, u64 hex, bool overlay /*= false*/, bool ignore_gamma /*= false*/)
 {
   //Reorder
   if(x1 > x2)
@@ -197,14 +246,19 @@ void LED::fillRegion(u8 x1, u8 y1, u8 x2, u8 y2, u8 colour, bool overlay /*= fal
   {
     for(y1; y1 <= y2; y1++)
     {
-      LED::setPalette(x1, y1, 0, colour);
+      LED::setXYHEX(x1, y1, hex, overlay, ignore_gamma);
     }
   }
 }
 
-u64 LED::applyGamma(u64 WRGB)
+void LED::fillRegionPalette(u8 x1, u8 y1, u8 x2, u8 y2, u8 p, u8 c, bool overlay /*= false*/)
 {
-  u8 LEDGamma[256] =
+  LED::fillRegionHEX(x1, y1, y1, y2, palette[p][c], overlay, true);
+}
+
+u64 LED::applyGamma(u64 hex)
+{
+  u8 gamma[256] =
   { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  1,  1,  1,
     1,  1,  1,  1,  1,  1,  1,  1,  1,  2,  2,  2,  2,  2,  2,  2,
@@ -224,10 +278,10 @@ u64 LED::applyGamma(u64 WRGB)
   };
 
   return
-  LEDGamma[(WRGB & 0xff000000) >> 24] * 0x1000000 +
-  LEDGamma[(WRGB & 0x00ff0000) >> 16] *0x10000 +
-  LEDGamma[(WRGB & 0x0000ff00) >> 8] *0x100 +
-  LEDGamma[(WRGB & 0x000000ff)];
+  gamma[(hex & 0xff000000) >> 24] * 0x1000000 +
+  gamma[(hex & 0x00ff0000) >> 16] *0x10000 +
+  gamma[(hex & 0x0000ff00) >> 8] *0x100 +
+  gamma[(hex & 0x000000ff)];
 }
 
 void LED::enableOverlayMode()
@@ -237,7 +291,7 @@ void LED::enableOverlayMode()
   {
     buffer[i] == leds[i];
   }
-  LED::fill(0,true);
+  LED::fill(0, true);
 }
 
 void LED::disableOverlayMode()

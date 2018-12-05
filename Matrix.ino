@@ -2,10 +2,11 @@
 Project Matrix (c) 203 Industries
 
 TODO
-Load variable from flash
 FN key menu
 Play Animation
 Play Text
+BootAnimation
+NexusRevamped while USB unreconized
 
 */
 
@@ -37,7 +38,7 @@ unsigned long currentMillis = 0;
 void setup()
 {
   variableLoad();
-  
+
   if(device_id != 0)
   {
 
@@ -62,11 +63,16 @@ void setup()
 
   FastLED.setBrightness(brightness);
 
+  currentMillis = millis();
   while(!USBComposite.isReady())
   {
-    LED.fill(0xff0000);
+    if (currentMillis - previousMillis > 1000)
+    {
+      LED.fill(0xff0000); //NexusRevamped Entence point
+    }
   }
   LED.fill(0x000000);
+  //BootAnimation Entence point
 }
 
 void ReadKey()
