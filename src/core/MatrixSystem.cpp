@@ -273,6 +273,46 @@ void getTouchSensitive()
   CompositeSerial.write(touch_sensitive);
 }
 
+//special
+void nextBrightnessState()
+{
+  if(brightness >= 192) //Bright AF
+  {
+    setBrightness(32);
+  }
+  else if(brightness >= 160) //VeryBright
+  {
+    setBrightness(192);
+  }
+  else if(brightness >= 128) //Bright
+  {
+    setBrightness(160);
+  }
+  else if(brightness >= 96) //Normal
+  {
+    setBrightness(128);
+  }
+  else if(brightness >= 64) //Dim
+  {
+    setBrightness(96);
+  }
+  else if(brightness >= 32) //VeryDim
+  {
+    setBrightness(64);
+  }
+  else
+  {
+    setBrightness(32);
+  }
+}
+
+void rotationCW(u8 r)
+{
+rotation += r;
+if(rotation > 3)
+  rotation %= 4;
+}
+
 //Math
 u8 wrgbToHEX(u8 w, u8 r, u8 g, u8 b)
 {
