@@ -52,7 +52,7 @@ public:
   void disableOverlayMode();
 
 private:
-  boolean overlay_mode = false;
+  bool overlay_mode = false;
   CRGB leds[NUM_TOTAL_LEDS];
   CRGB buffer[NUM_TOTAL_LEDS];
 };

@@ -38,7 +38,7 @@ void UI::fnMenu()
         }
         else
         {
-          if(millis() - KeyPad.lastFNpressed > MULTITAP_THRESHOLD)
+          if(KeyPad.fnTimer.isLonger(MULTITAP_THRESHOLD)) //if fn off and longer then threshold, will count as hold, release to back to main menu
           {
             UI::exitFNmenu();
             return;
@@ -49,11 +49,9 @@ void UI::fnMenu()
     }
   }
 
-  u32 currentMillis = millis();
-  if (currentMillis - previousMillis >= 1000/FPS)
+  if (uiTimer.tick(1000/FPS))
   {
     UI::fnRender();
-    previousMillis = currentMillis;
   }
 }
 

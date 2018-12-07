@@ -74,7 +74,7 @@ bool KeyPad::scan()
     {
       // if(lastFNpressed == 0)
       // lastFNpressed = millis();
-      if(millis() - lastFNpressed <= MULTITAP_THRESHOLD)
+      if(fnTimer.isLonger(MULTITAP_THRESHOLD))
       {
         timesFNpressed ++;
       }
@@ -84,7 +84,7 @@ bool KeyPad::scan()
       }
 
       //FNholded = millis() - lastFNpressed;
-      lastFNpressed = millis();
+      fnTimer.recordCurrent();
 
       fn = true;
     }

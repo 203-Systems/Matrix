@@ -20,6 +20,7 @@ NexusRevamped while USB unreconized
 #include "src/core/MatrixSystem.h"
 #include "src/core/KeyPad.h"
 #include "src/core/LED.h"
+#include "src/core/Timer.h"
 #include "src/core/USBmidi.h"
 #include "src/protocol/MIDI.h"
 #include "src/protocol/M2P.h"
@@ -31,9 +32,7 @@ M2P M2P;
 LED LED;
 KeyPad KeyPad;
 usbmidi USBmidi;
-
-unsigned long previousMillis = 0;
-unsigned long currentMillis = 0;
+Timer mainTimer;
 
 void setup()
 {
@@ -63,12 +62,13 @@ void setup()
 
   FastLED.setBrightness(brightness);
 
-  currentMillis = millis();
+  mainTimer.recordCurrent();
   while(!USBComposite.isReady())
   {
-    if (currentMillis - previousMillis > 1000)
+    if (mainTimer.isLonger(1000))
     {
       LED.fill(0xff0000); //NexusRevamped Entence point
+      break;
     }
   }
   LED.fill(0x000000);
@@ -117,14 +117,12 @@ void loop()
   // if (m2p_enable)
   // CDC.Poll();
 
-  currentMillis = millis();
-  if (currentMillis - previousMillis >= 1000/FPS)
+  if (mainTimer.tick(1000/FPS))
   {
     ReadKey();
     LED.update();
     //LED.Rainbow();
     //CompositeSerial.println("Running");
-    previousMillis = currentMillis;
   }
 }
 

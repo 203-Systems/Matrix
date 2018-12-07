@@ -4,6 +4,7 @@
 #include "Arduino.h"
 //#include "../parameter/MatrixVariable.h"
 #include "../parameter/MatrixParameter.h"
+#include "../core/Timer.h"
 //#include "MatrixSystem.h"
 //#include "../protocol/MIDI.h"
 //#include <USBComposite.h>
@@ -26,8 +27,8 @@ public:
   //u32 FNholded = 0;
   bool fn;
   bool fnChanged;
-  u32 lastFNpressed = 0;
   u8 timesFNpressed = 0;
+  Timer fnTimer;
 private:
   void updateList();
   // void On(u8 X, u8 Y);

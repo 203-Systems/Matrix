@@ -8,6 +8,7 @@
 #include "../core/USBmidi.h"
 #include "../core/KeyPad.h"
 #include "../core/LED.h"
+#include "../core/Timer.h"
 //#include "../protocol/MIDI.h"
 //#include <USBComposite.h>
 
@@ -32,7 +33,7 @@ public:
   void playAnimation(Animation a);
   void easterEgg();
 private:
-  u32 previousMillis = 0;
+  Timer uiTimer;
 };
 
 #endif
