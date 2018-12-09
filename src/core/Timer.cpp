@@ -2,7 +2,7 @@
 
 Timer::Timer()
 {
-  previous = millis();
+  Timer::recordCurrent()
 }
 
 boolean Timer::tick(u16 ms)
@@ -24,7 +24,7 @@ u32 Timer::sinceLastTick()
   return millis() - previous;
 }
 
-u32 Timer::recordCurrent()
+void Timer::recordCurrent()
 {
   previous = millis();
 }

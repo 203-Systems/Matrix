@@ -2,10 +2,8 @@
 Project Matrix (c) 203 Industries
 
 TODO
-FN key menu
 Play Animation
 Play Text
-BootAnimation
 NexusRevamped while USB unreconized
 
 */

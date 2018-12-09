@@ -11,7 +11,7 @@ public:
   bool tick(u16 ms);
   bool isLonger(u16 ms);
   u32 sinceLastTick();
-  u32 recordCurrent();
+  void recordCurrent();
 private:
   u32 previous = 0;
 };
