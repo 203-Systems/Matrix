@@ -1,10 +1,14 @@
 #include "MatrixSystem.h"
 
+void initializeEEPROM()
+{
+  EEPROM.PageBase0 = 0x801F000;
+  EEPROM.PageBase1 = 0x801F400;
+  EEPROM.PageSize  = 0x400;
+}
+
 void variableLoad()
 {
-  EEPROM.PageBase0 = 0x800F7FF;
-  EEPROM.PageBase1 = 0x800FBFF;
-  EEPROM.PageSize  = 0x400;
   if(EEPROM.read(0) & B00000001 > 0)
   loadPalette();
 
@@ -48,10 +52,10 @@ void enterBootloader()
   reset();
 }
 
-void initializeDevice()
+void resetDevice()
 {
   formatEEPROM();
-  EEPROM.write(0x00, B0000011); //customPalette,customKeymap,customtouchbar,gamma,powercord,MIDI,M2P
+  EEPROM.write(0x00, B01100000); //customPalette,customKeymap,customtouchbar,gamma,powercord,MIDI,M2P
 }
 
 void formatEEPROM()

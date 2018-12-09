@@ -13,8 +13,8 @@
 //   u8 y;
 // }
 
+void initializeEEPROM();
 void variableLoad();
-
 //load from EEPROM
 void loadPalette();
 void loadKeymap();
@@ -23,7 +23,7 @@ void loadKeymap();
 void reset();
 void setDeviceID();
 void enterBootloader();
-void initializeDevice();
+void resetDevice();
 void formatEEPROM();
 void updatePaletteRGB();
 void updatePaletteWRGB();

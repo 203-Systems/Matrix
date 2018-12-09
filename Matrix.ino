@@ -36,7 +36,10 @@ Timer mainTimer;
 
 void setup()
 {
-  //variableLoad();
+  initializeEEPROM();
+  //resetDevice();
+  variableLoad();
+
   setupUSB();
 
   FastLED.setBrightness(brightness);
@@ -47,7 +50,6 @@ void setup()
     if (mainTimer.isLonger(1000))
     {
       LED.fill(0xff0000); //NexusRevamped Entence point
-      break;
     }
   }
   LED.fill(0x000000);

@@ -99,7 +99,7 @@ void M2P::sysexSet()
     enterBootloader();
     break;
     case 10:
-    initializeDevice();
+    resetDevice();
     break;
     case 20:
     updatePaletteRGB();

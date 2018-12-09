@@ -436,7 +436,7 @@ u8 rotation = 0;
 u8 midi_channel = 0;
 bool gamma_enable = false; //Wont effect colour palette
 bool midi_enable = true;
-bool cdc_enable = true;
+bool m2p_enable = false;
 bool powercord_enable = false;
 bool massage_return = false;
 
