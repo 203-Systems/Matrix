@@ -2,8 +2,10 @@
 Project Matrix (c) 203 Industries
 
 TODO
+FN key menu
 Play Animation
 Play Text
+BootAnimation
 NexusRevamped while USB unreconized
 
 */
@@ -34,7 +36,26 @@ Timer mainTimer;
 
 void setup()
 {
-  variableLoad();
+  //variableLoad();
+  setupUSB();
+
+  FastLED.setBrightness(brightness);
+
+  mainTimer.recordCurrent();
+  while(!USBComposite.isReady())
+  {
+    if (mainTimer.isLonger(1000))
+    {
+      LED.fill(0xff0000); //NexusRevamped Entence point
+      break;
+    }
+  }
+  LED.fill(0x000000);
+  //BootAnimation Entence point
+}
+
+void setupUSB()
+{
 
   if(device_id != 0)
   {
@@ -57,20 +78,6 @@ void setup()
   USBmidi.registerComponent();
   CompositeSerial.registerComponent();
   USBComposite.begin();
-
-  FastLED.setBrightness(brightness);
-
-  mainTimer.recordCurrent();
-  while(!USBComposite.isReady())
-  {
-    if (mainTimer.isLonger(1000))
-    {
-      LED.fill(0xff0000); //NexusRevamped Entence point
-      break;
-    }
-  }
-  LED.fill(0x000000);
-  //BootAnimation Entence point
 }
 
 void ReadKey()

@@ -2,7 +2,7 @@
 
 Timer::Timer()
 {
-  Timer::recordCurrent()
+  Timer::recordCurrent();
 }
 
 boolean Timer::tick(u16 ms)
@@ -14,6 +14,7 @@ boolean Timer::tick(u16 ms)
   }
   return false;
 }
+
 boolean Timer::isLonger(u16 ms)
 {
   return previous + ms <= millis();
