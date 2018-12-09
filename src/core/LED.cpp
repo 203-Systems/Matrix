@@ -1,7 +1,5 @@
 #include "LED.h"
-#include <FastLED.h>
-
-
+// #include <FastLED.h>
 
 LED::LED()
 {

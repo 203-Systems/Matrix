@@ -4,7 +4,7 @@
 u8 device_id = 0; //0~255 0 for off
 
 //LED setting
-u8 brightness = 64;  //VeryDim - 32 | Dim - 64 | Normal - 96 | Bright(Default) - 128 | VeryBright - 160 | Bright AF - 192  (Higher then 192 could result in USB resettable fuse disconnect(500ma))
+u8 brightness = 96;  //VeryDim - 32 | Dim - 64 | Normal(Default) - 96 | Bright - 128 | VeryBright - 160 | Bright AF - 192  (Higher then 192 could result in USB resettable fuse disconnect(500ma))
 u64 palette[3][128] =     //WRGB Colour Palette
 {{            //MatrixColorPalette
   0x00000000, //0

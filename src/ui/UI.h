@@ -12,12 +12,12 @@
 //#include "../protocol/MIDI.h"
 //#include <USBComposite.h>
 
-struct Animation
-{
-  u8 Mode; //0 for full array are NUM_LEDS * FPS | 1 for xy mode XY+
-  u8 AnimationFPS;
-  char* AnimationData;
-};
+// struct Animation
+// {
+//   u8 Mode; //0 for full array are NUM_LEDS * FPS | 1 for xy mode XY+
+//   u8 AnimationFPS;
+//   char* AnimationData;
+// };
 
 
 

@@ -120,18 +120,27 @@ void KeyPad::updateList()
 
       if(bitRead(keypadChanged[y], x) == true)
       {
+        switch(rotation)
+        {
+          case 1:
+          list[i].xy = y * 0x10 + (8 - x);
+          case 2:
+          list[i].xy = (8 - x) * 0x10 + (8 - y);
+          case 3:
+          list[i].xy = (8 - y) * 0x10 + x;
+          case default:
+          list[i].xy = x * 0x10 + y;
+        }
+        
         if(bitRead(keypadStats[y], x) == true)
         {
-          list[i].xy = x * 0x10 + y;
           list[i].velocity = 127;
-          i++;
         }
         else
         {
-          list[i].xy = x * 0x10 + y;
           list[i].velocity = 0;
-          i++;
         }
+        i++;
         bitWrite(keypadChanged[y], x, 0);
       }
     }
