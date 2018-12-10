@@ -1,0 +1,6 @@
+[ProjectGroup]
+Version=1.0
+[Project1]
+ProjectPath=Matrix.PrjPCB
+[Project2]
+ProjectPath=lib\203.LibPkg
