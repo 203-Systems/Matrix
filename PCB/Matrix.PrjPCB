@@ -38,7 +38,24 @@ PrefsVaultGUID=
 PrefsRevisionGUID=
 
 [Document1]
-DocumentPath=Matrix.PcbDoc
+DocumentPath=MatrixRE.PcbDoc
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=1
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=PINSGSQS
+
+[Document2]
+DocumentPath=MatrixC8.PcbDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
 AnnotationIndexControlEnabled=0
@@ -54,7 +71,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=FXUTLVWW
 
-[Document2]
+[Document3]
 DocumentPath=led.SchDoc
 AnnotationEnabled=0
 AnnotateStartValue=1
@@ -71,7 +88,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=DOVHKYPA
 
-[Document3]
+[Document4]
 DocumentPath=matrixkeypad.SchDoc
 AnnotationEnabled=0
 AnnotateStartValue=1
@@ -88,7 +105,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=DVYDISHI
 
-[Document4]
+[Document5]
 DocumentPath=MCU.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -105,7 +122,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=IREWVDCT
 
-[Document5]
+[Document6]
 DocumentPath=TouchBar.PcbDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
