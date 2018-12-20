@@ -257,10 +257,10 @@ void LED::fillRegionPalette(u8 x1, u8 y1, u8 x2, u8 y2, u8 p, u8 c, bool overlay
 u64 LED::applyGamma(u64 hex)
 {
   return
-  ledGamma[(hex & 0xff000000) >> 24] * 0x1000000 +
-  ledGamma[(hex & 0x00ff0000) >> 16] *0x10000 +
-  ledGamma[(hex & 0x0000ff00) >> 8] *0x100 +
-  ledGamma[(hex & 0x000000ff)];
+  led_gamma[(hex & 0xff000000) >> 24] * 0x1000000 +
+  led_gamma[(hex & 0x00ff0000) >> 16] *0x10000 +
+  led_gamma[(hex & 0x0000ff00) >> 8] *0x100 +
+  led_gamma[(hex & 0x000000ff)];
 }
 
 void LED::enableOverlayMode()

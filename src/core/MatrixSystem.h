@@ -13,22 +13,25 @@
 //   u8 y;
 // }
 
-void initializeEEPROM();
+void initEEPROM();
 void variableLoad();
 //load from EEPROM
 void loadPalette();
 void loadKeymap();
 
+void resetEEPROM();
+
 //Sysex set
 void reset();
 void setDeviceID();
+void setDeviceID(u8 id);
 void enterBootloader();
 void resetDevice();
 void formatEEPROM();
 void updatePaletteRGB();
 void updatePaletteWRGB();
 void resetPalette();
-void setGamma(bool g);
+void setgamma(bool g);
 void updateCustomKeymap();
 void resetCustomKeymap();
 void setBrightness(u8 b);
@@ -42,7 +45,7 @@ void getdevice_id();
 void getAllParameter();
 void getPaletteRGB();
 void getPaletteWRGB();
-void getGammaState();
+void getgammaState();
 void getCustomKeymap();
 void getBrightness();
 void getTouchSensitive();

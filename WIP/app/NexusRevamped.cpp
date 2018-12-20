@@ -4,31 +4,29 @@ NexusRevamped::NexusRevamped()
 
   Timer updateTimer;
   Timer spawnTimer;
-
-  while(!USBComposite.isReady())
-  {
-    if(spawnTimer.tick(1500))
-    {
-      NexusRevamped::spawn()
-    }
-
-    if(updateTimer.tick(1000/UPS))
-    {
-      NexusRevamped::update(0);
-    }
-    NexusRevamped::ReadKey();
-  }
-
-  LED.enableOverlayMode();
-  NexusRevamped::~NexusRevamped();
 }
 
 NexusRevamped::~NexusRevamped()
 {
-
+    LED.disableOverlayMode();
+    LED.fill_solid(0);
 }
 
-void NexusElement::ReadKey()
+void NexusRevamped::tick()
+{
+  if(spawnTimer.tick(1500))
+  {
+    NexusRevamped::spawn()
+  }
+
+  if(updateTimer.tick(1000/UPS))
+  {
+    NexusRevamped::update();
+  }
+  NexusRevamped::readKey();
+}
+
+void NexusElement::readKey()
 {
   for(int i = 0; i < MULTIPRESS; i++)
   {
@@ -44,7 +42,7 @@ void NexusElement::ReadKey()
 
 void NexusRevamped::update()
 {
-  for(int i = 0; i < 20; i ++)
+  for(int i = 0; i < MAXELEMENT; i ++)
   {
     if(element[i].ttl > 0)
     element[i].ttl --;
@@ -55,7 +53,34 @@ void NexusRevamped::update()
 
 void NexusRevamped::render()
 {
-  
+  for(int i = 0; i < MAXELEMENT;++)
+  {
+    //Calc pixels to render
+
+    if(element[i].location & b11000000 == 0)
+    {
+
+      for(int t = 0; t < 6; t ++)
+      {
+        LED.setXYPalette(element[i].location & b11000000, t, 0, t + ttl)
+      }
+
+    }
+    else if(element[i].location & b11000000 == 1)
+    {
+
+    }
+    else if(element[i].location & b11000000 == 2)
+    {
+
+    }
+    else if(element[i].location & b11000000 == 3)
+    {
+
+    }
+
+  }
+
 
 }
 
@@ -64,7 +89,7 @@ void NexusRevamped::spawn()
   NexusRevamped::createElement(nextElement);
   nextElement ++;
 
-  if(nextElement == 20)
+  if(nextElement == MAXELEMENT)  //overrite
   nextElement = 0;
 
   return;
@@ -72,9 +97,9 @@ void NexusRevamped::spawn()
 
 void NexusRevamped::createElement(u8 i)
 {
-  element[i].ttl = 12;
+  element[i].step = 0;
   element[i].hue = random(16);
-  element[i].location = random(32);
+  element[i].location = random(4) * b1000000 + random(8);
 }
 
 void NexusRevamped::spawnInput(u8 xy)
@@ -82,7 +107,7 @@ void NexusRevamped::spawnInput(u8 xy)
   NexusRevamped::createUserElement(nextUserElement, xy);
   nextUserElement ++;
 
-  if(nextUserElement == 20)
+  if(nextUserElement == MAXUSERELEMENT)
   nextUserElement = 0;
 
   return;
@@ -90,7 +115,7 @@ void NexusRevamped::spawnInput(u8 xy)
 
 void NexusRevamped::createUserElement(u8 i, u8 xy)
 {
-  element[i].ttl = 12;
+  element[i].step = 0;
   element[i].hue = random(16);
   element[i].xy = xy;
 }

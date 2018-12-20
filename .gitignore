@@ -1,14 +1,7 @@
-
-PCB/lib/History/Lib.~(2).SchLib.Zip
-PCB/lib/History/Lib.~(3).SchLib.Zip
-PCB/lib/History/Lib.~(4).SchLib.Zip
-PCB/lib/History/Lib.~(5).SchLib.Zip
-PCB/lib/History/Lib.~(6).SchLib.Zip
-PCB/lib/History/Lib.~(7).SchLib.Zip
-PCB/lib/History/Lib.~(8).SchLib.Zip
-PCB/lib/History/Lib.~(9).SchLib.Zip
+PCB/lib/History/
+PCB/History/
+PCB/_Previews
 *.SchDocPreview
 *.Zip
-PCB/Project Logs for Matrix/MatrixRE PCB ECO 12-10-2018 11-08-35 AM.LOG
-PCB/Project Outputs for Matrix/Design Rule Check - MatrixRE.drc
-PCB/Project Outputs for Matrix/Design Rule Check - MatrixRE.html
+PCB/Project Logs for Matrix/
+PCB/Project Outputs for Matrix/

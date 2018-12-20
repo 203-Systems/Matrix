@@ -128,10 +128,10 @@ void KeyPad::updateList()
           list[i].xy = (8 - x) * 0x10 + (8 - y);
           case 3:
           list[i].xy = (8 - y) * 0x10 + x;
-          case default:
+          default:
           list[i].xy = x * 0x10 + y;
         }
-        
+
         if(bitRead(keypadStats[y], x) == true)
         {
           list[i].velocity = 127;

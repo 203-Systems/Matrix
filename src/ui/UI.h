@@ -32,7 +32,7 @@ public:
   void fnRender();
   void showDeviceInfo();
   void showASCII(char* ascii);
-  void playAnimation(Animation a);
+  void playAnimation(char* animation);
   void easterEgg();
 private:
   Timer uiTimer;

@@ -167,7 +167,7 @@ void UI::fnRender()
   }
 
 
-  //Gamma enable
+  //gamma enable
   if(gamma_enable)
   {
     LED.setXYHEX(7, 6, 0x00FFFFFF, true);
@@ -194,7 +194,7 @@ void UI::showASCII(char* ascii)
 
 }
 
-void UI::playAnimation(Animation a)
+void UI::playAnimation(char* animation)
 {
 
 }

@@ -1,6 +1,6 @@
 #include "MatrixSystem.h"
 
-void initializeEEPROM()
+void initEEPROM()
 {
   EEPROM.PageBase0 = 0x801F000;
   EEPROM.PageBase1 = 0x801F400;
@@ -9,35 +9,67 @@ void initializeEEPROM()
 
 void variableLoad()
 {
-  if(EEPROM.read(0) & B00000001 > 0)
+  if(EEPROM.read(0) == false)
+  {
+    resetEEPROM();
+    return;
+  }
+
+  device_id = EEPROM.read(1);
+  rotation = EEPROM.read(2);
+  brightness = EEPROM.read(3);
+  gamma_enable = EEPROM.read(4);
+  midi_enable = EEPROM.read(5);
+  m2p_enable = EEPROM.read(6);
+  powercord_enable = EEPROM.read(7);
+  massage_return = EEPROM.read(8);
+
+  if(EEPROM.read(9))
   loadPalette();
 
-  if(EEPROM.read(0) & B00000010 > 0)
+  if(EEPROM.read(518))
   loadKeymap();
 
-  //EEPROM.read(0x00) & b00000100;
-
-  gamma_enable = EEPROM.read(0) & B00001000 > 0;
-  powercord_enable = EEPROM.read(0) & B00010000 >  0;
-  midi_enable = EEPROM.read(0) & B00100000 > 0;
-  m2p_enable = EEPROM.read(0) & B01000000 > 0;
-  massage_return = EEPROM.read(0) & B10000000 > 0;
-
-  rotation = EEPROM.read(579);
-  device_id = EEPROM.read(580);
-
-  if(EEPROM.read(581) > 0)
-  brightness = EEPROM.read(581);
-
-  if(EEPROM.read(582) > 0)
   touch_sensitive = EEPROM.read(582);
+  // if(EEPROM.read(583))
+  // loadTouchmap();
+}
+
+void resetEEPROM()
+{
+  EEPROM.write(0, true);
+  EEPROM.write(1, device_id);
+  EEPROM.write(2, rotation);
+  EEPROM.write(3, brightness);
+  EEPROM.write(4, (u8)gamma_enable);
+  EEPROM.write(5, (u8)midi_enable);
+  EEPROM.write(6, (u8)m2p_enable);
+  EEPROM.write(7, (u8)powercord_enable);
+  EEPROM.write(8, (u8)massage_return);
+  EEPROM.write(9, false);
+
+  for(int i = 10; i < 518; i++)
+  {
+    EEPROM.write(i, 0xFF);
+  }
+
+  EEPROM.write(518, false);
+
+  for(int i = 0; i < 64; i++)
+  {
+    EEPROM.write(i + 519, 0);
+  }
+
+  EEPROM.write(583, touch_sensitive);
+  EEPROM.write(584, false);
+  EEPROM.write(585, 0);
 }
 
 
 //Sysex set
 void reset()
 {
-  digitalWrite(RESET_PIN,LOW);
+  digitalWrite(RESET_PIN, LOW);
 }
 
 void setDeviceID()
@@ -45,6 +77,13 @@ void setDeviceID()
   device_id = CompositeSerial.read();
   reset();
 }
+
+void setDeviceID(u8 id)
+{
+  device_id = id;
+  EEPROM.write(1, id);
+}
+
 
 
 void enterBootloader()
@@ -55,7 +94,7 @@ void enterBootloader()
 void resetDevice()
 {
   formatEEPROM();
-  EEPROM.write(0x00, B01100000); //customPalette,customKeymap,customtouchbar,gamma,powercord,MIDI,M2P
+  reset();
 }
 
 void formatEEPROM()
@@ -68,10 +107,10 @@ void loadPalette()
   for(int i = 0; i < 128; i++)
   {
     palette[2][i] =
-    EEPROM.read(i * 4 + 1)*0x1000000 + //W
-    EEPROM.read(i * 4 + 2)*0x10000 + //R
-    EEPROM.read(i * 4 + 3)*0x100 + //G
-    EEPROM.read(i * 4 + 4); //B
+    EEPROM.read(i * 4 + 10)*0x1000000 + //W
+    EEPROM.read(i * 4 + 11)*0x10000 + //R
+    EEPROM.read(i * 4 + 12)*0x100 + //G
+    EEPROM.read(i * 4 + 13); //B
   }
 }
 
@@ -81,26 +120,27 @@ void loadKeymap()
   {
     for(int x = 0; x < KEYPADX; x++)
     {
-      keymap[y][x] = EEPROM.read(y * KEYPADX + x + 514);
+      keymap[y][x] = EEPROM.read(y * KEYPADX + x + 519);
     }
   }
 }
 
 void updatePaletteRGB()
 {
+  EEPROM.write(9, true);
   if(CompositeSerial.peek() < 128)
   {
     u8 colour = CompositeSerial.read();
-    EEPROM.write(colour * 4, 0x00);
-    EEPROM.write(colour * 4 + 1, CompositeSerial.read());
-    EEPROM.write(colour * 4 + 2, CompositeSerial.read());
-    EEPROM.write(colour * 4 + 3, CompositeSerial.read());
+    EEPROM.write(colour * 4 + 10, 0x00);
+    EEPROM.write(colour * 4 + 11, CompositeSerial.read());
+    EEPROM.write(colour * 4 + 12, CompositeSerial.read());
+    EEPROM.write(colour * 4 + 13, CompositeSerial.read());
 
     palette[2][colour] =
-    EEPROM.read(colour * 4) * 0x1000000 +
-    EEPROM.read(colour * 4 + 1) * 0x10000 +
-    EEPROM.read(colour * 4 + 2) * 0x100 +
-    EEPROM.read(colour * 4 + 3);
+    EEPROM.read(colour * 4 + 10) * 0x1000000 +
+    EEPROM.read(colour * 4 + 11) * 0x10000 +
+    EEPROM.read(colour * 4 + 12) * 0x100 +
+    EEPROM.read(colour * 4 + 13);
   }
   else if(CompositeSerial.peek() == 255)
   {
@@ -110,19 +150,20 @@ void updatePaletteRGB()
 
 void updatePaletteWRGB()
 {
+  EEPROM.write(9, true);
   if(CompositeSerial.peek() < 128)
   {
     u8 colour = CompositeSerial.read();
-    EEPROM.write(colour * 4, CompositeSerial.read());
-    EEPROM.write(colour * 4 + 1, CompositeSerial.read());
-    EEPROM.write(colour * 4 + 2, CompositeSerial.read());
-    EEPROM.write(colour * 4 + 3, CompositeSerial.read());
+    EEPROM.write(colour * 4 + 10, CompositeSerial.read());
+    EEPROM.write(colour * 4 + 11, CompositeSerial.read());
+    EEPROM.write(colour * 4 + 12, CompositeSerial.read());
+    EEPROM.write(colour * 4 + 13, CompositeSerial.read());
 
     palette[2][colour] =
-    EEPROM.read(colour * 4) * 0x1000000 +
-    EEPROM.read(colour * 4 + 1) * 0x10000 +
-    EEPROM.read(colour * 4 + 2) * 0x100 +
-    EEPROM.read(colour * 4 + 3);
+    EEPROM.read(colour * 4 + 10) * 0x1000000 +
+    EEPROM.read(colour * 4 + 11) * 0x10000 +
+    EEPROM.read(colour * 4 + 12) * 0x100 +
+    EEPROM.read(colour * 4 + 13);
   }
   else if(CompositeSerial.peek() == 255)
   {
@@ -132,14 +173,14 @@ void updatePaletteWRGB()
 
 void resetPalette()
 {
-  EEPROM.write(0, EEPROM.read(0) & B01111111);
+  EEPROM.write(9, false);
   // for(int i = 0; i < sizeof(palette[0]); i++)
   // {
   //   palette[2][i] = palette[0][i];
   // }
 }
 
-void setGamma(bool g)
+void setgamma(bool g)
 {
 
   gamma_enable = g;
@@ -152,9 +193,9 @@ void updateCustomKeymap()
     u8 x = CompositeSerial.read();
     u8 y = CompositeSerial.read();
 
-    EEPROM.write(y * KEYPADX + x + 514, CompositeSerial.read());
+    EEPROM.write(y * KEYPADX + x + 519, CompositeSerial.read());
 
-    keymap[y][x] = EEPROM.read(y * KEYPADX + x + 514);
+    keymap[y][x] = EEPROM.read(y * KEYPADX + x + 519);
   }
 }
 
@@ -172,7 +213,7 @@ void resetCustomKeymap()
 
 void setBrightness(u8 b)
 {
-  EEPROM.write(581, b);
+  EEPROM.write(3, b);
   brightness = b;
   reset();
 }
@@ -180,7 +221,7 @@ void setBrightness(u8 b)
 
 void setTouchSensitive(u8 s)
 {
-  EEPROM.write(582, s);
+  EEPROM.write(3, s);
   touch_sensitive = s;
 }
 
@@ -247,7 +288,7 @@ void getPaletteWRGB()
   CompositeSerial.write(255);
 }
 
-void getGammaState()
+void getgammaState()
 {
   CompositeSerial.write((u8)(0));
   CompositeSerial.write(14);
@@ -312,8 +353,8 @@ void nextBrightnessState()
 
 void rotationCW(u8 r)
 {
-rotation += r;
-if(rotation > 3)
+  rotation += r;
+  if(rotation > 3)
   rotation %= 4;
 }
 

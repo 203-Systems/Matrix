@@ -2,6 +2,8 @@
 #define NEXUS_H
 
 #define UPS 4 //UpdatePerSec
+#define MAXELEMENT 20
+#define MAXUSERELEMENT 20
 
 #include "Arduino.h"
 #include <USBComposite.h>
@@ -17,16 +19,16 @@ extern KeyPad KeyPad;
 
 struct NexusElement
 {
-  u8 location; //location of spawn 0~7 top to bottom,8~15 right to left, 16~23 bottom to top, 24~31 right to left
+  u8 location; //b11000000 for side b00111111 for # but currently only support for 8
   u8 hue; //0~15 203palette
-  u8 ttl = 0; //time to live
+  u8 step = 255; //time to live
 };
 
 struct UserElement
 {
   u8 xy;
   u8 hue; //0~15 203palette
-  u8 ttl = 0; //time to live
+  u8 step = 255; //time to live
 };
 
 class NexusRevamped
@@ -34,15 +36,17 @@ class NexusRevamped
 public:
   NexusRevamped();
   ~NexusRevamped();
+  void tick();
 private:
+  void readKey()
   void update();
   void render();
   void spawn();
   void createElement();
   void spawnInput();
   void createUserElement();
-  NexusElement element[20];
-  UserElement userElement[20];
+  NexusElement element[MAXELEMENT];
+  UserElement userElement[MAXUSERELEMENT];
   u8 nextElement = 0;
   u8 nextUserElement = 0;
 };

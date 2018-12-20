@@ -2,7 +2,7 @@
 #define KEYPAD_H
 
 #include "Arduino.h"
-//#include "../parameter/MatrixVariable.h"
+#include "../parameter/MatrixVariable.h"
 #include "../parameter/MatrixParameter.h"
 #include "../core/Timer.h"
 //#include "MatrixSystem.h"

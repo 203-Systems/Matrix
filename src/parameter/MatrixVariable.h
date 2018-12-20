@@ -10,7 +10,7 @@ extern u8 device_id;
 //LED setting
 extern u8 brightness;
 extern u64 palette[3][128];
-extern u8 ledGamma[256] PROGMEM;
+extern u8 led_gamma[256] PROGMEM;
 
 extern u8 bottomLEDmap[NUM_BOTTOM_LEDS];
 

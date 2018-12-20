@@ -1,4 +1,4 @@
-  /*
+/*
 Project Matrix (c) 203 Industries
 
 TODO
@@ -9,7 +9,6 @@ BootAnimation
 NexusRevamped while USB unreconized
 
 */
-
 #include <Arduino.h>
 #include <USBMIDI.h>
 #include <USBComposite.h>
@@ -23,12 +22,12 @@ NexusRevamped while USB unreconized
 #include "src/core/Timer.h"
 #include "src/core/USBmidi.h"
 #include "src/protocol/MIDI.h"
-#include "src/protocol/M2P.h"
+//#include "src/protocol/M2P.h"
 //#include "..UI.h"
 
 
 MIDI Midi;
-M2P M2P;
+//M2P M2P;
 LED LED;
 KeyPad KeyPad;
 usbmidi USBmidi;
@@ -36,24 +35,34 @@ Timer mainTimer;
 
 void setup()
 {
-  initializeEEPROM();
-  //resetDevice();
-  variableLoad();
+  specialBoot();
+
+  // initEEPROM();
+  // resetEEPROM();
+  // variableLoad();
 
   setupUSB();
+  setupHardware();
 
   FastLED.setBrightness(brightness);
 
   mainTimer.recordCurrent();
+
   while(!USBComposite.isReady())
   {
     if (mainTimer.isLonger(1000))
     {
-      LED.fill(0xff0000); //NexusRevamped Entence point
+
+      //NexusRevamped nexus = new NexusRevamped();
+      while(!USBComposite.isReady())
+      {
+        LED.fill(0xff0000); //NexusRevamped Entence point
+      }
+      //delete nexus;
+      break;
     }
   }
   LED.fill(0x000000);
-  //BootAnimation Entence point
 }
 
 void setupUSB()
@@ -62,7 +71,7 @@ void setupUSB()
   if(device_id != 0)
   {
 
-    USBComposite.setProductString((DEVICENAME + String(' ' + device_id)).c_str());
+    USBComposite.setProductString((DEVICENAME + String(' ') + String(device_id)).c_str());
     USBComposite.setVendorId(VID2);
     USBComposite.setProductId(PID2+device_id);
   }
@@ -82,7 +91,12 @@ void setupUSB()
   USBComposite.begin();
 }
 
-void ReadKey()
+void setupHardware()
+{
+
+}
+
+void readKey()
 {
   if (KeyPad.scan())
   {
@@ -117,6 +131,28 @@ void ReadKey()
   }
 }
 
+void specialBoot()
+{
+  if (KeyPad.scan())
+  {
+    for(int i = 0; i < MULTIPRESS; i++)
+    {
+      if(KeyPad.list[i].velocity > 128)
+      {
+        return;
+      }
+      else
+      {
+        switch(KeyPad.list[i].xy)
+        {
+          case 0:
+          setDeviceID(203);
+        }
+      }
+    }
+  }
+}
+
 void loop()
 {
   if (midi_enable);
@@ -126,7 +162,7 @@ void loop()
 
   if (mainTimer.tick(1000/FPS))
   {
-    ReadKey();
+    readKey();
     LED.update();
     //LED.Rainbow();
     //CompositeSerial.println("Running");
