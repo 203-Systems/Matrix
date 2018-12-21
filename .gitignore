@@ -5,3 +5,13 @@ PCB/_Previews
 *.Zip
 PCB/Project Logs for Matrix/
 PCB/Project Outputs for Matrix/
+Vagrantfile
+ubuntu
+.vagrant
+ubuntu-bionic-18.04-cloudimg-console.log
+bootloader/.dep
+bootloader/TAGS
+bootloader/tags
+bootloader/cscope.out
+bootloader/build
+bootloader/*~
