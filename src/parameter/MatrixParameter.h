@@ -5,10 +5,10 @@ typedef uint16_t u16;
 typedef uint32_t u32;
 typedef uint64_t u64;
 
-#define MATRIXPROTO1.2 //Hardware model selector
+#define MATRIXPROTORE //Hardware model selector
 
 //HardwareMapping
-#ifdef MATRIXPROTO1.1
+#ifdef MATRIXPROTOC8
 //LED
 #define LED_PIN PB7
 #define POWERCORD_PIN PA9
@@ -19,7 +19,7 @@ typedef uint64_t u64;
 #define SI_DATA PA8
 #define SI_CLOCK PB14
 #define SI_SCAN PB15
-//#define FN_PIN PC15
+#define FN_PIN PC15
 
 //ANALOG(TouchBar)
 #define ANALOG0 PA0
@@ -70,7 +70,7 @@ typedef uint64_t u64;
 //#define SUPPORT_WRGB
 #endif
 
-#ifdef MATRIXPROTO1.2
+#ifdef MATRIXPROTORE
 //LED
 #define LED_PIN PB7
 #define POWERCORD_PIN PA9
@@ -80,7 +80,7 @@ typedef uint64_t u64;
 #define SI_DATA PC6
 #define SI_CLOCK PB14
 #define SI_SCAN PB15
-#define FN_PIN PC15
+#define FN_PIN PA0
 //ANALOG(TouchBar)
 #define ANALOG0 PA3
 #define ANALOG1 PA4

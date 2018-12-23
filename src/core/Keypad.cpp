@@ -86,11 +86,11 @@ bool KeyPad::scan()
       //FNholded = millis() - lastFNpressed;
       fnTimer.recordCurrent();
 
-      fn = true;
+      fn = false;
     }
     else
     {
-      fn = false;
+      fn = true;
     }
   }
   else
@@ -122,12 +122,16 @@ void KeyPad::updateList()
       {
         switch(rotation)
         {
+          break;
           case 1:
-          list[i].xy = y * 0x10 + (8 - x);
+          list[i].xy = y * 0x10 + (7 - x);
+          break;
           case 2:
-          list[i].xy = (8 - x) * 0x10 + (8 - y);
+          list[i].xy = (7 - x) * 0x10 + (7 - y);
+          break;
           case 3:
-          list[i].xy = (8 - y) * 0x10 + x;
+          list[i].xy = (7 - y) * 0x10 + x;
+          break;
           default:
           list[i].xy = x * 0x10 + y;
         }

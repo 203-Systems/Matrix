@@ -69,7 +69,11 @@ void resetEEPROM()
 //Sysex set
 void reset()
 {
-  digitalWrite(RESET_PIN, LOW);
+  *(volatile u16*)0x40006C26 = 0x424C;
+  nvic_sys_reset();
+  // pinMode(RESET_PIN, OUTPUT);
+  // digitalWrite(RESET_PIN, LOW);
+
 }
 
 void setDeviceID()
@@ -215,7 +219,6 @@ void setBrightness(u8 b)
 {
   EEPROM.write(3, b);
   brightness = b;
-  reset();
 }
 
 
@@ -319,43 +322,13 @@ void getTouchSensitive()
 }
 
 //special
-void nextBrightnessState()
-{
-  if(brightness >= 192) //Bright AF
-  {
-    setBrightness(32);
-  }
-  else if(brightness >= 160) //VeryBright
-  {
-    setBrightness(192);
-  }
-  else if(brightness >= 128) //Bright
-  {
-    setBrightness(160);
-  }
-  else if(brightness >= 96) //Normal
-  {
-    setBrightness(128);
-  }
-  else if(brightness >= 64) //Dim
-  {
-    setBrightness(96);
-  }
-  else if(brightness >= 32) //VeryDim
-  {
-    setBrightness(64);
-  }
-  else
-  {
-    setBrightness(32);
-  }
-}
 
 void rotationCW(u8 r)
 {
   rotation += r;
   if(rotation > 3)
   rotation %= 4;
+  // *(volatile u8*)0x801F000 = rotation;
 }
 
 //Math

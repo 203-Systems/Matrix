@@ -14,7 +14,41 @@ LED::LED()
 
 void LED::setBrightness(u8 b)
 {
+
   FastLED.setBrightness(b);
+  brightness = b;
+}
+
+void LED::nextBrightnessState()
+{
+  if(brightness >= 192) //Bright AF
+  {
+    LED::setBrightness(32);
+  }
+  else if(brightness >= 160) //VeryBright
+  {
+    LED::setBrightness(192);
+  }
+  else if(brightness >= 128) //Bright
+  {
+    LED::setBrightness(160);
+  }
+  else if(brightness >= 96) //Normal
+  {
+    LED::setBrightness(128);
+  }
+  else if(brightness >= 64) //Dim
+  {
+    LED::setBrightness(96);
+  }
+  else if(brightness >= 32) //VeryDim
+  {
+    LED::setBrightness(64);
+  }
+  else
+  {
+    LED::setBrightness(32);
+  }
 }
 
 void LED::fill(u64 WRGB, bool overlay /*= false*/)
@@ -279,6 +313,7 @@ void LED::enableOverlayMode()
 void LED::disableOverlayMode()
 {
   overlay_mode = false;
+  LED::fill(0);
   for(int i = 0; i < NUM_TOTAL_LEDS; i++)
   {
     leds[i] == buffer[i];

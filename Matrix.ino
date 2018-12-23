@@ -9,6 +9,8 @@ BootAnimation
 NexusRevamped while USB unreconized
 
 */
+#define MATRIXPROTORE
+
 #include <Arduino.h>
 #include <USBMIDI.h>
 #include <USBComposite.h>
@@ -23,9 +25,9 @@ NexusRevamped while USB unreconized
 #include "src/core/USBmidi.h"
 #include "src/protocol/MIDI.h"
 //#include "src/protocol/M2P.h"
-//#include "..UI.h"
+#include "src/ui/UI.h"
 
-
+UI UI;
 MIDI Midi;
 //M2P M2P;
 LED LED;
@@ -35,6 +37,7 @@ Timer mainTimer;
 
 void setup()
 {
+  // rotation = *(volatile u8*)0x801F000;
   specialBoot();
 
   // initEEPROM();
@@ -100,12 +103,15 @@ void readKey()
 {
   if (KeyPad.scan())
   {
-    // if(KeyPad.timesFNpressed == 5)
-    // UI.ShowDeviceInfo();
-    // if(KeyPad.timesFNpressed == 10)
-    // UI.EasterEgg();
-    // if(KeyPad.fn)
-    // UI.EnterFNmenu();
+    if(KeyPad.fnChanged)
+    {
+      // if(KeyPad.timesFNpressed == 5)
+      // UI.ShowDeviceInfo();
+      // if(KeyPad.timesFNpressed == 10)
+      // UI.EasterEgg();
+      if(KeyPad.fn)
+      UI.enterFNmenu();
+    }
 
     for(int i = 0; i < MULTIPRESS; i++)
     {

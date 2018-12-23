@@ -15,6 +15,7 @@ class LED
 {
 public:
    LED();
+   void nextBrightnessState();
    void setBrightness(u8 b);
    void fill(u64 WRGB, bool overlay = false);
 
