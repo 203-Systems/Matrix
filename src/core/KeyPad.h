@@ -22,6 +22,8 @@ class KeyPad
 public:
   KeyPad();
   bool scan();
+  bool checkXY(u8 x, u8 y);
+  bool checkXY(u8 xy);
 
   Key list[MULTIPRESS];
   //u32 FNholded = 0;
@@ -34,8 +36,8 @@ private:
   // void On(u8 X, u8 Y);
   // void Off(u8 X, u8 Y);
   bool fnCache;
-  byte keypadStats[KEYPADX]; // const Y is 8, allow configuration like 8*16 or 16*16 as 8*32 in the future.
-  byte keypadChanged[KEYPADX];
+  u8 keypadStats[KEYPADX]; // y is define by type, u8, u16 , u32, u64
+  u8 keypadChanged[KEYPADX];
 };
 
 #endif

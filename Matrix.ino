@@ -2,15 +2,12 @@
 Project Matrix (c) 203 Industries
 
 TODO
-FN key menu
 Play Animation
 Play Text
 BootAnimation
 NexusRevamped while USB unreconized
 
 */
-#define MATRIXPROTORE
-
 #include <Arduino.h>
 #include <USBMIDI.h>
 #include <USBComposite.h>
@@ -35,6 +32,8 @@ KeyPad KeyPad;
 usbmidi USBmidi;
 Timer mainTimer;
 
+bool setupComplete = false;
+
 void setup()
 {
   // rotation = *(volatile u8*)0x801F000;
@@ -47,6 +46,8 @@ void setup()
   setupHardware();
 
   FastLED.setBrightness(brightness);
+
+  setupComplete = true;
 
   specialBoot();
 
@@ -66,6 +67,7 @@ void setup()
     }
   }
   LED.fill(0x000000);
+
 }
 
 void setupUSB()
@@ -92,6 +94,7 @@ void setupUSB()
   USBmidi.registerComponent();
   CompositeSerial.registerComponent();
   USBComposite.begin();
+
 }
 
 void setupHardware()
@@ -121,17 +124,25 @@ void readKey()
       {
         if(midi_enable)
         {
-          Midi.sentXYon(KeyPad.list[i].xy >> 4, KeyPad.list[i].xy & 0x0F, KeyPad.list[i].velocity);
-          CompositeSerial.print(KeyPad.list[i].xy);
-          CompositeSerial.print(' ');
-          CompositeSerial.print(KeyPad.list[i].xy & 0xF0 >> 4 );
-          CompositeSerial.print(' ');
-          CompositeSerial.println(KeyPad.list[i].xy & 0x0F );
+          Midi.sentXYon(KeyPad.list[i].xy, KeyPad.list[i].velocity);
+
+          #ifdef DEBUG
+          if(setupComplete)
+          {
+            CompositeSerial.print("KeyPad \t");
+            CompositeSerial.print(KeyPad.list[i].xy, HEX);
+            CompositeSerial.print("\t");
+            CompositeSerial.print((KeyPad.list[i].xy & 0xF0) >> 4 );
+            CompositeSerial.print("\t");
+            CompositeSerial.println(KeyPad.list[i].xy & 0x0F);
+          }
+          #endif
+
         }
       }
       else
       {
-        Midi.sentXYoff(KeyPad.list[i].xy >> 4, KeyPad.list[i].xy & 0x0F, 0);
+        Midi.sentXYoff(KeyPad.list[i].xy, 0);
       }
     }
   }
@@ -141,33 +152,41 @@ void specialBoot()
 {
   if (KeyPad.scan())
   {
-    for(int i = 0; i < MULTIPRESS; i++)
+    if(KeyPad.checkXY(1, 1) && KeyPad.checkXY(0, 0))
     {
-      if(KeyPad.list[i].velocity > 128)
+
+      LED.fill(0xFFFFFF, true);
+      while(!KeyPad.fn)
       {
-        return;
-      }
-      else
-      {
-        switch(KeyPad.list[i].xy)
+        if(KeyPad.scan())
         {
-          case 0x00:
-          while(!KeyPad.fn)
+          for(int i = 0; i < MULTIPRESS; i++)
           {
-            LED.fill(0xFFFFFF, true);
-            LED.update();
-            while(KeyPad.scan())
+            if(KeyPad.list[i].velocity > 128)
+            break;
+            if(KeyPad.list[i].velocity > 0)
             {
+              if(LED.readXYLED(KeyPad.list[i].xy) != 0)
+              {
+                LED.offXY(KeyPad.list[i].xy);
+              }
+              else
+              {
+                LED.onXY(KeyPad.list[i].xy);
+              }
             }
           }
-          break;
-
-          case 0x70:
-          setDeviceID(203);
-          break;
+          LED.update();
+          delay(5);
         }
       }
     }
+
+    if(KeyPad.checkXY(0x00) && KeyPad.checkXY(0x02))
+    {
+      setDeviceID(203);
+    }
+
   }
 }
 

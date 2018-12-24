@@ -1,5 +1,5 @@
 #include "KeyPad.h"
-#include <USBComposite.h>
+//#include <USBComposite.h>
 
 // extern MIDI Midi;
 //
@@ -39,7 +39,7 @@ bool KeyPad::scan()
     {
       digitalWrite(SI_CLOCK, LOW);
 
-      if (digitalRead(SI_DATA) != bitRead(keypadStats[y],x))
+      if (digitalRead(SI_DATA) != bitRead(keypadStats[x],y))
       {
         // if (digitalRead(SI_DATA))
         // {
@@ -50,13 +50,13 @@ bool KeyPad::scan()
         //   KeyPad::Off(x,y);
         // }
         changed = true;
-        bitWrite(keypadStats[y], x, digitalRead(SI_DATA));
-        bitWrite(keypadChanged[y], x, 1);
+        bitWrite(keypadStats[x], y, digitalRead(SI_DATA));
+        bitWrite(keypadChanged[x], y, 1);
         // CompositeSerial.println(y * 0x10 + x);
       }
       else
       {
-        bitWrite(keypadChanged[y], x, 0);
+        bitWrite(keypadChanged[x], y, 0);
       }
 
       digitalWrite(SI_CLOCK, HIGH);
@@ -118,7 +118,7 @@ void KeyPad::updateList()
       if(i == MULTIPRESS)
       return;
 
-      if(bitRead(keypadChanged[y], x) == true)
+      if(bitRead(keypadChanged[x], y) == true)
       {
         switch(rotation)
         {
@@ -136,7 +136,7 @@ void KeyPad::updateList()
           list[i].xy = x * 0x10 + y;
         }
 
-        if(bitRead(keypadStats[y], x) == true)
+        if(bitRead(keypadStats[x], y) == true)
         {
           list[i].velocity = 127;
         }
@@ -145,10 +145,20 @@ void KeyPad::updateList()
           list[i].velocity = 0;
         }
         i++;
-        bitWrite(keypadChanged[y], x, 0);
+        bitWrite(keypadChanged[x], y, 0);
       }
     }
   }
+}
+
+bool KeyPad::checkXY(u8 x, u8 y)
+{
+  return bitRead(keypadStats[x], y);
+}
+
+bool KeyPad::checkXY(u8 xy)
+{
+  return bitRead(keypadStats[xy & B11110000], xy & B00001111);
 }
 
 // void KeyPad::On(uint8 x, uint8 y)

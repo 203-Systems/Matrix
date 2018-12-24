@@ -62,7 +62,7 @@ void NexusRevamped::render()
 
       for(int t = 0; t < 6; t ++)
       {
-        LED.setXYPalette(element[i].location & b11000000, t, 0, t + ttl)
+        LED.setXYPalette(element[i].location & b11000000, t, 0, t + ttl) //outdated api
       }
 
     }

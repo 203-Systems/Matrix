@@ -17,8 +17,8 @@ public:
   void noteOn(u8 channel, u8 note, u8 velocity);
   void noteOff(u8 channel, u8 note, u8 velocity);
   void poll();
-  void sentXYon(u8 x, u8 y, u8 velocity);
-  void sentXYoff(u8 x, u8 y, u8 velocity);
+  void sentXYon(u8 xy, u8 velocity);
+  void sentXYoff(u8 xy, u8 velocity);
   void sentNoteOn(u8 channel, u8 note, u8 velocity);
   void sentNoteOff(u8 channel, u8 note, u8 velocity);
 };

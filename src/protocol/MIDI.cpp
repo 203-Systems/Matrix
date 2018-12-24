@@ -1,5 +1,9 @@
 #include "MIDI.h"
 
+#ifdef DEBUG
+#include <USBComposite.h>
+#endif
+
 extern LED LED;
 
 
@@ -15,12 +19,22 @@ void MIDI::poll()
 
 void MIDI::noteOn(u8 channel, u8 note, u8 velocity)
 {
+
+  #ifdef DEBUG
+  CompositeSerial.print("MIDI In \t");
+  CompositeSerial.print(channel);
+  CompositeSerial.print("\t");
+  CompositeSerial.print(note);
+  CompositeSerial.print("\t");
+  CompositeSerial.println(velocity);
+  #endif
+
   for(u8 y = 0; y < KEYPADY; y++)
   {
     for(u8 x = 0; x < KEYPADX; x++)
     {
       if(note == keymap[y][x])
-      LED.setXYPalette(x, y, channel, velocity);
+      LED.setXYPalette(x * 0x10 + y, channel, velocity);
     }
   }
   //BottomLED
@@ -52,7 +66,7 @@ void MIDI::noteOff(u8 channel, u8 note, u8 velocity)
     for(u8 x = 0; x < KEYPADX; x++)
     {
       if(note == keymap[y][x])
-      LED.offXY(x,y);
+      LED.offXY(x * 0x10 + y);
     }
   }
   //BottomLED
@@ -76,14 +90,14 @@ void MIDI::noteOff(u8 channel, u8 note, u8 velocity)
   }
 }
 
-void MIDI::sentXYon(u8 x, u8 y, u8 velocity)
+void MIDI::sentXYon(u8 xy, u8 velocity)
 {
-    MIDI::sentNoteOn(midi_channel, keymap[y][x], 127);
+  MIDI::sentNoteOn(midi_channel, keymap[xy & 0x0F][(xy & 0xF0) >> 4], 127);
 }
 
-void MIDI::sentXYoff(u8 x, u8 y, u8 velocity)
+void MIDI::sentXYoff(u8 xy, u8 velocity)
 {
-    MIDI::sentNoteOff(midi_channel, keymap[y][x], 0);
+  MIDI::sentNoteOff(midi_channel, keymap[xy & 0x0F][(xy & 0xF0) >> 4], 0);
 
 }
 

@@ -337,8 +337,10 @@ u8 wrgbToHEX(u8 w, u8 r, u8 g, u8 b)
   return w * 0x10000000 + r * 0x10000 + g * 0x100 + b;
 }
 
-u8 xyToIndex(u8 x, u8 y)
+u8 xyToIndex(u8 xy)
 {
+  u8 x = (xy & 0xF0) >> 4;
+  u8 y = xy & 0x0F;
 
   switch (rotation)
   {
@@ -366,7 +368,7 @@ u8 indexRotation(int index)
   // XY xy = indexToXY(index);
   if(index < NUM_LEDS)
   {
-    return xyToIndex(index % KEYPADX, index / KEYPADX);
+    return xyToIndex((index % KEYPADX) * 0x10 + (index / KEYPADX));
   }
   else if(index >= NUM_LEDS && index < NUM_TOTAL_LEDS)
   {
