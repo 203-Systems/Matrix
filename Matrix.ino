@@ -38,7 +38,6 @@ Timer mainTimer;
 void setup()
 {
   // rotation = *(volatile u8*)0x801F000;
-  specialBoot();
 
   // initEEPROM();
   // resetEEPROM();
@@ -49,8 +48,9 @@ void setup()
 
   FastLED.setBrightness(brightness);
 
-  mainTimer.recordCurrent();
+  specialBoot();
 
+  mainTimer.recordCurrent();
   while(!USBComposite.isReady())
   {
     if (mainTimer.isLonger(1000))
@@ -151,8 +151,20 @@ void specialBoot()
       {
         switch(KeyPad.list[i].xy)
         {
-          case 0:
+          case 0x00:
+          while(!KeyPad.fn)
+          {
+            LED.fill(0xFFFFFF, true);
+            LED.update();
+            while(KeyPad.scan())
+            {
+            }
+          }
+          break;
+
+          case 0x70:
           setDeviceID(203);
+          break;
         }
       }
     }
