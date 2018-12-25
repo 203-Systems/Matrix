@@ -1,5 +1,15 @@
 #include <Arduino.h>
 
+typedef uint8_t u8;
+typedef uint16_t u16;
+typedef uint32_t u32;
+typedef uint64_t u64;
+
+typedef int8_t s8;
+typedef int16_t s16;
+typedef int32_t s32;
+typedef int64_t s64;
+
 #define MATRIXPROTORE //Hardware model selector
 #define DEBUG //CDC info
 
@@ -144,14 +154,10 @@
 #define NUM_TOTAL_LEDS 96   //64+32
 #define NUM_POWERCORD_LEDS 60
 #define FPS 100
+#define LOWSTATEBRIGHTNESS 0.3
 
 //KeyPad
 #define KEYPADX 8 //Max 256 key support due to the m2p and libary data type limition
 #define KEYPADY 8 // need tp change data type in keypad.h
 #define MULTIPRESS 10 //Key Press Process At Once
 #define MULTITAP_THRESHOLD 200
-
-typedef uint8_t u8;
-typedef uint16_t u16;
-typedef uint32_t u32;
-typedef uint64_t u64;

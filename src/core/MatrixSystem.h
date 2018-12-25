@@ -60,6 +60,7 @@ u8 xyToIndex(u8 xy);
 // XY indexToXY(u8 index);
 u8 indexRotation(int index);
 u8 bottomLEDrotation(int index);
+u8 xytoxy(u8 x, u8 y);
 //u8 xyToIndex(u8 X,u8 Y);
 
 #endif

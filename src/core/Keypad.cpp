@@ -35,7 +35,7 @@ bool KeyPad::scan()
     digitalWrite(SI_SCAN, HIGH);
 
 
-    for (int8_t y = KEYPADY-1; y >= 0; y--) //y could go negative so use int instead uint
+    for (s8 y = KEYPADY-1; y >= 0; y--) //y could go negative so use int instead uint
     {
       digitalWrite(SI_CLOCK, LOW);
 
@@ -133,7 +133,7 @@ void KeyPad::updateList()
           list[i].xy = (7 - y) * 0x10 + x;
           break;
           default:
-          list[i].xy = x * 0x10 + y;
+          list[i].xy = xytoxy(x, y);
         }
 
         if(bitRead(keypadStats[x], y) == true)

@@ -49,6 +49,10 @@ void setup()
 
   setupComplete = true;
 
+  #ifdef DEBUG
+  CompositeSerial.println("Setup Complete");
+  #endif
+
   specialBoot();
 
   mainTimer.recordCurrent();
@@ -68,6 +72,9 @@ void setup()
   }
   LED.fill(0x000000);
 
+  #ifdef DEBUG
+  CompositeSerial.println("Enter Main Program");
+  #endif
 }
 
 void setupUSB()
@@ -154,32 +161,7 @@ void specialBoot()
   {
     if(KeyPad.checkXY(1, 1) && KeyPad.checkXY(0, 0))
     {
-
-      LED.fill(0xFFFFFF, true);
-      while(!KeyPad.fn)
-      {
-        if(KeyPad.scan())
-        {
-          for(int i = 0; i < MULTIPRESS; i++)
-          {
-            if(KeyPad.list[i].velocity > 128)
-            break;
-            if(KeyPad.list[i].velocity > 0)
-            {
-              if(LED.readXYLED(KeyPad.list[i].xy) != 0)
-              {
-                LED.offXY(KeyPad.list[i].xy);
-              }
-              else
-              {
-                LED.onXY(KeyPad.list[i].xy);
-              }
-            }
-          }
-          LED.update();
-          delay(5);
-        }
-      }
+      factoryTest();
     }
 
     if(KeyPad.checkXY(0x00) && KeyPad.checkXY(0x02))
@@ -189,6 +171,77 @@ void specialBoot()
 
   }
 }
+
+// void factoryTest()
+// {
+//   u32 testcolor[] = {0xFFFFFF, 0xFF0000, 0x00FF00, 0x0000FF, 0xFFFF00, 0x00FFFF};
+//
+//   for(int i = 0; i < 6; i ++)
+//   {
+//     LED.fill(testcolor[i]);
+//     LED.update();
+//     while(!KeyPad.scan()){}
+//
+//     while(KeyPad.fnChanged && KeyPad.fn)
+//     {
+//       if (mainTimer.tick(1000/FPS))
+//       {
+//         KeyPad.scan();
+//         for(int i = 0; i < MULTIPRESS; i++)
+//         {
+//           if(KeyPad.list[i].velocity > 128)
+//           break;
+//           if(KeyPad.list[i].velocity > 0)
+//           {
+//             if(LED.readXYLED(KeyPad.list[i].xy) != testcolor[i])
+//             {
+//               LED.setXYHEX(KeyPad.list[i].xy, testcolor[i]);
+//             }
+//             else
+//             {
+//               LED.offXY(KeyPad.list[i].xy);
+//             }
+//           }
+//         }
+//         LED.update();
+//       }
+//     }
+//   }
+// }
+
+void factoryTest()
+{
+  LED.fill(0xFFFFFF);
+
+  while(!KeyPad.fn)
+  {
+    if (mainTimer.tick(1000/FPS))
+    {
+      KeyPad.scan();
+
+      for(int i = 0; i < MULTIPRESS; i++)
+      {
+        if(KeyPad.list[i].velocity > 128)
+        break;
+
+        if(KeyPad.list[i].velocity > 0)
+        {
+          if(LED.readXYLED(KeyPad.list[i].xy) != 0xFFFFFF)
+          {
+            LED.setXYHEX(KeyPad.list[i].xy, 0xFFFFFF);
+          }
+          else
+          {
+            LED.offXY(KeyPad.list[i].xy);
+          }
+        }
+      }
+      LED.update();
+    }
+  }
+}
+
+
 
 void loop()
 {

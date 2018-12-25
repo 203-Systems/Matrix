@@ -34,7 +34,7 @@ void MIDI::noteOn(u8 channel, u8 note, u8 velocity)
     for(u8 x = 0; x < KEYPADX; x++)
     {
       if(note == keymap[y][x])
-      LED.setXYPalette(x * 0x10 + y, channel, velocity);
+      LED.setXYPalette(xytoxy(x, y), channel, velocity);
     }
   }
   //BottomLED
@@ -66,7 +66,7 @@ void MIDI::noteOff(u8 channel, u8 note, u8 velocity)
     for(u8 x = 0; x < KEYPADX; x++)
     {
       if(note == keymap[y][x])
-      LED.offXY(x * 0x10 + y);
+      LED.offXY(xytoxy(x, y));
     }
   }
   //BottomLED

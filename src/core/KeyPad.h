@@ -4,6 +4,7 @@
 #include "Arduino.h"
 #include "../parameter/MatrixVariable.h"
 #include "../parameter/MatrixParameter.h"
+#include "../core/MatrixSystem.h"
 #include "../core/Timer.h"
 //#include "MatrixSystem.h"
 //#include "../protocol/MIDI.h"
@@ -31,13 +32,11 @@ public:
   bool fnChanged;
   u8 timesFNpressed = 0;
   Timer fnTimer;
-private:
-  void updateList();
-  // void On(u8 X, u8 Y);
-  // void Off(u8 X, u8 Y);
-  bool fnCache;
   u8 keypadStats[KEYPADX]; // y is define by type, u8, u16 , u32, u64
   u8 keypadChanged[KEYPADX];
+private:
+  void updateList();
+  bool fnCache;
 };
 
 #endif

@@ -31,4 +31,5 @@ extern bool powercord_enable;
 extern bool massage_return;
 
 extern u8 text_bitmap[96][6] PROGMEM;
+extern u8 half_height_num_font[10][3] PROGMEM;
 #endif

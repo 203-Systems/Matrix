@@ -17,7 +17,7 @@ boolean Timer::tick(u16 ms)
 
 boolean Timer::isLonger(u16 ms)
 {
-  return previous + ms <= millis();
+  return (previous + ms) <= millis();
 }
 
 u32 Timer::sinceLastTick()
