@@ -54,7 +54,7 @@ public:
   void disableOverlayMode();
   u32 readXYLED(u8 xy);
   u32 readLED(u8 index);
-  u32 toBrightness(u32 hex, float brightness);
+  u32 toBrightness(u32 hex, float f);
 private:
   bool overlay_mode = false;
   CRGB leds[NUM_TOTAL_LEDS];

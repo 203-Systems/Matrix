@@ -32,8 +32,6 @@ KeyPad KeyPad;
 usbmidi USBmidi;
 Timer mainTimer;
 
-bool setupComplete = false;
-
 void setup()
 {
   // rotation = *(volatile u8*)0x801F000;
@@ -46,8 +44,6 @@ void setup()
   setupHardware();
 
   FastLED.setBrightness(brightness);
-
-  setupComplete = true;
 
   #ifdef DEBUG
   CompositeSerial.println("Setup Complete");
@@ -65,12 +61,14 @@ void setup()
       while(!USBComposite.isReady())
       {
         LED.fill(0xff0000); //NexusRevamped Entence point
+        LED.update();
       }
       //delete nexus;
       break;
     }
   }
   LED.fill(0x000000);
+  LED.update();
 
   #ifdef DEBUG
   CompositeSerial.println("Enter Main Program");
@@ -132,19 +130,6 @@ void readKey()
         if(midi_enable)
         {
           Midi.sentXYon(KeyPad.list[i].xy, KeyPad.list[i].velocity);
-
-          #ifdef DEBUG
-          if(setupComplete)
-          {
-            CompositeSerial.print("KeyPad \t");
-            CompositeSerial.print(KeyPad.list[i].xy, HEX);
-            CompositeSerial.print("\t");
-            CompositeSerial.print((KeyPad.list[i].xy & 0xF0) >> 4 );
-            CompositeSerial.print("\t");
-            CompositeSerial.println(KeyPad.list[i].xy & 0x0F);
-          }
-          #endif
-
         }
       }
       else

@@ -20,46 +20,50 @@ void UI::enterFNmenu()
 
 void UI::fnMenu()
 {
+  #ifdef DEBUG
+  CompositeSerial.println("FN");
+  #endif
   while(1)
   {
-
-    if(uiTimer.tick(1000/FPS))
-    UI::fnRender();
-
     if(midi_enable);
     USBmidi.poll();
     // if (m2p_enable)
     // CDC.Poll();
 
-    if(KeyPad.scan())
+    if(uiTimer.tick(1000/FPS))
     {
-      if(KeyPad.fnChanged)
-      {
-        // if(KeyPad.timesFNpressed > 9)
-        // UI::easterEgg();
+      UI::fnRender();
 
-        if(KeyPad.fn)
+      if(KeyPad.scan())
+      {
+        if(KeyPad.fnChanged)
         {
-          UI::exitFNmenu();
-          return;
+          // if(KeyPad.timesFNpressed > 9)
+          // UI::easterEgg();
+
+          if(KeyPad.fn)
+          {
+            UI::exitFNmenu();
+            return;
+          }
+          // else if(!KeyPad.fn && KeyPad.fnTimer.isLonger(MULTITAP_THRESHOLD)) //if fn off and longer then threshold, will count as hold, release to back to main menu
+          // {
+          //   UI::exitFNmenu();
+          //   return;
+          // }
         }
-        else if(!KeyPad.fn && KeyPad.fnTimer.isLonger(MULTITAP_THRESHOLD)) //if fn off and longer then threshold, will count as hold, release to back to main menu
-        {
-          UI::exitFNmenu();
-          return;
-        }
+        fnKeyAction();
       }
     }
-    fnKeyAction();
   }
 }
 
 void UI::exitFNmenu()
 {
-  LED.disableOverlayMode();
   #ifdef DEBUG
   CompositeSerial.println("Exit FN");
   #endif
+  LED.disableOverlayMode();
 }
 
 void UI::fnKeyAction()
@@ -129,7 +133,7 @@ void UI::fnKeyAction()
         break;
 
         case 0x71:
-        device_id = UI::numSelector8bit(device_id, 0x00FFFF);
+        device_id = UI::numSelector8bit(device_id, 0x00FFAA);
         break;
       }
     }
@@ -139,6 +143,9 @@ void UI::fnKeyAction()
 
 void UI::fnRender()
 {
+  #ifdef DEBUG
+  CompositeSerial.println("Render");
+  #endif
   //brightness
   LED.setXYHEX(0x33, 0xFFFFFFFF, true);
   LED.setXYHEX(0x34, 0xFFFFFFFF, true);
@@ -201,23 +208,37 @@ void UI::fnRender()
   // LED.setXYHEX(0x07, 0x00FFFFFF, true); //AppLauncher
   // LED.setXYHEX(0x17, 0x00FFFFFF, true); //Text Selctor
   LED.setXYHEX(0x70, 0x00FF0000, true); //reset
-  LED.setXYHEX(0x71, 0x0000FFFF, true); //reset
+  LED.setXYHEX(0x71, 0x0000FFAA, true); //reset
+
+  #ifdef DEBUG
+  CompositeSerial.println("End Render");
+  #endif
 
   LED.update();
 }
 
 u8 UI::numSelector8bit(u8 currentNum, u32 colour)
 {
-  LED.fill(0);
-  while(!KeyPad.fn)
+  // LED.fill(0, true);
+  while(!KeyPad.fnChanged)
   {
-    if(KeyPad.scan())
+    if(uiTimer.tick(1000/FPS))
     {
-      currentNum = UI::binary8bitInput(currentNum, 7, colour);
-      UI::renderHalfHeightNum(currentNum, 0x73, colour);
-      LED.update();
+      if(KeyPad.scan())
+      {
+        LED.fill(0, true);
+        currentNum = UI::binary8bitInput(currentNum, 7, colour);
+        UI::renderHalfHeightNum(currentNum, 0x73, colour);
+        #ifdef DEBUG
+        CompositeSerial.print("numSelector\t");
+        CompositeSerial.println(currentNum);
+        #endif
+        LED.update();
+      }
     }
   }
+  while(KeyPad.fn) {}
+  LED.fill(0, true);
   return currentNum;
 }
 
@@ -241,12 +262,12 @@ void UI::showDeviceInfo()
 
 }
 
-void UI::showASCII(char* ascii)
+void UI::showASCII(char ascii[])
 {
 
 }
 
-void UI::playAnimation(char* animation)
+void UI::playAnimation(char animation[])
 {
 
 }
@@ -263,34 +284,33 @@ void UI::renderLetter(char ascii, u8 xy, u32 colour)
 
 void UI::renderHalfHeightNum(u8 num, u8 xy, u32 colour)
 {
+  //LED.fillRegionOff(0x00, 0x73, true);
   if(num > 99)
   UI::renderHalfHeightDigit(num / 100, 0x13, colour);
 
-  if(num > 99)
-  UI::renderHalfHeightDigit(num % 100 / 10 , 0x43, colour);
+  if(num > 9)
+  UI::renderHalfHeightDigit(num % 100 / 10 , 0x43, 0x00FFFFFF);
 
   UI::renderHalfHeightDigit(num % 10, 0x73, colour);
 }
 
 void UI::renderHalfHeightDigit(u8 num, u8 xy, u32 colour) //XY is the bottom right location
 {
-  s8 x = (xy & 0xF0) >> 8;
-  s8 y = (xy & 0x0F);
-
-  for(s8 xi = 3; xi >= 0; xi--)
+  s8 x = (xy & 0xF0) >> 4;
+  for(s8 xi = 2; xi >= 0; xi--)
   {
-    x--;
-    if(x > -1 && x < KEYPADX)
+    if(x == -1 && x == KEYPADX)
+    break;
+    s8 y = (xy & 0x0F);
+    for(s8 yi = 0; yi < 4; yi++)
     {
-      for(s8 yi = 0; yi < 4; yi++)
-      {
-        y++;
-        if(y > -1 && x < KEYPADY)
-        {
-          LED.setXYHEX(xytoxy(x, y), colour * bitRead(half_height_num_font[num][x], y));
-        }
-      }
+      if(y == -1 && y == KEYPADY)
+      break;
+
+      LED.setXYHEX(xytoxy(x, y), colour * bitRead(half_height_num_font[num][xi], yi), true);
+      y--;
     }
+    x--;
   }
 }
 
@@ -299,14 +319,14 @@ u8 UI::binary8bitInput(u8 currentNum, u8 y, u32 colour)
   for(int x = 0; x < 8; x++)
   {
     if(bitRead(KeyPad.keypadStats[x], y))
-    bitWrite(currentNum, x, !bitRead(currentNum, x));
-    if(bitRead(currentNum, x))
+    bitWrite(currentNum, 7 - x, !bitRead(currentNum, 7 - x));
+    if(bitRead(currentNum, 7 - x))
     {
-      LED.setXYHEX(xytoxy(x, y), colour);
+      LED.setXYHEX(xytoxy(x, y), colour, true);
     }
     else
     {
-      LED.setXYHEX(xytoxy(x, y), LED.toBrightness(colour, LOWSTATEBRIGHTNESS));
+      LED.setXYHEX(xytoxy(x, y), LED.toBrightness(colour, LOWSTATEBRIGHTNESS), true);
     }
   }
   return currentNum;

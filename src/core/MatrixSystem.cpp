@@ -402,7 +402,6 @@ u8 bottomLEDrotation(int index)
     default:
     return index;
   }
-
 }
 
 u8 xytoxy(u8 x, u8 y)

@@ -31,8 +31,8 @@ public:
   void fnKeyAction();
   void fnRender();
   void showDeviceInfo();
-  void showASCII(char* ascii);
-  void playAnimation(char* animation);
+  void showASCII(char ascii[]);
+  void playAnimation(char animation[]);
   u8 numSelector8bit(u8 currentNum, u32 colour);
   u8 numSelector6bit(u8 currentNum, u32 colour);
   u32 numSelectorRGB(u32 currentNum, u32 colour);

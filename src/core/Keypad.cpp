@@ -1,5 +1,5 @@
 #include "KeyPad.h"
-//#include <USBComposite.h>
+#include <USBComposite.h>
 
 // extern MIDI Midi;
 //
@@ -53,11 +53,28 @@ bool KeyPad::scan()
         bitWrite(keypadStats[x], y, digitalRead(SI_DATA));
         bitWrite(keypadChanged[x], y, 1);
         // CompositeSerial.println(y * 0x10 + x);
+        #ifdef DEBUG
+        if(digitalRead(SI_DATA))
+        {
+          CompositeSerial.print("KeyPad On \t");
+        }
+        else
+        {
+          CompositeSerial.print("KeyPad Off \t");
+        }
+        CompositeSerial.print(x * 0x10 + y, HEX);
+        CompositeSerial.print("\t");
+        CompositeSerial.print(x);
+        CompositeSerial.print("\t");
+        CompositeSerial.println(y);
+        #endif
       }
       else
       {
         bitWrite(keypadChanged[x], y, 0);
       }
+
+
 
       digitalWrite(SI_CLOCK, HIGH);
     }

@@ -69,7 +69,7 @@ void LED::fill(u32 WRGB, bool overlay /*= false*/)
       buffer[i] = WRGB;
     }
   }
-  FastLED.show();
+  //FastLED.show();
 }
 
 // void LED::setLED(INDEXMODE indexmode, LEDMODE ledmode, u8 xy = 0, u32 p1 = 0, u8 p2 = 0, u8 p3 = 0, u8 p4 = 0)
@@ -196,43 +196,41 @@ void LED::setXYWRGB(u8 xy, u8 w, u8 r, u8 g, u8 b, bool overlay /*= false*/)
 }
 
 
-void LED::setXYHEX(u8 xy, u32 WRGB, bool overlay /*= false*/, bool ignore_gamma /*= false*/)
+void LED::setXYHEX(u8 xy, u32 hex, bool overlay /*= false*/, bool ignore_gamma /*= false*/)
 {
+  #ifdef DEBUG
+  CompositeSerial.print("LED XY \t");
+  CompositeSerial.print(xy, HEX);
+  CompositeSerial.print("\t");
+  CompositeSerial.println(hex, HEX);
+  #endif
+
   if(!overlay_mode || overlay)
   {
     if(gamma_enable && !ignore_gamma)
     {
-      leds[xyToIndex(xy)] = applyGamma(WRGB);
+      leds[xyToIndex(xy)] = applyGamma(hex);
     }
     else
     {
-      leds[xyToIndex(xy)] = WRGB;
+      leds[xyToIndex(xy)] = hex;
     }
   }
   else
   {
     if(gamma_enable && !ignore_gamma)
     {
-      buffer[xyToIndex(xy)] = applyGamma(WRGB);
+      buffer[xyToIndex(xy)] = applyGamma(hex);
     }
     else
     {
-      buffer[xyToIndex(xy)] = WRGB;
+      buffer[xyToIndex(xy)] = hex;
     }
   }
 }
 
 void LED::setXYPalette(u8 xy, u8 pick_palette, u8 colour, bool overlay /*= false*/)
 {
-  #ifdef DEBUG
-  CompositeSerial.print("LED XY Palette \t");
-  CompositeSerial.print(xy);
-  CompositeSerial.print("\t");
-  CompositeSerial.print(pick_palette);
-  CompositeSerial.print("\t");
-  CompositeSerial.println(colour);
-  #endif
-
   LED::setXYHEX(xy, palette[pick_palette][colour], overlay, true);
 }
 
@@ -355,12 +353,12 @@ u32 LED::readLED(u8 index)
   return leds[indexRotation(index)];
 }
 
-u32 toBrightness(u32 hex, float brightness)
+u32 LED::toBrightness(u32 hex, float f)
 {
-    u8 w = (hex & 0xFF000000) >> 32;
-    u8 r = (hex & 0x00FF0000) >> 24;
-    u8 g = (hex & 0x0000FF00) >> 16;
-    u8 b = (hex & 0x000000FF);
+    u8 w = (((hex & 0xFF000000) >> 24) * f);
+    u8 r = (((hex & 0x00FF0000) >> 16) * f);
+    u8 g = (((hex & 0x0000FF00) >> 8) * f);
+    u8 b = ((hex & 0x000000FF) * f);
 
-    return w * brightness * 0x1000000 + r * brightness * 0x10000 + g * brightness * 0x100 + b * brightness;
+    return w * 0x1000000 + r * 0x10000 + g * 0x100 + b;
 }

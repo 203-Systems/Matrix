@@ -10,6 +10,15 @@ typedef int16_t s16;
 typedef int32_t s32;
 typedef int64_t s64;
 
+// typedef enum {
+//     VERYDIM = 16,
+//     DIM = 32,
+//     NORMAL = 64,
+//     BRIGHT = 96,
+//     VERYBRIGHT = 128,
+//     MAX = 196,
+// } BRIGHTNESS;
+
 #define MATRIXPROTORE //Hardware model selector
 #define DEBUG //CDC info
 
