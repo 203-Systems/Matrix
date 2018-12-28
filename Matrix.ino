@@ -52,22 +52,22 @@ void setup()
 
   specialBoot();
 
-  mainTimer.recordCurrent();
-  while(!USBComposite.isReady())
-  {
-    if (mainTimer.isLonger(1000))
-    {
-
-      //NexusRevamped nexus = new NexusRevamped();
-      while(!USBComposite.isReady())
-      {
-        LED.fill(0xff0000); //NexusRevamped Entence point
-        LED.update();
-      }
-      //delete nexus;
-      break;
-    }
-  }
+  // mainTimer.recordCurrent();
+  // while(!USBComposite.isReady())
+  // {
+  //   if (mainTimer.isLonger(1000))
+  //   {
+  //
+  //     //NexusRevamped nexus = new NexusRevamped();
+  //     while(!USBComposite.isReady())
+  //     {
+  //       LED.fill(0xff0000); //NexusRevamped Entence point
+  //       LED.update();
+  //     }
+  //     //delete nexus;
+  //     break;
+  //   }
+  // }
   LED.fill(0x000000);
   LED.update();
 
@@ -239,6 +239,7 @@ void loop()
   if (mainTimer.tick(1000/FPS))
   {
     readKey();
+    LED.fill(0xFFFFFF);
     LED.update();
     //LED.Rainbow();
     //CompositeSerial.println("Running");
