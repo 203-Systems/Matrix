@@ -223,15 +223,18 @@ void bkp10Write(u16 value)
 {
         // Enable clocks for the backup domain registers
         pRCC->APB1ENR |= (RCC_APB1ENR_PWR_CLK | RCC_APB1ENR_BKP_CLK);
+        //pRCC->APB1ENR = 0;
 
         // Disable backup register write protection
         pPWR->CR |= PWR_CR_DBP;
+        //pPWR->CR |= (1 << 8)
 
         // store value in pBK DR10
         pBKP->DR10 = value;
 
         // Re-enable backup register write protection
         pPWR->CR &=~ PWR_CR_DBP;
+        //pPWR->CR &=~ (1 << 8)
 }
 
 int checkAndClearBootloaderFlag()

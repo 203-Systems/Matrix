@@ -115,6 +115,7 @@ int main()
       #ifndef NOLED
       strobePin(LED_BANK, LED_PIN, 5, BLINK_FAST,LED_ON_STATE);
       #endif
+
       systemHardReset();
     }
   }

@@ -1,7 +1,7 @@
 @echo off
-echo File loaded: %~1
+cd /d "%~dp0"
+echo File loaded: "%~f1"
 echo. 
-dfu-util --list
-pause
-dfu-util -a 2 -R -d 1 1EAF:0003 -D "%~1"
+rem dfu-util.exe --list
+dfu-util.exe -a 2 -R -d 1 0203:0003 -D "%~f1"
 pause

@@ -5,10 +5,20 @@ typedef uint16_t u16;
 typedef uint32_t u32;
 typedef uint64_t u64;
 
+typedef volatile uint8_t vu8;
+typedef volatile uint16_t vu16;
+typedef volatile uint32_t vu32;
+typedef volatile uint64_t vu64;
+
 typedef int8_t s8;
 typedef int16_t s16;
 typedef int32_t s32;
 typedef int64_t s64;
+
+typedef volatile int8_t vs8;
+typedef volatile int16_t vs16;
+typedef volatile int32_t vs32;
+typedef volatile int64_t vs64;
 
 // typedef enum {
 //     VERYDIM = 16,
@@ -169,4 +179,4 @@ typedef int64_t s64;
 #define KEYPADX 8 //Max 256 key support due to the m2p and libary data type limition
 #define KEYPADY 8 // need tp change data type in keypad.h
 #define MULTIPRESS 10 //Key Press Process At Once
-#define MULTITAP_THRESHOLD 200
+#define MULTITAP_THRESHOLD 500

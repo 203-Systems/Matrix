@@ -103,11 +103,11 @@ bool KeyPad::scan()
       //FNholded = millis() - lastFNpressed;
       fnTimer.recordCurrent();
 
-      fn = false;
+      fn = true;
     }
     else
     {
-      fn = true;
+      fn = false;
     }
   }
   else

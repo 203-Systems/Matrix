@@ -46,11 +46,11 @@ void UI::fnMenu()
             UI::exitFNmenu();
             return;
           }
-          // else if(!KeyPad.fn && KeyPad.fnTimer.isLonger(MULTITAP_THRESHOLD)) //if fn off and longer then threshold, will count as hold, release to back to main menu
-          // {
-          //   UI::exitFNmenu();
-          //   return;
-          // }
+          else if(!KeyPad.fn && KeyPad.fnTimer.isLonger(MULTITAP_THRESHOLD)) //if fn off and longer then threshold, will count as hold, release to back to main menu
+          {
+            UI::exitFNmenu();
+            return;
+          }
         }
         fnKeyAction();
       }
@@ -129,7 +129,7 @@ void UI::fnKeyAction()
         case 0x70:
         LED.fill(0xFF0000, true);
         LED.update();
-        reset();
+        enterBootloader();
         break;
 
         case 0x71:
@@ -237,7 +237,6 @@ u8 UI::numSelector8bit(u8 currentNum, u32 colour)
       }
     }
   }
-  while(KeyPad.fn) {}
   LED.fill(0, true);
   return currentNum;
 }
