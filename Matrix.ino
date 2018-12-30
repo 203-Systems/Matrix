@@ -90,7 +90,7 @@ void readKey()
 
     for(int i = 0; i < MULTIPRESS; i++)
     {
-      if(KeyPad.list[i].velocity > 128)
+      if(KeyPad.list[i].velocity== -1)
       return;
       if(KeyPad.list[i].velocity > 0)
       {
@@ -179,7 +179,7 @@ void factoryTest()
 
       for(int i = 0; i < MULTIPRESS; i++)
       {
-        if(KeyPad.list[i].velocity > 128)
+        if(KeyPad.list[i].velocity== -1)
         break;
 
         if(KeyPad.list[i].velocity > 0)

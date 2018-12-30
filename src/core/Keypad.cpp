@@ -124,21 +124,35 @@ void KeyPad::updateList()
 {
   for(int i = 0; i < MULTIPRESS; i++)
   {
-    list[i].velocity = 255;
+    list[i].velocity = -1;
   }
 
   int i = 0;
   for(int y = 0; y < KEYPADY; y++)
   {
-    for(int x = 0; x  < KEYPADX; x++)
+    for(int x = 0; x < KEYPADX; x++)
     {
       if(i == MULTIPRESS)
       return;
 
       if(bitRead(keypadChanged[x], y) == true)
       {
-        u8 xyr = (xyRotation(xytoxy(x, y)));
-        list[i].xy = xyr;
+        switch(rotation)
+        {
+          break;
+          case 1:
+          list[i].xy = y * 0x10 + (7 - x);
+          break;
+          case 2:
+          list[i].xy = (7 - x) * 0x10 + (7 - y);
+          break;
+          case 3:
+          list[i].xy = (7 - y) * 0x10 + x;
+          break;
+          default:
+          list[i].xy = xytoxy(x, y);
+        }
+
         if(bitRead(keypadState[x], y) == true)
         {
           list[i].velocity = 127;
@@ -156,13 +170,12 @@ void KeyPad::updateList()
 
 bool KeyPad::checkXY(u8 x, u8 y)
 {
-  return KeyPad::checkXY(xytoxy(x, y));
+  return bitRead(keypadState[x], y);
 }
 
 bool KeyPad::checkXY(u8 xy)
 {
-  u8 xyr = xyReverseRotation(xy);
-  return bitRead(keypadState[xyr & 0xF0], xyr & 0x0F);
+  return bitRead(keypadState[xy & B11110000], xy & B00001111);
 }
 
 // void KeyPad::On(uint8 x, uint8 y)

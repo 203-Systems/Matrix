@@ -30,7 +30,6 @@ typedef volatile int64_t vs64;
 // } BRIGHTNESS;
 
 #define MATRIXPROTORE //Hardware model selector
-#define DEBUG //CDC info
 
 //HardwareMapping
 #ifdef MATRIXPROTOC8

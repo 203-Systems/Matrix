@@ -1,5 +1,7 @@
 #include "UI.h"
 
+#define DEBUG //CDC info
+
 extern KeyPad KeyPad;
 extern LED LED;
 
@@ -36,6 +38,9 @@ void UI::fnMenu()
 
       if(KeyPad.scan())
       {
+        #ifdef DEBUG
+        CompositeSerial.println("FnMenuKeyScaned");
+        #endif
         if(KeyPad.fnChanged)
         {
           // if(KeyPad.timesFNpressed > 9)
@@ -70,10 +75,14 @@ void UI::fnKeyAction()
 {
   for(int i = 0; i < MULTIPRESS; i++)
   {
-    if(KeyPad.list[i].velocity > 128)
+    if(KeyPad.list[i].velocity == -1)
     break;
     if(KeyPad.list[i].velocity != 0)
     {
+      #ifdef DEBUG
+      CompositeSerial.print("ReadKey ");
+      CompositeSerial.println(KeyPad.list[i].xy);
+      #endif
       switch(KeyPad.list[i].xy)
       {
         //Brightness
@@ -143,9 +152,9 @@ void UI::fnKeyAction()
 
 void UI::fnRender()
 {
-  #ifdef DEBUG
-  CompositeSerial.println("Render");
-  #endif
+  // #ifdef DEBUG
+  // CompositeSerial.println("Render");
+  // #endif
   //brightness
   LED.setXYHEX(0x33, 0xFFFFFFFF, true);
   LED.setXYHEX(0x34, 0xFFFFFFFF, true);
@@ -210,9 +219,9 @@ void UI::fnRender()
   LED.setXYHEX(0x70, 0x00FF0000, true); //reset
   LED.setXYHEX(0x71, 0x0000FFAA, true); //reset
 
-  #ifdef DEBUG
-  CompositeSerial.println("End Render");
-  #endif
+  // #ifdef DEBUG
+  // CompositeSerial.println("End Render");
+  // #endif
 
   LED.update();
 }

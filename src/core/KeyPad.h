@@ -14,7 +14,7 @@
 
 struct Key {
   u8 xy = 0;
-  u8 velocity = 0;
+  s8 velocity = 0;
   //KeyState kstate = IDLE;
 };
 
