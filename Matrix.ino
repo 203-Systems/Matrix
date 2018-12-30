@@ -15,6 +15,7 @@ NexusRevamped while USB unreconized
 #include <FastLED.h>
 #include "src/parameter/MatrixVariable.h"
 #include "src/parameter/MatrixParameter.h"
+#include "src/core/MatrixSystem.h"
 //#include "../Serials.h"
 #include "src/core/MatrixSystem.h"
 #include "src/core/KeyPad.h"
@@ -35,77 +36,42 @@ Timer mainTimer;
 
 void setup()
 {
-  // rotation = *(volatile u8*)0x801F000;
-
-  // initEEPROM();
-  // resetEEPROM();
-  // variableLoad();
-
-  setupUSB();
   setupHardware();
 
-  FastLED.setBrightness(brightness);
+  specialBoot();
+
+  initEEPROM();
+  variableLoad();
+
+  setupUSB();
 
   #ifdef DEBUG
   CompositeSerial.println("Setup Complete");
   #endif
 
-  specialBoot();
 
-  // mainTimer.recordCurrent();
-  // while(!USBComposite.isReady())
-  // {
-  //   if (mainTimer.isLonger(1000))
-  //   {
-  //
-  //     //NexusRevamped nexus = new NexusRevamped();
-  //     while(!USBComposite.isReady())
-  //     {
-  //       LED.fill(0xff0000); //NexusRevamped Entence point
-  //       LED.update();
-  //     }
-  //     //delete nexus;
-  //     break;
-  //   }
-  // }
+  mainTimer.recordCurrent();
+  while(!USBComposite.isReady())
+  {
+    if (mainTimer.isLonger(1000))
+    {
+
+      //NexusRevamped nexus = new NexusRevamped();
+      while(!USBComposite.isReady())
+      {
+        LED.fill(0xff0000); //NexusRevamped Entence point
+        LED.update();
+      }
+      //delete nexus;
+      break;
+    }
+  }
   LED.fill(0x000000);
   LED.update();
 
   #ifdef DEBUG
   CompositeSerial.println("Enter Main Program");
   #endif
-}
-
-void setupUSB()
-{
-
-  if(device_id != 0)
-  {
-
-    USBComposite.setProductString((DEVICENAME + String(' ') + String(device_id)).c_str());
-    USBComposite.setVendorId(VID2);
-    USBComposite.setProductId(PID2+device_id);
-  }
-  else
-  {
-    USBComposite.setProductString(DEVICENAME);
-    USBComposite.setVendorId(VID);
-    USBComposite.setProductId(PID);
-  }
-
-  USBComposite.setManufacturerString(MAUNFACTURERNAME);
-  //USBComposite.setProductString(DEVICENAME);
-  USBComposite.setSerialString(SERIALSTRING);
-
-  USBmidi.registerComponent();
-  CompositeSerial.registerComponent();
-  USBComposite.begin();
-
-}
-
-void setupHardware()
-{
-
 }
 
 void readKey()
@@ -145,6 +111,12 @@ void specialBoot()
 {
   if (KeyPad.scan())
   {
+    if(KeyPad.checkXY(1, 1) && KeyPad.checkXY(0, 0))
+    {
+      formatEEPROM();
+      LED.fill(0xFF00FF);
+    }
+
     if(KeyPad.checkXY(1, 1) && KeyPad.checkXY(0, 0))
     {
       factoryTest();
@@ -239,7 +211,6 @@ void loop()
   if (mainTimer.tick(1000/FPS))
   {
     readKey();
-    LED.fill(0xFFFFFF);
     LED.update();
     //LED.Rainbow();
     //CompositeSerial.println("Running");

@@ -4,7 +4,9 @@
 #include <Arduino.h>
 #include <EEPROM.h>
 #include <USBComposite.h>
-// #include "libmaple\nvic.c"
+#include <USBMIDI.h>
+#include <FastLED.h>
+#include "../core/USBmidi.h"
 #include "../parameter/MatrixVariable.h"
 #include "../parameter/MatrixParameter.h"
 
@@ -14,13 +16,16 @@
 //   u8 y;
 // }
 
-void initEEPROM();
+void setupUSB();
+void setupHardware();
+void setupEEPROM();
+
 void variableLoad();
 //load from EEPROM
 void loadPalette();
 void loadKeymap();
 
-void resetEEPROM();
+void initEEPROM();
 
 //Sysex set
 void reset();
@@ -53,7 +58,8 @@ void getTouchSensitive();
 
 //special
 void nextBrightnessState();
-void rotationCW(u8 v);
+void rotationCW(u8 r);
+void setRotation(u8 r);
 //Math
 u8 wrgbToHEX(u8 w, u8 r, u8 g, u8 b);
 u8 xyToIndex(u8 xy);
@@ -61,6 +67,8 @@ u8 xyToIndex(u8 xy);
 u8 indexRotation(int index);
 u8 bottomLEDrotation(int index);
 u8 xytoxy(u8 x, u8 y);
+u8 xyRotation(u8 xy);
+u8 xyReverseRotation(u8 xy);
 //u8 xyToIndex(u8 X,u8 Y);
 
 #endif

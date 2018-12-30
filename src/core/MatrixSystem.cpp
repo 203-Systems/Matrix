@@ -1,17 +1,50 @@
 #include "MatrixSystem.h"
 
-void initEEPROM()
+
+void setupUSB()
+{
+
+  if(device_id != 0)
+  {
+    USBComposite.setProductString((DEVICENAME + String(' ') + String(device_id)).c_str());
+    USBComposite.setVendorId(VID2);
+    USBComposite.setProductId(PID2+device_id);
+  }
+  else
+  {
+    USBComposite.setProductString(DEVICENAME);
+    USBComposite.setVendorId(VID);
+    USBComposite.setProductId(PID);
+  }
+
+  USBComposite.setManufacturerString(MAUNFACTURERNAME);
+  //USBComposite.setProductString(DEVICENAME);
+  USBComposite.setSerialString(SERIALSTRING);
+
+  USBmidi.registerComponent();
+  CompositeSerial.registerComponent();
+  USBComposite.begin();
+
+}
+
+void setupHardware()
+{
+  FastLED.setBrightness(brightness);
+  setupEEPROM();
+}
+
+void setupEEPROM()
 {
   EEPROM.PageBase0 = 0x801F000;
-  EEPROM.PageBase1 = 0x801F400;
-  EEPROM.PageSize  = 0x400;
+  EEPROM.PageBase1 = 0x801F800;
+  EEPROM.PageSize  = 0x800;
 }
 
 void variableLoad()
 {
-  if(EEPROM.read(0) == false)
+  if(EEPROM.read(0) == 0xFFFF)
   {
-    resetEEPROM();
+    initEEPROM();
     return;
   }
 
@@ -35,7 +68,7 @@ void variableLoad()
   // loadTouchmap();
 }
 
-void resetEEPROM()
+void initEEPROM()
 {
   EEPROM.write(0, true);
   EEPROM.write(1, device_id);
@@ -77,8 +110,7 @@ void reset()
 
 void setDeviceID()
 {
-  device_id = CompositeSerial.read();
-  reset();
+  setDeviceID(CompositeSerial.read());
 }
 
 void setDeviceID(u8 id)
@@ -330,8 +362,14 @@ void rotationCW(u8 r)
 {
   rotation += r;
   if(rotation > 3)
-  rotation %= 4;
+  setRotation(rotation %= 4);
   // *(volatile u8*)0x801F000 = rotation;
+}
+
+void setRotation(u8 r)
+{
+  rotation = r;
+  EEPROM.write(2, r);
 }
 
 //Math
@@ -410,4 +448,59 @@ u8 bottomLEDrotation(int index)
 u8 xytoxy(u8 x, u8 y)
 {
   return x * 0x10 + y;
+}
+
+u8 xyRotation(u8 xy)
+{
+  u8 x = (xy & 0xFF00) >> 4;
+  u8 y = xy & 0x00FF;
+  u8 xr;
+  u8 yr;
+  switch(rotation)
+  {
+    break;
+    case 1:
+    xr = y * 0x10;
+    yr = (7 - x);
+
+    break;
+    case 2:
+    xr = (7 - x) * 0x10;
+    yr = (7 - y);
+    break;
+    case 3:
+    xr = (7 - y) * 0x10;
+    yr = x;
+    break;
+    default:
+    xr = x;
+  }
+  return xr*0x100 + yr;
+}
+
+u8 xyReverseRotation(u8 xy)
+{
+  u8 x = (xy & 0xFF00) >> 4;
+  u8 y = xy & 0x00FF;
+  u8 xr;
+  u8 yr;
+  switch(rotation)
+  {
+    break;
+    case 1:
+    xr = (7 - y) * 0x10;
+    yr = x;
+    break;
+    case 2:
+    xr = (7 - x) * 0x10;
+    yr = (7 - y);
+    break;
+    case 3:
+    xr = y * 0x10;
+    yr = (7 - x);
+    break;
+    default:
+    xr = x;
+  }
+  return xr*0x100 + yr;
 }

@@ -133,7 +133,7 @@ void UI::fnKeyAction()
         break;
 
         case 0x71:
-        device_id = UI::numSelector8bit(device_id, 0x00FFAA);
+        setDeviceID(UI::numSelector8bit(device_id, 0x00FFAA));
         break;
       }
     }
@@ -317,7 +317,7 @@ u8 UI::binary8bitInput(u8 currentNum, u8 y, u32 colour)
 {
   for(int x = 0; x < 8; x++)
   {
-    if(bitRead(KeyPad.keypadStats[x], y))
+    if(KeyPad.checkXY(x, y))
     bitWrite(currentNum, 7 - x, !bitRead(currentNum, 7 - x));
     if(bitRead(currentNum, 7 - x))
     {

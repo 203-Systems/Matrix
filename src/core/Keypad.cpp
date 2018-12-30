@@ -39,7 +39,7 @@ bool KeyPad::scan()
     {
       digitalWrite(SI_CLOCK, LOW);
 
-      if (digitalRead(SI_DATA) != bitRead(keypadStats[x],y))
+      if (digitalRead(SI_DATA) != bitRead(keypadState[x],y))
       {
         // if (digitalRead(SI_DATA))
         // {
@@ -50,7 +50,7 @@ bool KeyPad::scan()
         //   KeyPad::Off(x,y);
         // }
         changed = true;
-        bitWrite(keypadStats[x], y, digitalRead(SI_DATA));
+        bitWrite(keypadState[x], y, digitalRead(SI_DATA));
         bitWrite(keypadChanged[x], y, 1);
         // CompositeSerial.println(y * 0x10 + x);
         #ifdef DEBUG
@@ -130,30 +130,16 @@ void KeyPad::updateList()
   int i = 0;
   for(int y = 0; y < KEYPADY; y++)
   {
-    for(int x = 0; x < KEYPADX; x++)
+    for(int x = 0; x  < KEYPADX; x++)
     {
       if(i == MULTIPRESS)
       return;
 
       if(bitRead(keypadChanged[x], y) == true)
       {
-        switch(rotation)
-        {
-          break;
-          case 1:
-          list[i].xy = y * 0x10 + (7 - x);
-          break;
-          case 2:
-          list[i].xy = (7 - x) * 0x10 + (7 - y);
-          break;
-          case 3:
-          list[i].xy = (7 - y) * 0x10 + x;
-          break;
-          default:
-          list[i].xy = xytoxy(x, y);
-        }
-
-        if(bitRead(keypadStats[x], y) == true)
+        u8 xyr = (xyRotation(xytoxy(x, y)));
+        list[i].xy = xyr;
+        if(bitRead(keypadState[x], y) == true)
         {
           list[i].velocity = 127;
         }
@@ -170,12 +156,13 @@ void KeyPad::updateList()
 
 bool KeyPad::checkXY(u8 x, u8 y)
 {
-  return bitRead(keypadStats[x], y);
+  return KeyPad::checkXY(xytoxy(x, y));
 }
 
 bool KeyPad::checkXY(u8 xy)
 {
-  return bitRead(keypadStats[xy & B11110000], xy & B00001111);
+  u8 xyr = xyReverseRotation(xy);
+  return bitRead(keypadState[xyr & 0xF0], xyr & 0x0F);
 }
 
 // void KeyPad::On(uint8 x, uint8 y)

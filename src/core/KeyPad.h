@@ -32,11 +32,11 @@ public:
   bool fnChanged;
   u8 timesFNpressed = 0;
   Timer fnTimer;
-  u8 keypadStats[KEYPADX]; // y is define by type, u8, u16 , u32, u64
-  u8 keypadChanged[KEYPADX];
 private:
   void updateList();
   bool fnCache;
+  u8 keypadState[KEYPADX]; // y is define by type, u8, u16 , u32, u64
+  u8 keypadChanged[KEYPADX];
 };
 
 #endif
