@@ -170,12 +170,13 @@ void KeyPad::updateList()
 
 bool KeyPad::checkXY(u8 x, u8 y)
 {
-  return bitRead(keypadState[x], y);
+  return KeyPad::checkXY(xytoxy(x, y));
 }
 
 bool KeyPad::checkXY(u8 xy)
 {
-  return bitRead(keypadState[xy & B11110000], xy & B00001111);
+  u8 xyr = xyReverseRotation(xy);
+  return bitRead(keypadState[(xyr & 0xF0) >> 4], xyr & 0x0F);
 }
 
 // void KeyPad::On(uint8 x, uint8 y)

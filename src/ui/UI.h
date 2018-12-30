@@ -31,17 +31,17 @@ public:
   void fnKeyAction();
   void fnRender();
   void showDeviceInfo();
-  void showASCII(char ascii[]);
+  void showASCII(char ascii[], u32 colour, bool ignore_gamma = false);
   void playAnimation(char animation[]);
-  u8 numSelector8bit(u8 currentNum, u32 colour);
-  u8 numSelector6bit(u8 currentNum, u32 colour);
-  u32 numSelectorRGB(u32 currentNum, u32 colour);
-  u32 numSelectorWRGB(u32 currentNum, u32 colour);
-  void renderText(char ascii[], u8 xy, u32 colour);
-  void renderLetter(char ascii, u8 xy, u32 colour);
-  void renderHalfHeightNum(u8 num, u8 xy, u32 colour);
-  void renderHalfHeightDigit(u8 num, u8 xy, u32 colour);
-  u8 binary8bitInput(u8 currentNum, u8 y, u32 colour);
+  u8 numSelector8bit(u8 currentNum, u32 colour, bool ignore_gamma = false);
+  u8 numSelector6bit(u8 currentNum, u32 colour, bool ignore_gamma = false);
+  u32 numSelectorRGB(u32 currentNum, u32 colour, bool ignore_gamma = false);
+  u32 numSelectorWRGB(u32 currentNum, u32 colour, bool ignore_gamma = false);
+  void renderText(char ascii[], u8 xy, u32 colour, bool ignore_gamma = false);
+  void renderLetter(char ascii, u8 xy, u32 colour, bool ignore_gamma = false);
+  void renderHalfHeightNum(u8 num, u8 xy, u32 colour, bool ignore_gamma = false);
+  void renderHalfHeightDigit(u8 num, u8 xy, u32 colour, bool ignore_gamma = false);
+  u8 binary8bitInput(u8 currentNum, u8 y, u32 colour, bool ignore_gamma = false);
 
   void easterEgg();
 private:

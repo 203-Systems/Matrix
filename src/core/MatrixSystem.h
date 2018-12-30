@@ -63,7 +63,7 @@ void setRotation(u8 r);
 //Math
 u8 wrgbToHEX(u8 w, u8 r, u8 g, u8 b);
 u8 xyToIndex(u8 xy);
-// XY indexToXY(u8 index);
+u8 indexToXY(u8 index);
 u8 indexRotation(int index);
 u8 bottomLEDrotation(int index);
 u8 xytoxy(u8 x, u8 y);

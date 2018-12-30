@@ -172,7 +172,7 @@ typedef volatile int64_t vs64;
 #define NUM_TOTAL_LEDS 96   //64+32
 #define NUM_POWERCORD_LEDS 60
 #define FPS 100
-#define LOWSTATEBRIGHTNESS 0.3
+#define LOWSTATEBRIGHTNESS 0.25
 
 //KeyPad
 #define KEYPADX 8 //Max 256 key support due to the m2p and libary data type limition

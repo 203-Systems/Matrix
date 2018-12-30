@@ -380,36 +380,24 @@ u8 wrgbToHEX(u8 w, u8 r, u8 g, u8 b)
 
 u8 xyToIndex(u8 xy)
 {
-  u8 x = (xy & 0xF0) >> 4;
-  u8 y = xy & 0x0F;
+  u8 xyr = xyRotation(xy);
+  u8 x = (xyr & 0xF0) >> 4;
+  u8 y = xyr & 0x0F;
 
-  switch (rotation)
-  {
-    case 1: //90
-    return (KEYPADY - y - 1) + x * KEYPADX;
-    case 2: //180
-    return (KEYPADX - x - 1) + (KEYPADY - y - 1) * KEYPADY;
-    case 3: //270
-    return y + (KEYPADX - x - 1) * KEYPADX;
-    default:
     return x + y * KEYPADX;
-  }
 }
 
-// XY indexToXY(u8 index)
-// {
-//   XY xy;
-//   xy.x = index%KEYPADX;
-//   xy.y = index/KEYPADX;
-//   return xy;
-// }
+u8 indexToXY(u8 index)
+{
+  return (index % KEYPADX) * 0x10 + (index / KEYPADX);
+}
 
 u8 indexRotation(int index)
 {
   // XY xy = indexToXY(index);
   if(index < NUM_LEDS)
   {
-    return xyToIndex((index % KEYPADX) * 0x10 + (index / KEYPADX));
+    return xyToIndex(indexToXY(index));
   }
   else if(index >= NUM_LEDS && index < NUM_TOTAL_LEDS)
   {
@@ -452,55 +440,54 @@ u8 xytoxy(u8 x, u8 y)
 
 u8 xyRotation(u8 xy)
 {
-  u8 x = (xy & 0xFF00) >> 4;
-  u8 y = xy & 0x00FF;
+  u8 x = (xy & 0xF0) >> 4;
+  u8 y = xy & 0x0F;
   u8 xr;
   u8 yr;
   switch(rotation)
   {
-    break;
     case 1:
-    xr = y * 0x10;
-    yr = (7 - x);
-
+    xr = y;
+    yr = 7 - x;
     break;
     case 2:
-    xr = (7 - x) * 0x10;
-    yr = (7 - y);
+    xr = 7 - x;
+    yr = 7 - y;
     break;
     case 3:
-    xr = (7 - y) * 0x10;
+    xr = 7 - y;
     yr = x;
     break;
     default:
     xr = x;
+    yr = y;
   }
-  return xr*0x100 + yr;
+  return xr * 0x10 + yr;
 }
 
 u8 xyReverseRotation(u8 xy)
 {
-  u8 x = (xy & 0xFF00) >> 4;
-  u8 y = xy & 0x00FF;
+  u8 x = (xy & 0xF0) >> 4;
+  u8 y = xy & 0x0F;
   u8 xr;
   u8 yr;
   switch(rotation)
   {
-    break;
     case 1:
-    xr = (7 - y) * 0x10;
+    xr = 7 - y;
     yr = x;
     break;
     case 2:
-    xr = (7 - x) * 0x10;
-    yr = (7 - y);
+    xr = 7 - x;
+    yr = 7 - y;
     break;
     case 3:
-    xr = y * 0x10;
-    yr = (7 - x);
+    xr = y;
+    yr = 7 - x;
     break;
     default:
     xr = x;
+    yr = y;
   }
-  return xr*0x100 + yr;
+  return xr * 0x10 + yr;
 }
