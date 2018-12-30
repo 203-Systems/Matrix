@@ -47,7 +47,7 @@ void setTouchSensitive(u8 s);
 void getDeviceInfo();
 void getModuleCount();
 void getModuleInfo();
-void getdevice_id();
+void getDeviceID();
 void getAllParameter();
 void getPaletteRGB();
 void getPaletteWRGB();

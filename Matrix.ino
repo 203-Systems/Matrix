@@ -37,12 +37,8 @@ Timer mainTimer;
 void setup()
 {
   setupHardware();
-
   specialBoot();
-
-  initEEPROM();
   variableLoad();
-
   setupUSB();
 
   #ifdef DEBUG

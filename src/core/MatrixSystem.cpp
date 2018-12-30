@@ -35,9 +35,10 @@ void setupHardware()
 
 void setupEEPROM()
 {
-  EEPROM.PageBase0 = 0x801F000;
-  EEPROM.PageBase1 = 0x801F800;
+  EEPROM.PageBase0 = 0x802F000;
+  EEPROM.PageBase1 = 0x802F800;
   EEPROM.PageSize  = 0x800;
+  EEPROM.init();
 }
 
 void variableLoad()
@@ -70,7 +71,7 @@ void variableLoad()
 
 void initEEPROM()
 {
-  EEPROM.write(0, true);
+  EEPROM.write(0, 0);
   EEPROM.write(1, device_id);
   EEPROM.write(2, rotation);
   EEPROM.write(3, brightness);
@@ -115,8 +116,9 @@ void setDeviceID()
 
 void setDeviceID(u8 id)
 {
-  device_id = id;
-  EEPROM.write(1, id);
+  CompositeSerial.print("Write Device ID into EEPROM: ");
+  CompositeSerial.println(EEPROM.write(1, id));
+  device_id = EEPROM.read(1);
 }
 
 
@@ -279,7 +281,7 @@ void getModuleInfo()
 
 }
 
-void getdevice_id()
+void getDeviceID()
 {
   CompositeSerial.write((u8)0);
   CompositeSerial.write(14);
@@ -360,16 +362,22 @@ void getTouchSensitive()
 
 void rotationCW(u8 r)
 {
-  rotation += r;
-  if(rotation > 3)
-  setRotation(rotation %= 4);
-  // *(volatile u8*)0x801F000 = rotation;
+  r += rotation;
+  if(r > 3)
+  {
+    setRotation(r % 4);
+  }
+  else
+  {
+    setRotation(r);
+  }
 }
 
 void setRotation(u8 r)
 {
-  rotation = r;
-  EEPROM.write(2, r);
+  CompositeSerial.print("Write Rotation into EEPROM: ");
+  CompositeSerial.println(EEPROM.write(2, r));
+  rotation = EEPROM.read(2);
 }
 
 //Math
@@ -380,11 +388,11 @@ u8 wrgbToHEX(u8 w, u8 r, u8 g, u8 b)
 
 u8 xyToIndex(u8 xy)
 {
-  u8 xyr = xyRotation(xy);
+  u8 xyr = xyReverseRotation(xy);
   u8 x = (xyr & 0xF0) >> 4;
   u8 y = xyr & 0x0F;
 
-    return x + y * KEYPADX;
+  return x + y * KEYPADX;
 }
 
 u8 indexToXY(u8 index)
