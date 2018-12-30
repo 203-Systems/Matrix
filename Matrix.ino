@@ -36,15 +36,15 @@ Timer mainTimer;
 
 void setup()
 {
-  setupHardware();
   specialBoot();
+  setupEEPROM();
   variableLoad();
+  setBrightnesss(brightness);
   setupUSB();
 
   #ifdef DEBUG
   CompositeSerial.println("Setup Complete");
   #endif
-
 
   mainTimer.recordCurrent();
   while(!USBComposite.isReady())
@@ -62,6 +62,7 @@ void setup()
       break;
     }
   }
+
   LED.fill(0x000000);
   LED.update();
 
@@ -103,28 +104,7 @@ void readKey()
   }
 }
 
-void specialBoot()
-{
-  if (KeyPad.scan())
-  {
-    if(KeyPad.checkXY(1, 1) && KeyPad.checkXY(0, 0))
-    {
-      formatEEPROM();
-      LED.fill(0xFF00FF);
-    }
 
-    if(KeyPad.checkXY(1, 1) && KeyPad.checkXY(0, 0))
-    {
-      factoryTest();
-    }
-
-    if(KeyPad.checkXY(0x00) && KeyPad.checkXY(0x02))
-    {
-      setDeviceID(203);
-    }
-
-  }
-}
 
 // void factoryTest()
 // {
@@ -163,37 +143,6 @@ void specialBoot()
 //   }
 // }
 
-void factoryTest()
-{
-  LED.fill(0xFFFFFF);
-
-  while(!KeyPad.fn)
-  {
-    if (mainTimer.tick(1000/FPS))
-    {
-      KeyPad.scan();
-
-      for(int i = 0; i < MULTIPRESS; i++)
-      {
-        if(KeyPad.list[i].velocity== -1)
-        break;
-
-        if(KeyPad.list[i].velocity > 0)
-        {
-          if(LED.readXYLED(KeyPad.list[i].xy) != 0xFFFFFF)
-          {
-            LED.setXYHEX(KeyPad.list[i].xy, 0xFFFFFF);
-          }
-          else
-          {
-            LED.offXY(KeyPad.list[i].xy);
-          }
-        }
-      }
-      LED.update();
-    }
-  }
-}
 
 
 
@@ -262,3 +211,58 @@ void loop()
 //     // }
 //   }
 //}
+
+void specialBoot()
+{
+  if (KeyPad.scan())
+  {
+    if(KeyPad.checkXY(1, 1) && KeyPad.checkXY(0, 0))
+    {
+      formatEEPROM();
+      LED.fill(0xFF00FF);
+    }
+
+    if(KeyPad.checkXY(1, 1) && KeyPad.checkXY(0, 0))
+    {
+      factoryTest();
+    }
+
+    if(KeyPad.checkXY(0x00) && KeyPad.checkXY(0x02))
+    {
+      setDeviceID(203);
+    }
+
+  }
+}
+
+void factoryTest()
+{
+  LED.fill(0xFFFFFF);
+
+  while(!KeyPad.fn)
+  {
+    if (mainTimer.tick(1000/FPS))
+    {
+      KeyPad.scan();
+
+      for(int i = 0; i < MULTIPRESS; i++)
+      {
+        if(KeyPad.list[i].velocity== -1)
+        break;
+
+        if(KeyPad.list[i].velocity > 0)
+        {
+          if(LED.readXYLED(KeyPad.list[i].xy) != 0xFFFFFF)
+          {
+            LED.setXYHEX(KeyPad.list[i].xy, 0xFFFFFF);
+          }
+          else
+          {
+            LED.offXY(KeyPad.list[i].xy);
+          }
+        }
+      }
+      LED.update();
+    }
+  }
+}

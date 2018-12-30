@@ -18,9 +18,8 @@ LED::LED()
 
 void LED::setBrightness(u8 b)
 {
-
-  FastLED.setBrightness(b);
-  brightness = b;
+  //FastLED.setBrightness(b);
+  setBrightnesss(b);
 }
 
 void LED::nextBrightnessState()

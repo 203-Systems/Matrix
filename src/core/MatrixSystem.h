@@ -15,9 +15,9 @@
 //   u8 x;
 //   u8 y;
 // }
+void bootDevice();
 
 void setupUSB();
-void setupHardware();
 void setupEEPROM();
 
 void variableLoad();
@@ -40,7 +40,7 @@ void resetPalette();
 void setgamma(bool g);
 void updateCustomKeymap();
 void resetCustomKeymap();
-void setBrightness(u8 b);
+void setBrightnesss(u8 b);
 void setTouchSensitive(u8 s);
 
 //Sysex get

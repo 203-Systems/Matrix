@@ -1,5 +1,6 @@
 #include "MatrixSystem.h"
 
+// LED LED;
 
 void setupUSB()
 {
@@ -27,10 +28,9 @@ void setupUSB()
 
 }
 
-void setupHardware()
+void bootDevice()
 {
-  FastLED.setBrightness(brightness);
-  setupEEPROM();
+
 }
 
 void setupEEPROM()
@@ -116,8 +116,7 @@ void setDeviceID()
 
 void setDeviceID(u8 id)
 {
-  CompositeSerial.print("Write Device ID into EEPROM: ");
-  CompositeSerial.println(EEPROM.write(1, id));
+  EEPROM.write(1, id);
   device_id = EEPROM.read(1);
 }
 
@@ -252,16 +251,18 @@ void resetCustomKeymap()
   // }
 }
 
-void setBrightness(u8 b)
+void setBrightnesss(u8 b) //Triple s to fix due to an unknow bug
 {
   EEPROM.write(3, b);
+  brightness = EEPROM.read(3);
   brightness = b;
+  FastLED.setBrightness(brightness);
 }
 
 
 void setTouchSensitive(u8 s)
 {
-  EEPROM.write(3, s);
+  EEPROM.write(583, s);
   touch_sensitive = s;
 }
 
@@ -375,8 +376,7 @@ void rotationCW(u8 r)
 
 void setRotation(u8 r)
 {
-  CompositeSerial.print("Write Rotation into EEPROM: ");
-  CompositeSerial.println(EEPROM.write(2, r));
+  EEPROM.write(2, r);
   rotation = EEPROM.read(2);
 }
 
