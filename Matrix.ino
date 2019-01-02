@@ -1,5 +1,6 @@
 /*
-Project Matrix (c) 203 Industries
+Project Matrix
+Copyright © 203 Industries 2017–2019. All rights reserved.
 
 TODO
 Play Animation
@@ -80,7 +81,7 @@ void readKey()
       // if(KeyPad.timesFNpressed == 5)
       // UI.ShowDeviceInfo();
       // if(KeyPad.timesFNpressed == 10)
-      // UI.EasterEgg();
+      // UI.EasterEgg();)
       if(KeyPad.fn)
       UI.enterFNmenu();
     }

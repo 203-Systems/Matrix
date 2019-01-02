@@ -152,7 +152,7 @@ ONE_DESCRIPTOR usbConfigDescriptorDFU = {
     u8_usbConfigDescriptorDFU_LENGTH
 };
 
-#ifndef MATRIX
+#ifdef MATRIX
 #define USB_STR_LANG_ID_LEN 0x04
 u8 u8_usbStringLangId[USB_STR_LANG_ID_LEN] = {
     USB_STR_LANG_ID_LEN,
@@ -179,6 +179,7 @@ u8 u8_usbStringSerial[USB_SERIAL_STR_LEN] = {
     'L', 0, 'L', 0, 'M', 0, ' ', 0, '0', 0, '0', 0, '3', 0
 };
 #else
+#define USB_STR_LANG_ID_LEN 0x10
 u8 u8_usbStringVendor[USB_VENDOR_STR_LEN] = {
     USB_VENDOR_STR_LEN,
     0x03,

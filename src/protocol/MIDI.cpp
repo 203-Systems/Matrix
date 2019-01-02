@@ -92,6 +92,13 @@ void MIDI::noteOff(u8 channel, u8 note, u8 velocity)
 
 void MIDI::sentXYon(u8 xy, u8 velocity)
 {
+  #ifdef DEBUG
+  CompositeSerial.print("MIDI XY Out \t");
+  CompositeSerial.print(xy, HEX);
+  CompositeSerial.print("\t");
+  CompositeSerial.println(velocity);
+  #endif
+
   MIDI::sentNoteOn(midi_channel, keymap[xy & 0x0F][(xy & 0xF0) >> 4], 127);
 }
 
@@ -103,6 +110,15 @@ void MIDI::sentXYoff(u8 xy, u8 velocity)
 
 void MIDI::sentNoteOn(u8 channel, u8 note, u8 velocity)
 {
+  #ifdef DEBUG
+  CompositeSerial.print("MIDI Out \t");
+  CompositeSerial.print(channel);
+  CompositeSerial.print("\t");
+  CompositeSerial.print(note);
+  CompositeSerial.print("\t");
+  CompositeSerial.println(velocity);
+  #endif
+
   USBMIDI.sendNoteOn(channel, note, velocity);
 }
 

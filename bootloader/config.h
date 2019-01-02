@@ -384,8 +384,8 @@
       #define MATRIX
       #define NOLED
 
-      #define BUTTON_BANK GPIOC
-      #define BUTTON_PIN 15
+      #define BUTTON_BANK GPIOB
+      #define BUTTON_PIN 7
       #define BUTTON_PRESSED_STATE 1
 
 
@@ -395,8 +395,8 @@
       #define NOLED
       #define FASTBOOT
 
-      #define BUTTON_BANK GPIOC
-      #define BUTTON_PIN 15
+      #define BUTTON_BANK GPIOB
+      #define BUTTON_PIN 7
       #define BUTTON_PRESSED_STATE 1
 
 

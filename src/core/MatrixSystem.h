@@ -3,6 +3,8 @@
 
 #include <Arduino.h>
 #include <EEPROM.h>
+#include <libmaple/bkp.h>
+#include <libmaple/nvic.h>
 #include <USBComposite.h>
 #include <USBMIDI.h>
 #include <FastLED.h>

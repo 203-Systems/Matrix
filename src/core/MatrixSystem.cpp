@@ -124,10 +124,14 @@ void setDeviceID(u8 id)
 
 void enterBootloader()
 {
-  (*(vu32*)0x4002101C) = 0;
-  (*(vu32*)0x40007000) &=~ (1 << 8);
-  (*(vu16*)0x40006C28) = 0x424C;
-  (*(vu32*)0x40007000) |= (1 << 8);
+  // (*(vu32*)0x4002101C) = 0;
+  // (*(vu32*)0x40007000) &=~ (1 << 8);
+  // (*(vu16*)0x40006C28) = 0x424C;
+  // (*(vu32*)0x40007000) |= (1 << 8);
+  bkp_init();
+  bkp_enable_writes();
+  bkp_write(10, 0x424C);
+  bkp_disable_writes();
   reset();
 }
 

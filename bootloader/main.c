@@ -96,6 +96,11 @@ int main()
       {
         dfuFinishUpload(); // systemHardReset from DFU once done
       }
+
+      // if(readButtonState())
+      // {
+      //   break;
+      // }
     }
   }
 
