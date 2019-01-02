@@ -438,7 +438,7 @@ bool gamma_enable = false; //Wont effect colour palette
 bool midi_enable = true;
 bool m2p_enable = false;
 bool powercord_enable = false;
-bool massage_return = true;
+bool massage_return = false;
 
 u8 font[96][6] = {
 	{4, 0b00000000, 0b00000000, 0b00000000, 0b00000000}, // 32 = Space

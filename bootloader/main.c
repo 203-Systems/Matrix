@@ -38,7 +38,7 @@ extern volatile dfuUploadTypes_t userUploadType;
 int main()
 {
   bool no_user_jump = FALSE;
-  bool dont_wait=FALSE;
+  bool dont_wait = FALSE;
 
   systemReset(); // peripherals but not PC
   setupCLK();
@@ -51,22 +51,27 @@ int main()
     case 0x01:
     no_user_jump = TRUE;
 
+    #ifdef FASTBOOT
+    dont_wait = FALSE;
+    #endif
+
     #ifndef NOLED
     strobePin(LED_BANK, LED_PIN, STARTUP_BLINKS, BLINK_FAST,LED_ON_STATE);
     #endif
     break;
 
     case 0x02:
-    dont_wait=TRUE;
+    dont_wait = TRUE;
     break;
 
     default:
+
     #ifdef FASTBOOT
-    dont_wait=TRUE;
-    #else
+    dont_wait = TRUE;
+    #endif
+
     #ifndef NOLED
     strobePin(LED_BANK, LED_PIN, STARTUP_BLINKS, BLINK_FAST,LED_ON_STATE);
-    #endif
     #endif
 
     if (!checkUserCode(USER_CODE_FLASH0X8005000) && !checkUserCode(USER_CODE_FLASH0X8002000))
@@ -77,7 +82,7 @@ int main()
     {
       no_user_jump = TRUE;
       #ifdef FASTBOOT
-      dont_wait=FALSE;
+      dont_wait = FALSE;
       #endif
     }
     break;

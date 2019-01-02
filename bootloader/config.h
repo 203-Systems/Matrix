@@ -384,9 +384,11 @@
       #define MATRIX
       #define NOLED
 
+      /*
       #define BUTTON_BANK GPIOB
       #define BUTTON_PIN 7
       #define BUTTON_PRESSED_STATE 1
+      */
 
 
   #elif defined TARGET_MATRIX_FASTBOOT
@@ -395,9 +397,11 @@
       #define NOLED
       #define FASTBOOT
 
+      /*
       #define BUTTON_BANK GPIOB
       #define BUTTON_PIN 7
       #define BUTTON_PRESSED_STATE 1
+      */
 
 
 
@@ -423,8 +427,8 @@
 
 // defines for USB (DONT CHANGE)
 #ifdef MATRIX
-#define VEND_ID0 0x02
-#define VEND_ID1 0x03
+#define VEND_ID0 0x03
+#define VEND_ID1 0x02
 #define PROD_ID0 0x03
 #define PROD_ID1 0x00
 #else

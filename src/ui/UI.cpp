@@ -141,6 +141,12 @@ void UI::fnKeyAction()
         enterBootloader();
         break;
 
+        case 0x60:
+        LED.fill(0xFFFF00, true);
+        LED.update();
+        resetDevice();
+        break;
+
         case 0x71:
         setDeviceID(UI::numSelector8bit(device_id, 0x00FFAA, true));
         break;
@@ -217,7 +223,8 @@ void UI::fnRender()
   // LED.setXYHEX(0x07, 0x00FFFFFF, true); //AppLauncher
   // LED.setXYHEX(0x17, 0x00FFFFFF, true); //Text Selctor
   LED.setXYHEX(0x70, 0x00FF0000, true, true); //reset
-  LED.setXYHEX(0x71, 0x0000FFAA, true, true); //reset
+  LED.setXYHEX(0x71, 0x0000FFAA, true, true); //Device ID
+  LED.setXYHEX(0x60, 0x00FFFF00, true, true); //reset
 
   // #ifdef DEBUG
   // CompositeSerial.println("End Render");

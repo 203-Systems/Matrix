@@ -58,11 +58,11 @@ void variableLoad()
   powercord_enable = EEPROM.read(7);
   massage_return = EEPROM.read(8);
 
-  if(EEPROM.read(9))
-  loadPalette();
-
-  if(EEPROM.read(518))
-  loadKeymap();
+  // if(EEPROM.read(9))
+  // loadPalette();
+  //
+  // if(EEPROM.read(518))
+  // loadKeymap();
 
   touch_sensitive = EEPROM.read(582);
   // if(EEPROM.read(583))
@@ -71,7 +71,7 @@ void variableLoad()
 
 void initEEPROM()
 {
-  EEPROM.write(0, 0);
+  EEPROM.write(0, 0); 
   EEPROM.write(1, device_id);
   EEPROM.write(2, rotation);
   EEPROM.write(3, brightness);
