@@ -38,7 +38,7 @@ Timer mainTimer;
 void setup()
 {
   specialBoot();
-  setupEEPROM();
+  u16 eeprom_code = setupEEPROM();
   variableLoad();
   setBrightnesss(brightness);
   setupUSB();
@@ -50,24 +50,20 @@ void setup()
   mainTimer.recordCurrent();
   while(!USBComposite.isReady())
   {
-    if (mainTimer.isLonger(1000))
+    if (mainTimer.isLonger(3000))
     {
-
-      //NexusRevamped nexus = new NexusRevamped();
-      while(!USBComposite.isReady())
-      {
-        LED.fill(0xff0000); //NexusRevamped Entence point
-        LED.update();
-      }
-      //delete nexus;
-      break;
+      LED.fill(0xff0000); //NexusRevamped Entence point
+      LED.update();
     }
   }
 
+  UI.kBootAnimation();
   LED.fill(0x000000);
   LED.update();
 
   #ifdef DEBUG
+  CompositeSerial.print("EEPROM CODE: ");
+  CompositeSerial.println(eeprom_code);
   CompositeSerial.println("Enter Main Program");
   #endif
 }

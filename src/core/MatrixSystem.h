@@ -20,7 +20,7 @@
 void bootDevice();
 
 void setupUSB();
-void setupEEPROM();
+u16 setupEEPROM();
 
 void variableLoad();
 //load from EEPROM

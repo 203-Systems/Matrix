@@ -1,11 +1,13 @@
-#include "MatrixVariable.h"
+#include "../parameter/MatrixVariable.h"
 
 //DeviceInfo
-u8 device_id = 0; //0~255 0 for off
+extern u8 device_id = 0; //0~255 0 for off
+extern Modes mode = Normal;
+extern u8 appID = -1;
 
 //LED setting
-u8 brightness = 64;  //VeryDim - 32 | Dim - 64 | Normal(Default) - 96 | Bright - 128 | VeryBright - 160 | Bright AF - 192  (Higher then 192 could result in USB resettable fuse disconnect(500ma))
-u32 palette[3][128] =     //WRGB Colour Palette
+extern u8 brightness = 64;  //VeryDim - 32 | Dim - 64 | Normal(Default) - 96 | Bright - 128 | VeryBright - 160 | Bright AF - 192  (Higher then 192 could result in USB resettable fuse disconnect(500ma))
+extern u32 palette[3][128] =     //WRGB Colour Palette
 {{            //MatrixColorPalette
   0x00000000, //0
   0x00050505, //1
@@ -395,7 +397,7 @@ u32 palette[3][128] =     //WRGB Colour Palette
   0x00FF3F6F //127
 }};
 
-u8 led_gamma[256] =
+extern u8 led_gamma[256] =
 { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  1,  1,  1,
   1,  1,  1,  1,  1,  1,  1,  1,  1,  2,  2,  2,  2,  2,  2,  2,
@@ -414,11 +416,11 @@ u8 led_gamma[256] =
   215, 218, 220, 223, 225, 228, 231, 233, 236, 239, 241, 244, 247, 249, 252, 255
 };
 
-u8 bottomLEDmap [NUM_BOTTOM_LEDS] =
+extern u8 bottomLEDmap [NUM_BOTTOM_LEDS] =
 {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35};
 
 //KeyPad
-u8 keymap [KEYPADY][KEYPADX] =
+extern u8 keymap [KEYPADY][KEYPADX] =
 {{64, 65, 66, 67, 96, 97, 98, 99},
 {60, 61, 62, 63, 92, 93, 94, 95},
 {56, 57, 58, 59, 88, 89, 90, 91},
@@ -429,18 +431,18 @@ u8 keymap [KEYPADY][KEYPADX] =
 {36, 37, 38, 39, 68, 69, 70, 71}};
 
 //TouchBar
-u8 touch_sensitive = 0;
+extern u8 touch_sensitive = 0;
 
 //Sysex
-u8 rotation = 0;
-u8 midi_channel = 0;
-bool gamma_enable = false; //Wont effect colour palette
-bool midi_enable = true;
-bool m2p_enable = false;
-bool powercord_enable = false;
-bool massage_return = false;
+extern u8 rotation = 0;
+extern u8 midi_channel = 0;
+extern bool gamma_enable = false; //Wont effect colour palette
+extern bool midi_enable = true;
+extern bool m2p_enable = false;
+extern bool powercord_enable = false;
+extern bool massage_return = false;
 
-u8 font[96][6] = {
+extern u8 font[96][6] = {
 	{4, 0b00000000, 0b00000000, 0b00000000, 0b00000000}, // 32 = Space
 	{1, 0b11111011}, // 33 = !
 	{3, 0b11100000, 0b00000000, 0b11100000}, // 34 = "
@@ -539,7 +541,7 @@ u8 font[96][6] = {
 	{5, 0b00111000, 0b00101000, 0b01101100, 0b00101000, 0b00010000} // 127 = DEL
 };
 
-u8 half_height_num_font[10][3] = {
+extern u8 half_height_num_font[10][3] = {
   {B1111, B1001, B1111},  //0
   {B0000, B0000, B1111},  //1
   {B0000, B1011, B1101},  //2

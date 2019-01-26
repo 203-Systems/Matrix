@@ -150,6 +150,12 @@ void UI::fnKeyAction()
         case 0x71:
         setDeviceID(UI::numSelector8bit(device_id, 0x00FFAA, true));
         break;
+
+        case 0x61:
+        LED.fill(0, true);
+        LED.update();
+        reset();
+        break;
       }
     }
   }
@@ -222,9 +228,10 @@ void UI::fnRender()
   // LED.setXYHEX(0x77, 0x00FFFFFF, true); //Setting
   // LED.setXYHEX(0x07, 0x00FFFFFF, true); //AppLauncher
   // LED.setXYHEX(0x17, 0x00FFFFFF, true); //Text Selctor
-  LED.setXYHEX(0x70, 0x00FF0000, true, true); //reset
+  LED.setXYHEX(0x70, 0x00FF0000, true, true); //DFU
   LED.setXYHEX(0x71, 0x0000FFAA, true, true); //Device ID
-  LED.setXYHEX(0x60, 0x00FFFF00, true, true); //reset
+  LED.setXYHEX(0x60, 0x00FFFF00, true, true); //reset device
+  LED.setXYHEX(0x61, 0x0000FF66, true, true); //reboot
 
   // #ifdef DEBUG
   // CompositeSerial.println("End Render");
@@ -347,7 +354,95 @@ u8 UI::binary8bitInput(u8 currentNum, u8 y, u32 colour, bool ignore_gamma /* = f
   return currentNum;
 }
 
-void UI::easterEgg()
+void UI::kBootAnimation() //8x8 only
 {
+  LED.enableOverlayMode();
+  //StageOne
+  u16 delay = 60;
+  for(s8 y = 7; y >= 0; y--)
+  {
+    for(u8 x = 0; x < 8; x++)
+    {
+      while(!uiTimer.isLonger(delay))
+      {
+        KeyPad.scan();
+        if(KeyPad.fnChanged)
+        {
+          if(!KeyPad.fn)
+          {
+            LED.disableOverlayMode();
+            return;
+          }
+        }
+      }
+      uiTimer.recordCurrent();
+      LED.onXY(xytoxy(x, y), true);
+      LED.update();
+    }
+    delay *= 0.8;
+  }
 
+  uiTimer.recordCurrent();
+  while(!uiTimer.isLonger(500))
+  {
+    KeyPad.scan();
+    if(KeyPad.fnChanged)
+    {
+      if(!KeyPad.fn)
+      {
+        LED.disableOverlayMode();
+        return;
+      }
+    }
+  }
+
+  //Stage2
+  delay = 25;
+  u8 shuffle[NUM_LEDS];
+  for(u8 i = 0; i < NUM_LEDS; i++)
+  {
+    shuffle[i] = i;
+  }
+  randomSeed(analogRead(PC5));
+  u8 n = sizeof(shuffle) / sizeof(shuffle[0]);
+  for (u8 i = 0; i < n - 1; i++)
+  {
+    u8 j = random(0, n - i);
+    u8 t = shuffle[i];
+    shuffle[i] = shuffle[j];
+    shuffle[j] = t;
+  }
+
+  for(int i = 0; i <NUM_LEDS; i++)
+  {
+    while(!uiTimer.isLonger(delay))
+    {
+      KeyPad.scan();
+      if(KeyPad.fnChanged)
+      {
+        if(!KeyPad.fn)
+        {
+          LED.disableOverlayMode();
+          return;
+        }
+      }
+    }
+    uiTimer.recordCurrent();
+    LED.setPalette(shuffle[i], 0, 45, true);
+    if(i > 0)
+    LED.setPalette(shuffle[i-1], 0, 29, true);
+    if(i > 1)
+    LED.setPalette(shuffle[i-2], 0, 13, true);
+    if(i > 2)
+    LED.setPalette(shuffle[i-3], 0, 109, true);
+    if(i > 3)
+    LED.setPalette(shuffle[i-4], 0, 93, true);
+    if(i > 4)
+    LED.off(shuffle[i-5], true);
+    LED.update();
+  }
+
+  //end
+  LED.disableOverlayMode();
+  return;
 }

@@ -33,12 +33,12 @@ void bootDevice()
 
 }
 
-void setupEEPROM()
+u16 setupEEPROM()
 {
-  EEPROM.PageBase0 = 0x802F000;
-  EEPROM.PageBase1 = 0x802F800;
-  EEPROM.PageSize  = 0x800;
-  EEPROM.init();
+  EEPROM.PageBase0 = 0x802B000;
+  EEPROM.PageBase1 = 0x802D000;
+  EEPROM.PageSize  = 0x2000;
+  return EEPROM.init();
 }
 
 void variableLoad()
@@ -71,7 +71,8 @@ void variableLoad()
 
 void initEEPROM()
 {
-  EEPROM.write(0, 0); 
+  EEPROM.format();
+  EEPROM.write(0, 0);
   EEPROM.write(1, device_id);
   EEPROM.write(2, rotation);
   EEPROM.write(3, brightness);
@@ -116,7 +117,12 @@ void setDeviceID()
 
 void setDeviceID(u8 id)
 {
+  #ifdef DEBUG
+  CompositeSerial.print("EEPROM init info: ");
+  CompositeSerial.println(EEPROM.write(1, id));
+  #else
   EEPROM.write(1, id);
+  #endif
   device_id = EEPROM.read(1);
 }
 
@@ -138,11 +144,13 @@ void enterBootloader()
 void resetDevice()
 {
   formatEEPROM();
-  reset();
+  //reset();
 }
 
 void formatEEPROM()
 {
+  // #ifdef DEBUG
+  // SerialComposite.print("EEPROM Format info :")
   EEPROM.format();
 }
 
@@ -259,7 +267,7 @@ void setBrightnesss(u8 b) //Triple s to fix due to an unknow bug
 {
   EEPROM.write(3, b);
   brightness = EEPROM.read(3);
-  brightness = b;
+  //brightness = b;
   FastLED.setBrightness(brightness);
 }
 
@@ -380,7 +388,12 @@ void rotationCW(u8 r)
 
 void setRotation(u8 r)
 {
+  #ifdef DEBUG
+  CompositeSerial.print("Set Rotation: ");
+  CompositeSerial.println(EEPROM.write(2, r));
+  #else
   EEPROM.write(2, r);
+  #endif
   rotation = EEPROM.read(2);
 }
 

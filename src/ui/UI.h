@@ -9,6 +9,7 @@
 #include "../core/KeyPad.h"
 #include "../core/LED.h"
 #include "../core/Timer.h"
+
 //#include "../protocol/MIDI.h"
 //#include <USBComposite.h>
 
@@ -43,7 +44,7 @@ public:
   void renderHalfHeightDigit(u8 num, u8 xy, u32 colour, bool ignore_gamma = false);
   u8 binary8bitInput(u8 currentNum, u8 y, u32 colour, bool ignore_gamma = false);
 
-  void easterEgg();
+  void kBootAnimation();
 private:
   Timer uiTimer;
 };

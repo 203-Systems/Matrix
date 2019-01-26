@@ -104,39 +104,42 @@ void LED::fill(u32 WRGB, bool overlay /*= false*/)
 // }
 
 // Index
-void LED::off(u8 index, bool overlay /*= false*/)
+void LED::off(s16 index, bool overlay /*= false*/)
 {
   LED::setHEX(index, 0, overlay);
 }
 
-void LED::on(u8 index, bool overlay /*= false*/)
+void LED::on(s16 index, bool overlay /*= false*/)
 {
   LED::setHEX(index, 0xFFFFFFFF, overlay);
 }
 
-void LED::setW(u8 index, u8 w, bool overlay /*= false*/)
+void LED::setW(s16 index, u8 w, bool overlay /*= false*/)
 {
   LED::setHEX(index, w * 0x10000 + w * 0x100 + w, overlay);
 }
 
-void LED::setRGB(u8 index, u8 r, u8 g, u8 b, bool overlay /*= false*/)
+void LED::setRGB(s16 index, u8 r, u8 g, u8 b, bool overlay /*= false*/)
 {
   LED::setHEX(index, r * 0x10000 + g * 0x100 + b, overlay);
 }
 
-void LED::setWRGB(u8 index, u8 w, u8 r, u8 g, u8 b, bool overlay /*= false*/)
+void LED::setWRGB(s16 index, u8 w, u8 r, u8 g, u8 b, bool overlay /*= false*/)
 {
   LED::setHEX(index, w * 0x1000000 + r * 0x10000 + g * 0x100 + b, overlay);
 }
 
-void LED::setHEX(u8 index, u32 hex, bool overlay /*= false*/, bool ignore_gamma /*= false*/)
+void LED::setHEX(s16 index, u32 hex, bool overlay /*= false*/, bool ignore_gamma /*= false*/)
 {
-  #ifdef DEBUG
-  CompositeSerial.print("LED Index \t");
-  CompositeSerial.print(index);
-  CompositeSerial.print("\t");
-  CompositeSerial.println(hex, HEX);
-  #endif
+  // #ifdef DEBUG
+  // CompositeSerial.print("LED Index \t");
+  // CompositeSerial.print(index);
+  // CompositeSerial.print("\t");
+  // CompositeSerial.println(hex, HEX);
+  // #endif
+
+  if(index < 0)
+    return;
 
   if(!overlay_mode || overlay)
   {
@@ -162,7 +165,7 @@ void LED::setHEX(u8 index, u32 hex, bool overlay /*= false*/, bool ignore_gamma 
   }
 }
 
-void LED::setPalette(u8 index, u8 pick_palette, u8 colour, bool overlay /*= false*/)
+void LED::setPalette(s16 index, u8 pick_palette, u8 colour, bool overlay /*= false*/)
 {
   LED::setHEX(index, palette[pick_palette][colour], overlay, true);
 }
@@ -197,12 +200,12 @@ void LED::setXYWRGB(u8 xy, u8 w, u8 r, u8 g, u8 b, bool overlay /*= false*/)
 
 void LED::setXYHEX(u8 xy, u32 hex, bool overlay /*= false*/, bool ignore_gamma /*= false*/)
 {
-  #ifdef DEBUG
-  CompositeSerial.print("LED XY \t");
-  CompositeSerial.print(xy, HEX);
-  CompositeSerial.print("\t");
-  CompositeSerial.println(hex, HEX);
-  #endif
+  // #ifdef DEBUG
+  // CompositeSerial.print("LED XY \t");
+  // CompositeSerial.print(xy, HEX);
+  // CompositeSerial.print("\t");
+  // CompositeSerial.println(hex, HEX);
+  // #endif
 
   if(!overlay_mode || overlay)
   {
