@@ -141,7 +141,7 @@ extern u32 palette[3][128] =     //WRGB Colour Palette
   0x00000000, //0
   0x001E1E1E, //1
   0x007F7F7F, //2
-  0x00FF4C4C, //3
+  0x004C4C4C, //3
   0x00FFFFFF, //4
   0x00FF0000, //5
   0x00590000, //6

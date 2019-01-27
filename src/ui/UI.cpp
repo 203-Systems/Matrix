@@ -382,19 +382,19 @@ void UI::kBootAnimation() //8x8 only
     delay *= 0.8;
   }
 
-  uiTimer.recordCurrent();
-  while(!uiTimer.isLonger(500))
-  {
-    KeyPad.scan();
-    if(KeyPad.fnChanged)
-    {
-      if(!KeyPad.fn)
-      {
-        LED.disableOverlayMode();
-        return;
-      }
-    }
-  }
+  // uiTimer.recordCurrent();
+  // while(!uiTimer.isLonger(30))
+  // {
+  //   KeyPad.scan();
+  //   if(KeyPad.fnChanged)
+  //   {
+  //     if(!KeyPad.fn)
+  //     {
+  //       LED.disableOverlayMode();
+  //       return;
+  //     }
+  //   }
+  // }
 
   //Stage2
   delay = 25;
@@ -413,7 +413,7 @@ void UI::kBootAnimation() //8x8 only
     shuffle[j] = t;
   }
 
-  for(int i = 0; i <NUM_LEDS; i++)
+  for(int i = 0; i <NUM_LEDS+5; i++)
   {
     while(!uiTimer.isLonger(delay))
     {
@@ -428,20 +428,20 @@ void UI::kBootAnimation() //8x8 only
       }
     }
     uiTimer.recordCurrent();
-    LED.setPalette(shuffle[i], 0, 45, true);
-    if(i > 0)
-    LED.setPalette(shuffle[i-1], 0, 29, true);
-    if(i > 1)
-    LED.setPalette(shuffle[i-2], 0, 13, true);
-    if(i > 2)
-    LED.setPalette(shuffle[i-3], 0, 109, true);
-    if(i > 3)
-    LED.setPalette(shuffle[i-4], 0, 93, true);
-    if(i > 4)
+    if(i < NUM_LEDS)
+    LED.setPalette(shuffle[i], 0, 44, true);
+    if(i > 0 && i < NUM_LEDS + 1)
+    LED.setPalette(shuffle[i-1], 0, 28, true);
+    if(i > 1 && i < NUM_LEDS + 2)
+    LED.setPalette(shuffle[i-2], 0, 12, true);
+    if(i > 2 && i < NUM_LEDS + 3)
+    LED.setPalette(shuffle[i-3], 0, 116, true);
+    if(i > 3 && i < NUM_LEDS + 4)
+    LED.setPalette(shuffle[i-4], 0, 102, true);
+    if(i > 4 && i < NUM_LEDS + 5)
     LED.off(shuffle[i-5], true);
     LED.update();
   }
-
   //end
   LED.disableOverlayMode();
   return;
