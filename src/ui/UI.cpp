@@ -403,7 +403,7 @@ void UI::kBootAnimation() //8x8 only
   {
     shuffle[i] = i;
   }
-  randomSeed(analogRead(PC5));
+  randomSeed(analogRead(PC3) * analogRead(PC4) * analogRead(PC5) );
   u8 n = sizeof(shuffle) / sizeof(shuffle[0]);
   for (u8 i = 0; i < n - 1; i++)
   {
