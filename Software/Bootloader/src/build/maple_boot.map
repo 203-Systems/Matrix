@@ -1,0 +1,1333 @@
+
+Allocating common symbols
+Common symbol       size              file
+
+SaveRState          0x2               build/usb_lib/usb_int.o
+SaveState           0x2               build/usb_lib/usb_init.o
+wTransferSize       0x4               build/usb.o
+wIstr               0x2               build/usb.o
+pProperty           0x4               build/usb_lib/usb_init.o
+EPindex             0x1               build/usb_lib/usb_init.o
+SaveTState          0x2               build/usb_lib/usb_int.o
+Device_Info         0x1c              build/usb_lib/usb_init.o
+pUser_Standard_Requests
+                    0x4               build/usb_lib/usb_init.o
+StatusInfo          0x2               build/usb_lib/usb_core.o
+pInformation        0x4               build/usb_lib/usb_init.o
+ResumeS             0x2               build/usb.o
+code_copy_lock      0x1               build/dfu.o
+wInterrupt_Mask     0x2               build/usb_lib/usb_init.o
+
+Discarded input sections
+
+ .text          0x0000000000000000       0x14 build/stm32_lib/c_only_startup.o
+ .bss           0x0000000000000000        0x0 build/stm32_lib/c_only_startup.o
+ .text          0x0000000000000000       0x7a build/stm32_lib/cortexm3_macro.o
+ .bss           0x0000000000000000        0x0 build/stm32_lib/cortexm3_macro.o
+ .text          0x0000000000000000        0x0 build/usb.o
+ .bss           0x0000000000000000        0x0 build/usb.o
+ .text.usbAppInit
+                0x0000000000000000        0x4 build/usb.o
+ .text          0x0000000000000000        0x0 build/usb_callbacks.o
+ .bss           0x0000000000000000        0x0 build/usb_callbacks.o
+ .text          0x0000000000000000        0x0 build/usb_descriptor.o
+ .bss           0x0000000000000000        0x0 build/usb_descriptor.o
+ .bss.u8_usbStringInterface
+                0x0000000000000000        0x1 build/usb_descriptor.o
+ .text          0x0000000000000000        0x0 build/main.o
+ .bss           0x0000000000000000        0x0 build/main.o
+ .text          0x0000000000000000        0x0 build/hardware.o
+ .bss           0x0000000000000000        0x0 build/hardware.o
+ .text.readPin  0x0000000000000000       0x12 build/hardware.o
+ .text.strobePin
+                0x0000000000000000       0x50 build/hardware.o
+ .text.flashErasePages
+                0x0000000000000000       0x30 build/hardware.o
+ .text          0x0000000000000000        0x0 build/dfu.o
+ .bss           0x0000000000000000        0x0 build/dfu.o
+ .text.dfuUpdateByTimeout
+                0x0000000000000000        0x2 build/dfu.o
+ .text.dfuGetState
+                0x0000000000000000        0xc build/dfu.o
+ .text.dfuSetState
+                0x0000000000000000        0xc build/dfu.o
+ .text          0x0000000000000000        0x0 build/usb_lib/usb_regs.o
+ .bss           0x0000000000000000        0x0 build/usb_lib/usb_regs.o
+ .text.SetCNTR  0x0000000000000000        0xc build/usb_lib/usb_regs.o
+ .text.GetCNTR  0x0000000000000000        0xc build/usb_lib/usb_regs.o
+ .text.SetISTR  0x0000000000000000        0xc build/usb_lib/usb_regs.o
+ .text.GetISTR  0x0000000000000000        0xc build/usb_lib/usb_regs.o
+ .text.GetFNR   0x0000000000000000        0xc build/usb_lib/usb_regs.o
+ .text.SetDADDR
+                0x0000000000000000        0xc build/usb_lib/usb_regs.o
+ .text.GetDADDR
+                0x0000000000000000        0xc build/usb_lib/usb_regs.o
+ .text.SetBTABLE
+                0x0000000000000000       0x10 build/usb_lib/usb_regs.o
+ .text.GetBTABLE
+                0x0000000000000000        0xc build/usb_lib/usb_regs.o
+ .text.SetENDPOINT
+                0x0000000000000000        0xe build/usb_lib/usb_regs.o
+ .text.GetENDPOINT
+                0x0000000000000000       0x10 build/usb_lib/usb_regs.o
+ .text.SetEPType
+                0x0000000000000000       0x1c build/usb_lib/usb_regs.o
+ .text.GetEPType
+                0x0000000000000000       0x12 build/usb_lib/usb_regs.o
+ .text.SetEPRxStatus
+                0x0000000000000000       0x2a build/usb_lib/usb_regs.o
+ .text.SetDouBleBuffEPStall
+                0x0000000000000000       0x24 build/usb_lib/usb_regs.o
+ .text.GetEPTxStatus
+                0x0000000000000000       0x12 build/usb_lib/usb_regs.o
+ .text.GetEPRxStatus
+                0x0000000000000000       0x12 build/usb_lib/usb_regs.o
+ .text.SetEPTxValid
+                0x0000000000000000       0x1e build/usb_lib/usb_regs.o
+ .text.SetEP_KIND
+                0x0000000000000000       0x1e build/usb_lib/usb_regs.o
+ .text.ClearEP_KIND
+                0x0000000000000000       0x1c build/usb_lib/usb_regs.o
+ .text.Set_Status_Out
+                0x0000000000000000       0x1e build/usb_lib/usb_regs.o
+ .text.SetEPDoubleBuff
+                0x0000000000000000       0x1e build/usb_lib/usb_regs.o
+ .text.ClearEPDoubleBuff
+                0x0000000000000000       0x1c build/usb_lib/usb_regs.o
+ .text.GetTxStallStatus
+                0x0000000000000000       0x1a build/usb_lib/usb_regs.o
+ .text.GetRxStallStatus
+                0x0000000000000000       0x1a build/usb_lib/usb_regs.o
+ .text.ClearEP_CTR_RX
+                0x0000000000000000       0x18 build/usb_lib/usb_regs.o
+ .text.ClearEP_CTR_TX
+                0x0000000000000000       0x1c build/usb_lib/usb_regs.o
+ .text.ToggleDTOG_RX
+                0x0000000000000000       0x20 build/usb_lib/usb_regs.o
+ .text.ToggleDTOG_TX
+                0x0000000000000000       0x20 build/usb_lib/usb_regs.o
+ .text.SetEPAddress
+                0x0000000000000000       0x1e build/usb_lib/usb_regs.o
+ .text.GetEPAddress
+                0x0000000000000000       0x12 build/usb_lib/usb_regs.o
+ .text.SetEPTxAddr
+                0x0000000000000000       0x20 build/usb_lib/usb_regs.o
+ .text.SetEPRxAddr
+                0x0000000000000000       0x20 build/usb_lib/usb_regs.o
+ .text.SetEPCountRxReg
+                0x0000000000000000       0x26 build/usb_lib/usb_regs.o
+ .text.GetEPTxCount
+                0x0000000000000000       0x20 build/usb_lib/usb_regs.o
+ .text.GetEPRxCount
+                0x0000000000000000       0x20 build/usb_lib/usb_regs.o
+ .text.SetEPDblBuffAddr
+                0x0000000000000000       0x38 build/usb_lib/usb_regs.o
+ .text.SetEPDblBuf0Addr
+                0x0000000000000000       0x20 build/usb_lib/usb_regs.o
+ .text.SetEPDblBuf1Addr
+                0x0000000000000000       0x20 build/usb_lib/usb_regs.o
+ .text.GetEPDblBuf0Addr
+                0x0000000000000000       0x1c build/usb_lib/usb_regs.o
+ .text.GetEPDblBuf1Addr
+                0x0000000000000000       0x1c build/usb_lib/usb_regs.o
+ .text.SetEPDblBuffCount
+                0x0000000000000000       0xa8 build/usb_lib/usb_regs.o
+ .text.SetEPDblBuf0Count
+                0x0000000000000000       0x5c build/usb_lib/usb_regs.o
+ .text.SetEPDblBuf1Count
+                0x0000000000000000       0x5c build/usb_lib/usb_regs.o
+ .text.GetEPDblBuf0Count
+                0x0000000000000000       0x20 build/usb_lib/usb_regs.o
+ .text.GetEPDblBuf1Count
+                0x0000000000000000       0x20 build/usb_lib/usb_regs.o
+ .text.GetEPDblBufDir
+                0x0000000000000000       0x44 build/usb_lib/usb_regs.o
+ .text.FreeUserBuffer
+                0x0000000000000000       0x3a build/usb_lib/usb_regs.o
+ .text.ToWord   0x0000000000000000        0x6 build/usb_lib/usb_regs.o
+ .text.ByteSwap
+                0x0000000000000000        0xa build/usb_lib/usb_regs.o
+ .text          0x0000000000000000        0x0 build/usb_lib/usb_int.o
+ .bss           0x0000000000000000        0x0 build/usb_lib/usb_int.o
+ .text.CTR_HP   0x0000000000000000       0x70 build/usb_lib/usb_int.o
+ .text          0x0000000000000000        0x0 build/usb_lib/usb_init.o
+ .bss           0x0000000000000000        0x0 build/usb_lib/usb_init.o
+ .text          0x0000000000000000        0x0 build/usb_lib/usb_core.o
+ .bss           0x0000000000000000        0x0 build/usb_lib/usb_core.o
+ .text.NOP_Process
+                0x0000000000000000        0x2 build/usb_lib/usb_core.o
+ .text          0x0000000000000000        0x0 build/usb_lib/usb_mem.o
+ .bss           0x0000000000000000        0x0 build/usb_lib/usb_mem.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+RAM              0x0000000020000000 0x0000000000001000 xrw
+FLASH            0x0000000008000000 0x0000000000002000 xr
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+LOAD build/stm32_lib/c_only_startup.o
+LOAD build/stm32_lib/cortexm3_macro.o
+LOAD build/usb.o
+LOAD build/usb_callbacks.o
+LOAD build/usb_descriptor.o
+LOAD build/main.o
+LOAD build/hardware.o
+LOAD build/dfu.o
+LOAD build/usb_lib/usb_regs.o
+LOAD build/usb_lib/usb_int.o
+LOAD build/usb_lib/usb_init.o
+LOAD build/usb_lib/usb_core.o
+LOAD build/usb_lib/usb_mem.o
+LOAD /home/null/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m/libc.a
+LOAD /home/null/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/libgcc.a
+START GROUP
+LOAD /home/null/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/libgcc.a
+LOAD /home/null/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m/libg.a
+LOAD /home/null/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m/libc.a
+END GROUP
+                0x0000000000000400                __Stack_Size = 0x400
+                0x0000000000000400                PROVIDE (_Stack_Size, __Stack_Size)
+                0x0000000020004c00                __Stack_Init = (_estack - __Stack_Size)
+                0x0000000020004c00                PROVIDE (_Stack_Init, __Stack_Init)
+                0x0000000000000100                _Minimum_Stack_Size = 0x100
+                0x0000000020005000                _estack = 0x20005000
+
+.isr_vector     0x0000000008000000       0xf0
+                0x0000000008000000                . = ALIGN (0x4)
+ *(.isr_vector)
+ .isr_vector    0x0000000008000000       0xf0 build/stm32_lib/c_only_startup.o
+                0x0000000008000000                g_pfnVectors
+                0x00000000080000f0                . = ALIGN (0x4)
+
+.flashtext      0x00000000080000f0        0x0
+                0x00000000080000f0                . = ALIGN (0x4)
+ *(.flashtext)
+                0x00000000080000f0                . = ALIGN (0x4)
+
+.text           0x00000000080000f0     0x175c
+                0x00000000080000f0                . = ALIGN (0x4)
+ *(.text)
+ *(.text.*)
+ .text.Reset_Handler
+                0x00000000080000f0       0x48 build/stm32_lib/c_only_startup.o
+                0x00000000080000f0                Reset_Handler
+ .text.Default_Handler
+                0x0000000008000138        0x4 build/stm32_lib/c_only_startup.o
+                0x0000000008000138                EXTI2_IRQHandler
+                0x0000000008000138                DebugMon_Handler
+                0x0000000008000138                TIM1_CC_IRQHandler
+                0x0000000008000138                HardFault_Handler
+                0x0000000008000138                SysTick_Handler
+                0x0000000008000138                PVD_IRQHandler
+                0x0000000008000138                PendSV_Handler
+                0x0000000008000138                NMI_Handler
+                0x0000000008000138                EXTI3_IRQHandler
+                0x0000000008000138                EXTI0_IRQHandler
+                0x0000000008000138                I2C2_EV_IRQHandler
+                0x0000000008000138                UsageFault_Handler
+                0x0000000008000138                ADC1_2_IRQHandler
+                0x0000000008000138                SPI1_IRQHandler
+                0x0000000008000138                TAMPER_IRQHandler
+                0x0000000008000138                DMA1_Channel4_IRQHandler
+                0x0000000008000138                USART3_IRQHandler
+                0x0000000008000138                RTC_IRQHandler
+                0x0000000008000138                DMA1_Channel7_IRQHandler
+                0x0000000008000138                CAN1_RX1_IRQHandler
+                0x0000000008000138                TIM4_IRQHandler
+                0x0000000008000138                I2C1_EV_IRQHandler
+                0x0000000008000138                DMA1_Channel6_IRQHandler
+                0x0000000008000138                TIM3_IRQHandler
+                0x0000000008000138                RCC_IRQHandler
+                0x0000000008000138                TIM1_TRG_COM_IRQHandler
+                0x0000000008000138                DMA1_Channel1_IRQHandler
+                0x0000000008000138                Default_Handler
+                0x0000000008000138                EXTI15_10_IRQHandler
+                0x0000000008000138                EXTI9_5_IRQHandler
+                0x0000000008000138                SPI2_IRQHandler
+                0x0000000008000138                MemManage_Handler
+                0x0000000008000138                SVC_Handler
+                0x0000000008000138                DMA1_Channel5_IRQHandler
+                0x0000000008000138                EXTI4_IRQHandler
+                0x0000000008000138                USB_HP_CAN1_TX_IRQHandler
+                0x0000000008000138                DMA1_Channel3_IRQHandler
+                0x0000000008000138                TIM1_UP_IRQHandler
+                0x0000000008000138                WWDG_IRQHandler
+                0x0000000008000138                TIM2_IRQHandler
+                0x0000000008000138                TIM1_BRK_IRQHandler
+                0x0000000008000138                EXTI1_IRQHandler
+                0x0000000008000138                RTCAlarm_IRQHandler
+                0x0000000008000138                USART2_IRQHandler
+                0x0000000008000138                I2C2_ER_IRQHandler
+                0x0000000008000138                DMA1_Channel2_IRQHandler
+                0x0000000008000138                CAN1_SCE_IRQHandler
+                0x0000000008000138                FLASH_IRQHandler
+                0x0000000008000138                BusFault_Handler
+                0x0000000008000138                USART1_IRQHandler
+                0x0000000008000138                I2C1_ER_IRQHandler
+                0x0000000008000138                USBWakeUp_IRQHandler
+ .text.nothingProc
+                0x000000000800013c        0x2 build/usb.o
+                0x000000000800013c                nothingProc
+ .text.usbStatusIn
+                0x000000000800013e        0x2 build/usb.o
+                0x000000000800013e                usbStatusIn
+ .text.usbStatusOut
+                0x0000000008000140        0x2 build/usb.o
+                0x0000000008000140                usbStatusOut
+ .text.usbGetInterfaceSetting
+                0x0000000008000142        0xa build/usb.o
+                0x0000000008000142                usbGetInterfaceSetting
+ .text.usbGetConfiguration
+                0x000000000800014c        0x2 build/usb.o
+                0x000000000800014c                usbGetConfiguration
+ *fill*         0x000000000800014e        0x2 
+ .text.usbSetConfiguration
+                0x0000000008000150       0x18 build/usb.o
+                0x0000000008000150                usbSetConfiguration
+ .text.usbGetInterface
+                0x0000000008000168        0x2 build/usb.o
+                0x0000000008000168                usbGetInterface
+ .text.usbSetInterface
+                0x000000000800016a        0x2 build/usb.o
+                0x000000000800016a                usbSetInterface
+ .text.usbGetStatus
+                0x000000000800016c        0x2 build/usb.o
+                0x000000000800016c                usbGetStatus
+ .text.usbClearFeature
+                0x000000000800016e        0x2 build/usb.o
+                0x000000000800016e                usbClearFeature
+ .text.usbSetEndpointFeature
+                0x0000000008000170        0x2 build/usb.o
+                0x0000000008000170                usbSetEndpointFeature
+ .text.usbSetDeviceFeature
+                0x0000000008000172        0x2 build/usb.o
+                0x0000000008000172                usbSetDeviceFeature
+ .text.usbSetDeviceAddress
+                0x0000000008000174        0xc build/usb.o
+                0x0000000008000174                usbSetDeviceAddress
+ .text.usbReset
+                0x0000000008000180       0xa8 build/usb.o
+                0x0000000008000180                usbReset
+ .text.usbDataSetup
+                0x0000000008000228       0x60 build/usb.o
+                0x0000000008000228                usbDataSetup
+ .text.usbGetDeviceDescriptor
+                0x0000000008000288        0xc build/usb.o
+                0x0000000008000288                usbGetDeviceDescriptor
+ .text.usbGetConfigDescriptor
+                0x0000000008000294        0xc build/usb.o
+                0x0000000008000294                usbGetConfigDescriptor
+ .text.usbGetStringDescriptor
+                0x00000000080002a0       0x20 build/usb.o
+                0x00000000080002a0                usbGetStringDescriptor
+ .text.usbGetFunctionalDescriptor
+                0x00000000080002c0        0xc build/usb.o
+                0x00000000080002c0                usbGetFunctionalDescriptor
+ .text.usbNoDataSetup
+                0x00000000080002cc       0x28 build/usb.o
+                0x00000000080002cc                usbNoDataSetup
+ .text.setupUSB
+                0x00000000080002f4       0x7c build/usb.o
+                0x00000000080002f4                setupUSB
+ .text.usbSuspend
+                0x0000000008000370       0x1c build/usb.o
+                0x0000000008000370                usbSuspend
+ .text.usbResumeInit
+                0x000000000800038c       0x18 build/usb.o
+                0x000000000800038c                usbResumeInit
+ .text.usbResume
+                0x00000000080003a4       0x84 build/usb.o
+                0x00000000080003a4                usbResume
+ .text.usbPowerOn
+                0x0000000008000428       0x28 build/usb.o
+                0x0000000008000428                usbPowerOn
+ .text.usbPowerOff
+                0x0000000008000450       0x1c build/usb.o
+                0x0000000008000450                usbPowerOff
+ .text.usbDsbBus
+                0x000000000800046c        0x4 build/usb.o
+                0x000000000800046c                usbDsbBus
+ .text.usbEnbISR
+                0x0000000008000470       0x24 build/usb.o
+                0x0000000008000470                usbEnbISR
+ .text.usbInit  0x0000000008000494       0x40 build/usb.o
+                0x0000000008000494                usbInit
+ .text.usbDsbISR
+                0x00000000080004d4       0x22 build/usb.o
+                0x00000000080004d4                usbDsbISR
+ *fill*         0x00000000080004f6        0x2 
+ .text.USB_LP_CAN1_RX0_IRQHandler
+                0x00000000080004f8       0xb4 build/usb.o
+                0x00000000080004f8                USB_LP_CAN1_RX0_IRQHandler
+ .text.startup.main
+                0x00000000080005ac       0x78 build/main.o
+                0x00000000080005ac                main
+ .text.gpio_write_bit
+                0x0000000008000624       0x16 build/hardware.o
+                0x0000000008000624                gpio_write_bit
+ .text.readButtonState
+                0x000000000800063a        0x4 build/hardware.o
+                0x000000000800063a                readButtonState
+ *fill*         0x000000000800063e        0x2 
+ .text.systemReset
+                0x0000000008000640       0x48 build/hardware.o
+                0x0000000008000640                systemReset
+ .text.setupCLK
+                0x0000000008000688       0x60 build/hardware.o
+                0x0000000008000688                setupCLK
+ .text.setupLEDAndButton
+                0x00000000080006e8        0x2 build/hardware.o
+                0x00000000080006e8                setupLEDAndButton
+ *fill*         0x00000000080006ea        0x2 
+ .text.setupFLASH
+                0x00000000080006ec       0x1c build/hardware.o
+                0x00000000080006ec                setupFLASH
+ .text.checkUserCode
+                0x0000000008000708       0x14 build/hardware.o
+                0x0000000008000708                checkUserCode
+ .text.setMspAndJump
+                0x000000000800071c       0x18 build/hardware.o
+                0x000000000800071c                setMspAndJump
+ .text.bkp10Write
+                0x0000000008000734       0x2c build/hardware.o
+                0x0000000008000734                bkp10Write
+ .text.checkAndClearBootloaderFlag
+                0x0000000008000760       0x48 build/hardware.o
+                0x0000000008000760                checkAndClearBootloaderFlag
+ .text.nvicInit
+                0x00000000080007a8       0x6c build/hardware.o
+                0x00000000080007a8                nvicInit
+ .text.nvicDisableInterrupts
+                0x0000000008000814       0x24 build/hardware.o
+                0x0000000008000814                nvicDisableInterrupts
+ .text.jumpToUser
+                0x0000000008000838       0x28 build/hardware.o
+                0x0000000008000838                jumpToUser
+ .text.systemHardReset
+                0x0000000008000860       0x14 build/hardware.o
+                0x0000000008000860                systemHardReset
+ .text.flashErasePage
+                0x0000000008000874       0x34 build/hardware.o
+                0x0000000008000874                flashErasePage
+ .text.flashWriteWord
+                0x00000000080008a8       0x4c build/hardware.o
+                0x00000000080008a8                flashWriteWord
+ .text.flashLock
+                0x00000000080008f4        0xc build/hardware.o
+                0x00000000080008f4                flashLock
+ .text.flashUnlock
+                0x0000000008000900       0x18 build/hardware.o
+                0x0000000008000900                flashUnlock
+ .text.crMask   0x0000000008000918       0x12 build/hardware.o
+                0x0000000008000918                crMask
+ *fill*         0x000000000800092a        0x2 
+ .text.getFlashEnd
+                0x000000000800092c       0x10 build/hardware.o
+                0x000000000800092c                getFlashEnd
+ .text.getFlashPageSize
+                0x000000000800093c       0x18 build/hardware.o
+                0x000000000800093c                getFlashPageSize
+ .text.dfuInit  0x0000000008000954       0x5c build/dfu.o
+                0x0000000008000954                dfuInit
+ .text.dfuUpdateByReset
+                0x00000000080009b0       0x44 build/dfu.o
+                0x00000000080009b0                dfuUpdateByReset
+ .text.dfuCopyState
+                0x00000000080009f4       0x18 build/dfu.o
+                0x00000000080009f4                dfuCopyState
+ .text.dfuCopyStatus
+                0x0000000008000a0c       0x18 build/dfu.o
+                0x0000000008000a0c                dfuCopyStatus
+ .text.dfuCopyDNLOAD
+                0x0000000008000a24       0x28 build/dfu.o
+                0x0000000008000a24                dfuCopyDNLOAD
+ .text.dfuCopyUPLOAD
+                0x0000000008000a4c       0x34 build/dfu.o
+                0x0000000008000a4c                dfuCopyUPLOAD
+ .text.dfuCopyBufferToExec
+                0x0000000008000a80       0x5c build/dfu.o
+                0x0000000008000a80                dfuCopyBufferToExec
+ .text.dfuUpdateByRequest
+                0x0000000008000adc      0x23c build/dfu.o
+                0x0000000008000adc                dfuUpdateByRequest
+ .text.dfuUploadStarted
+                0x0000000008000d18        0xc build/dfu.o
+                0x0000000008000d18                dfuUploadStarted
+ .text.dfuFinishUpload
+                0x0000000008000d24        0x4 build/dfu.o
+                0x0000000008000d24                dfuFinishUpload
+ .text.SetEPTxStatus
+                0x0000000008000d28       0x2a build/usb_lib/usb_regs.o
+                0x0000000008000d28                SetEPTxStatus
+ .text.SetEPRxValid
+                0x0000000008000d52       0x1e build/usb_lib/usb_regs.o
+                0x0000000008000d52                SetEPRxValid
+ .text.Clear_Status_Out
+                0x0000000008000d70       0x1c build/usb_lib/usb_regs.o
+                0x0000000008000d70                Clear_Status_Out
+ .text.ClearDTOG_RX
+                0x0000000008000d8c       0x20 build/usb_lib/usb_regs.o
+                0x0000000008000d8c                ClearDTOG_RX
+ .text.ClearDTOG_TX
+                0x0000000008000dac       0x20 build/usb_lib/usb_regs.o
+                0x0000000008000dac                ClearDTOG_TX
+ .text.GetEPTxAddr
+                0x0000000008000dcc       0x1c build/usb_lib/usb_regs.o
+                0x0000000008000dcc                GetEPTxAddr
+ .text.GetEPRxAddr
+                0x0000000008000de8       0x1c build/usb_lib/usb_regs.o
+                0x0000000008000de8                GetEPRxAddr
+ .text.SetEPTxCount
+                0x0000000008000e04       0x1c build/usb_lib/usb_regs.o
+                0x0000000008000e04                SetEPTxCount
+ .text.SetEPRxCount
+                0x0000000008000e20       0x40 build/usb_lib/usb_regs.o
+                0x0000000008000e20                SetEPRxCount
+ .text.CTR_LP   0x0000000008000e60      0x154 build/usb_lib/usb_int.o
+                0x0000000008000e60                CTR_LP
+ .text.USB_Init
+                0x0000000008000fb4       0x38 build/usb_lib/usb_init.o
+                0x0000000008000fb4                USB_Init
+ .text.Standard_GetConfiguration
+                0x0000000008000fec       0x24 build/usb_lib/usb_core.o
+                0x0000000008000fec                Standard_GetConfiguration
+ .text.Standard_GetInterface
+                0x0000000008001010       0x24 build/usb_lib/usb_core.o
+                0x0000000008001010                Standard_GetInterface
+ .text.Standard_GetStatus
+                0x0000000008001034       0x90 build/usb_lib/usb_core.o
+                0x0000000008001034                Standard_GetStatus
+ .text.DataStageIn
+                0x00000000080010c4       0xa8 build/usb_lib/usb_core.o
+ .text.Standard_SetConfiguration
+                0x000000000800116c       0x38 build/usb_lib/usb_core.o
+                0x000000000800116c                Standard_SetConfiguration
+ .text.Standard_SetInterface
+                0x00000000080011a4       0x48 build/usb_lib/usb_core.o
+                0x00000000080011a4                Standard_SetInterface
+ .text.Standard_ClearFeature
+                0x00000000080011ec       0xd0 build/usb_lib/usb_core.o
+                0x00000000080011ec                Standard_ClearFeature
+ .text.Standard_SetEndPointFeature
+                0x00000000080012bc       0x84 build/usb_lib/usb_core.o
+                0x00000000080012bc                Standard_SetEndPointFeature
+ .text.Standard_SetDeviceFeature
+                0x0000000008001340       0x24 build/usb_lib/usb_core.o
+                0x0000000008001340                Standard_SetDeviceFeature
+ .text.Standard_GetDescriptorData
+                0x0000000008001364       0x1c build/usb_lib/usb_core.o
+                0x0000000008001364                Standard_GetDescriptorData
+ .text.Post0_Process
+                0x0000000008001380       0x40 build/usb_lib/usb_core.o
+                0x0000000008001380                Post0_Process
+ .text.Setup0_Process
+                0x00000000080013c0      0x2dc build/usb_lib/usb_core.o
+                0x00000000080013c0                Setup0_Process
+ .text.Out0_Process
+                0x000000000800169c       0xc8 build/usb_lib/usb_core.o
+                0x000000000800169c                Out0_Process
+ .text.SetDeviceAddress
+                0x0000000008001764       0x38 build/usb_lib/usb_core.o
+                0x0000000008001764                SetDeviceAddress
+ .text.In0_Process
+                0x000000000800179c       0x5c build/usb_lib/usb_core.o
+                0x000000000800179c                In0_Process
+ .text.UserToPMABufferCopy
+                0x00000000080017f8       0x30 build/usb_lib/usb_mem.o
+                0x00000000080017f8                UserToPMABufferCopy
+ .text.PMAToUserBufferCopy
+                0x0000000008001828       0x24 build/usb_lib/usb_mem.o
+                0x0000000008001828                PMAToUserBufferCopy
+ *(.rodata)
+ *(.rodata*)
+ *(.glue_7)
+ .glue_7        0x0000000000000000        0x0 linker stubs
+ *(.glue_7t)
+ .glue_7t       0x0000000000000000        0x0 linker stubs
+                0x000000000800184c                . = ALIGN (0x4)
+                0x000000000800184c                _etext = .
+                0x000000000800184c                _sidata = _etext
+
+.vfp11_veneer   0x000000000800184c        0x0
+ .vfp11_veneer  0x0000000000000000        0x0 linker stubs
+
+.v4_bx          0x000000000800184c        0x0
+ .v4_bx         0x0000000000000000        0x0 linker stubs
+
+.iplt           0x000000000800184c        0x0
+ .iplt          0x0000000000000000        0x0 build/stm32_lib/c_only_startup.o
+
+.rel.dyn        0x000000000800184c        0x0
+ .rel.iplt      0x0000000000000000        0x0 build/stm32_lib/c_only_startup.o
+
+.data           0x0000000020000000      0x2d0 load address 0x000000000800184c
+                0x0000000020000000                . = ALIGN (0x4)
+                0x0000000020000000                _sdata = .
+ *(.data)
+ .data          0x0000000020000000        0x0 build/stm32_lib/c_only_startup.o
+ .data          0x0000000020000000        0x0 build/stm32_lib/cortexm3_macro.o
+ .data          0x0000000020000000        0x0 build/usb.o
+ .data          0x0000000020000000        0x0 build/usb_callbacks.o
+ .data          0x0000000020000000        0x0 build/usb_descriptor.o
+ .data          0x0000000020000000        0x0 build/main.o
+ .data          0x0000000020000000        0x0 build/hardware.o
+ .data          0x0000000020000000        0x0 build/dfu.o
+ .data          0x0000000020000000        0x0 build/usb_lib/usb_regs.o
+ .data          0x0000000020000000        0x0 build/usb_lib/usb_int.o
+ .data          0x0000000020000000        0x0 build/usb_lib/usb_init.o
+ .data          0x0000000020000000        0x0 build/usb_lib/usb_core.o
+ .data          0x0000000020000000        0x0 build/usb_lib/usb_mem.o
+ *(.data.*)
+ .data.Device_Property
+                0x0000000020000000       0x34 build/usb.o
+                0x0000000020000000                Device_Property
+ .data.pEpInt_IN
+                0x0000000020000034       0x1c build/usb.o
+                0x0000000020000034                pEpInt_IN
+ .data.pEpInt_OUT
+                0x0000000020000050       0x1c build/usb.o
+                0x0000000020000050                pEpInt_OUT
+ .data.User_Standard_Requests
+                0x000000002000006c       0x24 build/usb.o
+                0x000000002000006c                User_Standard_Requests
+ .data.Device_Table
+                0x0000000020000090        0x2 build/usb.o
+                0x0000000020000090                Device_Table
+ *fill*         0x0000000020000092        0x2 
+ .data.usbStringDescriptor
+                0x0000000020000094       0x38 build/usb_descriptor.o
+                0x0000000020000094                usbStringDescriptor
+ .data.u8_usbDeviceDescriptorDFU
+                0x00000000200000cc       0x12 build/usb_descriptor.o
+                0x00000000200000cc                u8_usbDeviceDescriptorDFU
+ *fill*         0x00000000200000de        0x2 
+ .data.usbFunctionalDescriptor
+                0x00000000200000e0        0x8 build/usb_descriptor.o
+                0x00000000200000e0                usbFunctionalDescriptor
+ .data.u8_usbStringLangId
+                0x00000000200000e8        0x4 build/usb_descriptor.o
+                0x00000000200000e8                u8_usbStringLangId
+ .data.u8_usbConfigDescriptorDFU
+                0x00000000200000ec       0x2d build/usb_descriptor.o
+                0x00000000200000ec                u8_usbConfigDescriptorDFU
+ .data.u8_usbStringSerial
+                0x0000000020000119       0x10 build/usb_descriptor.o
+                0x0000000020000119                u8_usbStringSerial
+ .data.u8_usbFunctionalDescriptor
+                0x0000000020000129        0x9 build/usb_descriptor.o
+                0x0000000020000129                u8_usbFunctionalDescriptor
+ .data.u8_usbStringVendor
+                0x0000000020000132       0x1a build/usb_descriptor.o
+                0x0000000020000132                u8_usbStringVendor
+ .data.usbDeviceDescriptorDFU
+                0x000000002000014c        0x8 build/usb_descriptor.o
+                0x000000002000014c                usbDeviceDescriptorDFU
+ .data.u8_usbStringProduct
+                0x0000000020000154       0x14 build/usb_descriptor.o
+                0x0000000020000154                u8_usbStringProduct
+ .data.u8_usbStringAlt0
+                0x0000000020000168       0x80 build/usb_descriptor.o
+                0x0000000020000168                u8_usbStringAlt0
+ .data.u8_usbStringAlt1
+                0x00000000200001e8       0x6c build/usb_descriptor.o
+                0x00000000200001e8                u8_usbStringAlt1
+ .data.u8_usbStringAlt2
+                0x0000000020000254       0x6c build/usb_descriptor.o
+                0x0000000020000254                u8_usbStringAlt2
+ .data.usbConfigDescriptorDFU
+                0x00000000200002c0        0x8 build/usb_descriptor.o
+                0x00000000200002c0                usbConfigDescriptorDFU
+ .data.userAppEnd
+                0x00000000200002c8        0x4 build/dfu.o
+ .data.userAppAddr
+                0x00000000200002cc        0x4 build/dfu.o
+                0x00000000200002d0                . = ALIGN (0x4)
+                0x00000000200002d0                _edata = .
+
+.igot.plt       0x00000000200002d0        0x0 load address 0x0000000008001b1c
+ .igot.plt      0x0000000000000000        0x0 build/stm32_lib/c_only_startup.o
+
+.bss            0x00000000200002d0       0x44 load address 0x0000000008001b1c
+                0x00000000200002d0                . = ALIGN (0x4)
+                0x00000000200002d0                _sbss = .
+ *(.bss)
+ *(COMMON)
+ COMMON         0x00000000200002d0        0x8 build/usb.o
+                0x00000000200002d0                wTransferSize
+                0x00000000200002d4                wIstr
+                0x00000000200002d6                ResumeS
+ COMMON         0x00000000200002d8        0x1 build/dfu.o
+                0x00000000200002d8                code_copy_lock
+ *fill*         0x00000000200002d9        0x1 
+ COMMON         0x00000000200002da        0x4 build/usb_lib/usb_int.o
+                0x00000000200002da                SaveRState
+                0x00000000200002dc                SaveTState
+ *fill*         0x00000000200002de        0x2 
+ COMMON         0x00000000200002e0       0x32 build/usb_lib/usb_init.o
+                0x00000000200002e0                SaveState
+                0x00000000200002e4                pProperty
+                0x00000000200002e8                EPindex
+                0x00000000200002ec                Device_Info
+                0x0000000020000308                pUser_Standard_Requests
+                0x000000002000030c                pInformation
+                0x0000000020000310                wInterrupt_Mask
+ COMMON         0x0000000020000312        0x2 build/usb_lib/usb_core.o
+                0x0000000020000312                StatusInfo
+                0x0000000020000314                . = ALIGN (0x4)
+                0x0000000020000314                _ebss = .
+                0x0000000020000314                PROVIDE (end, _ebss)
+                0x0000000020000314                PROVIDE (_end, _ebss)
+
+.bss.bIntPackSOF
+                0x0000000020000314        0x1 load address 0x0000000008001b60
+ .bss.bIntPackSOF
+                0x0000000020000314        0x1 build/usb.o
+                0x0000000020000314                bIntPackSOF
+
+.bss.bDeviceState
+                0x0000000020000318        0x4 load address 0x0000000008001b64
+ .bss.bDeviceState
+                0x0000000020000318        0x4 build/usb.o
+                0x0000000020000318                bDeviceState
+
+.bss.recvBuffer
+                0x000000002000031c      0x800 load address 0x0000000008001b68
+ .bss.recvBuffer
+                0x000000002000031c      0x800 build/dfu.o
+
+.bss.uploadBlockLen
+                0x0000000020000b1c        0x2 load address 0x0000000008002368
+ .bss.uploadBlockLen
+                0x0000000020000b1c        0x2 build/dfu.o
+
+.bss.thisBlockLen
+                0x0000000020000b1e        0x2 load address 0x000000000800236a
+ .bss.thisBlockLen
+                0x0000000020000b1e        0x2 build/dfu.o
+
+.bss.userFirmwareLen
+                0x0000000020000b20        0x4 load address 0x000000000800236c
+ .bss.userFirmwareLen
+                0x0000000020000b20        0x4 build/dfu.o
+
+.bss.userUploadType
+                0x0000000020000b24        0x1 load address 0x0000000008002370
+ .bss.userUploadType
+                0x0000000020000b24        0x1 build/dfu.o
+                0x0000000020000b24                userUploadType
+
+.bss.dfuAppStatus
+                0x0000000020000b25        0x6 load address 0x0000000008002371
+ .bss.dfuAppStatus
+                0x0000000020000b25        0x6 build/dfu.o
+
+.bss.dfuBusy    0x0000000020000b2b        0x1 load address 0x0000000008002377
+ .bss.dfuBusy   0x0000000020000b2b        0x1 build/dfu.o
+                0x0000000020000b2b                dfuBusy
+
+.bss.Data_Mul_MaxPacketSize
+                0x0000000020000b2c        0x1 load address 0x0000000008002378
+ .bss.Data_Mul_MaxPacketSize
+                0x0000000020000b2c        0x1 build/usb_lib/usb_core.o
+                0x0000000020000b2c                Data_Mul_MaxPacketSize
+
+._usrstack      0x0000000020000b2d      0x103 load address 0x0000000008002379
+                0x0000000020000b30                . = ALIGN (0x4)
+ *fill*         0x0000000020000b2d        0x3 
+                0x0000000020000b30                _susrstack = .
+                0x0000000020000c30                . = (. + _Minimum_Stack_Size)
+ *fill*         0x0000000020000b30      0x100 
+                0x0000000020000c30                . = ALIGN (0x4)
+                0x0000000020000c30                _eusrstack = .
+
+DISCARD
+ libc.a(*)
+ libm.a(*)
+ libgcc.a(*)
+
+.stab
+ *(.stab)
+
+.stabstr
+ *(.stabstr)
+
+.stab.excl
+ *(.stab.excl)
+
+.stab.exclstr
+ *(.stab.exclstr)
+
+.stab.index
+ *(.stab.index)
+
+.stab.indexstr
+ *(.stab.indexstr)
+
+.comment        0x0000000000000000       0x80
+ *(.comment)
+ .comment       0x0000000000000000       0x80 build/usb.o
+                                         0x81 (size before relaxing)
+ .comment       0x0000000000000000       0x81 build/usb_callbacks.o
+ .comment       0x0000000000000000       0x81 build/usb_descriptor.o
+ .comment       0x0000000000000000       0x81 build/main.o
+ .comment       0x0000000000000000       0x81 build/hardware.o
+ .comment       0x0000000000000000       0x81 build/dfu.o
+ .comment       0x0000000000000000       0x81 build/usb_lib/usb_regs.o
+ .comment       0x0000000000000000       0x81 build/usb_lib/usb_int.o
+ .comment       0x0000000000000000       0x81 build/usb_lib/usb_init.o
+ .comment       0x0000000000000000       0x81 build/usb_lib/usb_core.o
+ .comment       0x0000000000000000       0x81 build/usb_lib/usb_mem.o
+
+.ARM.attributes
+                0x0000000000000000       0x2f
+ .ARM.attributes
+                0x0000000000000000       0x21 build/stm32_lib/c_only_startup.o
+ .ARM.attributes
+                0x0000000000000021       0x21 build/stm32_lib/cortexm3_macro.o
+ .ARM.attributes
+                0x0000000000000042       0x33 build/usb.o
+ .ARM.attributes
+                0x0000000000000075       0x33 build/usb_callbacks.o
+ .ARM.attributes
+                0x00000000000000a8       0x33 build/usb_descriptor.o
+ .ARM.attributes
+                0x00000000000000db       0x33 build/main.o
+ .ARM.attributes
+                0x000000000000010e       0x33 build/hardware.o
+ .ARM.attributes
+                0x0000000000000141       0x33 build/dfu.o
+ .ARM.attributes
+                0x0000000000000174       0x33 build/usb_lib/usb_regs.o
+ .ARM.attributes
+                0x00000000000001a7       0x33 build/usb_lib/usb_int.o
+ .ARM.attributes
+                0x00000000000001da       0x33 build/usb_lib/usb_init.o
+ .ARM.attributes
+                0x000000000000020d       0x33 build/usb_lib/usb_core.o
+ .ARM.attributes
+                0x0000000000000240       0x33 build/usb_lib/usb_mem.o
+
+.debug
+ *(.debug)
+
+.line
+ *(.line)
+
+.debug_srcinfo
+ *(.debug_srcinfo)
+
+.debug_sfnames
+ *(.debug_sfnames)
+
+.debug_aranges  0x0000000000000000      0x5e8
+ *(.debug_aranges)
+ .debug_aranges
+                0x0000000000000000       0x28 build/stm32_lib/c_only_startup.o
+ .debug_aranges
+                0x0000000000000028       0x20 build/stm32_lib/cortexm3_macro.o
+ .debug_aranges
+                0x0000000000000048      0x118 build/usb.o
+ .debug_aranges
+                0x0000000000000160       0x18 build/usb_descriptor.o
+ .debug_aranges
+                0x0000000000000178       0x20 build/main.o
+ .debug_aranges
+                0x0000000000000198       0xd8 build/hardware.o
+ .debug_aranges
+                0x0000000000000270       0x80 build/dfu.o
+ .debug_aranges
+                0x00000000000002f0      0x1f0 build/usb_lib/usb_regs.o
+ .debug_aranges
+                0x00000000000004e0       0x28 build/usb_lib/usb_int.o
+ .debug_aranges
+                0x0000000000000508       0x20 build/usb_lib/usb_init.o
+ .debug_aranges
+                0x0000000000000528       0x98 build/usb_lib/usb_core.o
+ .debug_aranges
+                0x00000000000005c0       0x28 build/usb_lib/usb_mem.o
+
+.debug_pubnames
+ *(.debug_pubnames)
+
+.debug_info     0x0000000000000000     0x458f
+ *(.debug_info .gnu.linkonce.wi.*)
+ .debug_info    0x0000000000000000       0x62 build/stm32_lib/c_only_startup.o
+ .debug_info    0x0000000000000062       0x68 build/stm32_lib/cortexm3_macro.o
+ .debug_info    0x00000000000000ca      0xd12 build/usb.o
+ .debug_info    0x0000000000000ddc      0x251 build/usb_descriptor.o
+ .debug_info    0x000000000000102d      0x255 build/main.o
+ .debug_info    0x0000000000001282      0xacb build/hardware.o
+ .debug_info    0x0000000000001d4d      0x685 build/dfu.o
+ .debug_info    0x00000000000023d2      0xc8c build/usb_lib/usb_regs.o
+ .debug_info    0x000000000000305e      0x1dc build/usb_lib/usb_int.o
+ .debug_info    0x000000000000323a      0x3fd build/usb_lib/usb_init.o
+ .debug_info    0x0000000000003637      0xde4 build/usb_lib/usb_core.o
+ .debug_info    0x000000000000441b      0x174 build/usb_lib/usb_mem.o
+
+.debug_abbrev   0x0000000000000000     0x13c0
+ *(.debug_abbrev)
+ .debug_abbrev  0x0000000000000000       0x12 build/stm32_lib/c_only_startup.o
+ .debug_abbrev  0x0000000000000012       0x14 build/stm32_lib/cortexm3_macro.o
+ .debug_abbrev  0x0000000000000026      0x3cb build/usb.o
+ .debug_abbrev  0x00000000000003f1       0x8a build/usb_descriptor.o
+ .debug_abbrev  0x000000000000047b      0x144 build/main.o
+ .debug_abbrev  0x00000000000005bf      0x31a build/hardware.o
+ .debug_abbrev  0x00000000000008d9      0x2e9 build/dfu.o
+ .debug_abbrev  0x0000000000000bc2      0x1f5 build/usb_lib/usb_regs.o
+ .debug_abbrev  0x0000000000000db7       0xda build/usb_lib/usb_int.o
+ .debug_abbrev  0x0000000000000e91      0x103 build/usb_lib/usb_init.o
+ .debug_abbrev  0x0000000000000f94      0x3a1 build/usb_lib/usb_core.o
+ .debug_abbrev  0x0000000000001335       0x8b build/usb_lib/usb_mem.o
+
+.debug_line     0x0000000000000000     0x148e
+ *(.debug_line)
+ .debug_line    0x0000000000000000       0x75 build/stm32_lib/c_only_startup.o
+ .debug_line    0x0000000000000075       0xa6 build/stm32_lib/cortexm3_macro.o
+ .debug_line    0x000000000000011b      0x389 build/usb.o
+ .debug_line    0x00000000000004a4        0x0 build/usb_callbacks.o
+ .debug_line    0x00000000000004a4       0x72 build/usb_descriptor.o
+ .debug_line    0x0000000000000516       0x97 build/main.o
+ .debug_line    0x00000000000005ad      0x2de build/hardware.o
+ .debug_line    0x000000000000088b      0x232 build/dfu.o
+ .debug_line    0x0000000000000abd      0x4cb build/usb_lib/usb_regs.o
+ .debug_line    0x0000000000000f88       0xb8 build/usb_lib/usb_int.o
+ .debug_line    0x0000000000001040       0x67 build/usb_lib/usb_init.o
+ .debug_line    0x00000000000010a7      0x354 build/usb_lib/usb_core.o
+ .debug_line    0x00000000000013fb       0x93 build/usb_lib/usb_mem.o
+
+.debug_frame    0x0000000000000000      0xc70
+ *(.debug_frame)
+ .debug_frame   0x0000000000000000      0x298 build/usb.o
+ .debug_frame   0x0000000000000298       0x2c build/main.o
+ .debug_frame   0x00000000000002c4      0x214 build/hardware.o
+ .debug_frame   0x00000000000004d8      0x114 build/dfu.o
+ .debug_frame   0x00000000000005ec      0x3d8 build/usb_lib/usb_regs.o
+ .debug_frame   0x00000000000009c4       0x4c build/usb_lib/usb_int.o
+ .debug_frame   0x0000000000000a10       0x2c build/usb_lib/usb_init.o
+ .debug_frame   0x0000000000000a3c      0x1ec build/usb_lib/usb_core.o
+ .debug_frame   0x0000000000000c28       0x48 build/usb_lib/usb_mem.o
+
+.debug_str      0x0000000000000000     0x180e
+ *(.debug_str)
+ .debug_str     0x0000000000000000      0x96e build/usb.o
+                                        0xaee (size before relaxing)
+ .debug_str     0x000000000000096e        0x0 build/usb_callbacks.o
+ .debug_str     0x000000000000096e       0xc1 build/usb_descriptor.o
+                                        0x2b2 (size before relaxing)
+ .debug_str     0x0000000000000a2f       0xd7 build/main.o
+                                        0x21a (size before relaxing)
+ .debug_str     0x0000000000000b06      0x2c9 build/hardware.o
+                                        0x569 (size before relaxing)
+ .debug_str     0x0000000000000dcf      0x1ee build/dfu.o
+                                        0x52c (size before relaxing)
+ .debug_str     0x0000000000000fbd      0x3ab build/usb_lib/usb_regs.o
+                                        0x505 (size before relaxing)
+ .debug_str     0x0000000000001368       0x66 build/usb_lib/usb_int.o
+                                        0x1ad (size before relaxing)
+ .debug_str     0x00000000000013ce       0x41 build/usb_lib/usb_init.o
+                                        0x4df (size before relaxing)
+ .debug_str     0x000000000000140f      0x3bd build/usb_lib/usb_core.o
+                                        0xa77 (size before relaxing)
+ .debug_str     0x00000000000017cc       0x42 build/usb_lib/usb_mem.o
+                                        0x17d (size before relaxing)
+
+.debug_loc      0x0000000000000000     0x201e
+ *(.debug_loc)
+ .debug_loc     0x0000000000000000      0x246 build/usb.o
+ .debug_loc     0x0000000000000246       0x40 build/main.o
+ .debug_loc     0x0000000000000286      0x4bc build/hardware.o
+ .debug_loc     0x0000000000000742      0x142 build/dfu.o
+ .debug_loc     0x0000000000000884      0xbab build/usb_lib/usb_regs.o
+ .debug_loc     0x000000000000142f      0x1a4 build/usb_lib/usb_int.o
+ .debug_loc     0x00000000000015d3      0x7b8 build/usb_lib/usb_core.o
+ .debug_loc     0x0000000000001d8b      0x293 build/usb_lib/usb_mem.o
+
+.debug_macinfo
+ *(.debug_macinfo)
+
+.debug_weaknames
+ *(.debug_weaknames)
+
+.debug_funcnames
+ *(.debug_funcnames)
+
+.debug_typenames
+ *(.debug_typenames)
+
+.debug_varnames
+ *(.debug_varnames)
+OUTPUT(build/maple_boot.elf elf32-littlearm)
+
+.debug_ranges   0x0000000000000000      0x618
+ .debug_ranges  0x0000000000000000       0x20 build/stm32_lib/c_only_startup.o
+ .debug_ranges  0x0000000000000020      0x108 build/usb.o
+ .debug_ranges  0x0000000000000128       0x10 build/main.o
+ .debug_ranges  0x0000000000000138       0xe0 build/hardware.o
+ .debug_ranges  0x0000000000000218       0x70 build/dfu.o
+ .debug_ranges  0x0000000000000288      0x290 build/usb_lib/usb_regs.o
+ .debug_ranges  0x0000000000000518       0x18 build/usb_lib/usb_int.o
+ .debug_ranges  0x0000000000000530       0x10 build/usb_lib/usb_init.o
+ .debug_ranges  0x0000000000000540       0xc0 build/usb_lib/usb_core.o
+ .debug_ranges  0x0000000000000600       0x18 build/usb_lib/usb_mem.o
+
+Cross Reference Table
+
+Symbol                                            File
+ADC1_2_IRQHandler                                 build/stm32_lib/c_only_startup.o
+BusFault_Handler                                  build/stm32_lib/c_only_startup.o
+ByteSwap                                          build/usb_lib/usb_regs.o
+CAN1_RX1_IRQHandler                               build/stm32_lib/c_only_startup.o
+CAN1_SCE_IRQHandler                               build/stm32_lib/c_only_startup.o
+CTR_HP                                            build/usb_lib/usb_int.o
+CTR_LP                                            build/usb_lib/usb_int.o
+                                                  build/usb.o
+ClearDTOG_RX                                      build/usb_lib/usb_regs.o
+                                                  build/usb_lib/usb_core.o
+ClearDTOG_TX                                      build/usb_lib/usb_regs.o
+                                                  build/usb_lib/usb_core.o
+ClearEPDoubleBuff                                 build/usb_lib/usb_regs.o
+ClearEP_CTR_RX                                    build/usb_lib/usb_regs.o
+ClearEP_CTR_TX                                    build/usb_lib/usb_regs.o
+ClearEP_KIND                                      build/usb_lib/usb_regs.o
+Clear_Status_Out                                  build/usb_lib/usb_regs.o
+                                                  build/usb.o
+DMA1_Channel1_IRQHandler                          build/stm32_lib/c_only_startup.o
+DMA1_Channel2_IRQHandler                          build/stm32_lib/c_only_startup.o
+DMA1_Channel3_IRQHandler                          build/stm32_lib/c_only_startup.o
+DMA1_Channel4_IRQHandler                          build/stm32_lib/c_only_startup.o
+DMA1_Channel5_IRQHandler                          build/stm32_lib/c_only_startup.o
+DMA1_Channel6_IRQHandler                          build/stm32_lib/c_only_startup.o
+DMA1_Channel7_IRQHandler                          build/stm32_lib/c_only_startup.o
+Data_Mul_MaxPacketSize                            build/usb_lib/usb_core.o
+DebugMon_Handler                                  build/stm32_lib/c_only_startup.o
+Default_Handler                                   build/stm32_lib/c_only_startup.o
+Device_Info                                       build/usb_lib/usb_init.o
+Device_Property                                   build/usb.o
+                                                  build/usb_lib/usb_core.o
+                                                  build/usb_lib/usb_init.o
+Device_Table                                      build/usb.o
+                                                  build/usb_lib/usb_core.o
+EPindex                                           build/usb_lib/usb_init.o
+                                                  build/usb_lib/usb_int.o
+EXTI0_IRQHandler                                  build/stm32_lib/c_only_startup.o
+EXTI15_10_IRQHandler                              build/stm32_lib/c_only_startup.o
+EXTI1_IRQHandler                                  build/stm32_lib/c_only_startup.o
+EXTI2_IRQHandler                                  build/stm32_lib/c_only_startup.o
+EXTI3_IRQHandler                                  build/stm32_lib/c_only_startup.o
+EXTI4_IRQHandler                                  build/stm32_lib/c_only_startup.o
+EXTI9_5_IRQHandler                                build/stm32_lib/c_only_startup.o
+FLASH_IRQHandler                                  build/stm32_lib/c_only_startup.o
+FreeUserBuffer                                    build/usb_lib/usb_regs.o
+GetBTABLE                                         build/usb_lib/usb_regs.o
+GetCNTR                                           build/usb_lib/usb_regs.o
+GetDADDR                                          build/usb_lib/usb_regs.o
+GetENDPOINT                                       build/usb_lib/usb_regs.o
+GetEPAddress                                      build/usb_lib/usb_regs.o
+GetEPDblBuf0Addr                                  build/usb_lib/usb_regs.o
+GetEPDblBuf0Count                                 build/usb_lib/usb_regs.o
+GetEPDblBuf1Addr                                  build/usb_lib/usb_regs.o
+GetEPDblBuf1Count                                 build/usb_lib/usb_regs.o
+GetEPDblBufDir                                    build/usb_lib/usb_regs.o
+GetEPRxAddr                                       build/usb_lib/usb_regs.o
+                                                  build/usb_lib/usb_core.o
+GetEPRxCount                                      build/usb_lib/usb_regs.o
+GetEPRxStatus                                     build/usb_lib/usb_regs.o
+GetEPTxAddr                                       build/usb_lib/usb_regs.o
+                                                  build/usb_lib/usb_core.o
+GetEPTxCount                                      build/usb_lib/usb_regs.o
+GetEPTxStatus                                     build/usb_lib/usb_regs.o
+GetEPType                                         build/usb_lib/usb_regs.o
+GetFNR                                            build/usb_lib/usb_regs.o
+GetISTR                                           build/usb_lib/usb_regs.o
+GetRxStallStatus                                  build/usb_lib/usb_regs.o
+GetTxStallStatus                                  build/usb_lib/usb_regs.o
+HardFault_Handler                                 build/stm32_lib/c_only_startup.o
+I2C1_ER_IRQHandler                                build/stm32_lib/c_only_startup.o
+I2C1_EV_IRQHandler                                build/stm32_lib/c_only_startup.o
+I2C2_ER_IRQHandler                                build/stm32_lib/c_only_startup.o
+I2C2_EV_IRQHandler                                build/stm32_lib/c_only_startup.o
+In0_Process                                       build/usb_lib/usb_core.o
+                                                  build/usb_lib/usb_int.o
+MemManage_Handler                                 build/stm32_lib/c_only_startup.o
+NMI_Handler                                       build/stm32_lib/c_only_startup.o
+NOP_Process                                       build/usb_lib/usb_core.o
+Out0_Process                                      build/usb_lib/usb_core.o
+                                                  build/usb_lib/usb_int.o
+PMAToUserBufferCopy                               build/usb_lib/usb_mem.o
+                                                  build/usb_lib/usb_core.o
+PVD_IRQHandler                                    build/stm32_lib/c_only_startup.o
+PendSV_Handler                                    build/stm32_lib/c_only_startup.o
+Post0_Process                                     build/usb_lib/usb_core.o
+RCC_IRQHandler                                    build/stm32_lib/c_only_startup.o
+RTCAlarm_IRQHandler                               build/stm32_lib/c_only_startup.o
+RTC_IRQHandler                                    build/stm32_lib/c_only_startup.o
+Reset_Handler                                     build/stm32_lib/c_only_startup.o
+ResumeS                                           build/usb.o
+SPI1_IRQHandler                                   build/stm32_lib/c_only_startup.o
+SPI2_IRQHandler                                   build/stm32_lib/c_only_startup.o
+SVC_Handler                                       build/stm32_lib/c_only_startup.o
+SaveRState                                        build/usb_lib/usb_core.o
+                                                  build/usb_lib/usb_int.o
+SaveState                                         build/usb_lib/usb_init.o
+SaveTState                                        build/usb_lib/usb_core.o
+                                                  build/usb_lib/usb_int.o
+SetBTABLE                                         build/usb_lib/usb_regs.o
+SetCNTR                                           build/usb_lib/usb_regs.o
+SetDADDR                                          build/usb_lib/usb_regs.o
+SetDeviceAddress                                  build/usb_lib/usb_core.o
+                                                  build/usb.o
+SetDouBleBuffEPStall                              build/usb_lib/usb_regs.o
+SetENDPOINT                                       build/usb_lib/usb_regs.o
+SetEPAddress                                      build/usb_lib/usb_regs.o
+SetEPCountRxReg                                   build/usb_lib/usb_regs.o
+SetEPDblBuf0Addr                                  build/usb_lib/usb_regs.o
+SetEPDblBuf0Count                                 build/usb_lib/usb_regs.o
+SetEPDblBuf1Addr                                  build/usb_lib/usb_regs.o
+SetEPDblBuf1Count                                 build/usb_lib/usb_regs.o
+SetEPDblBuffAddr                                  build/usb_lib/usb_regs.o
+SetEPDblBuffCount                                 build/usb_lib/usb_regs.o
+SetEPDoubleBuff                                   build/usb_lib/usb_regs.o
+SetEPRxAddr                                       build/usb_lib/usb_regs.o
+SetEPRxCount                                      build/usb_lib/usb_regs.o
+                                                  build/usb_lib/usb_core.o
+                                                  build/usb.o
+SetEPRxStatus                                     build/usb_lib/usb_regs.o
+SetEPRxValid                                      build/usb_lib/usb_regs.o
+                                                  build/usb.o
+SetEPTxAddr                                       build/usb_lib/usb_regs.o
+SetEPTxCount                                      build/usb_lib/usb_regs.o
+                                                  build/usb_lib/usb_core.o
+SetEPTxStatus                                     build/usb_lib/usb_regs.o
+                                                  build/usb_lib/usb_core.o
+SetEPTxValid                                      build/usb_lib/usb_regs.o
+SetEPType                                         build/usb_lib/usb_regs.o
+SetEP_KIND                                        build/usb_lib/usb_regs.o
+SetISTR                                           build/usb_lib/usb_regs.o
+Set_Status_Out                                    build/usb_lib/usb_regs.o
+Setup0_Process                                    build/usb_lib/usb_core.o
+                                                  build/usb_lib/usb_int.o
+Standard_ClearFeature                             build/usb_lib/usb_core.o
+Standard_GetConfiguration                         build/usb_lib/usb_core.o
+Standard_GetDescriptorData                        build/usb_lib/usb_core.o
+                                                  build/usb.o
+Standard_GetInterface                             build/usb_lib/usb_core.o
+Standard_GetStatus                                build/usb_lib/usb_core.o
+Standard_SetConfiguration                         build/usb_lib/usb_core.o
+Standard_SetDeviceFeature                         build/usb_lib/usb_core.o
+Standard_SetEndPointFeature                       build/usb_lib/usb_core.o
+Standard_SetInterface                             build/usb_lib/usb_core.o
+StatusInfo                                        build/usb_lib/usb_core.o
+SysTick_Handler                                   build/stm32_lib/c_only_startup.o
+SystemInit_ExtMemCtl_Dummy                        build/stm32_lib/c_only_startup.o
+TAMPER_IRQHandler                                 build/stm32_lib/c_only_startup.o
+TIM1_BRK_IRQHandler                               build/stm32_lib/c_only_startup.o
+TIM1_CC_IRQHandler                                build/stm32_lib/c_only_startup.o
+TIM1_TRG_COM_IRQHandler                           build/stm32_lib/c_only_startup.o
+TIM1_UP_IRQHandler                                build/stm32_lib/c_only_startup.o
+TIM2_IRQHandler                                   build/stm32_lib/c_only_startup.o
+TIM3_IRQHandler                                   build/stm32_lib/c_only_startup.o
+TIM4_IRQHandler                                   build/stm32_lib/c_only_startup.o
+ToWord                                            build/usb_lib/usb_regs.o
+ToggleDTOG_RX                                     build/usb_lib/usb_regs.o
+ToggleDTOG_TX                                     build/usb_lib/usb_regs.o
+USART1_IRQHandler                                 build/stm32_lib/c_only_startup.o
+USART2_IRQHandler                                 build/stm32_lib/c_only_startup.o
+USART3_IRQHandler                                 build/stm32_lib/c_only_startup.o
+USBWakeUp_IRQHandler                              build/stm32_lib/c_only_startup.o
+USB_HP_CAN1_TX_IRQHandler                         build/stm32_lib/c_only_startup.o
+USB_Init                                          build/usb_lib/usb_init.o
+                                                  build/usb.o
+USB_LP_CAN1_RX0_IRQHandler                        build/usb.o
+                                                  build/stm32_lib/c_only_startup.o
+UsageFault_Handler                                build/stm32_lib/c_only_startup.o
+UserToPMABufferCopy                               build/usb_lib/usb_mem.o
+                                                  build/usb_lib/usb_core.o
+User_Standard_Requests                            build/usb.o
+                                                  build/usb_lib/usb_init.o
+WWDG_IRQHandler                                   build/stm32_lib/c_only_startup.o
+__BASEPRICONFIG                                   build/stm32_lib/cortexm3_macro.o
+__DMB                                             build/stm32_lib/cortexm3_macro.o
+__DSB                                             build/stm32_lib/cortexm3_macro.o
+__GetBASEPRI                                      build/stm32_lib/cortexm3_macro.o
+__ISB                                             build/stm32_lib/cortexm3_macro.o
+__MRS_CONTROL                                     build/stm32_lib/cortexm3_macro.o
+__MRS_MSP                                         build/stm32_lib/cortexm3_macro.o
+__MRS_PSP                                         build/stm32_lib/cortexm3_macro.o
+__MSR_CONTROL                                     build/stm32_lib/cortexm3_macro.o
+__MSR_MSP                                         build/stm32_lib/cortexm3_macro.o
+__MSR_PSP                                         build/stm32_lib/cortexm3_macro.o
+__READ_FAULTMASK                                  build/stm32_lib/cortexm3_macro.o
+__READ_PRIMASK                                    build/stm32_lib/cortexm3_macro.o
+__RESETFAULTMASK                                  build/stm32_lib/cortexm3_macro.o
+__RESETPRIMASK                                    build/stm32_lib/cortexm3_macro.o
+__REV_HalfWord                                    build/stm32_lib/cortexm3_macro.o
+__REV_Word                                        build/stm32_lib/cortexm3_macro.o
+__SETFAULTMASK                                    build/stm32_lib/cortexm3_macro.o
+__SETPRIMASK                                      build/stm32_lib/cortexm3_macro.o
+__SEV                                             build/stm32_lib/cortexm3_macro.o
+__SVC                                             build/stm32_lib/cortexm3_macro.o
+__WFE                                             build/stm32_lib/cortexm3_macro.o
+__WFI                                             build/stm32_lib/cortexm3_macro.o
+_ebss                                             build/stm32_lib/c_only_startup.o
+_edata                                            build/stm32_lib/c_only_startup.o
+_estack                                           build/stm32_lib/c_only_startup.o
+_sbss                                             build/stm32_lib/c_only_startup.o
+_sdata                                            build/stm32_lib/c_only_startup.o
+_sidata                                           build/stm32_lib/c_only_startup.o
+bDeviceState                                      build/usb.o
+bIntPackSOF                                       build/usb.o
+bkp10Write                                        build/hardware.o
+                                                  build/dfu.o
+checkAndClearBootloaderFlag                       build/hardware.o
+                                                  build/main.o
+checkUserCode                                     build/hardware.o
+                                                  build/main.o
+code_copy_lock                                    build/dfu.o
+crMask                                            build/hardware.o
+                                                  build/usb.o
+dfuBusy                                           build/dfu.o
+dfuCopyBufferToExec                               build/dfu.o
+dfuCopyDNLOAD                                     build/dfu.o
+                                                  build/usb.o
+dfuCopyState                                      build/dfu.o
+                                                  build/usb.o
+dfuCopyStatus                                     build/dfu.o
+                                                  build/usb.o
+dfuCopyUPLOAD                                     build/dfu.o
+                                                  build/usb.o
+dfuFinishUpload                                   build/dfu.o
+                                                  build/main.o
+dfuGetState                                       build/dfu.o
+dfuInit                                           build/dfu.o
+                                                  build/usb.o
+dfuSetState                                       build/dfu.o
+dfuUpdateByRequest                                build/dfu.o
+                                                  build/usb.o
+dfuUpdateByReset                                  build/dfu.o
+                                                  build/usb.o
+dfuUpdateByTimeout                                build/dfu.o
+dfuUploadStarted                                  build/dfu.o
+                                                  build/main.o
+flashErasePage                                    build/hardware.o
+                                                  build/dfu.o
+flashErasePages                                   build/hardware.o
+flashLock                                         build/hardware.o
+                                                  build/dfu.o
+flashUnlock                                       build/hardware.o
+                                                  build/dfu.o
+flashWriteWord                                    build/hardware.o
+                                                  build/dfu.o
+g_pfnVectors                                      build/stm32_lib/c_only_startup.o
+getFlashEnd                                       build/hardware.o
+                                                  build/dfu.o
+getFlashPageSize                                  build/hardware.o
+                                                  build/usb.o
+gpio_write_bit                                    build/hardware.o
+                                                  build/usb.o
+jumpToUser                                        build/hardware.o
+                                                  build/main.o
+main                                              build/main.o
+                                                  build/stm32_lib/c_only_startup.o
+nothingProc                                       build/usb.o
+nvicDisableInterrupts                             build/hardware.o
+                                                  build/dfu.o
+nvicInit                                          build/hardware.o
+                                                  build/usb.o
+pEpInt_IN                                         build/usb.o
+                                                  build/usb_lib/usb_int.o
+pEpInt_OUT                                        build/usb.o
+                                                  build/usb_lib/usb_int.o
+pInformation                                      build/usb_lib/usb_core.o
+                                                  build/usb_lib/usb_init.o
+                                                  build/dfu.o
+                                                  build/usb.o
+pProperty                                         build/usb_lib/usb_core.o
+                                                  build/usb_lib/usb_init.o
+                                                  build/usb.o
+pUser_Standard_Requests                           build/usb_lib/usb_core.o
+                                                  build/usb_lib/usb_init.o
+readButtonState                                   build/hardware.o
+                                                  build/main.o
+readPin                                           build/hardware.o
+setMspAndJump                                     build/hardware.o
+setupCLK                                          build/hardware.o
+                                                  build/main.o
+setupFLASH                                        build/hardware.o
+                                                  build/dfu.o
+                                                  build/main.o
+setupLEDAndButton                                 build/hardware.o
+                                                  build/main.o
+setupUSB                                          build/usb.o
+                                                  build/main.o
+strobePin                                         build/hardware.o
+systemHardReset                                   build/hardware.o
+                                                  build/dfu.o
+                                                  build/main.o
+systemReset                                       build/hardware.o
+                                                  build/main.o
+u8_usbConfigDescriptorDFU                         build/usb_descriptor.o
+                                                  build/usb.o
+u8_usbDeviceDescriptorDFU                         build/usb_descriptor.o
+u8_usbFunctionalDescriptor                        build/usb_descriptor.o
+                                                  build/usb.o
+u8_usbStringAlt0                                  build/usb_descriptor.o
+u8_usbStringAlt1                                  build/usb_descriptor.o
+u8_usbStringAlt2                                  build/usb_descriptor.o
+u8_usbStringInterface                             build/usb_descriptor.o
+u8_usbStringLangId                                build/usb_descriptor.o
+u8_usbStringProduct                               build/usb_descriptor.o
+u8_usbStringSerial                                build/usb_descriptor.o
+u8_usbStringVendor                                build/usb_descriptor.o
+usbAppInit                                        build/usb.o
+usbClearFeature                                   build/usb.o
+usbConfigDescriptorDFU                            build/usb_descriptor.o
+                                                  build/usb.o
+usbDataSetup                                      build/usb.o
+usbDeviceDescriptorDFU                            build/usb_descriptor.o
+                                                  build/usb.o
+usbDsbBus                                         build/usb.o
+                                                  build/hardware.o
+usbDsbISR                                         build/usb.o
+                                                  build/hardware.o
+usbEnbISR                                         build/usb.o
+                                                  build/dfu.o
+usbFunctionalDescriptor                           build/usb_descriptor.o
+                                                  build/usb.o
+usbGetConfigDescriptor                            build/usb.o
+usbGetConfiguration                               build/usb.o
+usbGetDeviceDescriptor                            build/usb.o
+usbGetFunctionalDescriptor                        build/usb.o
+usbGetInterface                                   build/usb.o
+usbGetInterfaceSetting                            build/usb.o
+usbGetStatus                                      build/usb.o
+usbGetStringDescriptor                            build/usb.o
+usbInit                                           build/usb.o
+usbNoDataSetup                                    build/usb.o
+usbPowerOff                                       build/usb.o
+usbPowerOn                                        build/usb.o
+usbReset                                          build/usb.o
+usbResume                                         build/usb.o
+usbResumeInit                                     build/usb.o
+usbSetConfiguration                               build/usb.o
+usbSetDeviceAddress                               build/usb.o
+usbSetDeviceFeature                               build/usb.o
+usbSetEndpointFeature                             build/usb.o
+usbSetInterface                                   build/usb.o
+usbStatusIn                                       build/usb.o
+usbStatusOut                                      build/usb.o
+usbStringDescriptor                               build/usb_descriptor.o
+                                                  build/usb.o
+usbSuspend                                        build/usb.o
+userUploadType                                    build/dfu.o
+wInterrupt_Mask                                   build/usb_lib/usb_init.o
+                                                  build/usb.o
+wIstr                                             build/usb_lib/usb_int.o
+                                                  build/usb.o
+wTransferSize                                     build/dfu.o
+                                                  build/hardware.o
+                                                  build/main.o
+                                                  build/usb_descriptor.o
+                                                  build/usb.o

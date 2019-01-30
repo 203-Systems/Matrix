@@ -1,0 +1,169 @@
+Added Component: Designator=RET6(STM-LQFP64_L)
+Add component. Clean all parameters for all variants
+Added Pin To Net: NetName=GND Pin=C13-1
+Added Pin To Net: NetName=+3.3 Pin=C13-2
+Added Pin To Net: NetName=VBAT Pin=RET6-1
+Added Pin To Net: NetName=PC13 Pin=RET6-2
+Added Pin To Net: NetName=PC14 Pin=RET6-3
+Added Pin To Net: NetName=PC15 Pin=RET6-4
+Added Pin To Net: NetName=OSCIN Pin=RET6-5
+Added Pin To Net: NetName=OSCOUT Pin=RET6-6
+Added Pin To Net: NetName=RESET Pin=RET6-7
+Added Pin To Net: NetName=GND Pin=RET6-12
+Added Pin To Net: NetName=+3.3 Pin=RET6-13
+Added Pin To Net: NetName=Analog0 Pin=RET6-14
+Added Pin To Net: NetName=Analog1 Pin=RET6-15
+Added Pin To Net: NetName=Analog2 Pin=RET6-16
+Added Pin To Net: NetName=Analog3 Pin=RET6-17
+Added Pin To Net: NetName=GND Pin=RET6-18
+Added Pin To Net: NetName=+3.3 Pin=RET6-19
+Added Pin To Net: NetName=Analog4 Pin=RET6-20
+Added Pin To Net: NetName=Analog5 Pin=RET6-21
+Added Pin To Net: NetName=Analog6 Pin=RET6-22
+Added Pin To Net: NetName=Analog7 Pin=RET6-23
+Added Pin To Net: NetName=Analog8 Pin=RET6-24
+Added Pin To Net: NetName=Analog9 Pin=RET6-25
+Added Pin To Net: NetName=GND Pin=RET6-28
+Added Pin To Net: NetName=EXTTX Pin=RET6-29
+Added Pin To Net: NetName=EXTRX Pin=RET6-30
+Added Pin To Net: NetName=GND Pin=RET6-31
+Added Pin To Net: NetName=+3.3 Pin=RET6-32
+Added Pin To Net: NetName=SBTX Pin=RET6-42
+Added Pin To Net: NetName=SBRX Pin=RET6-43
+Added Pin To Net: NetName=MCUUSB- Pin=RET6-44
+Added Pin To Net: NetName=MCUUSB+ Pin=RET6-45
+Added Pin To Net: NetName=SWIO Pin=RET6-46
+Added Pin To Net: NetName=GND Pin=RET6-47
+Added Pin To Net: NetName=+3.3 Pin=RET6-48
+Added Pin To Net: NetName=SWCLK Pin=RET6-49
+Added Pin To Net: NetName=CS1 Pin=RET6-50
+Added Pin To Net: NetName=SCK Pin=RET6-51
+Added Pin To Net: NetName=MISO Pin=RET6-56
+Added Pin To Net: NetName=MOSI Pin=RET6-57
+Added Pin To Net: NetName=PB6 Pin=RET6-58
+Added Pin To Net: NetName=PB7 Pin=RET6-59
+Added Pin To Net: NetName=BOOT0 Pin=RET6-60
+Added Pin To Net: NetName=SCL Pin=RET6-61
+Added Pin To Net: NetName=SDA Pin=RET6-62
+Added Pin To Net: NetName=GND Pin=RET6-63
+Added Pin To Net: NetName=+3.3 Pin=RET6-64
+Added Pin To Net: NetName=Analog10 Pin=RET6-26
+Added Net: Name=Analog10
+Added Pin To Net: NetName=Analog11 Pin=RET6-27
+Added Net: Name=Analog11
+Added Pin To Net: NetName=Analog12 Pin=RET6-8
+Added Net: Name=Analog12
+Added Pin To Net: NetName=Analog13 Pin=RET6-9
+Added Net: Name=Analog13
+Added Pin To Net: NetName=Analog14 Pin=RET6-10
+Added Net: Name=Analog14
+Added Pin To Net: NetName=Analog15 Pin=RET6-11
+Added Net: Name=Analog15
+Added Pin To Net: NetName=KeyOutClock Pin=RET6-35
+Added Net: Name=KeyOutClock
+Added Pin To Net: NetName=PA8 Pin=RET6-41
+Added Net: Name=PA8
+Added Pin To Net: NetName=PC7 Pin=RET6-38
+Added Net: Name=PC7
+Added Pin To Net: NetName=PC8 Pin=RET6-39
+Added Net: Name=PC8
+Added Pin To Net: NetName=PC9 Pin=RET6-40
+Added Net: Name=PC9
+Added Pin To Net: NetName=RX4 Pin=RET6-53
+Added Net: Name=RX4
+Added Pin To Net: NetName=RX5 Pin=RET6-55
+Added Net: Name=RX5
+Added Pin To Net: NetName=TX4 Pin=RET6-52
+Added Net: Name=TX4
+Added Pin To Net: NetName=TX5 Pin=RET6-54
+Added Net: Name=TX5
+Added Member To Class: ClassName=led Member=Component C1 Cap Semi
+Added Member To Class: ClassName=MCU Member=Component C1 System
+Added Member To Class: ClassName=MCU Member=Component C1 CJA1117
+Added Member To Class: ClassName=led Member=Component C3 Cap Semi
+Added Member To Class: ClassName=MCU Member=Component C3 System
+Added Member To Class: ClassName=MCU Member=Component C5 System
+Added Member To Class: ClassName=led Member=Component C6 Cap Semi
+Added Member To Class: ClassName=MCU Member=Component C6 System
+Added Member To Class: ClassName=led Member=Component C7 Cap Semi
+Added Member To Class: ClassName=MCU Member=Component C7 System
+Added Member To Class: ClassName=led Member=Component C8 Cap Semi
+Added Member To Class: ClassName=MCU Member=Component C8 System
+Added Member To Class: ClassName=MCU Member=Component C10 System
+Added Member To Class: ClassName=MCU Member=Component C12 Cap Pol1
+Added Member To Class: ClassName=MCU Member=Component C13 System
+Added Member To Class: ClassName=MCU Member=Component D1 CESD5V0D3
+Added Member To Class: ClassName=MCU Member=Component D2 CESD3V3D3
+Added Member To Class: ClassName=matrixkeypad Member=Component D13 1N4148
+Added Member To Class: ClassName=MCU Member=Component FN System
+Added Member To Class: ClassName=MCU Member=Component PPTC Fuse 1
+Added Member To Class: ClassName=matrixkeypad Member=Component R5 res
+Added Member To Class: ClassName=MCU Member=Component R5 System
+Added Member To Class: ClassName=MCU Member=Component R6 System
+Added Member To Class: ClassName=MCU Member=Component R7 System
+Added Member To Class: ClassName=MCU Member=Component RET6
+Added Member To Class: ClassName=matrixkeypad Member=Component SW1 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW2 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW3 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW4 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW5 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW6 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW7 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW8 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW9 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW10 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW11 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW12 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW13 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW14 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW15 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW16 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW17 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW18 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW19 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW20 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW21 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW22 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW23 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW24 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW25 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW26 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW27 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW28 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW29 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW30 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW31 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW32 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW33 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW34 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW35 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW36 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW37 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW38 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW39 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW40 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW41 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW42 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW43 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW44 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW45 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW46 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW47 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW48 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW49 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW50 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW51 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW52 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW53 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW54 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW55 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW56 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW57 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW58 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW59 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW60 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW61 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW62 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW63 
+Added Member To Class: ClassName=matrixkeypad Member=Component SW64 
+Added Member To Class: ClassName=MCU Member=Component T1 BSS138
