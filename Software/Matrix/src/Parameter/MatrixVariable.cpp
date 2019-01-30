@@ -1,4 +1,4 @@
-#include "../parameter/MatrixVariable.h"
+#include "../Parameter/MatrixVariable.h"
 
 //DeviceInfo
 extern u8 device_id = 0; //0~255 0 for off

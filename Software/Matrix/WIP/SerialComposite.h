@@ -3,9 +3,9 @@
 
 #include <Arduino.h>
 #include "../protocol/M2P.h"
-#include "../parameter/MatrixVariable.h"
-#include "../parameter/MatrixParameter.h"
-#include "../core/MatrixSystem.h"
+#include "../Parameter/MatrixVariable.h"
+#include "../Parameter/MatrixParameter.h"
+#include "../Core/MatrixSystem.h"
 #include <USBComposite.h>
 
 enum SERIALS { USBCDC, USBSB , SERIAL2, MATRIXMOD };

@@ -2,7 +2,7 @@
 #define MATRIX_VARIABLE
 
 #include <Arduino.h>
-#include "../parameter/MatrixParameter.h"
+#include "../Parameter/MatrixParameter.h"
 
 //DeviceInfo
 extern u8 device_id; //0~255 0 for off

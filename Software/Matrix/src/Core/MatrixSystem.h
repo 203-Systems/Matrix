@@ -8,9 +8,9 @@
 #include <USBComposite.h>
 #include <USBMIDI.h>
 #include <FastLED.h>
-#include "../core/USBmidi.h"
-#include "../parameter/MatrixVariable.h"
-#include "../parameter/MatrixParameter.h"
+#include "../Protocol/USBmidi.h"
+#include "../Parameter/MatrixVariable.h"
+#include "../Parameter/MatrixParameter.h"
 
 struct XY
 {

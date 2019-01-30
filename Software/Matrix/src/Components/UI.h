@@ -2,13 +2,13 @@
 #define UI_H
 
 #include "Arduino.h"
-#include "../parameter/MatrixVariable.h"
-#include "../parameter/MatrixParameter.h"
-#include "../core/MatrixSystem.h"
-#include "../core/USBmidi.h"
-#include "../core/KeyPad.h"
-#include "../core/LED.h"
-#include "../core/Timer.h"
+#include "../Parameter/MatrixVariable.h"
+#include "../Parameter/MatrixParameter.h"
+#include "../Core/MatrixSystem.h"
+#include "../Protocol/USBmidi.h"
+#include "../HAL/KeyPad.h"
+#include "../HAL/LED.h"
+#include "../HAL/Timer.h"
 
 //#include "../protocol/MIDI.h"
 //#include <USBComposite.h>

@@ -2,7 +2,7 @@
 #define TIMER_H
 
 #include <Arduino.h>
-#include "../parameter/MatrixParameter.h"
+#include "../Parameter/MatrixParameter.h"
 
 class Timer
 {

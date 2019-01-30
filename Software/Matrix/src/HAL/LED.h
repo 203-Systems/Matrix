@@ -3,9 +3,9 @@
 
 #include <Arduino.h>
 #include <FastLED.h>
-#include "../parameter/MatrixVariable.h"
-#include "../parameter/MatrixParameter.h"
-#include "../core/MatrixSystem.h"
+#include "../Parameter/MatrixVariable.h"
+#include "../Parameter/MatrixParameter.h"
+#include "../Core/MatrixSystem.h"
 
 
 // enum LEDMoDE{ on, off, w, rgb, wrgb, hex, palette};

@@ -318,12 +318,11 @@ void UI::renderText(char ascii[], u8 xy, u8 speed, u32 colour, bool ignore_gamma
 
     while(lastX < KEYPADX - space - 2)
     {
-      lastX = lastX + space +
+      //lastX = lastX + space +
     }
-
   }
   firstX--;
-  while(uitimer.tick(speed*2));
+  while(uiTimer.tick(speed*2));
 }
 
 void UI::renderAscii(char ascii, u8 xy, u32 colour, bool ignore_gamma /* = false */) //XY is the bottom right location
@@ -342,7 +341,7 @@ void UI::renderAscii(char ascii, u8 xy, u32 colour, bool ignore_gamma /* = false
         if(nxy.y - y <= 0)
         {
           if(bitRead(font[ascii - 32][font[ascii - 32][0] - x], 7 - y))
-          LED.setXYHEX(xytoxy(nxy.x - x, nxy.y - y), colour, true， ignore_gamma);
+          LED.setXYHEX(xytoxy(nxy.x - x, nxy.y - y), colour, true, ignore_gamma);
         }
       }
     }
