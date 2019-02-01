@@ -8,6 +8,7 @@
 LED::LED()
 {
   FastLED.addLeds<NEOPIXEL, LED_PIN>(leds, NUM_TOTAL_LEDS);
+  setBrightnesss(brightness);
   //LED::setBrightness(brightness);
   // if(POWERCORD)
   //{
@@ -18,39 +19,53 @@ LED::LED()
 
 void LED::setBrightness(u8 b)
 {
-  //FastLED.setBrightness(b);
+  FastLED.setBrightness(b);
   setBrightnesss(b);
+}
+
+void LED::dynamicBrightness(u16 mah)
+{
+  FastLED.setMaxPowerInVoltsAndMilliamps(5,mah);
 }
 
 void LED::nextBrightnessState()
 {
-  if(brightness >= 192) //Bright AF
+  // if(brightness >= 192) //Bright AF
+  // {
+  //   LED::setBrightness(32);
+  // }
+  // else if(brightness >= 160) //VeryBright
+  // {
+  //   LED::setBrightness(192);
+  // }
+  // else if(brightness >= 128) //Bright
+  // {
+  //   LED::setBrightness(160);
+  // }
+  // else if(brightness >= 96) //Normal
+  // {
+  //   LED::setBrightness(128);
+  // }
+  // else if(brightness >= 64) //Dim
+  // {
+  //   LED::setBrightness(96);
+  // }
+  // else if(brightness >= 32) //VeryDim
+  // {
+  //   LED::setBrightness(64);
+  // }
+  // else
+  // {
+  //   LED::setBrightness(32);
+  // }
+  for(u8 i = 0; i < sizeof(brightness_level); i++)
   {
-    LED::setBrightness(32);
-  }
-  else if(brightness >= 160) //VeryBright
-  {
-    LED::setBrightness(192);
-  }
-  else if(brightness >= 128) //Bright
-  {
-    LED::setBrightness(160);
-  }
-  else if(brightness >= 96) //Normal
-  {
-    LED::setBrightness(128);
-  }
-  else if(brightness >= 64) //Dim
-  {
-    LED::setBrightness(96);
-  }
-  else if(brightness >= 32) //VeryDim
-  {
-    LED::setBrightness(64);
-  }
-  else
-  {
-    LED::setBrightness(32);
+    if(brightness_level[i] > brightness)
+    {
+      FastLED.setBrightness(brightness_level[i]);
+      return;
+    }
+    FastLED.setBrightness(brightness_level[0]);
   }
 }
 
@@ -253,64 +268,64 @@ void LED::rainbow()
   }
 }
 
-void LED::fillRegionOff(u8 xy1, u8 xy2, bool overlay /*= false*/)
-{
-  LED::fillRegionHEX(xy1, xy2, 0, overlay);
-}
-
-void LED::fillRegionOn(u8 xy1, u8 xy2, bool overlay /*= false*/)
-{
-  LED::fillRegionHEX(xy1, xy2, 0xFFFFFFFF, overlay);
-}
-
-void LED::fillRegionW(u8 xy1, u8 xy2, u8 w, bool overlay /*= false*/)
-{
-  LED::fillRegionHEX(xy1, xy2, w * 0x10000 + w * 0x100 + w, overlay);
-}
-
-void LED::fillRegionRGB(u8 xy1, u8 xy2, u8 r, u8 g, u8 b, bool overlay /*= false*/)
-{
-  LED::fillRegionHEX(xy1, xy2, r * 0x10000 + g * 0x100 + b, overlay);
-}
-
-void LED::fillRegionWRGB(u8 xy1, u8 xy2, u8 w, u8 r, u8 g, u8 b, bool overlay /*= false*/)
-{
-  LED::fillRegionHEX(xy1, xy2, w *  0x1000000 + r * 0x10000 + g * 0x100 + b, overlay);
-}
-
-void LED::fillRegionHEX(u8 xy1, u8 xy2, u32 hex, bool overlay /*= false*/, bool ignore_gamma /*= false*/)
-{
-  u8 x1 = (xy1 & 0xF0) >> 4;
-  u8 y1 = xy1 & 0x0F;
-  u8 x2 = (xy2 & 0xF0) >> 4;
-  u8 y2 = xy2 & 0x0F;
-  //Reorder
-  if(x1 > x2)
-  {
-    u8 c = x1;
-    x1 = x2;
-    x2 = c;
-  }
-  if(y1 > y2)
-  {
-    u8 c = y1;
-    y1 = y2;
-    y2 = c;
-  }
-
-  for(x1; x1 <= x2; x1++)
-  {
-    for(y1; y1 <= y2; y1++)
-    {
-      LED::setXYHEX(x1 * 0x10 + y1, hex, overlay, ignore_gamma);
-    }
-  }
-}
-
-void LED::fillRegionPalette(u8 xy1, u8 xy2, u8 p, u8 c, bool overlay /*= false*/)
-{
-  LED::fillRegionHEX(xy1, xy2, palette[p][c], overlay, true);
-}
+// void LED::fillRegionOff(u8 xy1, u8 xy2, bool overlay /*= false*/)
+// {
+//   LED::fillRegionHEX(xy1, xy2, 0, overlay);
+// }
+//
+// void LED::fillRegionOn(u8 xy1, u8 xy2, bool overlay /*= false*/)
+// {
+//   LED::fillRegionHEX(xy1, xy2, 0xFFFFFFFF, overlay);
+// }
+//
+// void LED::fillRegionW(u8 xy1, u8 xy2, u8 w, bool overlay /*= false*/)
+// {
+//   LED::fillRegionHEX(xy1, xy2, w * 0x10000 + w * 0x100 + w, overlay);
+// }
+//
+// void LED::fillRegionRGB(u8 xy1, u8 xy2, u8 r, u8 g, u8 b, bool overlay /*= false*/)
+// {
+//   LED::fillRegionHEX(xy1, xy2, r * 0x10000 + g * 0x100 + b, overlay);
+// }
+//
+// void LED::fillRegionWRGB(u8 xy1, u8 xy2, u8 w, u8 r, u8 g, u8 b, bool overlay /*= false*/)
+// {
+//   LED::fillRegionHEX(xy1, xy2, w *  0x1000000 + r * 0x10000 + g * 0x100 + b, overlay);
+// }
+//
+// void LED::fillRegionHEX(u8 xy1, u8 xy2, u32 hex, bool overlay /*= false*/, bool ignore_gamma /*= false*/)
+// {
+//   u8 x1 = (xy1 & 0xF0) >> 4;
+//   u8 y1 = xy1 & 0x0F;
+//   u8 x2 = (xy2 & 0xF0) >> 4;
+//   u8 y2 = xy2 & 0x0F;
+//   //Reorder
+//   if(x1 > x2)
+//   {
+//     u8 c = x1;
+//     x1 = x2;
+//     x2 = c;
+//   }
+//   if(y1 > y2)
+//   {
+//     u8 c = y1;
+//     y1 = y2;
+//     y2 = c;
+//   }
+//
+//   for(x1; x1 <= x2; x1++)
+//   {
+//     for(y1; y1 <= y2; y1++)
+//     {
+//       LED::setXYHEX(x1 * 0x10 + y1, hex, overlay, ignore_gamma);
+//     }
+//   }
+// }
+//
+// void LED::fillRegionPalette(u8 xy1, u8 xy2, u8 p, u8 c, bool overlay /*= false*/)
+// {
+//   LED::fillRegionHEX(xy1, xy2, palette[p][c], overlay, true);
+// }
 
 u32 LED::applyGamma(u32 hex)
 {

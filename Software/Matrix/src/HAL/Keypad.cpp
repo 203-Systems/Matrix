@@ -19,7 +19,7 @@ KeyPad::KeyPad()
 bool KeyPad::scan()
 {
   bool changed = false;
-  for (u8 x = 0; x < KEYPADX; x++) //for 0 - 7 do
+  for (u8 x = 0; x < XSIZE; x++) //for 0 - 7 do
   {
     //shiftOut(SO_DATA, SO_CLOCK, MSBFIRST, 1 << x); // bit shift a logic high (1) value by i
     if( x == 0)
@@ -35,7 +35,7 @@ bool KeyPad::scan()
     digitalWrite(SI_SCAN, HIGH);
 
 
-    for (s8 y = KEYPADY-1; y >= 0; y--) //y could go negative so use int instead uint
+    for (s8 y = YSIZE-1; y >= 0; y--) //y could go negative so use int instead uint
     {
       digitalWrite(SI_CLOCK, LOW);
 
@@ -128,9 +128,9 @@ void KeyPad::updateList()
   }
 
   int i = 0;
-  for(int y = 0; y < KEYPADY; y++)
+  for(int y = 0; y < YSIZE; y++)
   {
-    for(int x = 0; x < KEYPADX; x++)
+    for(int x = 0; x < XSIZE; x++)
     {
       if(i == MULTIPRESS)
       return;
@@ -186,13 +186,13 @@ bool KeyPad::checkXY(u8 xy)
 //   switch (rotation)
 //   {
 //     case 1: //90
-//     Midi.sentNoteOn(MIDIChannel, keymap[x][KEYPADY - y - 1], 127);
+//     Midi.sentNoteOn(MIDIChannel, keymap[x][YSIZE - y - 1], 127);
 //     break;
 //     case 2: //180
-//     Midi.sentNoteOn(MIDIChannel, keymap[KEYPADY - y - 1][KEYPADX - x - 1], 127);
+//     Midi.sentNoteOn(MIDIChannel, keymap[YSIZE - y - 1][XSIZE - x - 1], 127);
 //     break;
 //     case 3: //270
-//     Midi.sentNoteOn(MIDIChannel, keymap[KEYPADX - x - 1][y], 127);
+//     Midi.sentNoteOn(MIDIChannel, keymap[XSIZE - x - 1][y], 127);
 //     break;
 //     default: //0
 //     Midi.sentNoteOn(MIDIChannel, keymap[y][x], 127);
@@ -206,13 +206,13 @@ bool KeyPad::checkXY(u8 xy)
 //   switch (rotation)
 //   {
 //     case 1: //90
-//     Midi.sentNoteOff(MIDIChannel, keymap[x][KEYPADY - y - 1], 0);
+//     Midi.sentNoteOff(MIDIChannel, keymap[x][YSIZE - y - 1], 0);
 //     break;
 //     case 2: //180
-//     Midi.sentNoteOff(MIDIChannel, keymap[KEYPADY - y - 1][KEYPADX - x - 1], 0);
+//     Midi.sentNoteOff(MIDIChannel, keymap[YSIZE - y - 1][XSIZE - x - 1], 0);
 //     break;
 //     case 3: //270
-//     Midi.sentNoteOff(MIDIChannel, keymap[KEYPADX - x - 1][y], 0);
+//     Midi.sentNoteOff(MIDIChannel, keymap[XSIZE - x - 1][y], 0);
 //     break;
 //     default: //0
 //     Midi.sentNoteOff(MIDIChannel, keymap[y][x], 0);

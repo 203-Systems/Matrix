@@ -8,7 +8,7 @@
 #include <USBComposite.h>
 #include <USBMIDI.h>
 #include <FastLED.h>
-#include "../Protocol/USBmidi.h"
+#include "../Protocol/MIDI.h"
 #include "../Parameter/MatrixVariable.h"
 #include "../Parameter/MatrixParameter.h"
 
@@ -60,7 +60,7 @@ void getBrightness();
 void getTouchSensitive();
 
 //special
-void nextBrightnessState();
+//void nextBrightnessState();
 void rotationCW(u8 r);
 void setRotation(u8 r);
 //Math

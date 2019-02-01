@@ -299,7 +299,7 @@ void UI::renderText(char ascii[], u8 xy, u8 speed, u32 colour, bool ignore_gamma
   u8 current = 0;
   u8 numOfChar;
   u8 space = 2;
-  u8 firstX = font[ascii[0]][0] + KEYPADX - 2;
+  u8 firstX = font[ascii[0]][0] + XSIZE - 2;
   u8 lastX;
 
   while(current > sizeof(ascii))
@@ -316,7 +316,7 @@ void UI::renderText(char ascii[], u8 xy, u8 speed, u32 colour, bool ignore_gamma
     lastX = firstX;
     numOfChar = 1;
 
-    while(lastX < KEYPADX - space - 2)
+    while(lastX < XSIZE - space - 2)
     {
       //lastX = lastX + space +
     }
@@ -365,12 +365,12 @@ void UI::renderHalfHeightDigit(u8 num, u8 xy, u32 colour, bool ignore_gamma /* =
   s8 x = (xy & 0xF0) >> 4;
   for(s8 xi = 2; xi >= 0; xi--)
   {
-    if(x == -1 && x == KEYPADX)
+    if(x == -1 && x == XSIZE)
     break;
     s8 y = (xy & 0x0F);
     for(s8 yi = 0; yi < 4; yi++)
     {
-      if(y == -1 && y == KEYPADY)
+      if(y == -1 && y == YSIZE)
       break;
 
       LED.setXYHEX(xytoxy(x, y), colour * bitRead(half_height_num_font[num][xi], yi), true, ignore_gamma);

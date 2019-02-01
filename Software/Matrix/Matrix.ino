@@ -22,7 +22,7 @@ NexusRevamped while USB unreconized
 #include "src/HAL/KeyPad.h"
 #include "src/HAL/LED.h"
 #include "src/HAL/Timer.h"
-#include "src/Protocol/USBmidi.h"
+//#include "src/Protocol/USBmidi.h"
 #include "src/Protocol/MIDI.h"
 //#include "src/protocol/M2P.h"
 #include "src/Components/UI.h"

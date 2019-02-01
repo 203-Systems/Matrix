@@ -35,8 +35,8 @@ public:
 private:
   void updateList();
   bool fnCache;
-  u8 keypadState[KEYPADX]; // y is define by type, u8, u16 , u32, u64
-  u8 keypadChanged[KEYPADX];
+  u8 keypadState[XSIZE]; // y is define by type, u8, u16 , u32, u64
+  u8 keypadChanged[XSIZE];
 };
 
 #endif

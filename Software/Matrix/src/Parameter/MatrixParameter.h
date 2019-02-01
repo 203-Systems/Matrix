@@ -175,8 +175,9 @@ typedef volatile int64_t vs64;
 #define FPS 100
 #define LOWSTATEBRIGHTNESS 0.25
 
+#define XSIZE 8 //Max 256 key support due to the m2p and libary data type limition
+#define YSIZE 8 // need tp change data type in keypad.h
+
 //KeyPad
-#define KEYPADX 8 //Max 256 key support due to the m2p and libary data type limition
-#define KEYPADY 8 // need tp change data type in keypad.h
 #define MULTIPRESS 10 //Key Press Process At Once
 #define MULTITAP_THRESHOLD 500

@@ -5,7 +5,7 @@
 #include "../Parameter/MatrixVariable.h"
 #include "../Parameter/MatrixParameter.h"
 #include "../Core/MatrixSystem.h"
-#include "../Protocol/USBmidi.h"
+#include "../Protocol/MIDI.h"
 #include "../HAL/KeyPad.h"
 #include "../HAL/LED.h"
 #include "../HAL/Timer.h"

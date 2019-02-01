@@ -35,15 +35,15 @@ void bootDevice()
 
 u16 setupEEPROM()
 {
-  EEPROM.PageBase0 = 0x802B000;
-  EEPROM.PageBase1 = 0x802D000;
+  EEPROM.PageBase0 = 0x8020000;
+  EEPROM.PageBase1 = 0x8022000;
   EEPROM.PageSize  = 0x2000;
   return EEPROM.init();
 }
 
 void variableLoad()
 {
-  if(EEPROM.read(0) == 0xFFFF)
+  if(EEPROM.read(0) != 1)
   {
     initEEPROM();
     return;
@@ -72,7 +72,7 @@ void variableLoad()
 void initEEPROM()
 {
   EEPROM.format();
-  EEPROM.write(0, 0);
+  EEPROM.write(0, 1);
   EEPROM.write(1, device_id);
   EEPROM.write(2, rotation);
   EEPROM.write(3, brightness);
@@ -168,11 +168,11 @@ void loadPalette()
 
 void loadKeymap()
 {
-  for(int y = 0; y < KEYPADY; y++)
+  for(int y = 0; y < YSIZE; y++)
   {
-    for(int x = 0; x < KEYPADX; x++)
+    for(int x = 0; x < XSIZE; x++)
     {
-      keymap[y][x] = EEPROM.read(y * KEYPADX + x + 519);
+      keymap[y][x] = EEPROM.read(y * XSIZE + x + 519);
     }
   }
 }
@@ -245,18 +245,18 @@ void updateCustomKeymap()
     u8 x = CompositeSerial.read();
     u8 y = CompositeSerial.read();
 
-    EEPROM.write(y * KEYPADX + x + 519, CompositeSerial.read());
+    EEPROM.write(y * XSIZE + x + 519, CompositeSerial.read());
 
-    keymap[y][x] = EEPROM.read(y * KEYPADX + x + 519);
+    keymap[y][x] = EEPROM.read(y * XSIZE + x + 519);
   }
 }
 
 void resetCustomKeymap()
 {
 
-  // for(int x = 0; x < KEYPADX; x++)
+  // for(int x = 0; x < XSIZE; x++)
   // {
-  //   for(int y = 0; y < KEYPADY; y++)
+  //   for(int y = 0; y < YSIZE; y++)
   //   {
   //     keymap[x][y] = defaultKeymap[x][y];
   //   }
@@ -268,7 +268,7 @@ void setBrightnesss(u8 b) //Triple s to fix due to an unknow bug
   EEPROM.write(3, b);
   brightness = EEPROM.read(3);
   //brightness = b;
-  FastLED.setBrightness(brightness);
+  //FastLED.setBrightness(brightness);
 }
 
 
@@ -409,12 +409,12 @@ u8 xyToIndex(u8 xy)
   u8 x = (xyr & 0xF0) >> 4;
   u8 y = xyr & 0x0F;
 
-  return x + y * KEYPADX;
+  return x + y * XSIZE;
 }
 
 u8 indexToXY(u8 index)
 {
-  return (index % KEYPADX) * 0x10 + (index / KEYPADX);
+  return (index % XSIZE) * 0x10 + (index / XSIZE);
 }
 
 u8 indexRotation(int index)

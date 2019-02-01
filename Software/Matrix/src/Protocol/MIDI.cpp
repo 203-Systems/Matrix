@@ -5,7 +5,22 @@
 #endif
 
 extern LED LED;
+extern MIDI Midi;
 
+void usbmidi::handleNoteOff(unsigned int channel, unsigned int note, unsigned int velocity)
+{
+  Midi.noteOff(channel,note,velocity);
+  //USBMIDI.sendNoteOff(channel,note,velocity);
+  //leds[IndexInKeyMap(note)] = 0;
+  //CompositeSerial.println(channel + " off " + note + " " + velocity);
+}
+
+void usbmidi::handleNoteOn(unsigned int channel, unsigned int note, unsigned int velocity)
+{
+  Midi.noteOn(channel,note,velocity);
+  //USBMIDI.sendNoteOn(channel,note,velocity);
+  //leds[IndexInKeyMap(note)] = colour[channel][velocity];
+}
 
 MIDI::MIDI()
 {
@@ -29,9 +44,9 @@ void MIDI::noteOn(u8 channel, u8 note, u8 velocity)
   CompositeSerial.println(velocity);
   #endif
 
-  for(u8 y = 0; y < KEYPADY; y++)
+  for(u8 y = 0; y < YSIZE; y++)
   {
-    for(u8 x = 0; x < KEYPADX; x++)
+    for(u8 x = 0; x < XSIZE; x++)
     {
       if(note == keymap[y][x])
       LED.setXYPalette(xytoxy(x, y), channel, velocity);
@@ -61,9 +76,9 @@ void MIDI::noteOn(u8 channel, u8 note, u8 velocity)
 
 void MIDI::noteOff(u8 channel, u8 note, u8 velocity)
 {
-  for(u8 y = 0; y < KEYPADY; y++)
+  for(u8 y = 0; y < YSIZE; y++)
   {
-    for(u8 x = 0; x < KEYPADX; x++)
+    for(u8 x = 0; x < XSIZE; x++)
     {
       if(note == keymap[y][x])
       LED.offXY(xytoxy(x, y));

@@ -11,7 +11,9 @@ extern Modes mode;
 extern u8 appID;
 
 //LED setting
-extern u8 brightness;  //VeryDim - 32 | Dim - 64 | Normal(Default) - 96 | Bright - 128 | VeryBright - 160 | Bright AF - 192  (Higher then 192 could result in USB resettable fuse disconnect(500ma))
+extern u8 brightness;
+extern u8 brightness_level[5];
+
 extern u32 palette[3][128];
 
 extern u8 led_gamma[256];
@@ -19,7 +21,7 @@ extern u8 led_gamma[256];
 extern u8 bottomLEDmap [NUM_BOTTOM_LEDS];
 
 //KeyPad
-extern u8 keymap [KEYPADY][KEYPADX];
+extern u8 keymap [YSIZE][XSIZE];
 
 //TouchBar
 extern u8 touch_sensitive;

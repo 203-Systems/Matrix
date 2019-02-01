@@ -1,12 +1,14 @@
 #include "../Parameter/MatrixVariable.h"
 
 //DeviceInfo
-extern u8 device_id = 0; //0~255 0 for off
+extern u8 device_id = 203; //0~255 0 for off
 extern Modes mode = Normal;
-extern u8 appID = -1;
+extern u8 app_id = -1;
 
 //LED setting
-extern u8 brightness = 64;  //VeryDim - 32 | Dim - 64 | Normal(Default) - 96 | Bright - 128 | VeryBright - 160 | Bright AF - 192  (Higher then 192 could result in USB resettable fuse disconnect(500ma))
+extern u8 brightness = 64;
+extern u8 brightness_level[5] = {32,64,96,128,160};
+
 extern u32 palette[3][128] =     //WRGB Colour Palette
 {{            //MatrixColorPalette
   0x00000000, //0
@@ -420,7 +422,7 @@ extern u8 bottomLEDmap [NUM_BOTTOM_LEDS] =
 {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35};
 
 //KeyPad
-extern u8 keymap [KEYPADY][KEYPADX] =
+extern u8 keymap [YSIZE][XSIZE] =
 {{64, 65, 66, 67, 96, 97, 98, 99},
 {60, 61, 62, 63, 92, 93, 94, 95},
 {56, 57, 58, 59, 88, 89, 90, 91},
