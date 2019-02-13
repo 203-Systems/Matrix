@@ -12,6 +12,7 @@ extern u8 appID;
 
 //LED setting
 extern u8 brightness;
+extern bool dynamic_brightness;
 extern u8 brightness_level[5];
 
 extern u32 palette[3][128];

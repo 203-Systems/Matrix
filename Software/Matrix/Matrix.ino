@@ -40,7 +40,9 @@ void setup()
   specialBoot();
   u16 eeprom_code = setupEEPROM();
   variableLoad();
-  setBrightnesss(brightness);
+  LED.setBrightness(brightness);
+  if(dynamic_brightness)
+  LED.dynamicBrightness();
   setupUSB();
 
   #ifdef DEBUG

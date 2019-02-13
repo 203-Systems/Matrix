@@ -7,6 +7,7 @@ extern u8 app_id = -1;
 
 //LED setting
 extern u8 brightness = 64;
+extern bool dynamic_brightness = true;
 extern u8 brightness_level[5] = {32,64,96,128,160};
 
 extern u32 palette[3][128] =     //WRGB Colour Palette

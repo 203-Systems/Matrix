@@ -8,7 +8,7 @@
 LED::LED()
 {
   FastLED.addLeds<NEOPIXEL, LED_PIN>(leds, NUM_TOTAL_LEDS);
-  setBrightnesss(brightness);
+  //setBrightnesss(brightness);
   //LED::setBrightness(brightness);
   // if(POWERCORD)
   //{
