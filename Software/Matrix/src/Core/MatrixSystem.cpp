@@ -64,7 +64,7 @@ void variableLoad()
   // if(EEPROM.read(518))
   // loadKeymap();
 
-  touch_sensitive = EEPROM.read(582);
+  current_keymap = EEPROM.read(582);
   // if(EEPROM.read(583))
   // loadTouchmap();
 }
@@ -95,7 +95,7 @@ void initEEPROM()
     EEPROM.write(i + 519, 0);
   }
 
-  EEPROM.write(583, touch_sensitive);
+  EEPROM.write(583, current_keymap);
   EEPROM.write(584, false);
   EEPROM.write(585, 0);
 }
@@ -172,7 +172,7 @@ void loadKeymap()
   {
     for(int x = 0; x < XSIZE; x++)
     {
-      keymap[y][x] = EEPROM.read(y * XSIZE + x + 519);
+      keymap[2][y][x] = EEPROM.read(y * XSIZE + x + 519);
     }
   }
 }
@@ -247,7 +247,7 @@ void updateCustomKeymap()
 
     EEPROM.write(y * XSIZE + x + 519, CompositeSerial.read());
 
-    keymap[y][x] = EEPROM.read(y * XSIZE + x + 519);
+    keymap[2][y][x] = EEPROM.read(y * XSIZE + x + 519);
   }
 }
 
@@ -266,110 +266,119 @@ void resetCustomKeymap()
 void setBrightnesss(u8 b) //Triple s to fix due to an unknow bug
 {
   EEPROM.write(3, b);
-  brightness = EEPROM.read(3);
-  //brightness = b;
+  //brightness = EEPROM.read(3);
+  brightness = b;
   //FastLED.setBrightness(brightness);
+
 }
 
 
-void setTouchSensitive(u8 s)
+// void setTouchSensitive(u8 s)
+// {
+//   EEPROM.write(583, s);
+//   touch_sensitive = s;
+// }
+
+void setCurrentKeyMap(u8 k) //Triple s to fix due to an unknow bug
 {
-  EEPROM.write(583, s);
-  touch_sensitive = s;
+  // EEPROM.write(583, k);
+  // current_keymap = EEPROM.read(583);
+  current_keymap = k;
+  return;
 }
 
 //Sysex get
-void getDeviceInfo()
-{
-  //TODO
-}
+// void getDeviceInfo()
+// {
+//   //TODO
+// }
+//
+// void getModuleCount()
+// {
+//   //TODO
+// }
+//
+// void getModuleInfo()
+// {
+//
+// }
+//
+// void getDeviceID()
+// {
+//   CompositeSerial.write((u8)0);
+//   CompositeSerial.write(14);
+//   CompositeSerial.write(3);
+//   CompositeSerial.write(device_id);
+// }
+//
+//
+// void getAllParameter()
+// {
+//   //TODO
+// }
+//
+// void getPaletteRGB()
+// {
+//   CompositeSerial.write((u8)(0));
+//   CompositeSerial.write(14);
+//   CompositeSerial.write(20);
+//
+//   for(u8 i = 0; i < sizeof(palette[2]); i++)
+//   {
+//     CompositeSerial.write(i);
+//     CompositeSerial.write(palette[2][i] & 0xFF0000 >> 16);
+//     CompositeSerial.write(palette[2][i] & 0xFF00 >> 8);
+//     CompositeSerial.write(palette[2][i] & 0xFF);
+//   }
+//   CompositeSerial.write(255);
+// }
+//
+// void getPaletteWRGB()
+// {
+//   CompositeSerial.write((u8)(0));
+//   CompositeSerial.write(14);
+//   CompositeSerial.write(21);
+//
+//   for(u8 i = 0; i < sizeof(palette[2]); i++)
+//   {
+//     CompositeSerial.write(i);
+//     CompositeSerial.write(palette[2][i] & 0xFF000000 >> 24);
+//     CompositeSerial.write(palette[2][i] & 0xFF0000 >> 16);
+//     CompositeSerial.write(palette[2][i] & 0xFF00 >> 8);
+//     CompositeSerial.write(palette[2][i] & 0xFF);
+//   }
+//   CompositeSerial.write(255);
+// }
+//
+// void getgammaState()
+// {
+//   CompositeSerial.write((u8)(0));
+//   CompositeSerial.write(14);
+//   CompositeSerial.write(24);
+// }
+//
+// void getCustomKeymap()
+// {
+//   CompositeSerial.write((u8)(0));
+//   CompositeSerial.write(14);
+//   CompositeSerial.write(25);
+// }
+//
+// void getBrightness()
+// {
+//   CompositeSerial.write((u8)(0));
+//   CompositeSerial.write(14);
+//   CompositeSerial.write(25);
+//   CompositeSerial.write(brightness);
+// }
 
-void getModuleCount()
-{
-  //TODO
-}
-
-void getModuleInfo()
-{
-
-}
-
-void getDeviceID()
-{
-  CompositeSerial.write((u8)0);
-  CompositeSerial.write(14);
-  CompositeSerial.write(3);
-  CompositeSerial.write(device_id);
-}
-
-
-void getAllParameter()
-{
-  //TODO
-}
-
-void getPaletteRGB()
-{
-  CompositeSerial.write((u8)(0));
-  CompositeSerial.write(14);
-  CompositeSerial.write(20);
-
-  for(u8 i = 0; i < sizeof(palette[2]); i++)
-  {
-    CompositeSerial.write(i);
-    CompositeSerial.write(palette[2][i] & 0xFF0000 >> 16);
-    CompositeSerial.write(palette[2][i] & 0xFF00 >> 8);
-    CompositeSerial.write(palette[2][i] & 0xFF);
-  }
-  CompositeSerial.write(255);
-}
-
-void getPaletteWRGB()
-{
-  CompositeSerial.write((u8)(0));
-  CompositeSerial.write(14);
-  CompositeSerial.write(21);
-
-  for(u8 i = 0; i < sizeof(palette[2]); i++)
-  {
-    CompositeSerial.write(i);
-    CompositeSerial.write(palette[2][i] & 0xFF000000 >> 24);
-    CompositeSerial.write(palette[2][i] & 0xFF0000 >> 16);
-    CompositeSerial.write(palette[2][i] & 0xFF00 >> 8);
-    CompositeSerial.write(palette[2][i] & 0xFF);
-  }
-  CompositeSerial.write(255);
-}
-
-void getgammaState()
-{
-  CompositeSerial.write((u8)(0));
-  CompositeSerial.write(14);
-  CompositeSerial.write(24);
-}
-
-void getCustomKeymap()
-{
-  CompositeSerial.write((u8)(0));
-  CompositeSerial.write(14);
-  CompositeSerial.write(25);
-}
-
-void getBrightness()
-{
-  CompositeSerial.write((u8)(0));
-  CompositeSerial.write(14);
-  CompositeSerial.write(25);
-  CompositeSerial.write(brightness);
-}
-
-void getTouchSensitive()
-{
-  CompositeSerial.write((u8)(0));
-  CompositeSerial.write(14);
-  CompositeSerial.write(31);
-  CompositeSerial.write(touch_sensitive);
-}
+// void getTouchSensitive()
+// {
+//   CompositeSerial.write((u8)(0));
+//   CompositeSerial.write(14);
+//   CompositeSerial.write(31);
+//   CompositeSerial.write(touch_sensitive);
+// }
 
 //special
 
@@ -394,7 +403,8 @@ void setRotation(u8 r)
   #else
   EEPROM.write(2, r);
   #endif
-  rotation = EEPROM.read(2);
+  //rotation = EEPROM.read(2);
+  rotation = r;
 }
 
 //Math

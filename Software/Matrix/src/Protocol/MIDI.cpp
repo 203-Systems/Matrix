@@ -48,14 +48,14 @@ void MIDI::noteOn(u8 channel, u8 note, u8 velocity)
   {
     for(u8 x = 0; x < XSIZE; x++)
     {
-      if(note == keymap[y][x])
+      if(note == keymap[current_keymap][y][x])
       LED.setXYPalette(xytoxy(x, y), channel, velocity);
     }
   }
   //BottomLED
   for(u8 i = 0;i < NUM_BOTTOM_LEDS; i++)
   {
-    if(note == bottomLEDmap[i])
+    if(note == bottom_led_map[current_keymap][i])
     LED.setPalette(i+NUM_LEDS, channel ,velocity);
   }
 
@@ -80,14 +80,14 @@ void MIDI::noteOff(u8 channel, u8 note, u8 velocity)
   {
     for(u8 x = 0; x < XSIZE; x++)
     {
-      if(note == keymap[y][x])
+      if(note == keymap[current_keymap][y][x])
       LED.offXY(xytoxy(x, y));
     }
   }
   //BottomLED
   for(u8 i = 0;i < NUM_BOTTOM_LEDS; i++)
   {
-    if(note == bottomLEDmap[i])
+    if(note == bottom_led_map[current_keymap][i])
     LED.off(i+NUM_LEDS);
   }
 
@@ -119,14 +119,14 @@ void MIDI::sentXYon(u8 xy, u8 velocity)
   #endif
 
 
-  MIDI::sentNoteOn(midi_channel, keymap[y][x], 127);
+  MIDI::sentNoteOn(midi_channel, keymap[current_keymap][y][x], 127);
 }
 
 void MIDI::sentXYoff(u8 xy, u8 velocity)
 {
   u8 y = xy & 0x0F;
   u8 x = (xy & 0xF0) >> 4;
-  MIDI::sentNoteOff(midi_channel, keymap[y][x], 0);
+  MIDI::sentNoteOff(midi_channel, keymap[current_keymap][y][x], 0);
 }
 
 void MIDI::sentNoteOn(u8 channel, u8 note, u8 velocity)

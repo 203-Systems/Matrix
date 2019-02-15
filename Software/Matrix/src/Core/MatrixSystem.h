@@ -44,20 +44,21 @@ void setgamma(bool g);
 void updateCustomKeymap();
 void resetCustomKeymap();
 void setBrightnesss(u8 b);
-void setTouchSensitive(u8 s);
+//void setTouchSensitive(u8 s);
+void setCurrentKeyMap(u8 k);
 
 //Sysex get
-void getDeviceInfo();
-void getModuleCount();
-void getModuleInfo();
-void getDeviceID();
-void getAllParameter();
-void getPaletteRGB();
-void getPaletteWRGB();
-void getgammaState();
-void getCustomKeymap();
-void getBrightness();
-void getTouchSensitive();
+// void getDeviceInfo();
+// void getModuleCount();
+// void getModuleInfo();
+// void getDeviceID();x
+// void getAllParameter();
+// void getPaletteRGB();
+// void getPaletteWRGB();
+// void getgammaState();
+// void getCustomKeymap();
+// void getBrightness();
+//void getTouchSensitive();
 
 //special
 //void nextBrightnessState();

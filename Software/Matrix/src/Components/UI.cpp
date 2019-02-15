@@ -4,6 +4,7 @@
 
 extern KeyPad KeyPad;
 extern LED LED;
+extern MIDI Midi;
 
 UI::UI()
 {
@@ -76,13 +77,25 @@ void UI::fnKeyAction()
   for(int i = 0; i < MULTIPRESS; i++)
   {
     if(KeyPad.list[i].velocity == -1)
-    break;
+    return;
+
+    if(KeyPad.list[i].velocity == 0){
+      if(xytoxy(KeyPad.list[i].xy).x > 5)
+      {
+        Midi.noteOff(0, fn_keymap[current_keymap][xytoxy(KeyPad.list[i].xy).y - 6][xytoxy(KeyPad.list[i].xy).x], 0);
+      }
+    }
+
     if(KeyPad.list[i].velocity != 0)
     {
       #ifdef DEBUG
       CompositeSerial.print("ReadKey ");
-      CompositeSerial.println(KeyPad.list[i].xy);
+      CompositeSerial.println(KeyPad.list[i].xy, HEX);
       #endif
+      if(xytoxy(KeyPad.list[i].xy).x > 5)
+      {
+        Midi.noteOn(0, fn_keymap[current_keymap][xytoxy(KeyPad.list[i].xy).y - 6][xytoxy(KeyPad.list[i].xy).x], 127);
+      }
       switch(KeyPad.list[i].xy)
       {
         //Brightness
@@ -113,6 +126,19 @@ void UI::fnKeyAction()
         case 0x24:
         LED.fill(0, true);
         rotationCW(3); //270
+        break;
+
+        case 0x00:
+        case 0x01: //due to
+        setCurrentKeyMap(0);
+        break;
+        case 0x10:
+        case 0x11:
+        setCurrentKeyMap(1);
+        break;
+        case 0x20:
+        case 0x21:
+        setCurrentKeyMap(2);
         break;
 
         // //midi_enable
@@ -233,6 +259,40 @@ void UI::fnRender()
   LED.setXYHEX(0x60, 0x00FFFF00, true, true); //reset device
   LED.setXYHEX(0x61, 0x0000FF66, true, true); //reboot
 
+  LED.setXYHEX(0x00, LED.toBrightness(keymap_colour[0], LOWSTATEBRIGHTNESS), true, true); //Keymap selector 1
+  LED.setXYHEX(0x10, LED.toBrightness(keymap_colour[1], LOWSTATEBRIGHTNESS), true, true); //Keymap selector 1
+  LED.setXYHEX(0x20, LED.toBrightness(keymap_colour[2], LOWSTATEBRIGHTNESS), true, true); //Keymap selector 1
+
+  switch(current_keymap)
+  {
+    case 0:
+    LED.setXYHEX(0x00, keymap_colour[0], true, true);
+    break;
+    case 1:
+    LED.setXYHEX(0x10, keymap_colour[1], true, true);
+    break;
+    case 2:
+    LED.setXYHEX(0x20, keymap_colour[2], true, true);
+    break;
+    default:
+    LED.setXYHEX(0x01, 0xFF0000, true, true);
+    break;
+  }
+
+  for(u8 y = 6; y < 8; y++)
+  {
+    for(u8 x = 0; x < 8; x++)
+    {
+      if(KeyPad.checkXY(x, y))
+      {
+        LED.setXYHEX(xytoxy(x, y), fn_keymap_active_color[current_keymap][y - 6][x], true, true);
+      }
+      else
+      {
+        LED.setXYHEX(xytoxy(x, y), fn_keymap_idle_color[current_keymap][y - 6][x], true, true);
+      }
+    }
+  }
   // #ifdef DEBUG
   // CompositeSerial.println("End Render");
   // #endif

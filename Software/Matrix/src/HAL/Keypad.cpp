@@ -125,6 +125,7 @@ void KeyPad::updateList()
   for(int i = 0; i < MULTIPRESS; i++)
   {
     list[i].velocity = -1;
+    //list[i].xy = 0xFF;
   }
 
   int i = 0;

@@ -58,7 +58,7 @@ void LED::nextBrightnessState()
   // {
   //   LED::setBrightness(32);
   // }
-  for(u8 i = 0; i < sizeof(brightness_level); i++)
+  for(u8 i = 0; i < 5 ; i++)  //sizeof(brightness_level)
   {
     if(brightness_level[i] > brightness)
     {
