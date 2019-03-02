@@ -197,296 +197,231 @@
   93:dfu.c         ****                 dfuAppStatus.bState  = dfuDNLOAD_SYNC;
   94:dfu.c         ****                 switch(pInformation->Current_AlternateSetting)
   95:dfu.c         ****                 {
-  96:dfu.c         ****                     /*
-  97:dfu.c         ****                     Roger Clark. removed upload to RAM option
-  98:dfu.c         ****                     case 0:
-  99:dfu.c         ****                         userAppAddr = USER_CODE_RAM;
- 100:dfu.c         ****                         userUploadType = DFU_UPLOAD_RAM;
- 101:dfu.c         ****                         break;
- 102:dfu.c         ****                         */
- 103:dfu.c         ****                     #ifdef MATRIX
- 104:dfu.c         ****                     case 0:
- 105:dfu.c         ****                         userUploadType = DFU_UPLOAD_FLASH_0X8002000;
- 106:dfu.c         ****                         userAppAddr = USER_CODE_FLASH0X8002000;
- 107:dfu.c         ****                         /* make sure the flash is setup properly, unlock it */
- 108:dfu.c         ****                         setupFLASH();
- 109:dfu.c         ****                         flashUnlock();
- 110:dfu.c         ****                         bkp10Write(RTC_BOOTLOADER_JUST_UPLOADED);
- 111:dfu.c         **** 
- 112:dfu.c         ****                         break;
- 113:dfu.c         ****                     // case 1:
- 114:dfu.c         ****                     //
- 115:dfu.c         ****                     //         userAppAddr = USER_CODE_FLASH0X8005000;
- 116:dfu.c         ****                     //         userUploadType = DFU_UPLOAD_FLASH_0X8000000;
- 117:dfu.c         ****                     //
- 118:dfu.c         ****                     //         /* make sure the flash is setup properly, unlock it */
- 119:dfu.c         ****                     //         setupFLASH();
- 120:dfu.c         ****                     //         flashUnlock();
- 121:dfu.c         ****                     //         // Clear lower memory so that we can check on cold boot, whether the
- 122:dfu.c         ****                     //         flashErasePage((u32)USER_CODE_FLASH0X8002000);
- 123:dfu.c         ****                     //         bkp10Write(RTC_BOOTLOADER_JUST_UPLOADED);
- 124:dfu.c         ****                     //
- 125:dfu.c         ****                     //         break;
- 126:dfu.c         ****                     #else
- 127:dfu.c         ****                     case 1:
- 128:dfu.c         **** 
- 129:dfu.c         ****                         userAppAddr = USER_CODE_FLASH0X8005000;
- 130:dfu.c         ****                         userUploadType = DFU_UPLOAD_FLASH_0X8005000;
- 131:dfu.c         **** 
- 132:dfu.c         ****                         /* make sure the flash is setup properly, unlock it */
- 133:dfu.c         ****                         setupFLASH();
- 134:dfu.c         ****                         flashUnlock();
- 135:dfu.c         ****                         // Clear lower memory so that we can check on cold boot, whether the last u
- 136:dfu.c         ****                         flashErasePage((u32)USER_CODE_FLASH0X8002000);
- 137:dfu.c         ****                         bkp10Write(RTC_BOOTLOADER_JUST_UPLOADED);
- 138:dfu.c         **** 
- 139:dfu.c         ****                         break;
- 140:dfu.c         ****                     case 2:
- 141:dfu.c         ****                         userUploadType = DFU_UPLOAD_FLASH_0X8002000;
- 142:dfu.c         ****                         userAppAddr = USER_CODE_FLASH0X8002000;
- 143:dfu.c         ****                         /* make sure the flash is setup properly, unlock it */
- 144:dfu.c         ****                         setupFLASH();
- 145:dfu.c         ****                         flashUnlock();
- 146:dfu.c         ****                         bkp10Write(RTC_BOOTLOADER_JUST_UPLOADED);
- 147:dfu.c         **** 
- 148:dfu.c         ****                         break;
- 149:dfu.c         ****                     #endif
- 150:dfu.c         **** 
- 151:dfu.c         ****                     default:
- 152:dfu.c         ****                     // Roger Clark. Report error
- 153:dfu.c         ****                         dfuAppStatus.bState  = dfuERROR;
- 154:dfu.c         ****                         dfuAppStatus.bStatus = errWRITE;
- 155:dfu.c         ****                         break;
- 156:dfu.c         ****                 }
- 157:dfu.c         ****             } else {
- 158:dfu.c         ****                 dfuAppStatus.bState  = dfuERROR;
- 159:dfu.c         ****                 dfuAppStatus.bStatus = errNOTDONE;
- 160:dfu.c         ****             }
- 161:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_UPLOAD) {
- 162:dfu.c         ****             dfuAppStatus.bState  = dfuUPLOAD_IDLE;
- 163:dfu.c         ****             /* record length of first block for calculating target
- 164:dfu.c         ****                address from wValue in consecutive blocks */
- 165:dfu.c         ****             uploadBlockLen = pInformation->USBwLengths.w;
- 166:dfu.c         ****             thisBlockLen = uploadBlockLen; /* for this first block as well */
- 167:dfu.c         ****             /* calculate where the data should be copied from */
- 168:dfu.c         ****             userFirmwareLen = uploadBlockLen * pInformation->USBwValue;
- 169:dfu.c         ****             switch(pInformation->Current_AlternateSetting)
- 170:dfu.c         ****             {
- 171:dfu.c         ****             /*
- 172:dfu.c         ****                 case 0:
- 173:dfu.c         ****                     userAppAddr = USER_CODE_RAM;
- 174:dfu.c         ****                     userAppEnd = RAM_END;
- 175:dfu.c         ****                     */
- 176:dfu.c         ****                 #ifdef Matrix
- 177:dfu.c         ****                 case 0:
- 178:dfu.c         ****                     userAppAddr = USER_CODE_FLASH0X8002000;
- 179:dfu.c         ****                     userAppEnd = getFlashEnd();
- 180:dfu.c         ****                     break;
- 181:dfu.c         ****                 // case 1:
- 182:dfu.c         ****                 //     userAppAddr = USER_CODE_FLASH0X8000000;
- 183:dfu.c         ****                 //     userAppEnd = USER_CODE_FLASH0X8002000;
- 184:dfu.c         ****                 //     break;
- 185:dfu.c         ****                 #else
- 186:dfu.c         ****                 case 1:
- 187:dfu.c         ****                     userAppAddr = USER_CODE_FLASH0X8005000;
- 188:dfu.c         ****                     userAppEnd = getFlashEnd();
- 189:dfu.c         ****                     break;
- 190:dfu.c         ****                 case 2:
- 191:dfu.c         ****                     userAppAddr = USER_CODE_FLASH0X8002000;
- 192:dfu.c         ****                     userAppEnd = getFlashEnd();
- 193:dfu.c         ****                     break;
- 194:dfu.c         ****                 #endif
- 195:dfu.c         ****                 default:
- 196:dfu.c         ****                 // Roger Clark.
- 197:dfu.c         ****                 // Changed this to report error that its unable to write to this memory
- 198:dfu.c         ****                 // However the code should never get here as only AlternateSetting 1 and 2 are allo
- 199:dfu.c         ****                     dfuAppStatus.bState  = dfuERROR;
- 200:dfu.c         ****                     dfuAppStatus.bStatus = errWRITE;
- 201:dfu.c         ****                     break;
- 202:dfu.c         ****             }
- 203:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_ABORT) {
- 204:dfu.c         ****             dfuAppStatus.bState  = dfuIDLE;
- 205:dfu.c         ****             dfuAppStatus.bStatus = OK;  /* are we really ok? we were just aborted */
- 206:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_GETSTATUS) {
- 207:dfu.c         ****             dfuAppStatus.bState  = dfuIDLE;
- 208:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_GETSTATE) {
- 209:dfu.c         ****             dfuAppStatus.bState  = dfuIDLE;
- 210:dfu.c         ****         } else {
- 211:dfu.c         ****             dfuAppStatus.bState  = dfuERROR;
- 212:dfu.c         ****             dfuAppStatus.bStatus = errSTALLEDPKT;
- 213:dfu.c         ****         }
- 214:dfu.c         **** 
- 215:dfu.c         ****     } else if (startState == dfuDNLOAD_SYNC)         {
- 216:dfu.c         ****         /* device received block, waiting for DFU_GETSTATUS request */
- 217:dfu.c         **** 
- 218:dfu.c         ****         if (pInformation->USBbRequest == DFU_GETSTATUS) {
- 219:dfu.c         ****             /* todo, add routine to wait for last block write to finish */
- 220:dfu.c         **** 
- 221:dfu.c         ****             /* Roger Clark. Commented out code associated with RAM upload
- 222:dfu.c         **** 
- 223:dfu.c         ****             if (userUploadType == DFU_UPLOAD_RAM)
- 224:dfu.c         ****             {
- 225:dfu.c         ****                 if (code_copy_lock == WAIT) {
- 226:dfu.c         ****                     code_copy_lock = BEGINNING;
- 227:dfu.c         ****                     dfuAppStatus.bwPollTimeout0 = 0x20; // 32 ms
- 228:dfu.c         ****                     dfuAppStatus.bwPollTimeout1 = 0x00;
- 229:dfu.c         ****                     dfuAppStatus.bState = dfuDNBUSY;
- 230:dfu.c         **** 
- 231:dfu.c         ****                 } else if (code_copy_lock == BEGINNING) {
- 232:dfu.c         ****                     dfuAppStatus.bState = dfuDNLOAD_SYNC;
- 233:dfu.c         **** 
- 234:dfu.c         ****                 } else if (code_copy_lock == MIDDLE) {
- 235:dfu.c         ****                     dfuAppStatus.bState = dfuDNLOAD_SYNC;
- 236:dfu.c         **** 
- 237:dfu.c         ****                 } else if (code_copy_lock == END) {
- 238:dfu.c         ****                     dfuAppStatus.bwPollTimeout0 = 0x00;
- 239:dfu.c         ****                     code_copy_lock = WAIT;
- 240:dfu.c         ****                     dfuAppStatus.bState = dfuDNLOAD_IDLE;
- 241:dfu.c         ****                 }
- 242:dfu.c         **** 
- 243:dfu.c         ****             }
- 244:dfu.c         ****             else
- 245:dfu.c         ****             */
- 246:dfu.c         ****             {
- 247:dfu.c         ****                 dfuAppStatus.bState = dfuDNLOAD_IDLE;
- 248:dfu.c         ****                 dfuCopyBufferToExec();
- 249:dfu.c         ****             }
- 250:dfu.c         **** 
- 251:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_GETSTATE) {
- 252:dfu.c         ****             dfuAppStatus.bState  = dfuDNLOAD_SYNC;
- 253:dfu.c         ****         } else {
- 254:dfu.c         ****             dfuAppStatus.bState  = dfuERROR;
- 255:dfu.c         ****             dfuAppStatus.bStatus = errSTALLEDPKT;
- 256:dfu.c         ****         }
- 257:dfu.c         **** 
- 258:dfu.c         ****     } else if (startState == dfuDNBUSY)              {
- 259:dfu.c         ****         /* if were actually done writing, goto sync, else stay busy */
- 260:dfu.c         ****         if (code_copy_lock == END) {
- 261:dfu.c         ****             dfuAppStatus.bwPollTimeout0 = 0x00;
- 262:dfu.c         ****             code_copy_lock = WAIT;
- 263:dfu.c         ****             dfuAppStatus.bState = dfuDNLOAD_IDLE;
- 264:dfu.c         ****         } else {
- 265:dfu.c         ****             dfuAppStatus.bState = dfuDNBUSY;
- 266:dfu.c         ****         }
- 267:dfu.c         **** 
- 268:dfu.c         ****     } else if (startState == dfuDNLOAD_IDLE)         {
- 269:dfu.c         ****         /* device is expecting dfu_dnload requests */
- 270:dfu.c         ****         if (pInformation->USBbRequest == DFU_DNLOAD) {
- 271:dfu.c         ****             if (pInformation->USBwLengths.w > 0) {
- 272:dfu.c         ****                 dfuAppStatus.bState  = dfuDNLOAD_SYNC;
+  96:dfu.c         ****                     case 0:
+  97:dfu.c         ****                         userUploadType = DFU_UPLOAD_FLASH_0X8002000;
+  98:dfu.c         ****                         userAppAddr = USER_CODE_FLASH0X8002000;
+  99:dfu.c         ****                         /* make sure the flash is setup properly, unlock it */
+ 100:dfu.c         ****                         setupFLASH();
+ 101:dfu.c         ****                         flashUnlock();
+ 102:dfu.c         ****                         bkp10Write(RTC_BOOTLOADER_JUST_UPLOADED);
+ 103:dfu.c         **** 
+ 104:dfu.c         ****                         break;
+ 105:dfu.c         **** 
+ 106:dfu.c         ****                     default:
+ 107:dfu.c         ****                     // Roger Clark. Report error
+ 108:dfu.c         ****                         dfuAppStatus.bState  = dfuERROR;
+ 109:dfu.c         ****                         dfuAppStatus.bStatus = errWRITE;
+ 110:dfu.c         ****                         break;
+ 111:dfu.c         ****                 }
+ 112:dfu.c         ****             } else {
+ 113:dfu.c         ****                 dfuAppStatus.bState  = dfuERROR;
+ 114:dfu.c         ****                 dfuAppStatus.bStatus = errNOTDONE;
+ 115:dfu.c         ****             }
+ 116:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_UPLOAD) {
+ 117:dfu.c         ****             dfuAppStatus.bState  = dfuUPLOAD_IDLE;
+ 118:dfu.c         ****             /* record length of first block for calculating target
+ 119:dfu.c         ****                address from wValue in consecutive blocks */
+ 120:dfu.c         ****             uploadBlockLen = pInformation->USBwLengths.w;
+ 121:dfu.c         ****             thisBlockLen = uploadBlockLen; /* for this first block as well */
+ 122:dfu.c         ****             /* calculate where the data should be copied from */
+ 123:dfu.c         ****             userFirmwareLen = uploadBlockLen * pInformation->USBwValue;
+ 124:dfu.c         ****             switch(pInformation->Current_AlternateSetting)
+ 125:dfu.c         ****             {
+ 126:dfu.c         ****                 case 0:
+ 127:dfu.c         ****                     userAppAddr = USER_CODE_FLASH0X8002000;
+ 128:dfu.c         ****                     userAppEnd = getFlashEnd();
+ 129:dfu.c         ****                     break;
+ 130:dfu.c         ****                 default:
+ 131:dfu.c         ****                 // Roger Clark.
+ 132:dfu.c         ****                 // Changed this to report error that its unable to write to this memory
+ 133:dfu.c         ****                 // However the code should never get here as only AlternateSetting 1 and 2 are allo
+ 134:dfu.c         ****                     dfuAppStatus.bState  = dfuERROR;
+ 135:dfu.c         ****                     dfuAppStatus.bStatus = errWRITE;
+ 136:dfu.c         ****                     break;
+ 137:dfu.c         ****             }
+ 138:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_ABORT) {
+ 139:dfu.c         ****             dfuAppStatus.bState  = dfuIDLE;
+ 140:dfu.c         ****             dfuAppStatus.bStatus = OK;  /* are we really ok? we were just aborted */
+ 141:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_GETSTATUS) {
+ 142:dfu.c         ****             dfuAppStatus.bState  = dfuIDLE;
+ 143:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_GETSTATE) {
+ 144:dfu.c         ****             dfuAppStatus.bState  = dfuIDLE;
+ 145:dfu.c         ****         } else {
+ 146:dfu.c         ****             dfuAppStatus.bState  = dfuERROR;
+ 147:dfu.c         ****             dfuAppStatus.bStatus = errSTALLEDPKT;
+ 148:dfu.c         ****         }
+ 149:dfu.c         **** 
+ 150:dfu.c         ****     } else if (startState == dfuDNLOAD_SYNC)         {
+ 151:dfu.c         ****         /* device received block, waiting for DFU_GETSTATUS request */
+ 152:dfu.c         **** 
+ 153:dfu.c         ****         if (pInformation->USBbRequest == DFU_GETSTATUS) {
+ 154:dfu.c         ****             /* todo, add routine to wait for last block write to finish */
+ 155:dfu.c         **** 
+ 156:dfu.c         ****             /* Roger Clark. Commented out code associated with RAM upload
+ 157:dfu.c         **** 
+ 158:dfu.c         ****             if (userUploadType == DFU_UPLOAD_RAM)
+ 159:dfu.c         ****             {
+ 160:dfu.c         ****                 if (code_copy_lock == WAIT) {
+ 161:dfu.c         ****                     code_copy_lock = BEGINNING;
+ 162:dfu.c         ****                     dfuAppStatus.bwPollTimeout0 = 0x20; // 32 ms
+ 163:dfu.c         ****                     dfuAppStatus.bwPollTimeout1 = 0x00;
+ 164:dfu.c         ****                     dfuAppStatus.bState = dfuDNBUSY;
+ 165:dfu.c         **** 
+ 166:dfu.c         ****                 } else if (code_copy_lock == BEGINNING) {
+ 167:dfu.c         ****                     dfuAppStatus.bState = dfuDNLOAD_SYNC;
+ 168:dfu.c         **** 
+ 169:dfu.c         ****                 } else if (code_copy_lock == MIDDLE) {
+ 170:dfu.c         ****                     dfuAppStatus.bState = dfuDNLOAD_SYNC;
+ 171:dfu.c         **** 
+ 172:dfu.c         ****                 } else if (code_copy_lock == END) {
+ 173:dfu.c         ****                     dfuAppStatus.bwPollTimeout0 = 0x00;
+ 174:dfu.c         ****                     code_copy_lock = WAIT;
+ 175:dfu.c         ****                     dfuAppStatus.bState = dfuDNLOAD_IDLE;
+ 176:dfu.c         ****                 }
+ 177:dfu.c         **** 
+ 178:dfu.c         ****             }
+ 179:dfu.c         ****             else
+ 180:dfu.c         ****             */
+ 181:dfu.c         ****             {
+ 182:dfu.c         ****                 dfuAppStatus.bState = dfuDNLOAD_IDLE;
+ 183:dfu.c         ****                 dfuCopyBufferToExec();
+ 184:dfu.c         ****             }
+ 185:dfu.c         **** 
+ 186:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_GETSTATE) {
+ 187:dfu.c         ****             dfuAppStatus.bState  = dfuDNLOAD_SYNC;
+ 188:dfu.c         ****         } else {
+ 189:dfu.c         ****             dfuAppStatus.bState  = dfuERROR;
+ 190:dfu.c         ****             dfuAppStatus.bStatus = errSTALLEDPKT;
+ 191:dfu.c         ****         }
+ 192:dfu.c         **** 
+ 193:dfu.c         ****     } else if (startState == dfuDNBUSY)              {
+ 194:dfu.c         ****         /* if were actually done writing, goto sync, else stay busy */
+ 195:dfu.c         ****         if (code_copy_lock == END) {
+ 196:dfu.c         ****             dfuAppStatus.bwPollTimeout0 = 0x00;
+ 197:dfu.c         ****             code_copy_lock = WAIT;
+ 198:dfu.c         ****             dfuAppStatus.bState = dfuDNLOAD_IDLE;
+ 199:dfu.c         ****         } else {
+ 200:dfu.c         ****             dfuAppStatus.bState = dfuDNBUSY;
+ 201:dfu.c         ****         }
+ 202:dfu.c         **** 
+ 203:dfu.c         ****     } else if (startState == dfuDNLOAD_IDLE)         {
+ 204:dfu.c         ****         /* device is expecting dfu_dnload requests */
+ 205:dfu.c         ****         if (pInformation->USBbRequest == DFU_DNLOAD) {
+ 206:dfu.c         ****             if (pInformation->USBwLengths.w > 0) {
+ 207:dfu.c         ****                 dfuAppStatus.bState  = dfuDNLOAD_SYNC;
+ 208:dfu.c         ****             } else {
+ 209:dfu.c         ****                 /* todo, support "disagreement" if device expects more data than this */
+ 210:dfu.c         ****                 dfuAppStatus.bState  = dfuMANIFEST_SYNC;
+ 211:dfu.c         **** 
+ 212:dfu.c         ****                 /* relock the flash */
+ 213:dfu.c         ****                 flashLock();
+ 214:dfu.c         ****             }
+ 215:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_ABORT) {
+ 216:dfu.c         ****             dfuAppStatus.bState  = dfuIDLE;
+ 217:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_GETSTATUS) {
+ 218:dfu.c         ****             dfuAppStatus.bState  = dfuIDLE;
+ 219:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_GETSTATE) {
+ 220:dfu.c         ****             dfuAppStatus.bState  = dfuIDLE;
+ 221:dfu.c         ****         } else {
+ 222:dfu.c         ****             dfuAppStatus.bState  = dfuERROR;
+ 223:dfu.c         ****             dfuAppStatus.bStatus = errSTALLEDPKT;
+ 224:dfu.c         ****         }
+ 225:dfu.c         **** 
+ 226:dfu.c         ****     } else if (startState == dfuMANIFEST_SYNC)       {
+ 227:dfu.c         ****         /* device has received last block, waiting DFU_GETSTATUS request */
+ 228:dfu.c         **** 
+ 229:dfu.c         ****         if (pInformation->USBbRequest == DFU_GETSTATUS) {
+ 230:dfu.c         ****             dfuAppStatus.bState  = dfuMANIFEST_WAIT_RESET;
+ 231:dfu.c         ****             dfuAppStatus.bStatus = OK;
+ 232:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_GETSTATE) {
+ 233:dfu.c         ****             dfuAppStatus.bState  = dfuMANIFEST_SYNC;
+ 234:dfu.c         ****         } else {
+ 235:dfu.c         ****             dfuAppStatus.bState  = dfuERROR;
+ 236:dfu.c         ****             dfuAppStatus.bStatus = errSTALLEDPKT;
+ 237:dfu.c         ****         }
+ 238:dfu.c         **** 
+ 239:dfu.c         ****     } else if (startState == dfuMANIFEST)            {
+ 240:dfu.c         ****         /* device is in manifestation phase */
+ 241:dfu.c         **** 
+ 242:dfu.c         ****         /* should never receive request while in manifest! */
+ 243:dfu.c         ****         dfuAppStatus.bState  = dfuMANIFEST_WAIT_RESET;
+ 244:dfu.c         ****         dfuAppStatus.bStatus = OK;
+ 245:dfu.c         **** 
+ 246:dfu.c         ****     } else if (startState == dfuMANIFEST_WAIT_RESET) {
+ 247:dfu.c         ****         /* device has programmed new firmware but needs external
+ 248:dfu.c         ****            usb reset or power on reset to run the new code */
+ 249:dfu.c         **** 
+ 250:dfu.c         ****         /* consider timing out and self-resetting */
+ 251:dfu.c         ****         dfuAppStatus.bState  = dfuMANIFEST_WAIT_RESET;
+ 252:dfu.c         **** 
+ 253:dfu.c         ****     } else if (startState == dfuUPLOAD_IDLE)         {
+ 254:dfu.c         ****         /* device expecting further dfu_upload requests */
+ 255:dfu.c         **** 
+ 256:dfu.c         ****         if (pInformation->USBbRequest == DFU_UPLOAD) {
+ 257:dfu.c         ****             if (pInformation->USBwLengths.w > 0) {
+ 258:dfu.c         ****                 /* check that this is not the last possible block */
+ 259:dfu.c         ****                 userFirmwareLen = uploadBlockLen * pInformation->USBwValue;
+ 260:dfu.c         ****                 if (userAppAddr + userFirmwareLen + uploadBlockLen <= userAppEnd) {
+ 261:dfu.c         ****                     thisBlockLen = uploadBlockLen;
+ 262:dfu.c         ****                     dfuAppStatus.bState  = dfuUPLOAD_IDLE;
+ 263:dfu.c         ****                 } else {
+ 264:dfu.c         ****                     /* if above comparison was just equal, thisBlockLen becomes zero
+ 265:dfu.c         ****                     next time when USBWValue has been increased by one */
+ 266:dfu.c         ****                     thisBlockLen = userAppEnd - userAppAddr - userFirmwareLen;
+ 267:dfu.c         ****                     /* check for overflow due to USBwValue out of range */
+ 268:dfu.c         ****                     if (thisBlockLen >= pInformation->USBwLengths.w) {
+ 269:dfu.c         ****                         thisBlockLen = 0;
+ 270:dfu.c         ****                     }
+ 271:dfu.c         ****                     dfuAppStatus.bState  = dfuIDLE;
+ 272:dfu.c         ****                 }
  273:dfu.c         ****             } else {
- 274:dfu.c         ****                 /* todo, support "disagreement" if device expects more data than this */
- 275:dfu.c         ****                 dfuAppStatus.bState  = dfuMANIFEST_SYNC;
- 276:dfu.c         **** 
- 277:dfu.c         ****                 /* relock the flash */
- 278:dfu.c         ****                 flashLock();
- 279:dfu.c         ****             }
- 280:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_ABORT) {
- 281:dfu.c         ****             dfuAppStatus.bState  = dfuIDLE;
- 282:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_GETSTATUS) {
- 283:dfu.c         ****             dfuAppStatus.bState  = dfuIDLE;
- 284:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_GETSTATE) {
- 285:dfu.c         ****             dfuAppStatus.bState  = dfuIDLE;
- 286:dfu.c         ****         } else {
- 287:dfu.c         ****             dfuAppStatus.bState  = dfuERROR;
- 288:dfu.c         ****             dfuAppStatus.bStatus = errSTALLEDPKT;
- 289:dfu.c         ****         }
- 290:dfu.c         **** 
- 291:dfu.c         ****     } else if (startState == dfuMANIFEST_SYNC)       {
- 292:dfu.c         ****         /* device has received last block, waiting DFU_GETSTATUS request */
- 293:dfu.c         **** 
- 294:dfu.c         ****         if (pInformation->USBbRequest == DFU_GETSTATUS) {
- 295:dfu.c         ****             dfuAppStatus.bState  = dfuMANIFEST_WAIT_RESET;
- 296:dfu.c         ****             dfuAppStatus.bStatus = OK;
- 297:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_GETSTATE) {
- 298:dfu.c         ****             dfuAppStatus.bState  = dfuMANIFEST_SYNC;
- 299:dfu.c         ****         } else {
- 300:dfu.c         ****             dfuAppStatus.bState  = dfuERROR;
- 301:dfu.c         ****             dfuAppStatus.bStatus = errSTALLEDPKT;
- 302:dfu.c         ****         }
- 303:dfu.c         **** 
- 304:dfu.c         ****     } else if (startState == dfuMANIFEST)            {
- 305:dfu.c         ****         /* device is in manifestation phase */
- 306:dfu.c         **** 
- 307:dfu.c         ****         /* should never receive request while in manifest! */
- 308:dfu.c         ****         dfuAppStatus.bState  = dfuMANIFEST_WAIT_RESET;
- 309:dfu.c         ****         dfuAppStatus.bStatus = OK;
- 310:dfu.c         **** 
- 311:dfu.c         ****     } else if (startState == dfuMANIFEST_WAIT_RESET) {
- 312:dfu.c         ****         /* device has programmed new firmware but needs external
- 313:dfu.c         ****            usb reset or power on reset to run the new code */
- 314:dfu.c         **** 
- 315:dfu.c         ****         /* consider timing out and self-resetting */
- 316:dfu.c         ****         dfuAppStatus.bState  = dfuMANIFEST_WAIT_RESET;
- 317:dfu.c         **** 
- 318:dfu.c         ****     } else if (startState == dfuUPLOAD_IDLE)         {
- 319:dfu.c         ****         /* device expecting further dfu_upload requests */
- 320:dfu.c         **** 
- 321:dfu.c         ****         if (pInformation->USBbRequest == DFU_UPLOAD) {
- 322:dfu.c         ****             if (pInformation->USBwLengths.w > 0) {
- 323:dfu.c         ****                 /* check that this is not the last possible block */
- 324:dfu.c         ****                 userFirmwareLen = uploadBlockLen * pInformation->USBwValue;
- 325:dfu.c         ****                 if (userAppAddr + userFirmwareLen + uploadBlockLen <= userAppEnd) {
- 326:dfu.c         ****                     thisBlockLen = uploadBlockLen;
- 327:dfu.c         ****                     dfuAppStatus.bState  = dfuUPLOAD_IDLE;
- 328:dfu.c         ****                 } else {
- 329:dfu.c         ****                     /* if above comparison was just equal, thisBlockLen becomes zero
- 330:dfu.c         ****                     next time when USBWValue has been increased by one */
- 331:dfu.c         ****                     thisBlockLen = userAppEnd - userAppAddr - userFirmwareLen;
- 332:dfu.c         ****                     /* check for overflow due to USBwValue out of range */
- 333:dfu.c         ****                     if (thisBlockLen >= pInformation->USBwLengths.w) {
- 334:dfu.c         ****                         thisBlockLen = 0;
- 335:dfu.c         ****                     }
- 336:dfu.c         ****                     dfuAppStatus.bState  = dfuIDLE;
- 337:dfu.c         ****                 }
- 338:dfu.c         ****             } else {
- 339:dfu.c         ****                 dfuAppStatus.bState  = dfuERROR;
- 340:dfu.c         ****                 dfuAppStatus.bStatus = errNOTDONE;
- 341:dfu.c         ****             }
- 342:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_ABORT) {
- 343:dfu.c         ****             dfuAppStatus.bState  = dfuIDLE;
- 344:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_GETSTATUS) {
- 345:dfu.c         ****             dfuAppStatus.bState  = dfuUPLOAD_IDLE;
- 346:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_GETSTATE) {
- 347:dfu.c         ****             dfuAppStatus.bState  = dfuUPLOAD_IDLE;
- 348:dfu.c         ****         } else {
- 349:dfu.c         ****             dfuAppStatus.bState  = dfuERROR;
- 350:dfu.c         ****             dfuAppStatus.bStatus = errSTALLEDPKT;
- 351:dfu.c         ****         }
- 352:dfu.c         **** 
- 353:dfu.c         **** 
- 354:dfu.c         ****     } else if (startState == dfuERROR)               {
- 355:dfu.c         ****         /* status is in error, awaiting DFU_CLRSTATUS request */
- 356:dfu.c         **** 
- 357:dfu.c         ****         if (pInformation->USBbRequest == DFU_GETSTATUS) {
- 358:dfu.c         ****             /* todo, add routine to wait for last block write to finish */
- 359:dfu.c         ****             dfuAppStatus.bState  = dfuERROR;
- 360:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_GETSTATE) {
- 361:dfu.c         ****             dfuAppStatus.bState  = dfuERROR;
- 362:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_CLRSTATUS) {
- 363:dfu.c         ****             /* todo handle any cleanup we need here */
- 364:dfu.c         ****             dfuAppStatus.bState  = dfuIDLE;
- 365:dfu.c         ****             dfuAppStatus.bStatus = OK;
- 366:dfu.c         ****         } else {
- 367:dfu.c         ****             dfuAppStatus.bState  = dfuERROR;
- 368:dfu.c         ****             dfuAppStatus.bStatus = errSTALLEDPKT;
- 369:dfu.c         ****         }
- 370:dfu.c         **** 
- 371:dfu.c         ****     } else {
- 372:dfu.c         ****         /* some kind of error... */
- 373:dfu.c         ****         dfuAppStatus.bState  = dfuERROR;
- 374:dfu.c         ****         dfuAppStatus.bStatus = errSTALLEDPKT;
- 375:dfu.c         ****     }
- 376:dfu.c         **** 
- 377:dfu.c         ****     if (dfuAppStatus.bStatus == OK) {
- 378:dfu.c         ****         return TRUE;
- 379:dfu.c         ****     } else {
- 380:dfu.c         ****         return FALSE;
- 381:dfu.c         ****     }
- 382:dfu.c         **** }
- 383:dfu.c         **** 
- 384:dfu.c         **** void dfuUpdateByReset(void) {
- 101              		.loc 1 384 0
+ 274:dfu.c         ****                 dfuAppStatus.bState  = dfuERROR;
+ 275:dfu.c         ****                 dfuAppStatus.bStatus = errNOTDONE;
+ 276:dfu.c         ****             }
+ 277:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_ABORT) {
+ 278:dfu.c         ****             dfuAppStatus.bState  = dfuIDLE;
+ 279:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_GETSTATUS) {
+ 280:dfu.c         ****             dfuAppStatus.bState  = dfuUPLOAD_IDLE;
+ 281:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_GETSTATE) {
+ 282:dfu.c         ****             dfuAppStatus.bState  = dfuUPLOAD_IDLE;
+ 283:dfu.c         ****         } else {
+ 284:dfu.c         ****             dfuAppStatus.bState  = dfuERROR;
+ 285:dfu.c         ****             dfuAppStatus.bStatus = errSTALLEDPKT;
+ 286:dfu.c         ****         }
+ 287:dfu.c         **** 
+ 288:dfu.c         **** 
+ 289:dfu.c         ****     } else if (startState == dfuERROR)               {
+ 290:dfu.c         ****         /* status is in error, awaiting DFU_CLRSTATUS request */
+ 291:dfu.c         **** 
+ 292:dfu.c         ****         if (pInformation->USBbRequest == DFU_GETSTATUS) {
+ 293:dfu.c         ****             /* todo, add routine to wait for last block write to finish */
+ 294:dfu.c         ****             dfuAppStatus.bState  = dfuERROR;
+ 295:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_GETSTATE) {
+ 296:dfu.c         ****             dfuAppStatus.bState  = dfuERROR;
+ 297:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_CLRSTATUS) {
+ 298:dfu.c         ****             /* todo handle any cleanup we need here */
+ 299:dfu.c         ****             dfuAppStatus.bState  = dfuIDLE;
+ 300:dfu.c         ****             dfuAppStatus.bStatus = OK;
+ 301:dfu.c         ****         } else {
+ 302:dfu.c         ****             dfuAppStatus.bState  = dfuERROR;
+ 303:dfu.c         ****             dfuAppStatus.bStatus = errSTALLEDPKT;
+ 304:dfu.c         ****         }
+ 305:dfu.c         **** 
+ 306:dfu.c         ****     } else {
+ 307:dfu.c         ****         /* some kind of error... */
+ 308:dfu.c         ****         dfuAppStatus.bState  = dfuERROR;
+ 309:dfu.c         ****         dfuAppStatus.bStatus = errSTALLEDPKT;
+ 310:dfu.c         ****     }
+ 311:dfu.c         **** 
+ 312:dfu.c         ****     if (dfuAppStatus.bStatus == OK) {
+ 313:dfu.c         ****         return TRUE;
+ 314:dfu.c         ****     } else {
+ 315:dfu.c         ****         return FALSE;
+ 316:dfu.c         ****     }
+ 317:dfu.c         **** }
+ 318:dfu.c         **** 
+ 319:dfu.c         **** void dfuUpdateByReset(void) {
+ 101              		.loc 1 319 0
  102              		.cfi_startproc
  103              		@ args = 0, pretend = 0, frame = 0
  104              		@ frame_needed = 0, uses_anonymous_args = 0
@@ -494,80 +429,80 @@
  106              		.cfi_def_cfa_offset 8
  107              		.cfi_offset 3, -8
  108              		.cfi_offset 14, -4
- 385:dfu.c         ****     u8 startState = dfuAppStatus.bState;
- 109              		.loc 1 385 0
+ 320:dfu.c         ****     u8 startState = dfuAppStatus.bState;
+ 109              		.loc 1 320 0
  110 0002 0E4B     		ldr	r3, .L8
- 386:dfu.c         ****     userFirmwareLen = 0;
- 111              		.loc 1 386 0
+ 321:dfu.c         ****     userFirmwareLen = 0;
+ 111              		.loc 1 321 0
  112 0004 0E48     		ldr	r0, .L8+4
- 385:dfu.c         ****     u8 startState = dfuAppStatus.bState;
- 113              		.loc 1 385 0
+ 320:dfu.c         ****     u8 startState = dfuAppStatus.bState;
+ 113              		.loc 1 320 0
  114 0006 1979     		ldrb	r1, [r3, #4]	@ zero_extendqisi2
- 115              		.loc 1 386 0
+ 115              		.loc 1 321 0
  116 0008 0022     		movs	r2, #0
- 385:dfu.c         ****     u8 startState = dfuAppStatus.bState;
- 117              		.loc 1 385 0
+ 320:dfu.c         ****     u8 startState = dfuAppStatus.bState;
+ 117              		.loc 1 320 0
  118 000a C9B2     		uxtb	r1, r1
  119              	.LVL0:
- 387:dfu.c         **** 
- 388:dfu.c         ****     if (startState == appDETACH) {
- 120              		.loc 1 388 0
+ 322:dfu.c         **** 
+ 323:dfu.c         ****     if (startState == appDETACH) {
+ 120              		.loc 1 323 0
  121 000c 0129     		cmp	r1, #1
- 386:dfu.c         ****     userFirmwareLen = 0;
- 122              		.loc 1 386 0
+ 321:dfu.c         ****     userFirmwareLen = 0;
+ 122              		.loc 1 321 0
  123 000e 0260     		str	r2, [r0]
- 124              		.loc 1 388 0
+ 124              		.loc 1 323 0
  125 0010 08D1     		bne	.L5
- 389:dfu.c         ****         dfuAppStatus.bState = dfuIDLE;
- 126              		.loc 1 389 0
+ 324:dfu.c         ****         dfuAppStatus.bState = dfuIDLE;
+ 126              		.loc 1 324 0
  127 0012 0221     		movs	r1, #2
  128              	.LVL1:
  129 0014 1971     		strb	r1, [r3, #4]
- 390:dfu.c         ****         dfuAppStatus.bStatus = OK;
- 130              		.loc 1 390 0
+ 325:dfu.c         ****         dfuAppStatus.bStatus = OK;
+ 130              		.loc 1 325 0
  131 0016 1A70     		strb	r2, [r3]
- 391:dfu.c         **** 
- 392:dfu.c         ****         nvicDisableInterrupts();
- 132              		.loc 1 392 0
+ 326:dfu.c         **** 
+ 327:dfu.c         ****         nvicDisableInterrupts();
+ 132              		.loc 1 327 0
  133 0018 FFF7FEFF 		bl	nvicDisableInterrupts
  134              	.LVL2:
- 393:dfu.c         ****         usbEnbISR();
- 394:dfu.c         **** 
- 395:dfu.c         ****     } else if (startState == appIDLE || startState == dfuIDLE) {
- 396:dfu.c         ****         /* do nothing...might be normal usb bus activity */
- 397:dfu.c         ****     } else {
- 398:dfu.c         ****         /* we reset from the dfu, reset everything and startover,
- 399:dfu.c         ****            which is the correct operation if this is an erroneous
- 400:dfu.c         ****            event or properly following a MANIFEST */
- 401:dfu.c         ****         dfuAppStatus.bState = dfuIDLE;
- 402:dfu.c         ****         dfuAppStatus.bStatus = OK;
- 403:dfu.c         **** 
- 404:dfu.c         ****         systemHardReset();
- 405:dfu.c         ****     }
- 406:dfu.c         **** }
- 135              		.loc 1 406 0
+ 328:dfu.c         ****         usbEnbISR();
+ 329:dfu.c         **** 
+ 330:dfu.c         ****     } else if (startState == appIDLE || startState == dfuIDLE) {
+ 331:dfu.c         ****         /* do nothing...might be normal usb bus activity */
+ 332:dfu.c         ****     } else {
+ 333:dfu.c         ****         /* we reset from the dfu, reset everything and startover,
+ 334:dfu.c         ****            which is the correct operation if this is an erroneous
+ 335:dfu.c         ****            event or properly following a MANIFEST */
+ 336:dfu.c         ****         dfuAppStatus.bState = dfuIDLE;
+ 337:dfu.c         ****         dfuAppStatus.bStatus = OK;
+ 338:dfu.c         **** 
+ 339:dfu.c         ****         systemHardReset();
+ 340:dfu.c         ****     }
+ 341:dfu.c         **** }
+ 135              		.loc 1 341 0
  136 001c BDE80840 		pop	{r3, lr}
- 393:dfu.c         ****         usbEnbISR();
- 137              		.loc 1 393 0
+ 328:dfu.c         ****         usbEnbISR();
+ 137              		.loc 1 328 0
  138 0020 FFF7FEBF 		b	usbEnbISR
  139              	.LVL3:
  140              	.L5:
- 395:dfu.c         ****     } else if (startState == appIDLE || startState == dfuIDLE) {
- 141              		.loc 1 395 0
+ 330:dfu.c         ****     } else if (startState == appIDLE || startState == dfuIDLE) {
+ 141              		.loc 1 330 0
  142 0024 11F0FD0F 		tst	r1, #253
  143 0028 06D0     		beq	.L4
- 401:dfu.c         ****         dfuAppStatus.bState = dfuIDLE;
- 144              		.loc 1 401 0
+ 336:dfu.c         ****         dfuAppStatus.bState = dfuIDLE;
+ 144              		.loc 1 336 0
  145 002a 0221     		movs	r1, #2
  146              	.LVL4:
  147 002c 1971     		strb	r1, [r3, #4]
- 402:dfu.c         ****         dfuAppStatus.bStatus = OK;
- 148              		.loc 1 402 0
+ 337:dfu.c         ****         dfuAppStatus.bStatus = OK;
+ 148              		.loc 1 337 0
  149 002e 1A70     		strb	r2, [r3]
- 150              		.loc 1 406 0
+ 150              		.loc 1 341 0
  151 0030 BDE80840 		pop	{r3, lr}
- 404:dfu.c         ****         systemHardReset();
- 152              		.loc 1 404 0
+ 339:dfu.c         ****         systemHardReset();
+ 152              		.loc 1 339 0
  153 0034 FFF7FEBF 		b	systemHardReset
  154              	.LVL5:
  155              	.L4:
@@ -586,9 +521,9 @@
  169              		.thumb_func
  171              	dfuUpdateByTimeout:
  172              	.LFB3:
- 407:dfu.c         **** 
- 408:dfu.c         **** void dfuUpdateByTimeout(void) {
- 173              		.loc 1 408 0
+ 342:dfu.c         **** 
+ 343:dfu.c         **** void dfuUpdateByTimeout(void) {
+ 173              		.loc 1 343 0
  174              		.cfi_startproc
  175              		@ args = 0, pretend = 0, frame = 0
  176              		@ frame_needed = 0, uses_anonymous_args = 0
@@ -603,36 +538,36 @@
  186              		.thumb_func
  188              	dfuCopyState:
  189              	.LFB4:
- 409:dfu.c         **** }
- 410:dfu.c         **** 
- 411:dfu.c         **** u8 *dfuCopyState(u16 length) {
- 190              		.loc 1 411 0
+ 344:dfu.c         **** }
+ 345:dfu.c         **** 
+ 346:dfu.c         **** u8 *dfuCopyState(u16 length) {
+ 190              		.loc 1 346 0
  191              		.cfi_startproc
  192              		@ args = 0, pretend = 0, frame = 0
  193              		@ frame_needed = 0, uses_anonymous_args = 0
  194              		@ link register save eliminated.
  195              	.LVL6:
- 412:dfu.c         ****     if (length == 0) {
- 196              		.loc 1 412 0
+ 347:dfu.c         ****     if (length == 0) {
+ 196              		.loc 1 347 0
  197 0000 20B9     		cbnz	r0, .L13
- 413:dfu.c         ****         pInformation->Ctrl_Info.Usb_wLength = 1;
- 198              		.loc 1 413 0
+ 348:dfu.c         ****         pInformation->Ctrl_Info.Usb_wLength = 1;
+ 198              		.loc 1 348 0
  199 0002 034B     		ldr	r3, .L14
  200 0004 0122     		movs	r2, #1
  201 0006 1B68     		ldr	r3, [r3]
  202 0008 1A82     		strh	r2, [r3, #16]	@ movhi
- 414:dfu.c         ****         return NULL;
- 203              		.loc 1 414 0
+ 349:dfu.c         ****         return NULL;
+ 203              		.loc 1 349 0
  204 000a 7047     		bx	lr
  205              	.L13:
- 415:dfu.c         ****     } else {
- 416:dfu.c         ****         return (&(dfuAppStatus.bState));
- 206              		.loc 1 416 0
+ 350:dfu.c         ****     } else {
+ 351:dfu.c         ****         return (&(dfuAppStatus.bState));
+ 206              		.loc 1 351 0
  207 000c 0148     		ldr	r0, .L14+4
  208              	.LVL7:
- 417:dfu.c         ****     }
- 418:dfu.c         **** }
- 209              		.loc 1 418 0
+ 352:dfu.c         ****     }
+ 353:dfu.c         **** }
+ 209              		.loc 1 353 0
  210 000e 7047     		bx	lr
  211              	.L15:
  212              		.align	2
@@ -648,35 +583,35 @@
  223              		.thumb_func
  225              	dfuCopyStatus:
  226              	.LFB5:
- 419:dfu.c         **** 
- 420:dfu.c         **** u8 *dfuCopyStatus(u16 length) {
- 227              		.loc 1 420 0
+ 354:dfu.c         **** 
+ 355:dfu.c         **** u8 *dfuCopyStatus(u16 length) {
+ 227              		.loc 1 355 0
  228              		.cfi_startproc
  229              		@ args = 0, pretend = 0, frame = 0
  230              		@ frame_needed = 0, uses_anonymous_args = 0
  231              		@ link register save eliminated.
  232              	.LVL8:
- 421:dfu.c         ****     if (length == 0) {
- 233              		.loc 1 421 0
+ 356:dfu.c         ****     if (length == 0) {
+ 233              		.loc 1 356 0
  234 0000 20B9     		cbnz	r0, .L18
- 422:dfu.c         ****         pInformation->Ctrl_Info.Usb_wLength = 6;
- 235              		.loc 1 422 0
+ 357:dfu.c         ****         pInformation->Ctrl_Info.Usb_wLength = 6;
+ 235              		.loc 1 357 0
  236 0002 034B     		ldr	r3, .L19
  237 0004 0622     		movs	r2, #6
  238 0006 1B68     		ldr	r3, [r3]
  239 0008 1A82     		strh	r2, [r3, #16]	@ movhi
- 423:dfu.c         ****         return NULL;
- 240              		.loc 1 423 0
+ 358:dfu.c         ****         return NULL;
+ 240              		.loc 1 358 0
  241 000a 7047     		bx	lr
  242              	.L18:
- 424:dfu.c         ****     } else {
- 425:dfu.c         ****         return (u8*)(&dfuAppStatus);
- 243              		.loc 1 425 0
+ 359:dfu.c         ****     } else {
+ 360:dfu.c         ****         return (u8*)(&dfuAppStatus);
+ 243              		.loc 1 360 0
  244 000c 0148     		ldr	r0, .L19+4
  245              	.LVL9:
- 426:dfu.c         ****     }
- 427:dfu.c         **** }
- 246              		.loc 1 427 0
+ 361:dfu.c         ****     }
+ 362:dfu.c         **** }
+ 246              		.loc 1 362 0
  247 000e 7047     		bx	lr
  248              	.L20:
  249              		.align	2
@@ -692,46 +627,46 @@
  260              		.thumb_func
  262              	dfuCopyDNLOAD:
  263              	.LFB6:
- 428:dfu.c         **** 
- 429:dfu.c         **** 
- 430:dfu.c         **** u8 *dfuCopyDNLOAD(u16 length) {
- 264              		.loc 1 430 0
+ 363:dfu.c         **** 
+ 364:dfu.c         **** 
+ 365:dfu.c         **** u8 *dfuCopyDNLOAD(u16 length) {
+ 264              		.loc 1 365 0
  265              		.cfi_startproc
  266              		@ args = 0, pretend = 0, frame = 0
  267              		@ frame_needed = 0, uses_anonymous_args = 0
  268              		@ link register save eliminated.
  269              	.LVL10:
  270 0000 064B     		ldr	r3, .L24
- 431:dfu.c         ****     if (length == 0) {
- 432:dfu.c         ****         pInformation->Ctrl_Info.Usb_wLength = pInformation->USBwLengths.w - pInformation->Ctrl_Info
- 271              		.loc 1 432 0
+ 366:dfu.c         ****     if (length == 0) {
+ 367:dfu.c         ****         pInformation->Ctrl_Info.Usb_wLength = pInformation->USBwLengths.w - pInformation->Ctrl_Info
+ 271              		.loc 1 367 0
  272 0002 1B68     		ldr	r3, [r3]
- 431:dfu.c         ****     if (length == 0) {
- 273              		.loc 1 431 0
+ 366:dfu.c         ****     if (length == 0) {
+ 273              		.loc 1 366 0
  274 0004 30B9     		cbnz	r0, .L22
- 275              		.loc 1 432 0
+ 275              		.loc 1 367 0
  276 0006 DA88     		ldrh	r2, [r3, #6]
  277 0008 598A     		ldrh	r1, [r3, #18]
  278 000a 511A     		subs	r1, r2, r1
  279 000c 1982     		strh	r1, [r3, #16]	@ movhi
- 433:dfu.c         ****         thisBlockLen = pInformation->USBwLengths.w;
- 280              		.loc 1 433 0
+ 368:dfu.c         ****         thisBlockLen = pInformation->USBwLengths.w;
+ 280              		.loc 1 368 0
  281 000e 044B     		ldr	r3, .L24+4
  282 0010 1A80     		strh	r2, [r3]	@ movhi
- 434:dfu.c         ****         return NULL;
- 283              		.loc 1 434 0
+ 369:dfu.c         ****         return NULL;
+ 283              		.loc 1 369 0
  284 0012 7047     		bx	lr
  285              	.L22:
- 435:dfu.c         ****     } else {
- 436:dfu.c         ****         return ((u8 *)recvBuffer + pInformation->Ctrl_Info.Usb_wOffset);
- 286              		.loc 1 436 0
+ 370:dfu.c         ****     } else {
+ 371:dfu.c         ****         return ((u8 *)recvBuffer + pInformation->Ctrl_Info.Usb_wOffset);
+ 286              		.loc 1 371 0
  287 0014 5B8A     		ldrh	r3, [r3, #18]
  288 0016 0348     		ldr	r0, .L24+8
  289              	.LVL11:
  290 0018 1844     		add	r0, r0, r3
- 437:dfu.c         ****     }
- 438:dfu.c         **** }
- 291              		.loc 1 438 0
+ 372:dfu.c         ****     }
+ 373:dfu.c         **** }
+ 291              		.loc 1 373 0
  292 001a 7047     		bx	lr
  293              	.L25:
  294              		.align	2
@@ -748,33 +683,33 @@
  306              		.thumb_func
  308              	dfuCopyUPLOAD:
  309              	.LFB7:
- 439:dfu.c         **** 
- 440:dfu.c         **** u8 *dfuCopyUPLOAD(u16 length) {
- 310              		.loc 1 440 0
+ 374:dfu.c         **** 
+ 375:dfu.c         **** u8 *dfuCopyUPLOAD(u16 length) {
+ 310              		.loc 1 375 0
  311              		.cfi_startproc
  312              		@ args = 0, pretend = 0, frame = 0
  313              		@ frame_needed = 0, uses_anonymous_args = 0
  314              		@ link register save eliminated.
  315              	.LVL12:
  316 0000 084B     		ldr	r3, .L29
- 441:dfu.c         ****     if (length == 0) {
- 317              		.loc 1 441 0
+ 376:dfu.c         ****     if (length == 0) {
+ 317              		.loc 1 376 0
  318 0002 30B9     		cbnz	r0, .L27
- 442:dfu.c         ****         pInformation->Ctrl_Info.Usb_wLength = thisBlockLen - pInformation->Ctrl_Info.Usb_wOffset;
- 319              		.loc 1 442 0
+ 377:dfu.c         ****         pInformation->Ctrl_Info.Usb_wLength = thisBlockLen - pInformation->Ctrl_Info.Usb_wOffset;
+ 319              		.loc 1 377 0
  320 0004 1B68     		ldr	r3, [r3]
  321 0006 084A     		ldr	r2, .L29+4
  322 0008 1188     		ldrh	r1, [r2]
  323 000a 5A8A     		ldrh	r2, [r3, #18]
  324 000c 8A1A     		subs	r2, r1, r2
  325 000e 1A82     		strh	r2, [r3, #16]	@ movhi
- 443:dfu.c         ****         return NULL;
- 326              		.loc 1 443 0
+ 378:dfu.c         ****         return NULL;
+ 326              		.loc 1 378 0
  327 0010 7047     		bx	lr
  328              	.L27:
- 444:dfu.c         ****     } else {
- 445:dfu.c         ****         return((u8*) userAppAddr + userFirmwareLen + pInformation->Ctrl_Info.Usb_wOffset);
- 329              		.loc 1 445 0
+ 379:dfu.c         ****     } else {
+ 380:dfu.c         ****         return((u8*) userAppAddr + userFirmwareLen + pInformation->Ctrl_Info.Usb_wOffset);
+ 329              		.loc 1 380 0
  330 0012 0649     		ldr	r1, .L29+8
  331 0014 064A     		ldr	r2, .L29+12
  332 0016 1B68     		ldr	r3, [r3]
@@ -784,9 +719,9 @@
  336 001c 5B8A     		ldrh	r3, [r3, #18]
  337 001e 1044     		add	r0, r0, r2
  338 0020 1844     		add	r0, r0, r3
- 446:dfu.c         ****     }
- 447:dfu.c         **** }
- 339              		.loc 1 447 0
+ 381:dfu.c         ****     }
+ 382:dfu.c         **** }
+ 339              		.loc 1 382 0
  340 0022 7047     		bx	lr
  341              	.L30:
  342              		.align	2
@@ -804,9 +739,9 @@
  355              		.thumb_func
  357              	dfuCopyBufferToExec:
  358              	.LFB8:
- 448:dfu.c         **** 
- 449:dfu.c         **** void dfuCopyBufferToExec() {
- 359              		.loc 1 449 0
+ 383:dfu.c         **** 
+ 384:dfu.c         **** void dfuCopyBufferToExec() {
+ 359              		.loc 1 384 0
  360              		.cfi_startproc
  361              		@ args = 0, pretend = 0, frame = 0
  362              		@ frame_needed = 0, uses_anonymous_args = 0
@@ -816,92 +751,92 @@
  366              		.cfi_offset 5, -12
  367              		.cfi_offset 6, -8
  368              		.cfi_offset 14, -4
- 450:dfu.c         ****     int i;
- 451:dfu.c         ****     u32 *userSpace;
- 452:dfu.c         **** 
- 453:dfu.c         **** /* Roger Clark.
- 454:dfu.c         ****     Commented out code associated with upload to RAM
- 455:dfu.c         **** 
- 456:dfu.c         ****     if (userUploadType == DFU_UPLOAD_RAM)
- 457:dfu.c         ****     {
- 458:dfu.c         ****         userSpace = (u32 *)(USER_CODE_RAM + userFirmwareLen);
- 459:dfu.c         ****         // we dont need to handle when thisBlock len is not divisible by 4,
- 460:dfu.c         ****         //   since the linker will align everything to 4B anyway
- 461:dfu.c         ****         for (i = 0; i < thisBlockLen; i = i + 4) {
- 462:dfu.c         ****             *userSpace++ = *(u32 *)(recvBuffer + i);
- 463:dfu.c         ****         }
- 464:dfu.c         ****     }
- 465:dfu.c         ****     else
- 466:dfu.c         **** */
- 467:dfu.c         ****     {
- 468:dfu.c         ****         if (userUploadType == DFU_UPLOAD_FLASH_0X8005000)
- 369              		.loc 1 468 0
+ 385:dfu.c         ****     int i;
+ 386:dfu.c         ****     u32 *userSpace;
+ 387:dfu.c         **** 
+ 388:dfu.c         **** /* Roger Clark.
+ 389:dfu.c         ****     Commented out code associated with upload to RAM
+ 390:dfu.c         **** 
+ 391:dfu.c         ****     if (userUploadType == DFU_UPLOAD_RAM)
+ 392:dfu.c         ****     {
+ 393:dfu.c         ****         userSpace = (u32 *)(USER_CODE_RAM + userFirmwareLen);
+ 394:dfu.c         ****         // we dont need to handle when thisBlock len is not divisible by 4,
+ 395:dfu.c         ****         //   since the linker will align everything to 4B anyway
+ 396:dfu.c         ****         for (i = 0; i < thisBlockLen; i = i + 4) {
+ 397:dfu.c         ****             *userSpace++ = *(u32 *)(recvBuffer + i);
+ 398:dfu.c         ****         }
+ 399:dfu.c         ****     }
+ 400:dfu.c         ****     else
+ 401:dfu.c         **** */
+ 402:dfu.c         ****     {
+ 403:dfu.c         ****         if (userUploadType == DFU_UPLOAD_FLASH_0X8005000)
+ 369              		.loc 1 403 0
  370 0002 124B     		ldr	r3, .L37
  371 0004 124E     		ldr	r6, .L37+4
  372 0006 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
- 469:dfu.c         ****         {
- 470:dfu.c         ****             userSpace = (u32 *)(USER_CODE_FLASH0X8005000 + userFirmwareLen);
- 373              		.loc 1 470 0
+ 404:dfu.c         ****         {
+ 405:dfu.c         ****             userSpace = (u32 *)(USER_CODE_FLASH0X8005000 + userFirmwareLen);
+ 373              		.loc 1 405 0
  374 0008 3468     		ldr	r4, [r6]
- 468:dfu.c         ****         if (userUploadType == DFU_UPLOAD_FLASH_0X8005000)
- 375              		.loc 1 468 0
+ 403:dfu.c         ****         if (userUploadType == DFU_UPLOAD_FLASH_0X8005000)
+ 375              		.loc 1 403 0
  376 000a 022B     		cmp	r3, #2
- 377              		.loc 1 470 0
+ 377              		.loc 1 405 0
  378 000c 04F10064 		add	r4, r4, #134217728
  379 0010 0CBF     		ite	eq
  380 0012 04F5A044 		addeq	r4, r4, #20480
  381              	.LVL14:
- 471:dfu.c         ****         }
- 472:dfu.c         ****         else
- 473:dfu.c         ****         {
- 474:dfu.c         ****             userSpace = (u32 *)(USER_CODE_FLASH0X8002000 + userFirmwareLen);
- 382              		.loc 1 474 0
+ 406:dfu.c         ****         }
+ 407:dfu.c         ****         else
+ 408:dfu.c         ****         {
+ 409:dfu.c         ****             userSpace = (u32 *)(USER_CODE_FLASH0X8002000 + userFirmwareLen);
+ 382              		.loc 1 409 0
  383 0016 04F50054 		addne	r4, r4, #8192
- 475:dfu.c         ****         }
- 476:dfu.c         **** 
- 477:dfu.c         ****         flashErasePage((u32)(userSpace));
- 384              		.loc 1 477 0
+ 410:dfu.c         ****         }
+ 411:dfu.c         **** 
+ 412:dfu.c         ****         flashErasePage((u32)(userSpace));
+ 384              		.loc 1 412 0
  385 001a 2046     		mov	r0, r4
  386 001c FFF7FEFF 		bl	flashErasePage
  387              	.LVL15:
- 478:dfu.c         **** 
- 479:dfu.c         ****         for (i = 0; i < thisBlockLen; i = i + 4) {
- 388              		.loc 1 479 0
+ 413:dfu.c         **** 
+ 414:dfu.c         ****         for (i = 0; i < thisBlockLen; i = i + 4) {
+ 388              		.loc 1 414 0
  389 0020 0025     		movs	r5, #0
  390              	.LVL16:
  391              	.L34:
- 392              		.loc 1 479 0 is_stmt 0 discriminator 1
+ 392              		.loc 1 414 0 is_stmt 0 discriminator 1
  393 0022 0C4B     		ldr	r3, .L37+8
  394 0024 1A88     		ldrh	r2, [r3]
  395 0026 92B2     		uxth	r2, r2
  396 0028 9542     		cmp	r5, r2
  397 002a 06DA     		bge	.L36
- 480:dfu.c         ****             flashWriteWord((u32)(userSpace++), *(u32 *)(recvBuffer +i));
- 398              		.loc 1 480 0 is_stmt 1 discriminator 2
+ 415:dfu.c         ****             flashWriteWord((u32)(userSpace++), *(u32 *)(recvBuffer +i));
+ 398              		.loc 1 415 0 is_stmt 1 discriminator 2
  399 002c 0A4B     		ldr	r3, .L37+12
  400 002e 6019     		adds	r0, r4, r5
  401 0030 E958     		ldr	r1, [r5, r3]
  402 0032 FFF7FEFF 		bl	flashWriteWord
  403              	.LVL17:
- 479:dfu.c         ****         for (i = 0; i < thisBlockLen; i = i + 4) {
- 404              		.loc 1 479 0 discriminator 2
+ 414:dfu.c         ****         for (i = 0; i < thisBlockLen; i = i + 4) {
+ 404              		.loc 1 414 0 discriminator 2
  405 0036 0435     		adds	r5, r5, #4
  406              	.LVL18:
  407 0038 F3E7     		b	.L34
  408              	.L36:
- 481:dfu.c         ****         }
- 482:dfu.c         **** 
- 483:dfu.c         ****     }
- 484:dfu.c         ****     userFirmwareLen += thisBlockLen;
- 409              		.loc 1 484 0
+ 416:dfu.c         ****         }
+ 417:dfu.c         **** 
+ 418:dfu.c         ****     }
+ 419:dfu.c         ****     userFirmwareLen += thisBlockLen;
+ 409              		.loc 1 419 0
  410 003a 3168     		ldr	r1, [r6]
  411 003c 1A88     		ldrh	r2, [r3]
  412 003e 92B2     		uxth	r2, r2
  413 0040 0A44     		add	r2, r2, r1
  414 0042 3260     		str	r2, [r6]
- 485:dfu.c         **** 
- 486:dfu.c         ****     thisBlockLen = 0;
- 415              		.loc 1 486 0
+ 420:dfu.c         **** 
+ 421:dfu.c         ****     thisBlockLen = 0;
+ 415              		.loc 1 421 0
  416 0044 0022     		movs	r2, #0
  417 0046 1A80     		strh	r2, [r3]	@ movhi
  418 0048 70BD     		pop	{r4, r5, r6, pc}
@@ -937,10 +872,10 @@
  449              		.cfi_offset 14, -4
   78:dfu.c         ****     dfuBusy = TRUE;
  450              		.loc 1 78 0
- 451 0004 7949     		ldr	r1, .L98
+ 451 0004 7749     		ldr	r1, .L92
   82:dfu.c         ****     u8 startState = dfuAppStatus.bState;
  452              		.loc 1 82 0
- 453 0006 7A4C     		ldr	r4, .L98+4
+ 453 0006 784C     		ldr	r4, .L92+4
   78:dfu.c         ****     dfuBusy = TRUE;
  454              		.loc 1 78 0
  455 0008 0120     		movs	r0, #1
@@ -963,13 +898,13 @@
  467 0014 2270     		strb	r2, [r4]
   85:dfu.c         ****     if (startState == dfuIDLE)  {
  468              		.loc 1 85 0
- 469 0016 4AD1     		bne	.L40
+ 469 0016 46D1     		bne	.L40
   87:dfu.c         ****         dfuBusy = TRUE; // signals the main loop to defer to the dfu write-loop
  470              		.loc 1 87 0
  471 0018 0870     		strb	r0, [r1]
   89:dfu.c         ****         if (pInformation->USBbRequest == DFU_DNLOAD) {
  472              		.loc 1 89 0
- 473 001a 7649     		ldr	r1, .L98+8
+ 473 001a 7449     		ldr	r1, .L92+8
  474 001c 0968     		ldr	r1, [r1]
  475 001e 4878     		ldrb	r0, [r1, #1]	@ zero_extendqisi2
  476 0020 0128     		cmp	r0, #1
@@ -979,10 +914,10 @@
  479 0024 CB88     		ldrh	r3, [r1, #6]
  480              	.LVL21:
  481 0026 002B     		cmp	r3, #0
- 482 0028 00F0B580 		beq	.L71
+ 482 0028 00F0B080 		beq	.L70
   92:dfu.c         ****                 userFirmwareLen = 0;
  483              		.loc 1 92 0
- 484 002c 724B     		ldr	r3, .L98+12
+ 484 002c 704B     		ldr	r3, .L92+12
  485 002e 1A60     		str	r2, [r3]
   94:dfu.c         ****                 switch(pInformation->Current_AlternateSetting)
  486              		.loc 1 94 0
@@ -993,669 +928,657 @@
  490 0034 2371     		strb	r3, [r4, #4]
   94:dfu.c         ****                 switch(pInformation->Current_AlternateSetting)
  491              		.loc 1 94 0
- 492 0036 6AB9     		cbnz	r2, .L81
- 105:dfu.c         ****                         userUploadType = DFU_UPLOAD_FLASH_0X8002000;
- 493              		.loc 1 105 0
- 494 0038 704A     		ldr	r2, .L98+16
+ 492 0036 6AB9     		cbnz	r2, .L80
+  97:dfu.c         ****                         userUploadType = DFU_UPLOAD_FLASH_0X8002000;
+ 493              		.loc 1 97 0
+ 494 0038 6E4A     		ldr	r2, .L92+16
  495 003a 1370     		strb	r3, [r2]
- 106:dfu.c         ****                         userAppAddr = USER_CODE_FLASH0X8002000;
- 496              		.loc 1 106 0
- 497 003c 704A     		ldr	r2, .L98+20
- 498 003e 714B     		ldr	r3, .L98+24
+  98:dfu.c         ****                         userAppAddr = USER_CODE_FLASH0X8002000;
+ 496              		.loc 1 98 0
+ 497 003c 6E4A     		ldr	r2, .L92+20
+ 498 003e 6F4B     		ldr	r3, .L92+24
  499 0040 1A60     		str	r2, [r3]
- 108:dfu.c         ****                         setupFLASH();
- 500              		.loc 1 108 0
+ 100:dfu.c         ****                         setupFLASH();
+ 500              		.loc 1 100 0
  501 0042 FFF7FEFF 		bl	setupFLASH
  502              	.LVL22:
- 109:dfu.c         ****                         flashUnlock();
- 503              		.loc 1 109 0
+ 101:dfu.c         ****                         flashUnlock();
+ 503              		.loc 1 101 0
  504 0046 FFF7FEFF 		bl	flashUnlock
  505              	.LVL23:
- 110:dfu.c         ****                         bkp10Write(RTC_BOOTLOADER_JUST_UPLOADED);
- 506              		.loc 1 110 0
+ 102:dfu.c         ****                         bkp10Write(RTC_BOOTLOADER_JUST_UPLOADED);
+ 506              		.loc 1 102 0
  507 004a 44F24D20 		movw	r0, #16973
  508 004e FFF7FEFF 		bl	bkp10Write
  509              	.LVL24:
- 112:dfu.c         ****                         break;
- 510              		.loc 1 112 0
- 511 0052 C3E0     		b	.L45
- 512              	.L81:
- 153:dfu.c         ****                         dfuAppStatus.bState  = dfuERROR;
- 513              		.loc 1 153 0
+ 104:dfu.c         ****                         break;
+ 510              		.loc 1 104 0
+ 511 0052 BFE0     		b	.L45
+ 512              	.L80:
+ 108:dfu.c         ****                         dfuAppStatus.bState  = dfuERROR;
+ 513              		.loc 1 108 0
  514 0054 0A22     		movs	r2, #10
  515 0056 2271     		strb	r2, [r4, #4]
- 516 0058 BFE0     		b	.L84
+ 516 0058 BBE0     		b	.L83
  517              	.LVL25:
  518              	.L41:
- 161:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_UPLOAD) {
- 519              		.loc 1 161 0
+ 116:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_UPLOAD) {
+ 519              		.loc 1 116 0
  520 005a 0228     		cmp	r0, #2
- 521 005c 21D1     		bne	.L46
- 162:dfu.c         ****             dfuAppStatus.bState  = dfuUPLOAD_IDLE;
- 522              		.loc 1 162 0
+ 521 005c 1CD1     		bne	.L46
+ 117:dfu.c         ****             dfuAppStatus.bState  = dfuUPLOAD_IDLE;
+ 522              		.loc 1 117 0
  523 005e 0923     		movs	r3, #9
  524              	.LVL26:
  525 0060 2371     		strb	r3, [r4, #4]
- 165:dfu.c         ****             uploadBlockLen = pInformation->USBwLengths.w;
- 526              		.loc 1 165 0
+ 120:dfu.c         ****             uploadBlockLen = pInformation->USBwLengths.w;
+ 526              		.loc 1 120 0
  527 0062 CA88     		ldrh	r2, [r1, #6]
- 528 0064 684B     		ldr	r3, .L98+28
+ 528 0064 664B     		ldr	r3, .L92+28
  529 0066 1A80     		strh	r2, [r3]	@ movhi
- 166:dfu.c         ****             thisBlockLen = uploadBlockLen; /* for this first block as well */
- 530              		.loc 1 166 0
+ 121:dfu.c         ****             thisBlockLen = uploadBlockLen; /* for this first block as well */
+ 530              		.loc 1 121 0
  531 0068 1888     		ldrh	r0, [r3]
- 532 006a 684A     		ldr	r2, .L98+32
+ 532 006a 664A     		ldr	r2, .L92+32
  533 006c 80B2     		uxth	r0, r0
  534 006e 1080     		strh	r0, [r2]	@ movhi
- 168:dfu.c         ****             userFirmwareLen = uploadBlockLen * pInformation->USBwValue;
- 535              		.loc 1 168 0
+ 123:dfu.c         ****             userFirmwareLen = uploadBlockLen * pInformation->USBwValue;
+ 535              		.loc 1 123 0
  536 0070 1A88     		ldrh	r2, [r3]
  537 0072 4B88     		ldrh	r3, [r1, #2]
  538 0074 92B2     		uxth	r2, r2
  539 0076 5A43     		muls	r2, r3, r2
- 540 0078 5F4B     		ldr	r3, .L98+12
+ 540 0078 5D4B     		ldr	r3, .L92+12
  541 007a 1A60     		str	r2, [r3]
- 169:dfu.c         ****             switch(pInformation->Current_AlternateSetting)
- 542              		.loc 1 169 0
+ 124:dfu.c         ****             switch(pInformation->Current_AlternateSetting)
+ 542              		.loc 1 124 0
  543 007c 0B7B     		ldrb	r3, [r1, #12]	@ zero_extendqisi2
- 544 007e 012B     		cmp	r3, #1
- 545 0080 03D0     		beq	.L48
- 546 0082 022B     		cmp	r3, #2
- 547 0084 09D1     		bne	.L97
- 191:dfu.c         ****                     userAppAddr = USER_CODE_FLASH0X8002000;
- 548              		.loc 1 191 0
- 549 0086 5E4A     		ldr	r2, .L98+20
- 550 0088 00E0     		b	.L83
- 551              	.L48:
- 187:dfu.c         ****                     userAppAddr = USER_CODE_FLASH0X8005000;
- 552              		.loc 1 187 0
- 553 008a 614A     		ldr	r2, .L98+36
- 554              	.L83:
- 191:dfu.c         ****                     userAppAddr = USER_CODE_FLASH0X8002000;
- 555              		.loc 1 191 0
- 556 008c 5D4B     		ldr	r3, .L98+24
- 557 008e 1A60     		str	r2, [r3]
- 192:dfu.c         ****                     userAppEnd = getFlashEnd();
- 558              		.loc 1 192 0
- 559 0090 FFF7FEFF 		bl	getFlashEnd
- 560              	.LVL27:
- 561 0094 5F4B     		ldr	r3, .L98+40
- 562 0096 1860     		str	r0, [r3]
- 193:dfu.c         ****                     break;
- 563              		.loc 1 193 0
- 564 0098 A0E0     		b	.L45
- 565              	.L97:
- 199:dfu.c         ****                     dfuAppStatus.bState  = dfuERROR;
- 566              		.loc 1 199 0
- 567 009a 0A23     		movs	r3, #10
- 568 009c 2371     		strb	r3, [r4, #4]
- 200:dfu.c         ****                     dfuAppStatus.bStatus = errWRITE;
- 569              		.loc 1 200 0
- 570 009e 0323     		movs	r3, #3
- 571 00a0 9BE0     		b	.L84
- 572              	.LVL28:
- 573              	.L46:
- 203:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_ABORT) {
- 574              		.loc 1 203 0
- 575 00a2 0628     		cmp	r0, #6
- 576 00a4 3CD0     		beq	.L87
- 206:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_GETSTATUS) {
- 577              		.loc 1 206 0
- 578 00a6 0328     		cmp	r0, #3
- 579 00a8 19D0     		beq	.L86
- 208:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_GETSTATE) {
- 580              		.loc 1 208 0
- 581 00aa 0528     		cmp	r0, #5
- 582 00ac 3CE0     		b	.L93
- 583              	.L40:
- 215:dfu.c         ****     } else if (startState == dfuDNLOAD_SYNC)         {
- 584              		.loc 1 215 0
- 585 00ae 032B     		cmp	r3, #3
- 586 00b0 0BD1     		bne	.L53
- 218:dfu.c         ****         if (pInformation->USBbRequest == DFU_GETSTATUS) {
- 587              		.loc 1 218 0
- 588 00b2 504A     		ldr	r2, .L98+8
- 589 00b4 1268     		ldr	r2, [r2]
- 590 00b6 5278     		ldrb	r2, [r2, #1]	@ zero_extendqisi2
- 591 00b8 032A     		cmp	r2, #3
- 592 00ba 04D1     		bne	.L54
- 247:dfu.c         ****                 dfuAppStatus.bState = dfuDNLOAD_IDLE;
- 593              		.loc 1 247 0
- 594 00bc 0523     		movs	r3, #5
- 595              	.LVL29:
- 596 00be 2371     		strb	r3, [r4, #4]
- 248:dfu.c         ****                 dfuCopyBufferToExec();
- 597              		.loc 1 248 0
- 598 00c0 FFF7FEFF 		bl	dfuCopyBufferToExec
- 599              	.LVL30:
- 600 00c4 8AE0     		b	.L45
- 601              	.LVL31:
- 602              	.L54:
- 251:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_GETSTATE) {
- 603              		.loc 1 251 0
- 604 00c6 052A     		cmp	r2, #5
- 605 00c8 2EE0     		b	.L93
- 606              	.L53:
- 258:dfu.c         ****     } else if (startState == dfuDNBUSY)              {
- 607              		.loc 1 258 0
- 608 00ca 042B     		cmp	r3, #4
- 609 00cc 09D1     		bne	.L56
- 260:dfu.c         ****         if (code_copy_lock == END) {
- 610              		.loc 1 260 0
- 611 00ce 5249     		ldr	r1, .L98+44
- 612 00d0 0878     		ldrb	r0, [r1]	@ zero_extendqisi2
- 613 00d2 0228     		cmp	r0, #2
- 614 00d4 03D1     		bne	.L86
- 262:dfu.c         ****             code_copy_lock = WAIT;
- 615              		.loc 1 262 0
- 616 00d6 0323     		movs	r3, #3
- 617              	.LVL32:
- 261:dfu.c         ****             dfuAppStatus.bwPollTimeout0 = 0x00;
- 618              		.loc 1 261 0
- 619 00d8 6270     		strb	r2, [r4, #1]
- 262:dfu.c         ****             code_copy_lock = WAIT;
- 620              		.loc 1 262 0
- 621 00da 0B70     		strb	r3, [r1]
- 263:dfu.c         ****             dfuAppStatus.bState = dfuDNLOAD_IDLE;
- 622              		.loc 1 263 0
- 623 00dc 0523     		movs	r3, #5
- 624              	.L86:
- 625 00de 2371     		strb	r3, [r4, #4]
- 626 00e0 7CE0     		b	.L45
- 627              	.LVL33:
- 628              	.L56:
- 268:dfu.c         ****     } else if (startState == dfuDNLOAD_IDLE)         {
- 629              		.loc 1 268 0
- 630 00e2 052B     		cmp	r3, #5
- 631 00e4 14D1     		bne	.L58
- 270:dfu.c         ****         if (pInformation->USBbRequest == DFU_DNLOAD) {
- 632              		.loc 1 270 0
- 633 00e6 434B     		ldr	r3, .L98+8
- 634              	.LVL34:
- 635 00e8 1A68     		ldr	r2, [r3]
- 636 00ea 5378     		ldrb	r3, [r2, #1]	@ zero_extendqisi2
- 637 00ec 012B     		cmp	r3, #1
- 638 00ee 08D1     		bne	.L59
- 271:dfu.c         ****             if (pInformation->USBwLengths.w > 0) {
- 639              		.loc 1 271 0
- 640 00f0 D388     		ldrh	r3, [r2, #6]
- 641 00f2 0BB1     		cbz	r3, .L60
- 272:dfu.c         ****                 dfuAppStatus.bState  = dfuDNLOAD_SYNC;
- 642              		.loc 1 272 0
- 643 00f4 0323     		movs	r3, #3
- 644 00f6 F2E7     		b	.L86
- 645              	.L60:
- 275:dfu.c         ****                 dfuAppStatus.bState  = dfuMANIFEST_SYNC;
- 646              		.loc 1 275 0
- 647 00f8 0623     		movs	r3, #6
- 648 00fa 2371     		strb	r3, [r4, #4]
- 278:dfu.c         ****                 flashLock();
- 649              		.loc 1 278 0
- 650 00fc FFF7FEFF 		bl	flashLock
- 651              	.LVL35:
- 652 0100 6CE0     		b	.L45
- 653              	.L59:
- 280:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_ABORT) {
- 654              		.loc 1 280 0
- 655 0102 062B     		cmp	r3, #6
- 656 0104 4DD0     		beq	.L96
- 282:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_GETSTATUS) {
- 657              		.loc 1 282 0
- 658 0106 032B     		cmp	r3, #3
- 659 0108 4BD0     		beq	.L96
- 284:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_GETSTATE) {
- 660              		.loc 1 284 0
- 661 010a 052B     		cmp	r3, #5
- 662 010c 62D1     		bne	.L77
- 663 010e 48E0     		b	.L96
- 664              	.LVL36:
- 665              	.L58:
- 291:dfu.c         ****     } else if (startState == dfuMANIFEST_SYNC)       {
- 666              		.loc 1 291 0
- 667 0110 062B     		cmp	r3, #6
- 668 0112 0BD1     		bne	.L64
- 294:dfu.c         ****         if (pInformation->USBbRequest == DFU_GETSTATUS) {
- 669              		.loc 1 294 0
- 670 0114 3749     		ldr	r1, .L98+8
- 671 0116 0968     		ldr	r1, [r1]
- 672 0118 4978     		ldrb	r1, [r1, #1]	@ zero_extendqisi2
- 673 011a 0329     		cmp	r1, #3
- 674 011c 03D1     		bne	.L65
- 675              	.L88:
- 295:dfu.c         ****             dfuAppStatus.bState  = dfuMANIFEST_WAIT_RESET;
- 676              		.loc 1 295 0
- 677 011e 0823     		movs	r3, #8
- 678              	.LVL37:
- 679              	.L87:
- 680 0120 2371     		strb	r3, [r4, #4]
- 296:dfu.c         ****             dfuAppStatus.bStatus = OK;
- 681              		.loc 1 296 0
- 682 0122 2270     		strb	r2, [r4]
- 683 0124 5AE0     		b	.L45
- 684              	.LVL38:
- 685              	.L65:
- 297:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_GETSTATE) {
- 686              		.loc 1 297 0
- 687 0126 0529     		cmp	r1, #5
- 688              	.L93:
- 689 0128 54D1     		bne	.L77
- 690 012a D8E7     		b	.L86
- 691              	.L64:
- 304:dfu.c         ****     } else if (startState == dfuMANIFEST)            {
- 692              		.loc 1 304 0
- 693 012c 072B     		cmp	r3, #7
- 694 012e F6D0     		beq	.L88
- 311:dfu.c         ****     } else if (startState == dfuMANIFEST_WAIT_RESET) {
- 695              		.loc 1 311 0
- 696 0130 082B     		cmp	r3, #8
- 697 0132 D4D0     		beq	.L86
- 318:dfu.c         ****     } else if (startState == dfuUPLOAD_IDLE)         {
- 698              		.loc 1 318 0
- 699 0134 092B     		cmp	r3, #9
- 700 0136 3CD1     		bne	.L69
- 321:dfu.c         ****         if (pInformation->USBbRequest == DFU_UPLOAD) {
- 701              		.loc 1 321 0
- 702 0138 2E4B     		ldr	r3, .L98+8
- 703              	.LVL39:
- 704 013a 1A68     		ldr	r2, [r3]
- 705 013c 5378     		ldrb	r3, [r2, #1]	@ zero_extendqisi2
- 706 013e 022B     		cmp	r3, #2
- 707 0140 2DD1     		bne	.L70
- 322:dfu.c         ****             if (pInformation->USBwLengths.w > 0) {
- 708              		.loc 1 322 0
- 709 0142 D088     		ldrh	r0, [r2, #6]
- 710 0144 38B3     		cbz	r0, .L71
- 324:dfu.c         ****                 userFirmwareLen = uploadBlockLen * pInformation->USBwValue;
- 711              		.loc 1 324 0
- 712 0146 3049     		ldr	r1, .L98+28
- 713 0148 5288     		ldrh	r2, [r2, #2]
- 714 014a 0B88     		ldrh	r3, [r1]
- 325:dfu.c         ****                 if (userAppAddr + userFirmwareLen + uploadBlockLen <= userAppEnd) {
- 715              		.loc 1 325 0
- 716 014c 2D4D     		ldr	r5, .L98+24
- 324:dfu.c         ****                 userFirmwareLen = uploadBlockLen * pInformation->USBwValue;
- 717              		.loc 1 324 0
- 718 014e 9BB2     		uxth	r3, r3
- 719 0150 5343     		muls	r3, r2, r3
- 720 0152 294A     		ldr	r2, .L98+12
- 325:dfu.c         ****                 if (userAppAddr + userFirmwareLen + uploadBlockLen <= userAppEnd) {
- 721              		.loc 1 325 0
- 722 0154 2F4E     		ldr	r6, .L98+40
- 324:dfu.c         ****                 userFirmwareLen = uploadBlockLen * pInformation->USBwValue;
- 723              		.loc 1 324 0
- 724 0156 1360     		str	r3, [r2]
- 325:dfu.c         ****                 if (userAppAddr + userFirmwareLen + uploadBlockLen <= userAppEnd) {
- 725              		.loc 1 325 0
- 726 0158 2F68     		ldr	r7, [r5]
- 727 015a D2F80080 		ldr	r8, [r2]
- 728 015e B1F800C0 		ldrh	ip, [r1]
- 729 0162 4744     		add	r7, r7, r8
- 730 0164 3368     		ldr	r3, [r6]
- 731 0166 1FFA8CFC 		uxth	ip, ip
- 732 016a 6744     		add	r7, r7, ip
- 733 016c 9F42     		cmp	r7, r3
- 734 016e 274B     		ldr	r3, .L98+32
- 735 0170 03D8     		bhi	.L72
- 326:dfu.c         ****                     thisBlockLen = uploadBlockLen;
- 736              		.loc 1 326 0
- 737 0172 0A88     		ldrh	r2, [r1]
- 738 0174 92B2     		uxth	r2, r2
- 739 0176 1A80     		strh	r2, [r3]	@ movhi
- 740 0178 19E0     		b	.L95
- 741              	.L72:
- 331:dfu.c         ****                     thisBlockLen = userAppEnd - userAppAddr - userFirmwareLen;
- 742              		.loc 1 331 0
- 743 017a 3668     		ldr	r6, [r6]
- 744 017c 2D68     		ldr	r5, [r5]
- 745 017e 1168     		ldr	r1, [r2]
- 746 0180 721B     		subs	r2, r6, r5
- 747 0182 521A     		subs	r2, r2, r1
- 748 0184 92B2     		uxth	r2, r2
- 749 0186 1A80     		strh	r2, [r3]	@ movhi
- 333:dfu.c         ****                     if (thisBlockLen >= pInformation->USBwLengths.w) {
- 750              		.loc 1 333 0
- 751 0188 1A88     		ldrh	r2, [r3]
- 752 018a 92B2     		uxth	r2, r2
- 753 018c 8242     		cmp	r2, r0
- 754 018e 08D3     		bcc	.L96
- 334:dfu.c         ****                         thisBlockLen = 0;
- 755              		.loc 1 334 0
- 756 0190 0022     		movs	r2, #0
- 757 0192 1A80     		strh	r2, [r3]	@ movhi
- 758 0194 05E0     		b	.L96
- 759              	.L71:
- 339:dfu.c         ****                 dfuAppStatus.bState  = dfuERROR;
- 760              		.loc 1 339 0
- 761 0196 0A23     		movs	r3, #10
- 762 0198 2371     		strb	r3, [r4, #4]
- 340:dfu.c         ****                 dfuAppStatus.bStatus = errNOTDONE;
- 763              		.loc 1 340 0
- 764 019a 0923     		movs	r3, #9
- 765 019c 1DE0     		b	.L84
- 766              	.L70:
- 342:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_ABORT) {
- 767              		.loc 1 342 0
- 768 019e 062B     		cmp	r3, #6
- 769 01a0 01D1     		bne	.L74
- 770              	.L96:
- 343:dfu.c         ****             dfuAppStatus.bState  = dfuIDLE;
- 771              		.loc 1 343 0
- 772 01a2 0223     		movs	r3, #2
- 773 01a4 9BE7     		b	.L86
- 774              	.L74:
- 344:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_GETSTATUS) {
- 775              		.loc 1 344 0
- 776 01a6 032B     		cmp	r3, #3
- 777 01a8 01D0     		beq	.L95
- 346:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_GETSTATE) {
- 778              		.loc 1 346 0
- 779 01aa 052B     		cmp	r3, #5
- 780 01ac 12D1     		bne	.L77
- 781              	.L95:
- 347:dfu.c         ****             dfuAppStatus.bState  = dfuUPLOAD_IDLE;
- 782              		.loc 1 347 0
- 783 01ae 0923     		movs	r3, #9
- 784 01b0 95E7     		b	.L86
- 785              	.LVL40:
- 786              	.L69:
- 354:dfu.c         ****     } else if (startState == dfuERROR)               {
- 787              		.loc 1 354 0
- 788 01b2 0A2B     		cmp	r3, #10
- 789 01b4 0ED1     		bne	.L77
- 357:dfu.c         ****         if (pInformation->USBbRequest == DFU_GETSTATUS) {
- 790              		.loc 1 357 0
- 791 01b6 0F4B     		ldr	r3, .L98+8
- 792              	.LVL41:
- 793 01b8 1B68     		ldr	r3, [r3]
- 794 01ba 5B78     		ldrb	r3, [r3, #1]	@ zero_extendqisi2
- 795 01bc 032B     		cmp	r3, #3
- 796 01be 01D1     		bne	.L78
- 797              	.L91:
- 359:dfu.c         ****             dfuAppStatus.bState  = dfuERROR;
- 798              		.loc 1 359 0
- 799 01c0 0A23     		movs	r3, #10
- 800 01c2 8CE7     		b	.L86
- 801              	.L78:
- 360:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_GETSTATE) {
- 802              		.loc 1 360 0
- 803 01c4 052B     		cmp	r3, #5
- 804 01c6 FBD0     		beq	.L91
- 362:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_CLRSTATUS) {
- 805              		.loc 1 362 0
- 806 01c8 042B     		cmp	r3, #4
- 807 01ca 03D1     		bne	.L77
- 364:dfu.c         ****             dfuAppStatus.bState  = dfuIDLE;
- 808              		.loc 1 364 0
- 809 01cc 0223     		movs	r3, #2
- 810 01ce 2371     		strb	r3, [r4, #4]
- 365:dfu.c         ****             dfuAppStatus.bStatus = OK;
- 811              		.loc 1 365 0
- 812 01d0 0023     		movs	r3, #0
- 813 01d2 02E0     		b	.L84
- 814              	.L77:
- 373:dfu.c         ****         dfuAppStatus.bState  = dfuERROR;
- 815              		.loc 1 373 0
- 816 01d4 0A23     		movs	r3, #10
- 817 01d6 2371     		strb	r3, [r4, #4]
- 374:dfu.c         ****         dfuAppStatus.bStatus = errSTALLEDPKT;
- 818              		.loc 1 374 0
- 819 01d8 0F23     		movs	r3, #15
- 820              	.L84:
- 821 01da 2370     		strb	r3, [r4]
- 822              	.L45:
- 377:dfu.c         ****     if (dfuAppStatus.bStatus == OK) {
- 823              		.loc 1 377 0
- 824 01dc 2078     		ldrb	r0, [r4]	@ zero_extendqisi2
- 382:dfu.c         **** }
- 825              		.loc 1 382 0
- 826 01de D0F10100 		rsbs	r0, r0, #1
- 827 01e2 38BF     		it	cc
- 828 01e4 0020     		movcc	r0, #0
- 829 01e6 BDE8F081 		pop	{r4, r5, r6, r7, r8, pc}
- 830              	.L99:
- 831 01ea 00BF     		.align	2
- 832              	.L98:
- 833 01ec 00000000 		.word	.LANCHOR6
- 834 01f0 00000000 		.word	.LANCHOR0
- 835 01f4 00000000 		.word	pInformation
- 836 01f8 00000000 		.word	.LANCHOR1
- 837 01fc 00000000 		.word	.LANCHOR5
- 838 0200 00200008 		.word	134225920
- 839 0204 00000000 		.word	.LANCHOR3
- 840 0208 00000000 		.word	.LANCHOR8
- 841 020c 00000000 		.word	.LANCHOR2
- 842 0210 00500008 		.word	134238208
- 843 0214 00000000 		.word	.LANCHOR4
- 844 0218 00000000 		.word	code_copy_lock
- 845              		.cfi_endproc
- 846              	.LFE1:
- 848              		.section	.text.dfuGetState,"ax",%progbits
- 849              		.align	1
- 850              		.global	dfuGetState
- 851              		.thumb
- 852              		.thumb_func
- 854              	dfuGetState:
- 855              	.LFB9:
- 487:dfu.c         **** }
- 488:dfu.c         **** 
- 489:dfu.c         **** u8 dfuGetState(void) {
- 856              		.loc 1 489 0
- 857              		.cfi_startproc
- 858              		@ args = 0, pretend = 0, frame = 0
- 859              		@ frame_needed = 0, uses_anonymous_args = 0
- 860              		@ link register save eliminated.
- 490:dfu.c         ****     return dfuAppStatus.bState;
- 861              		.loc 1 490 0
- 862 0000 014B     		ldr	r3, .L101
- 863 0002 1879     		ldrb	r0, [r3, #4]	@ zero_extendqisi2
- 491:dfu.c         **** }
- 864              		.loc 1 491 0
- 865 0004 7047     		bx	lr
- 866              	.L102:
- 867 0006 00BF     		.align	2
- 868              	.L101:
- 869 0008 00000000 		.word	.LANCHOR0
- 870              		.cfi_endproc
- 871              	.LFE9:
- 873              		.section	.text.dfuSetState,"ax",%progbits
- 874              		.align	1
- 875              		.global	dfuSetState
- 876              		.thumb
- 877              		.thumb_func
- 879              	dfuSetState:
- 880              	.LFB10:
- 492:dfu.c         **** 
- 493:dfu.c         **** void dfuSetState(u8 newState) {
- 881              		.loc 1 493 0
- 882              		.cfi_startproc
- 883              		@ args = 0, pretend = 0, frame = 0
- 884              		@ frame_needed = 0, uses_anonymous_args = 0
- 885              		@ link register save eliminated.
- 886              	.LVL42:
- 494:dfu.c         ****     dfuAppStatus.bState = newState;
- 887              		.loc 1 494 0
- 888 0000 014B     		ldr	r3, .L104
- 889 0002 1871     		strb	r0, [r3, #4]
- 890 0004 7047     		bx	lr
- 891              	.L105:
- 892 0006 00BF     		.align	2
- 893              	.L104:
- 894 0008 00000000 		.word	.LANCHOR0
- 895              		.cfi_endproc
- 896              	.LFE10:
- 898              		.section	.text.dfuUploadStarted,"ax",%progbits
- 899              		.align	1
- 900              		.global	dfuUploadStarted
- 901              		.thumb
- 902              		.thumb_func
- 904              	dfuUploadStarted:
- 905              	.LFB11:
- 495:dfu.c         **** }
- 496:dfu.c         **** 
- 497:dfu.c         **** bool dfuUploadStarted() {
- 906              		.loc 1 497 0
- 907              		.cfi_startproc
- 908              		@ args = 0, pretend = 0, frame = 0
- 909              		@ frame_needed = 0, uses_anonymous_args = 0
- 910              		@ link register save eliminated.
- 498:dfu.c         ****     return dfuBusy;
- 911              		.loc 1 498 0
- 912 0000 014B     		ldr	r3, .L107
- 913 0002 1878     		ldrb	r0, [r3]	@ zero_extendqisi2
- 499:dfu.c         **** }
- 914              		.loc 1 499 0
- 915 0004 7047     		bx	lr
- 916              	.L108:
- 917 0006 00BF     		.align	2
- 918              	.L107:
- 919 0008 00000000 		.word	.LANCHOR6
- 920              		.cfi_endproc
- 921              	.LFE11:
- 923              		.section	.text.dfuFinishUpload,"ax",%progbits
- 924              		.align	1
- 925              		.global	dfuFinishUpload
- 926              		.thumb
- 927              		.thumb_func
- 929              	dfuFinishUpload:
- 930              	.LFB12:
- 500:dfu.c         **** 
- 501:dfu.c         **** void dfuFinishUpload() {
- 931              		.loc 1 501 0
- 932              		.cfi_startproc
- 933              		@ Volatile: function does not return.
- 934              		@ args = 0, pretend = 0, frame = 0
- 935              		@ frame_needed = 0, uses_anonymous_args = 0
- 936              		@ link register save eliminated.
- 937              	.L110:
- 502:dfu.c         ****     while (1)
- 503:dfu.c         ****     {
- 504:dfu.c         ****         __asm("nop");
- 938              		.loc 1 504 0 discriminator 1
- 939              	@ 504 "dfu.c" 1
- 940 0000 00BF     		nop
- 941              	@ 0 "" 2
- 942              		.thumb
- 943 0002 FDE7     		b	.L110
- 944              		.cfi_endproc
- 945              	.LFE12:
- 947              		.comm	code_copy_lock,1,1
- 948              		.global	dfuBusy
- 949              		.global	userUploadType
- 950              		.comm	wTransferSize,4,4
- 951              		.section	.bss.recvBuffer,"aw",%nobits
- 952              		.align	2
- 953              		.set	.LANCHOR7,. + 0
- 956              	recvBuffer:
- 957 0000 00000000 		.space	2048
- 957      00000000 
- 957      00000000 
- 957      00000000 
- 957      00000000 
- 958              		.section	.bss.uploadBlockLen,"aw",%nobits
- 959              		.align	1
- 960              		.set	.LANCHOR8,. + 0
- 963              	uploadBlockLen:
- 964 0000 0000     		.space	2
- 965              		.section	.bss.thisBlockLen,"aw",%nobits
- 966              		.align	1
- 967              		.set	.LANCHOR2,. + 0
- 970              	thisBlockLen:
- 971 0000 0000     		.space	2
- 972              		.section	.bss.userFirmwareLen,"aw",%nobits
- 973              		.align	2
- 974              		.set	.LANCHOR1,. + 0
- 977              	userFirmwareLen:
- 978 0000 00000000 		.space	4
- 979              		.section	.data.userAppEnd,"aw",%progbits
- 980              		.align	2
- 981              		.set	.LANCHOR4,. + 0
- 984              	userAppEnd:
- 985 0000 00500020 		.word	536891392
- 986              		.section	.bss.userUploadType,"aw",%nobits
- 987              		.set	.LANCHOR5,. + 0
- 990              	userUploadType:
- 991 0000 00       		.space	1
- 992              		.section	.bss.dfuAppStatus,"aw",%nobits
- 993              		.set	.LANCHOR0,. + 0
- 996              	dfuAppStatus:
- 997 0000 00000000 		.space	6
- 997      0000
- 998              		.section	.bss.dfuBusy,"aw",%nobits
- 999              		.set	.LANCHOR6,. + 0
- 1002              	dfuBusy:
- 1003 0000 00       		.space	1
- 1004              		.section	.data.userAppAddr,"aw",%progbits
- 1005              		.align	2
- 1006              		.set	.LANCHOR3,. + 0
- 1009              	userAppAddr:
- 1010 0000 000C0020 		.word	536873984
- 1011              		.text
- 1012              	.Letext0:
- 1013              		.file 2 "./stm32_lib/stm32f10x_type.h"
- 1014              		.file 3 "./usb_lib/usb_core.h"
- 1015              		.file 4 "dfu.h"
- 1016              		.file 5 "./usb_lib/usb_init.h"
- 1017              		.file 6 "usb.h"
- 1018              		.file 7 "hardware.h"
+ 544 007e 3BB9     		cbnz	r3, .L81
+ 127:dfu.c         ****                     userAppAddr = USER_CODE_FLASH0X8002000;
+ 545              		.loc 1 127 0
+ 546 0080 5E4B     		ldr	r3, .L92+24
+ 547 0082 5D4A     		ldr	r2, .L92+20
+ 548 0084 1A60     		str	r2, [r3]
+ 128:dfu.c         ****                     userAppEnd = getFlashEnd();
+ 549              		.loc 1 128 0
+ 550 0086 FFF7FEFF 		bl	getFlashEnd
+ 551              	.LVL27:
+ 552 008a 5F4B     		ldr	r3, .L92+36
+ 553 008c 1860     		str	r0, [r3]
+ 129:dfu.c         ****                     break;
+ 554              		.loc 1 129 0
+ 555 008e A1E0     		b	.L45
+ 556              	.L81:
+ 134:dfu.c         ****                     dfuAppStatus.bState  = dfuERROR;
+ 557              		.loc 1 134 0
+ 558 0090 0A23     		movs	r3, #10
+ 559 0092 2371     		strb	r3, [r4, #4]
+ 135:dfu.c         ****                     dfuAppStatus.bStatus = errWRITE;
+ 560              		.loc 1 135 0
+ 561 0094 0323     		movs	r3, #3
+ 562 0096 9CE0     		b	.L83
+ 563              	.LVL28:
+ 564              	.L46:
+ 138:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_ABORT) {
+ 565              		.loc 1 138 0
+ 566 0098 0628     		cmp	r0, #6
+ 567 009a 3CD0     		beq	.L84
+ 141:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_GETSTATUS) {
+ 568              		.loc 1 141 0
+ 569 009c 0328     		cmp	r0, #3
+ 570 009e 00F08B80 		beq	.L82
+ 143:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_GETSTATE) {
+ 571              		.loc 1 143 0
+ 572 00a2 0528     		cmp	r0, #5
+ 573 00a4 3BE0     		b	.L89
+ 574              	.L40:
+ 150:dfu.c         ****     } else if (startState == dfuDNLOAD_SYNC)         {
+ 575              		.loc 1 150 0
+ 576 00a6 032B     		cmp	r3, #3
+ 577 00a8 0BD1     		bne	.L52
+ 153:dfu.c         ****         if (pInformation->USBbRequest == DFU_GETSTATUS) {
+ 578              		.loc 1 153 0
+ 579 00aa 504A     		ldr	r2, .L92+8
+ 580 00ac 1268     		ldr	r2, [r2]
+ 581 00ae 5278     		ldrb	r2, [r2, #1]	@ zero_extendqisi2
+ 582 00b0 032A     		cmp	r2, #3
+ 583 00b2 04D1     		bne	.L53
+ 182:dfu.c         ****                 dfuAppStatus.bState = dfuDNLOAD_IDLE;
+ 584              		.loc 1 182 0
+ 585 00b4 0523     		movs	r3, #5
+ 586              	.LVL29:
+ 587 00b6 2371     		strb	r3, [r4, #4]
+ 183:dfu.c         ****                 dfuCopyBufferToExec();
+ 588              		.loc 1 183 0
+ 589 00b8 FFF7FEFF 		bl	dfuCopyBufferToExec
+ 590              	.LVL30:
+ 591 00bc 8AE0     		b	.L45
+ 592              	.LVL31:
+ 593              	.L53:
+ 186:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_GETSTATE) {
+ 594              		.loc 1 186 0
+ 595 00be 052A     		cmp	r2, #5
+ 596 00c0 2DE0     		b	.L89
+ 597              	.L52:
+ 193:dfu.c         ****     } else if (startState == dfuDNBUSY)              {
+ 598              		.loc 1 193 0
+ 599 00c2 042B     		cmp	r3, #4
+ 600 00c4 08D1     		bne	.L55
+ 195:dfu.c         ****         if (code_copy_lock == END) {
+ 601              		.loc 1 195 0
+ 602 00c6 5149     		ldr	r1, .L92+40
+ 603 00c8 0878     		ldrb	r0, [r1]	@ zero_extendqisi2
+ 604 00ca 0228     		cmp	r0, #2
+ 605 00cc 74D1     		bne	.L82
+ 197:dfu.c         ****             code_copy_lock = WAIT;
+ 606              		.loc 1 197 0
+ 607 00ce 0323     		movs	r3, #3
+ 608              	.LVL32:
+ 196:dfu.c         ****             dfuAppStatus.bwPollTimeout0 = 0x00;
+ 609              		.loc 1 196 0
+ 610 00d0 6270     		strb	r2, [r4, #1]
+ 197:dfu.c         ****             code_copy_lock = WAIT;
+ 611              		.loc 1 197 0
+ 612 00d2 0B70     		strb	r3, [r1]
+ 198:dfu.c         ****             dfuAppStatus.bState = dfuDNLOAD_IDLE;
+ 613              		.loc 1 198 0
+ 614 00d4 0523     		movs	r3, #5
+ 615 00d6 6FE0     		b	.L82
+ 616              	.LVL33:
+ 617              	.L55:
+ 203:dfu.c         ****     } else if (startState == dfuDNLOAD_IDLE)         {
+ 618              		.loc 1 203 0
+ 619 00d8 052B     		cmp	r3, #5
+ 620 00da 14D1     		bne	.L57
+ 205:dfu.c         ****         if (pInformation->USBbRequest == DFU_DNLOAD) {
+ 621              		.loc 1 205 0
+ 622 00dc 434B     		ldr	r3, .L92+8
+ 623              	.LVL34:
+ 624 00de 1A68     		ldr	r2, [r3]
+ 625 00e0 5378     		ldrb	r3, [r2, #1]	@ zero_extendqisi2
+ 626 00e2 012B     		cmp	r3, #1
+ 627 00e4 08D1     		bne	.L58
+ 206:dfu.c         ****             if (pInformation->USBwLengths.w > 0) {
+ 628              		.loc 1 206 0
+ 629 00e6 D388     		ldrh	r3, [r2, #6]
+ 630 00e8 0BB1     		cbz	r3, .L59
+ 207:dfu.c         ****                 dfuAppStatus.bState  = dfuDNLOAD_SYNC;
+ 631              		.loc 1 207 0
+ 632 00ea 0323     		movs	r3, #3
+ 633 00ec 64E0     		b	.L82
+ 634              	.L59:
+ 210:dfu.c         ****                 dfuAppStatus.bState  = dfuMANIFEST_SYNC;
+ 635              		.loc 1 210 0
+ 636 00ee 0623     		movs	r3, #6
+ 637 00f0 2371     		strb	r3, [r4, #4]
+ 213:dfu.c         ****                 flashLock();
+ 638              		.loc 1 213 0
+ 639 00f2 FFF7FEFF 		bl	flashLock
+ 640              	.LVL35:
+ 641 00f6 6DE0     		b	.L45
+ 642              	.L58:
+ 215:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_ABORT) {
+ 643              		.loc 1 215 0
+ 644 00f8 062B     		cmp	r3, #6
+ 645 00fa 4DD0     		beq	.L90
+ 217:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_GETSTATUS) {
+ 646              		.loc 1 217 0
+ 647 00fc 032B     		cmp	r3, #3
+ 648 00fe 4BD0     		beq	.L90
+ 219:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_GETSTATE) {
+ 649              		.loc 1 219 0
+ 650 0100 052B     		cmp	r3, #5
+ 651 0102 63D1     		bne	.L76
+ 652 0104 48E0     		b	.L90
+ 653              	.LVL36:
+ 654              	.L57:
+ 226:dfu.c         ****     } else if (startState == dfuMANIFEST_SYNC)       {
+ 655              		.loc 1 226 0
+ 656 0106 062B     		cmp	r3, #6
+ 657 0108 0BD1     		bne	.L63
+ 229:dfu.c         ****         if (pInformation->USBbRequest == DFU_GETSTATUS) {
+ 658              		.loc 1 229 0
+ 659 010a 3849     		ldr	r1, .L92+8
+ 660 010c 0968     		ldr	r1, [r1]
+ 661 010e 4978     		ldrb	r1, [r1, #1]	@ zero_extendqisi2
+ 662 0110 0329     		cmp	r1, #3
+ 663 0112 03D1     		bne	.L64
+ 664              	.L86:
+ 230:dfu.c         ****             dfuAppStatus.bState  = dfuMANIFEST_WAIT_RESET;
+ 665              		.loc 1 230 0
+ 666 0114 0823     		movs	r3, #8
+ 667              	.LVL37:
+ 668              	.L84:
+ 669 0116 2371     		strb	r3, [r4, #4]
+ 231:dfu.c         ****             dfuAppStatus.bStatus = OK;
+ 670              		.loc 1 231 0
+ 671 0118 2270     		strb	r2, [r4]
+ 672 011a 5BE0     		b	.L45
+ 673              	.LVL38:
+ 674              	.L64:
+ 232:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_GETSTATE) {
+ 675              		.loc 1 232 0
+ 676 011c 0529     		cmp	r1, #5
+ 677              	.L89:
+ 678 011e 55D1     		bne	.L76
+ 679 0120 4AE0     		b	.L82
+ 680              	.L63:
+ 239:dfu.c         ****     } else if (startState == dfuMANIFEST)            {
+ 681              		.loc 1 239 0
+ 682 0122 072B     		cmp	r3, #7
+ 683 0124 F6D0     		beq	.L86
+ 246:dfu.c         ****     } else if (startState == dfuMANIFEST_WAIT_RESET) {
+ 684              		.loc 1 246 0
+ 685 0126 082B     		cmp	r3, #8
+ 686 0128 46D0     		beq	.L82
+ 253:dfu.c         ****     } else if (startState == dfuUPLOAD_IDLE)         {
+ 687              		.loc 1 253 0
+ 688 012a 092B     		cmp	r3, #9
+ 689 012c 3CD1     		bne	.L68
+ 256:dfu.c         ****         if (pInformation->USBbRequest == DFU_UPLOAD) {
+ 690              		.loc 1 256 0
+ 691 012e 2F4B     		ldr	r3, .L92+8
+ 692              	.LVL39:
+ 693 0130 1A68     		ldr	r2, [r3]
+ 694 0132 5378     		ldrb	r3, [r2, #1]	@ zero_extendqisi2
+ 695 0134 022B     		cmp	r3, #2
+ 696 0136 2DD1     		bne	.L69
+ 257:dfu.c         ****             if (pInformation->USBwLengths.w > 0) {
+ 697              		.loc 1 257 0
+ 698 0138 D088     		ldrh	r0, [r2, #6]
+ 699 013a 38B3     		cbz	r0, .L70
+ 259:dfu.c         ****                 userFirmwareLen = uploadBlockLen * pInformation->USBwValue;
+ 700              		.loc 1 259 0
+ 701 013c 3049     		ldr	r1, .L92+28
+ 702 013e 5288     		ldrh	r2, [r2, #2]
+ 703 0140 0B88     		ldrh	r3, [r1]
+ 260:dfu.c         ****                 if (userAppAddr + userFirmwareLen + uploadBlockLen <= userAppEnd) {
+ 704              		.loc 1 260 0
+ 705 0142 2E4D     		ldr	r5, .L92+24
+ 259:dfu.c         ****                 userFirmwareLen = uploadBlockLen * pInformation->USBwValue;
+ 706              		.loc 1 259 0
+ 707 0144 9BB2     		uxth	r3, r3
+ 708 0146 5343     		muls	r3, r2, r3
+ 709 0148 294A     		ldr	r2, .L92+12
+ 260:dfu.c         ****                 if (userAppAddr + userFirmwareLen + uploadBlockLen <= userAppEnd) {
+ 710              		.loc 1 260 0
+ 711 014a 2F4E     		ldr	r6, .L92+36
+ 259:dfu.c         ****                 userFirmwareLen = uploadBlockLen * pInformation->USBwValue;
+ 712              		.loc 1 259 0
+ 713 014c 1360     		str	r3, [r2]
+ 260:dfu.c         ****                 if (userAppAddr + userFirmwareLen + uploadBlockLen <= userAppEnd) {
+ 714              		.loc 1 260 0
+ 715 014e 2F68     		ldr	r7, [r5]
+ 716 0150 D2F80080 		ldr	r8, [r2]
+ 717 0154 B1F800C0 		ldrh	ip, [r1]
+ 718 0158 4744     		add	r7, r7, r8
+ 719 015a 3368     		ldr	r3, [r6]
+ 720 015c 1FFA8CFC 		uxth	ip, ip
+ 721 0160 6744     		add	r7, r7, ip
+ 722 0162 9F42     		cmp	r7, r3
+ 723 0164 274B     		ldr	r3, .L92+32
+ 724 0166 03D8     		bhi	.L71
+ 261:dfu.c         ****                     thisBlockLen = uploadBlockLen;
+ 725              		.loc 1 261 0
+ 726 0168 0A88     		ldrh	r2, [r1]
+ 727 016a 92B2     		uxth	r2, r2
+ 728 016c 1A80     		strh	r2, [r3]	@ movhi
+ 729 016e 19E0     		b	.L87
+ 730              	.L71:
+ 266:dfu.c         ****                     thisBlockLen = userAppEnd - userAppAddr - userFirmwareLen;
+ 731              		.loc 1 266 0
+ 732 0170 3668     		ldr	r6, [r6]
+ 733 0172 2D68     		ldr	r5, [r5]
+ 734 0174 1168     		ldr	r1, [r2]
+ 735 0176 721B     		subs	r2, r6, r5
+ 736 0178 521A     		subs	r2, r2, r1
+ 737 017a 92B2     		uxth	r2, r2
+ 738 017c 1A80     		strh	r2, [r3]	@ movhi
+ 268:dfu.c         ****                     if (thisBlockLen >= pInformation->USBwLengths.w) {
+ 739              		.loc 1 268 0
+ 740 017e 1A88     		ldrh	r2, [r3]
+ 741 0180 92B2     		uxth	r2, r2
+ 742 0182 8242     		cmp	r2, r0
+ 743 0184 08D3     		bcc	.L90
+ 269:dfu.c         ****                         thisBlockLen = 0;
+ 744              		.loc 1 269 0
+ 745 0186 0022     		movs	r2, #0
+ 746 0188 1A80     		strh	r2, [r3]	@ movhi
+ 747 018a 05E0     		b	.L90
+ 748              	.L70:
+ 274:dfu.c         ****                 dfuAppStatus.bState  = dfuERROR;
+ 749              		.loc 1 274 0
+ 750 018c 0A23     		movs	r3, #10
+ 751 018e 2371     		strb	r3, [r4, #4]
+ 275:dfu.c         ****                 dfuAppStatus.bStatus = errNOTDONE;
+ 752              		.loc 1 275 0
+ 753 0190 0923     		movs	r3, #9
+ 754 0192 1EE0     		b	.L83
+ 755              	.L69:
+ 277:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_ABORT) {
+ 756              		.loc 1 277 0
+ 757 0194 062B     		cmp	r3, #6
+ 758 0196 01D1     		bne	.L73
+ 759              	.L90:
+ 278:dfu.c         ****             dfuAppStatus.bState  = dfuIDLE;
+ 760              		.loc 1 278 0
+ 761 0198 0223     		movs	r3, #2
+ 762 019a 0DE0     		b	.L82
+ 763              	.L73:
+ 279:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_GETSTATUS) {
+ 764              		.loc 1 279 0
+ 765 019c 032B     		cmp	r3, #3
+ 766 019e 01D0     		beq	.L87
+ 281:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_GETSTATE) {
+ 767              		.loc 1 281 0
+ 768 01a0 052B     		cmp	r3, #5
+ 769 01a2 13D1     		bne	.L76
+ 770              	.L87:
+ 282:dfu.c         ****             dfuAppStatus.bState  = dfuUPLOAD_IDLE;
+ 771              		.loc 1 282 0
+ 772 01a4 0923     		movs	r3, #9
+ 773 01a6 07E0     		b	.L82
+ 774              	.LVL40:
+ 775              	.L68:
+ 289:dfu.c         ****     } else if (startState == dfuERROR)               {
+ 776              		.loc 1 289 0
+ 777 01a8 0A2B     		cmp	r3, #10
+ 778 01aa 0FD1     		bne	.L76
+ 292:dfu.c         ****         if (pInformation->USBbRequest == DFU_GETSTATUS) {
+ 779              		.loc 1 292 0
+ 780 01ac 0F4B     		ldr	r3, .L92+8
+ 781              	.LVL41:
+ 782 01ae 1B68     		ldr	r3, [r3]
+ 783 01b0 5B78     		ldrb	r3, [r3, #1]	@ zero_extendqisi2
+ 784 01b2 032B     		cmp	r3, #3
+ 785 01b4 02D1     		bne	.L77
+ 786              	.L85:
+ 294:dfu.c         ****             dfuAppStatus.bState  = dfuERROR;
+ 787              		.loc 1 294 0
+ 788 01b6 0A23     		movs	r3, #10
+ 789              	.L82:
+ 790 01b8 2371     		strb	r3, [r4, #4]
+ 791 01ba 0BE0     		b	.L45
+ 792              	.L77:
+ 295:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_GETSTATE) {
+ 793              		.loc 1 295 0
+ 794 01bc 052B     		cmp	r3, #5
+ 795 01be FAD0     		beq	.L85
+ 297:dfu.c         ****         } else if (pInformation->USBbRequest == DFU_CLRSTATUS) {
+ 796              		.loc 1 297 0
+ 797 01c0 042B     		cmp	r3, #4
+ 798 01c2 03D1     		bne	.L76
+ 299:dfu.c         ****             dfuAppStatus.bState  = dfuIDLE;
+ 799              		.loc 1 299 0
+ 800 01c4 0223     		movs	r3, #2
+ 801 01c6 2371     		strb	r3, [r4, #4]
+ 300:dfu.c         ****             dfuAppStatus.bStatus = OK;
+ 802              		.loc 1 300 0
+ 803 01c8 0023     		movs	r3, #0
+ 804 01ca 02E0     		b	.L83
+ 805              	.L76:
+ 308:dfu.c         ****         dfuAppStatus.bState  = dfuERROR;
+ 806              		.loc 1 308 0
+ 807 01cc 0A23     		movs	r3, #10
+ 808 01ce 2371     		strb	r3, [r4, #4]
+ 309:dfu.c         ****         dfuAppStatus.bStatus = errSTALLEDPKT;
+ 809              		.loc 1 309 0
+ 810 01d0 0F23     		movs	r3, #15
+ 811              	.L83:
+ 812 01d2 2370     		strb	r3, [r4]
+ 813              	.L45:
+ 312:dfu.c         ****     if (dfuAppStatus.bStatus == OK) {
+ 814              		.loc 1 312 0
+ 815 01d4 2078     		ldrb	r0, [r4]	@ zero_extendqisi2
+ 317:dfu.c         **** }
+ 816              		.loc 1 317 0
+ 817 01d6 D0F10100 		rsbs	r0, r0, #1
+ 818 01da 38BF     		it	cc
+ 819 01dc 0020     		movcc	r0, #0
+ 820 01de BDE8F081 		pop	{r4, r5, r6, r7, r8, pc}
+ 821              	.L93:
+ 822 01e2 00BF     		.align	2
+ 823              	.L92:
+ 824 01e4 00000000 		.word	.LANCHOR6
+ 825 01e8 00000000 		.word	.LANCHOR0
+ 826 01ec 00000000 		.word	pInformation
+ 827 01f0 00000000 		.word	.LANCHOR1
+ 828 01f4 00000000 		.word	.LANCHOR5
+ 829 01f8 00200008 		.word	134225920
+ 830 01fc 00000000 		.word	.LANCHOR3
+ 831 0200 00000000 		.word	.LANCHOR8
+ 832 0204 00000000 		.word	.LANCHOR2
+ 833 0208 00000000 		.word	.LANCHOR4
+ 834 020c 00000000 		.word	code_copy_lock
+ 835              		.cfi_endproc
+ 836              	.LFE1:
+ 838              		.section	.text.dfuGetState,"ax",%progbits
+ 839              		.align	1
+ 840              		.global	dfuGetState
+ 841              		.thumb
+ 842              		.thumb_func
+ 844              	dfuGetState:
+ 845              	.LFB9:
+ 422:dfu.c         **** }
+ 423:dfu.c         **** 
+ 424:dfu.c         **** u8 dfuGetState(void) {
+ 846              		.loc 1 424 0
+ 847              		.cfi_startproc
+ 848              		@ args = 0, pretend = 0, frame = 0
+ 849              		@ frame_needed = 0, uses_anonymous_args = 0
+ 850              		@ link register save eliminated.
+ 425:dfu.c         ****     return dfuAppStatus.bState;
+ 851              		.loc 1 425 0
+ 852 0000 014B     		ldr	r3, .L95
+ 853 0002 1879     		ldrb	r0, [r3, #4]	@ zero_extendqisi2
+ 426:dfu.c         **** }
+ 854              		.loc 1 426 0
+ 855 0004 7047     		bx	lr
+ 856              	.L96:
+ 857 0006 00BF     		.align	2
+ 858              	.L95:
+ 859 0008 00000000 		.word	.LANCHOR0
+ 860              		.cfi_endproc
+ 861              	.LFE9:
+ 863              		.section	.text.dfuSetState,"ax",%progbits
+ 864              		.align	1
+ 865              		.global	dfuSetState
+ 866              		.thumb
+ 867              		.thumb_func
+ 869              	dfuSetState:
+ 870              	.LFB10:
+ 427:dfu.c         **** 
+ 428:dfu.c         **** void dfuSetState(u8 newState) {
+ 871              		.loc 1 428 0
+ 872              		.cfi_startproc
+ 873              		@ args = 0, pretend = 0, frame = 0
+ 874              		@ frame_needed = 0, uses_anonymous_args = 0
+ 875              		@ link register save eliminated.
+ 876              	.LVL42:
+ 429:dfu.c         ****     dfuAppStatus.bState = newState;
+ 877              		.loc 1 429 0
+ 878 0000 014B     		ldr	r3, .L98
+ 879 0002 1871     		strb	r0, [r3, #4]
+ 880 0004 7047     		bx	lr
+ 881              	.L99:
+ 882 0006 00BF     		.align	2
+ 883              	.L98:
+ 884 0008 00000000 		.word	.LANCHOR0
+ 885              		.cfi_endproc
+ 886              	.LFE10:
+ 888              		.section	.text.dfuUploadStarted,"ax",%progbits
+ 889              		.align	1
+ 890              		.global	dfuUploadStarted
+ 891              		.thumb
+ 892              		.thumb_func
+ 894              	dfuUploadStarted:
+ 895              	.LFB11:
+ 430:dfu.c         **** }
+ 431:dfu.c         **** 
+ 432:dfu.c         **** bool dfuUploadStarted() {
+ 896              		.loc 1 432 0
+ 897              		.cfi_startproc
+ 898              		@ args = 0, pretend = 0, frame = 0
+ 899              		@ frame_needed = 0, uses_anonymous_args = 0
+ 900              		@ link register save eliminated.
+ 433:dfu.c         ****     return dfuBusy;
+ 901              		.loc 1 433 0
+ 902 0000 014B     		ldr	r3, .L101
+ 903 0002 1878     		ldrb	r0, [r3]	@ zero_extendqisi2
+ 434:dfu.c         **** }
+ 904              		.loc 1 434 0
+ 905 0004 7047     		bx	lr
+ 906              	.L102:
+ 907 0006 00BF     		.align	2
+ 908              	.L101:
+ 909 0008 00000000 		.word	.LANCHOR6
+ 910              		.cfi_endproc
+ 911              	.LFE11:
+ 913              		.section	.text.dfuFinishUpload,"ax",%progbits
+ 914              		.align	1
+ 915              		.global	dfuFinishUpload
+ 916              		.thumb
+ 917              		.thumb_func
+ 919              	dfuFinishUpload:
+ 920              	.LFB12:
+ 435:dfu.c         **** 
+ 436:dfu.c         **** void dfuFinishUpload() {
+ 921              		.loc 1 436 0
+ 922              		.cfi_startproc
+ 923              		@ Volatile: function does not return.
+ 924              		@ args = 0, pretend = 0, frame = 0
+ 925              		@ frame_needed = 0, uses_anonymous_args = 0
+ 926              		@ link register save eliminated.
+ 927              	.L104:
+ 437:dfu.c         ****     while (1)
+ 438:dfu.c         ****     {
+ 439:dfu.c         ****         __asm("nop");
+ 928              		.loc 1 439 0 discriminator 1
+ 929              	@ 439 "dfu.c" 1
+ 930 0000 00BF     		nop
+ 931              	@ 0 "" 2
+ 932              		.thumb
+ 933 0002 FDE7     		b	.L104
+ 934              		.cfi_endproc
+ 935              	.LFE12:
+ 937              		.comm	code_copy_lock,1,1
+ 938              		.global	dfuBusy
+ 939              		.global	userUploadType
+ 940              		.comm	wTransferSize,4,4
+ 941              		.section	.bss.recvBuffer,"aw",%nobits
+ 942              		.align	2
+ 943              		.set	.LANCHOR7,. + 0
+ 946              	recvBuffer:
+ 947 0000 00000000 		.space	2048
+ 947      00000000 
+ 947      00000000 
+ 947      00000000 
+ 947      00000000 
+ 948              		.section	.bss.uploadBlockLen,"aw",%nobits
+ 949              		.align	1
+ 950              		.set	.LANCHOR8,. + 0
+ 953              	uploadBlockLen:
+ 954 0000 0000     		.space	2
+ 955              		.section	.bss.thisBlockLen,"aw",%nobits
+ 956              		.align	1
+ 957              		.set	.LANCHOR2,. + 0
+ 960              	thisBlockLen:
+ 961 0000 0000     		.space	2
+ 962              		.section	.bss.userFirmwareLen,"aw",%nobits
+ 963              		.align	2
+ 964              		.set	.LANCHOR1,. + 0
+ 967              	userFirmwareLen:
+ 968 0000 00000000 		.space	4
+ 969              		.section	.data.userAppEnd,"aw",%progbits
+ 970              		.align	2
+ 971              		.set	.LANCHOR4,. + 0
+ 974              	userAppEnd:
+ 975 0000 00500020 		.word	536891392
+ 976              		.section	.bss.userUploadType,"aw",%nobits
+ 977              		.set	.LANCHOR5,. + 0
+ 980              	userUploadType:
+ 981 0000 00       		.space	1
+ 982              		.section	.bss.dfuAppStatus,"aw",%nobits
+ 983              		.set	.LANCHOR0,. + 0
+ 986              	dfuAppStatus:
+ 987 0000 00000000 		.space	6
+ 987      0000
+ 988              		.section	.bss.dfuBusy,"aw",%nobits
+ 989              		.set	.LANCHOR6,. + 0
+ 992              	dfuBusy:
+ 993 0000 00       		.space	1
+ 994              		.section	.data.userAppAddr,"aw",%progbits
+ 995              		.align	2
+ 996              		.set	.LANCHOR3,. + 0
+ 999              	userAppAddr:
+ 1000 0000 000C0020 		.word	536873984
+ 1001              		.text
+ 1002              	.Letext0:
+ 1003              		.file 2 "./stm32_lib/stm32f10x_type.h"
+ 1004              		.file 3 "./usb_lib/usb_core.h"
+ 1005              		.file 4 "dfu.h"
+ 1006              		.file 5 "./usb_lib/usb_init.h"
+ 1007              		.file 6 "usb.h"
+ 1008              		.file 7 "hardware.h"
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 dfu.c
-     /tmp/cc71nvgf.s:19     .text.dfuInit:0000000000000000 $t
-     /tmp/cc71nvgf.s:24     .text.dfuInit:0000000000000000 dfuInit
-     /tmp/cc71nvgf.s:81     .text.dfuInit:0000000000000038 $d
+     /tmp/cc3p0WX8.s:19     .text.dfuInit:0000000000000000 $t
+     /tmp/cc3p0WX8.s:24     .text.dfuInit:0000000000000000 dfuInit
+     /tmp/cc3p0WX8.s:81     .text.dfuInit:0000000000000038 $d
                             *COM*:0000000000000001 code_copy_lock
-     /tmp/cc71nvgf.s:94     .text.dfuUpdateByReset:0000000000000000 $t
-     /tmp/cc71nvgf.s:99     .text.dfuUpdateByReset:0000000000000000 dfuUpdateByReset
-     /tmp/cc71nvgf.s:160    .text.dfuUpdateByReset:000000000000003c $d
-     /tmp/cc71nvgf.s:166    .text.dfuUpdateByTimeout:0000000000000000 $t
-     /tmp/cc71nvgf.s:171    .text.dfuUpdateByTimeout:0000000000000000 dfuUpdateByTimeout
-     /tmp/cc71nvgf.s:183    .text.dfuCopyState:0000000000000000 $t
-     /tmp/cc71nvgf.s:188    .text.dfuCopyState:0000000000000000 dfuCopyState
-     /tmp/cc71nvgf.s:214    .text.dfuCopyState:0000000000000010 $d
-     /tmp/cc71nvgf.s:220    .text.dfuCopyStatus:0000000000000000 $t
-     /tmp/cc71nvgf.s:225    .text.dfuCopyStatus:0000000000000000 dfuCopyStatus
-     /tmp/cc71nvgf.s:251    .text.dfuCopyStatus:0000000000000010 $d
-     /tmp/cc71nvgf.s:257    .text.dfuCopyDNLOAD:0000000000000000 $t
-     /tmp/cc71nvgf.s:262    .text.dfuCopyDNLOAD:0000000000000000 dfuCopyDNLOAD
-     /tmp/cc71nvgf.s:296    .text.dfuCopyDNLOAD:000000000000001c $d
-     /tmp/cc71nvgf.s:303    .text.dfuCopyUPLOAD:0000000000000000 $t
-     /tmp/cc71nvgf.s:308    .text.dfuCopyUPLOAD:0000000000000000 dfuCopyUPLOAD
-     /tmp/cc71nvgf.s:344    .text.dfuCopyUPLOAD:0000000000000024 $d
-     /tmp/cc71nvgf.s:352    .text.dfuCopyBufferToExec:0000000000000000 $t
-     /tmp/cc71nvgf.s:357    .text.dfuCopyBufferToExec:0000000000000000 dfuCopyBufferToExec
-     /tmp/cc71nvgf.s:423    .text.dfuCopyBufferToExec:000000000000004c $d
-     /tmp/cc71nvgf.s:431    .text.dfuUpdateByRequest:0000000000000000 $t
-     /tmp/cc71nvgf.s:436    .text.dfuUpdateByRequest:0000000000000000 dfuUpdateByRequest
-     /tmp/cc71nvgf.s:833    .text.dfuUpdateByRequest:00000000000001ec $d
-     /tmp/cc71nvgf.s:849    .text.dfuGetState:0000000000000000 $t
-     /tmp/cc71nvgf.s:854    .text.dfuGetState:0000000000000000 dfuGetState
-     /tmp/cc71nvgf.s:869    .text.dfuGetState:0000000000000008 $d
-     /tmp/cc71nvgf.s:874    .text.dfuSetState:0000000000000000 $t
-     /tmp/cc71nvgf.s:879    .text.dfuSetState:0000000000000000 dfuSetState
-     /tmp/cc71nvgf.s:894    .text.dfuSetState:0000000000000008 $d
-     /tmp/cc71nvgf.s:899    .text.dfuUploadStarted:0000000000000000 $t
-     /tmp/cc71nvgf.s:904    .text.dfuUploadStarted:0000000000000000 dfuUploadStarted
-     /tmp/cc71nvgf.s:919    .text.dfuUploadStarted:0000000000000008 $d
-     /tmp/cc71nvgf.s:924    .text.dfuFinishUpload:0000000000000000 $t
-     /tmp/cc71nvgf.s:929    .text.dfuFinishUpload:0000000000000000 dfuFinishUpload
-     /tmp/cc71nvgf.s:1002   .bss.dfuBusy:0000000000000000 dfuBusy
-     /tmp/cc71nvgf.s:990    .bss.userUploadType:0000000000000000 userUploadType
+     /tmp/cc3p0WX8.s:94     .text.dfuUpdateByReset:0000000000000000 $t
+     /tmp/cc3p0WX8.s:99     .text.dfuUpdateByReset:0000000000000000 dfuUpdateByReset
+     /tmp/cc3p0WX8.s:160    .text.dfuUpdateByReset:000000000000003c $d
+     /tmp/cc3p0WX8.s:166    .text.dfuUpdateByTimeout:0000000000000000 $t
+     /tmp/cc3p0WX8.s:171    .text.dfuUpdateByTimeout:0000000000000000 dfuUpdateByTimeout
+     /tmp/cc3p0WX8.s:183    .text.dfuCopyState:0000000000000000 $t
+     /tmp/cc3p0WX8.s:188    .text.dfuCopyState:0000000000000000 dfuCopyState
+     /tmp/cc3p0WX8.s:214    .text.dfuCopyState:0000000000000010 $d
+     /tmp/cc3p0WX8.s:220    .text.dfuCopyStatus:0000000000000000 $t
+     /tmp/cc3p0WX8.s:225    .text.dfuCopyStatus:0000000000000000 dfuCopyStatus
+     /tmp/cc3p0WX8.s:251    .text.dfuCopyStatus:0000000000000010 $d
+     /tmp/cc3p0WX8.s:257    .text.dfuCopyDNLOAD:0000000000000000 $t
+     /tmp/cc3p0WX8.s:262    .text.dfuCopyDNLOAD:0000000000000000 dfuCopyDNLOAD
+     /tmp/cc3p0WX8.s:296    .text.dfuCopyDNLOAD:000000000000001c $d
+     /tmp/cc3p0WX8.s:303    .text.dfuCopyUPLOAD:0000000000000000 $t
+     /tmp/cc3p0WX8.s:308    .text.dfuCopyUPLOAD:0000000000000000 dfuCopyUPLOAD
+     /tmp/cc3p0WX8.s:344    .text.dfuCopyUPLOAD:0000000000000024 $d
+     /tmp/cc3p0WX8.s:352    .text.dfuCopyBufferToExec:0000000000000000 $t
+     /tmp/cc3p0WX8.s:357    .text.dfuCopyBufferToExec:0000000000000000 dfuCopyBufferToExec
+     /tmp/cc3p0WX8.s:423    .text.dfuCopyBufferToExec:000000000000004c $d
+     /tmp/cc3p0WX8.s:431    .text.dfuUpdateByRequest:0000000000000000 $t
+     /tmp/cc3p0WX8.s:436    .text.dfuUpdateByRequest:0000000000000000 dfuUpdateByRequest
+     /tmp/cc3p0WX8.s:824    .text.dfuUpdateByRequest:00000000000001e4 $d
+     /tmp/cc3p0WX8.s:839    .text.dfuGetState:0000000000000000 $t
+     /tmp/cc3p0WX8.s:844    .text.dfuGetState:0000000000000000 dfuGetState
+     /tmp/cc3p0WX8.s:859    .text.dfuGetState:0000000000000008 $d
+     /tmp/cc3p0WX8.s:864    .text.dfuSetState:0000000000000000 $t
+     /tmp/cc3p0WX8.s:869    .text.dfuSetState:0000000000000000 dfuSetState
+     /tmp/cc3p0WX8.s:884    .text.dfuSetState:0000000000000008 $d
+     /tmp/cc3p0WX8.s:889    .text.dfuUploadStarted:0000000000000000 $t
+     /tmp/cc3p0WX8.s:894    .text.dfuUploadStarted:0000000000000000 dfuUploadStarted
+     /tmp/cc3p0WX8.s:909    .text.dfuUploadStarted:0000000000000008 $d
+     /tmp/cc3p0WX8.s:914    .text.dfuFinishUpload:0000000000000000 $t
+     /tmp/cc3p0WX8.s:919    .text.dfuFinishUpload:0000000000000000 dfuFinishUpload
+     /tmp/cc3p0WX8.s:992    .bss.dfuBusy:0000000000000000 dfuBusy
+     /tmp/cc3p0WX8.s:980    .bss.userUploadType:0000000000000000 userUploadType
                             *COM*:0000000000000004 wTransferSize
-     /tmp/cc71nvgf.s:952    .bss.recvBuffer:0000000000000000 $d
-     /tmp/cc71nvgf.s:956    .bss.recvBuffer:0000000000000000 recvBuffer
-     /tmp/cc71nvgf.s:959    .bss.uploadBlockLen:0000000000000000 $d
-     /tmp/cc71nvgf.s:963    .bss.uploadBlockLen:0000000000000000 uploadBlockLen
-     /tmp/cc71nvgf.s:966    .bss.thisBlockLen:0000000000000000 $d
-     /tmp/cc71nvgf.s:970    .bss.thisBlockLen:0000000000000000 thisBlockLen
-     /tmp/cc71nvgf.s:973    .bss.userFirmwareLen:0000000000000000 $d
-     /tmp/cc71nvgf.s:977    .bss.userFirmwareLen:0000000000000000 userFirmwareLen
-     /tmp/cc71nvgf.s:980    .data.userAppEnd:0000000000000000 $d
-     /tmp/cc71nvgf.s:984    .data.userAppEnd:0000000000000000 userAppEnd
-     /tmp/cc71nvgf.s:991    .bss.userUploadType:0000000000000000 $d
-     /tmp/cc71nvgf.s:996    .bss.dfuAppStatus:0000000000000000 dfuAppStatus
-     /tmp/cc71nvgf.s:997    .bss.dfuAppStatus:0000000000000000 $d
-     /tmp/cc71nvgf.s:1003   .bss.dfuBusy:0000000000000000 $d
-     /tmp/cc71nvgf.s:1005   .data.userAppAddr:0000000000000000 $d
-     /tmp/cc71nvgf.s:1009   .data.userAppAddr:0000000000000000 userAppAddr
+     /tmp/cc3p0WX8.s:942    .bss.recvBuffer:0000000000000000 $d
+     /tmp/cc3p0WX8.s:946    .bss.recvBuffer:0000000000000000 recvBuffer
+     /tmp/cc3p0WX8.s:949    .bss.uploadBlockLen:0000000000000000 $d
+     /tmp/cc3p0WX8.s:953    .bss.uploadBlockLen:0000000000000000 uploadBlockLen
+     /tmp/cc3p0WX8.s:956    .bss.thisBlockLen:0000000000000000 $d
+     /tmp/cc3p0WX8.s:960    .bss.thisBlockLen:0000000000000000 thisBlockLen
+     /tmp/cc3p0WX8.s:963    .bss.userFirmwareLen:0000000000000000 $d
+     /tmp/cc3p0WX8.s:967    .bss.userFirmwareLen:0000000000000000 userFirmwareLen
+     /tmp/cc3p0WX8.s:970    .data.userAppEnd:0000000000000000 $d
+     /tmp/cc3p0WX8.s:974    .data.userAppEnd:0000000000000000 userAppEnd
+     /tmp/cc3p0WX8.s:981    .bss.userUploadType:0000000000000000 $d
+     /tmp/cc3p0WX8.s:986    .bss.dfuAppStatus:0000000000000000 dfuAppStatus
+     /tmp/cc3p0WX8.s:987    .bss.dfuAppStatus:0000000000000000 $d
+     /tmp/cc3p0WX8.s:993    .bss.dfuBusy:0000000000000000 $d
+     /tmp/cc3p0WX8.s:995    .data.userAppAddr:0000000000000000 $d
+     /tmp/cc3p0WX8.s:999    .data.userAppAddr:0000000000000000 userAppAddr
                      .debug_frame:0000000000000010 $d
 
 UNDEFINED SYMBOLS

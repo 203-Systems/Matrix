@@ -74,11 +74,7 @@ int main()
     strobePin(LED_BANK, LED_PIN, STARTUP_BLINKS, BLINK_FAST,LED_ON_STATE);
     #endif
 
-    if (!checkUserCode(USER_CODE_FLASH0X8005000) && !checkUserCode(USER_CODE_FLASH0X8002000))
-    {
-      no_user_jump = TRUE;
-    }
-    else if (readButtonState())
+    if ((!checkUserCode(USER_CODE_FLASH0X8005000) && !checkUserCode(USER_CODE_FLASH0X8002000)) || readButtonState())
     {
       no_user_jump = TRUE;
       #ifdef FASTBOOT

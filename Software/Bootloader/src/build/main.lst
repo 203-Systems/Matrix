@@ -100,9 +100,9 @@
   52 0016 FFF7FEFF 		bl	checkAndClearBootloaderFlag
   53              	.LVL6:
   54 001a 0128     		cmp	r0, #1
-  55 001c 0FD0     		beq	.L14
+  55 001c 0ED0     		beq	.L14
   56 001e 0228     		cmp	r0, #2
-  57 0020 14D0     		beq	.L4
+  57 0020 13D0     		beq	.L4
   58              	.LVL7:
   59              	.LBB2:
   50:main.c        ****   {
@@ -132,147 +132,140 @@
   74:main.c        ****     strobePin(LED_BANK, LED_PIN, STARTUP_BLINKS, BLINK_FAST,LED_ON_STATE);
   75:main.c        ****     #endif
   76:main.c        **** 
-  77:main.c        ****     if (!checkUserCode(USER_CODE_FLASH0X8005000) && !checkUserCode(USER_CODE_FLASH0X8002000))
+  77:main.c        ****     if ((!checkUserCode(USER_CODE_FLASH0X8005000) && !checkUserCode(USER_CODE_FLASH0X8002000)) || r
   60              		.loc 1 77 0
   61 0022 1348     		ldr	r0, .L25
   62 0024 FFF7FEFF 		bl	checkUserCode
   63              	.LVL8:
   64 0028 18B1     		cbz	r0, .L5
   65              	.L7:
+  66 002a FFF7FEFF 		bl	readButtonState
+  67              	.LVL9:
+  68 002e 28B9     		cbnz	r0, .L14
+  69 0030 0BE0     		b	.L4
+  70              	.L5:
+  71              		.loc 1 77 0 is_stmt 0 discriminator 1
+  72 0032 1048     		ldr	r0, .L25+4
+  73 0034 FFF7FEFF 		bl	checkUserCode
+  74              	.LVL10:
+  75 0038 0028     		cmp	r0, #0
+  76 003a F6D1     		bne	.L7
+  77              	.LVL11:
+  78              	.L14:
+  79              	.LBE2:
+  80              	.LBB3:
   78:main.c        ****     {
   79:main.c        ****       no_user_jump = TRUE;
-  80:main.c        ****     }
-  81:main.c        ****     else if (readButtonState())
-  66              		.loc 1 81 0
-  67 002a FFF7FEFF 		bl	readButtonState
-  68              	.LVL9:
-  69 002e 30B9     		cbnz	r0, .L14
-  70 0030 0CE0     		b	.L4
-  71              	.L5:
-  77:main.c        ****     if (!checkUserCode(USER_CODE_FLASH0X8005000) && !checkUserCode(USER_CODE_FLASH0X8002000))
-  72              		.loc 1 77 0 discriminator 1
-  73 0032 1048     		ldr	r0, .L25+4
-  74 0034 FFF7FEFF 		bl	checkUserCode
-  75              	.LVL10:
-  76 0038 0028     		cmp	r0, #0
-  77 003a F6D1     		bne	.L7
-  78 003c 06E0     		b	.L4
-  79              	.LVL11:
-  80              	.L14:
-  81              	.LBE2:
-  82              	.LBB3:
-  82:main.c        ****     {
-  83:main.c        ****       no_user_jump = TRUE;
-  84:main.c        ****       #ifdef FASTBOOT
-  85:main.c        ****       dont_wait = FALSE;
-  86:main.c        ****       #endif
-  87:main.c        ****     }
-  88:main.c        ****     break;
-  89:main.c        ****   }
+  80:main.c        ****       #ifdef FASTBOOT
+  81:main.c        ****       dont_wait = FALSE;
+  82:main.c        ****       #endif
+  83:main.c        ****     }
+  84:main.c        ****     break;
+  85:main.c        ****   }
+  86:main.c        **** 
+  87:main.c        ****   if (!dont_wait)
+  88:main.c        ****   {
+  89:main.c        ****     int delay_count = 0;
   90:main.c        **** 
-  91:main.c        ****   if (!dont_wait)
-  92:main.c        ****   {
-  93:main.c        ****     int delay_count = 0;
-  94:main.c        **** 
-  95:main.c        ****     while ((delay_count++ < BOOTLOADER_WAIT) || no_user_jump)
-  96:main.c        ****     {
-  97:main.c        ****       #ifndef NOLED
-  98:main.c        ****       strobePin(LED_BANK, LED_PIN, 1, BLINK_SLOW,LED_ON_STATE);
-  99:main.c        ****       #endif
- 100:main.c        ****       if (dfuUploadStarted())
-  83              		.loc 1 100 0 discriminator 1
-  84 003e FFF7FEFF 		bl	dfuUploadStarted
-  85              	.LVL12:
-  86 0042 0028     		cmp	r0, #0
-  87 0044 FBD0     		beq	.L14
- 101:main.c        ****       {
- 102:main.c        ****         dfuFinishUpload(); // systemHardReset from DFU once done
-  88              		.loc 1 102 0
-  89 0046 FFF7FEFF 		bl	dfuFinishUpload
-  90              	.LVL13:
-  91 004a F8E7     		b	.L14
-  92              	.L4:
-  93              	.LVL14:
-  94              	.LBE3:
- 103:main.c        ****       }
- 104:main.c        **** 
- 105:main.c        ****       // if(readButtonState())
- 106:main.c        ****       // {
- 107:main.c        ****       //   break;
- 108:main.c        ****       // }
- 109:main.c        ****     }
- 110:main.c        ****   }
- 111:main.c        **** 
- 112:main.c        ****   if (checkUserCode(USER_CODE_FLASH0X8002000))
-  95              		.loc 1 112 0
-  96 004c 0948     		ldr	r0, .L25+4
-  97 004e FFF7FEFF 		bl	checkUserCode
-  98              	.LVL15:
-  99 0052 08B1     		cbz	r0, .L22
+  91:main.c        ****     while ((delay_count++ < BOOTLOADER_WAIT) || no_user_jump)
+  92:main.c        ****     {
+  93:main.c        ****       #ifndef NOLED
+  94:main.c        ****       strobePin(LED_BANK, LED_PIN, 1, BLINK_SLOW,LED_ON_STATE);
+  95:main.c        ****       #endif
+  96:main.c        ****       if (dfuUploadStarted())
+  81              		.loc 1 96 0 is_stmt 1 discriminator 1
+  82 003c FFF7FEFF 		bl	dfuUploadStarted
+  83              	.LVL12:
+  84 0040 0028     		cmp	r0, #0
+  85 0042 FBD0     		beq	.L14
+  97:main.c        ****       {
+  98:main.c        ****         dfuFinishUpload(); // systemHardReset from DFU once done
+  86              		.loc 1 98 0
+  87 0044 FFF7FEFF 		bl	dfuFinishUpload
+  88              	.LVL13:
+  89 0048 F8E7     		b	.L14
+  90              	.L4:
+  91              	.LVL14:
+  92              	.LBE3:
+  99:main.c        ****       }
+ 100:main.c        **** 
+ 101:main.c        ****       // if(readButtonState())
+ 102:main.c        ****       // {
+ 103:main.c        ****       //   break;
+ 104:main.c        ****       // }
+ 105:main.c        ****     }
+ 106:main.c        ****   }
+ 107:main.c        **** 
+ 108:main.c        ****   if (checkUserCode(USER_CODE_FLASH0X8002000))
+  93              		.loc 1 108 0
+  94 004a 0A48     		ldr	r0, .L25+4
+  95 004c FFF7FEFF 		bl	checkUserCode
+  96              	.LVL15:
+  97 0050 08B1     		cbz	r0, .L22
+ 109:main.c        ****   {
+ 110:main.c        ****     jumpToUser(USER_CODE_FLASH0X8002000);
+  98              		.loc 1 110 0
+  99 0052 0848     		ldr	r0, .L25+4
+ 100 0054 04E0     		b	.L23
+ 101              	.L22:
+ 111:main.c        ****   }
+ 112:main.c        ****   else
  113:main.c        ****   {
- 114:main.c        ****     jumpToUser(USER_CODE_FLASH0X8002000);
- 100              		.loc 1 114 0
- 101 0054 0748     		ldr	r0, .L25+4
- 102 0056 04E0     		b	.L23
- 103              	.L22:
- 115:main.c        ****   }
- 116:main.c        ****   else
- 117:main.c        ****   {
- 118:main.c        ****     if (checkUserCode(USER_CODE_FLASH0X8005000))
- 104              		.loc 1 118 0
- 105 0058 0548     		ldr	r0, .L25
- 106 005a FFF7FEFF 		bl	checkUserCode
- 107              	.LVL16:
- 108 005e 18B1     		cbz	r0, .L11
+ 114:main.c        ****     if (checkUserCode(USER_CODE_FLASH0X8005000))
+ 102              		.loc 1 114 0
+ 103 0056 0648     		ldr	r0, .L25
+ 104 0058 FFF7FEFF 		bl	checkUserCode
+ 105              	.LVL16:
+ 106 005c 18B1     		cbz	r0, .L11
+ 115:main.c        ****     {
+ 116:main.c        ****       jumpToUser(USER_CODE_FLASH0X8005000);
+ 107              		.loc 1 116 0
+ 108 005e 0448     		ldr	r0, .L25
+ 109              	.L23:
+ 110 0060 FFF7FEFF 		bl	jumpToUser
+ 111              	.LVL17:
+ 112 0064 01E0     		b	.L21
+ 113              	.L11:
+ 117:main.c        ****     }
+ 118:main.c        ****     else
  119:main.c        ****     {
- 120:main.c        ****       jumpToUser(USER_CODE_FLASH0X8005000);
- 109              		.loc 1 120 0
- 110 0060 0348     		ldr	r0, .L25
- 111              	.L23:
- 112 0062 FFF7FEFF 		bl	jumpToUser
- 113              	.LVL17:
- 114 0066 01E0     		b	.L21
- 115              	.L11:
- 121:main.c        ****     }
- 122:main.c        ****     else
- 123:main.c        ****     {
- 124:main.c        ****       // Nothing to execute in either Flash or RAM
- 125:main.c        ****       #ifndef NOLED
- 126:main.c        ****       strobePin(LED_BANK, LED_PIN, 5, BLINK_FAST,LED_ON_STATE);
- 127:main.c        ****       #endif
+ 120:main.c        ****       // Nothing to execute in either Flash or RAM
+ 121:main.c        ****       #ifndef NOLED
+ 122:main.c        ****       strobePin(LED_BANK, LED_PIN, 5, BLINK_FAST,LED_ON_STATE);
+ 123:main.c        ****       #endif
+ 124:main.c        **** 
+ 125:main.c        ****       systemHardReset();
+ 114              		.loc 1 125 0
+ 115 0066 FFF7FEFF 		bl	systemHardReset
+ 116              	.LVL18:
+ 117              	.L21:
+ 126:main.c        ****     }
+ 127:main.c        ****   }
  128:main.c        **** 
- 129:main.c        ****       systemHardReset();
- 116              		.loc 1 129 0
- 117 0068 FFF7FEFF 		bl	systemHardReset
- 118              	.LVL18:
- 119              	.L21:
- 130:main.c        ****     }
- 131:main.c        ****   }
- 132:main.c        **** 
- 133:main.c        ****   return 0;// Added to please the compiler
- 134:main.c        **** }
- 120              		.loc 1 134 0
- 121 006c 0020     		movs	r0, #0
- 122 006e 08BD     		pop	{r3, pc}
- 123              	.L26:
- 124              		.align	2
- 125              	.L25:
- 126 0070 00500008 		.word	134238208
- 127 0074 00200008 		.word	134225920
- 128              		.cfi_endproc
- 129              	.LFE0:
- 131              		.comm	wTransferSize,4,4
- 132              		.text
- 133              	.Letext0:
- 134              		.file 2 "dfu.h"
- 135              		.file 3 "hardware.h"
- 136              		.file 4 "usb.h"
- 137              		.file 5 "./stm32_lib/stm32f10x_type.h"
+ 129:main.c        ****   return 0;// Added to please the compiler
+ 130:main.c        **** }
+ 118              		.loc 1 130 0
+ 119 006a 0020     		movs	r0, #0
+ 120 006c 08BD     		pop	{r3, pc}
+ 121              	.L26:
+ 122 006e 00BF     		.align	2
+ 123              	.L25:
+ 124 0070 00500008 		.word	134238208
+ 125 0074 00200008 		.word	134225920
+ 126              		.cfi_endproc
+ 127              	.LFE0:
+ 129              		.comm	wTransferSize,4,4
+ 130              		.text
+ 131              	.Letext0:
+ 132              		.file 2 "dfu.h"
+ 133              		.file 3 "hardware.h"
+ 134              		.file 4 "usb.h"
+ 135              		.file 5 "./stm32_lib/stm32f10x_type.h"
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 main.c
-     /tmp/ccEQclhz.s:19     .text.startup.main:0000000000000000 $t
-     /tmp/ccEQclhz.s:24     .text.startup.main:0000000000000000 main
-     /tmp/ccEQclhz.s:126    .text.startup.main:0000000000000070 $d
+     /tmp/ccaXf0vc.s:19     .text.startup.main:0000000000000000 $t
+     /tmp/ccaXf0vc.s:24     .text.startup.main:0000000000000000 main
+     /tmp/ccaXf0vc.s:124    .text.startup.main:0000000000000070 $d
                             *COM*:0000000000000004 wTransferSize
                      .debug_frame:0000000000000010 $d
 
