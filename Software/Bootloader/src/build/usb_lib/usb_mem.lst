@@ -209,10 +209,10 @@
  137              		.file 2 "usb_lib/usb_type.h"
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 usb_mem.c
-     /tmp/cc08B6dc.s:19     .text.UserToPMABufferCopy:0000000000000000 $t
-     /tmp/cc08B6dc.s:24     .text.UserToPMABufferCopy:0000000000000000 UserToPMABufferCopy
-     /tmp/cc08B6dc.s:83     .text.PMAToUserBufferCopy:0000000000000000 $t
-     /tmp/cc08B6dc.s:88     .text.PMAToUserBufferCopy:0000000000000000 PMAToUserBufferCopy
+     /tmp/ccaeSFtc.s:19     .text.UserToPMABufferCopy:0000000000000000 $t
+     /tmp/ccaeSFtc.s:24     .text.UserToPMABufferCopy:0000000000000000 UserToPMABufferCopy
+     /tmp/ccaeSFtc.s:83     .text.PMAToUserBufferCopy:0000000000000000 $t
+     /tmp/ccaeSFtc.s:88     .text.PMAToUserBufferCopy:0000000000000000 PMAToUserBufferCopy
                      .debug_frame:0000000000000010 $d
 
 NO UNDEFINED SYMBOLS

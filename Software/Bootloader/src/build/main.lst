@@ -270,9 +270,9 @@
  137              		.file 5 "./stm32_lib/stm32f10x_type.h"
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 main.c
-     /tmp/ccpdhTGL.s:19     .text.startup.main:0000000000000000 $t
-     /tmp/ccpdhTGL.s:24     .text.startup.main:0000000000000000 main
-     /tmp/ccpdhTGL.s:126    .text.startup.main:0000000000000070 $d
+     /tmp/ccEQclhz.s:19     .text.startup.main:0000000000000000 $t
+     /tmp/ccEQclhz.s:24     .text.startup.main:0000000000000000 main
+     /tmp/ccEQclhz.s:126    .text.startup.main:0000000000000070 $d
                             *COM*:0000000000000004 wTransferSize
                      .debug_frame:0000000000000010 $d
 

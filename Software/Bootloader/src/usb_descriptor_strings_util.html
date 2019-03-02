@@ -10,11 +10,10 @@ function convertText(txt,idNum)
     }
     return txt2.substring(0,txt2.length-1)+"<br/>";
 }
-var bootloaderName = "Matrix Bootloader v1.0 ";
+var bootloaderName = "Matrix Bootloader v1.2 ";
 document.write("<pre>USB Strings for config.h\n\n");
-document.write("\t"+convertText(bootloaderName + " ERROR using Mode 0",0)+"<br/>");
-document.write("\t"+convertText(bootloaderName + " Uploaded with Mode 1",1)+"<br/>");
-document.write("\t"+convertText(bootloaderName + " Uploaded with Mode 2",2)+"<br/>");
+document.write("\t"+convertText(bootloaderName + " Upload Firmware",0)+"<br/>");
+document.write("\t"+convertText(bootloaderName + " Update Bootloader",1)+"<br/>");
 
 
 document.write("</pre>");
