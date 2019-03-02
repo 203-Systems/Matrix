@@ -1,4 +1,4 @@
-  /*
+/*
 Project Matrix
 Copyright © 203 Industries 2017–2019. All rights reserved.
 
@@ -143,10 +143,16 @@ void readKey()
 // }
 
 
-
-
+//
+// int ttt = 63;
 void loop()
 {
+  // if(USBmidi.available())
+  // {
+  //   LED.on(ttt);
+  //   ttt--;
+  // }
+
   if (midi_enable);
   USBmidi.poll();
   // if (m2p_enable)
@@ -236,32 +242,28 @@ void specialBoot()
 
 void factoryTest()
 {
-  LED.fill(0xFFFFFF);
+  //LED.setBrightness(16);
+  LED.fill(0);
+  LED.update();
 
   while(!KeyPad.fn)
   {
     if (mainTimer.tick(1000/FPS))
     {
-      KeyPad.scan();
-
-      for(int i = 0; i < MULTIPRESS; i++)
+      if(KeyPad.scan())
       {
-        if(KeyPad.list[i].velocity== -1)
-        break;
-
-        if(KeyPad.list[i].velocity > 0)
+        for(int i = 0; i < MULTIPRESS; i++)
         {
-          if(LED.readXYLED(KeyPad.list[i].xy) != 0xFFFFFF)
+          // if(KeyPad.list[i].velocity== -1)
+          // break;
+
+          if(KeyPad.list[i].velocity > 0)
           {
-            LED.setXYHEX(KeyPad.list[i].xy, 0xFFFFFF);
-          }
-          else
-          {
-            LED.offXY(KeyPad.list[i].xy);
+              LED.setXYHEX(KeyPad.list[i].xy, 0xFFFFFF, true, true);
           }
         }
+        LED.update();
       }
-      LED.update();
     }
   }
 }

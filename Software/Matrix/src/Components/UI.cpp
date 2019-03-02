@@ -80,21 +80,21 @@ void UI::fnKeyAction()
     return;
 
     if(KeyPad.list[i].velocity == 0){
-      if(xytoxy(KeyPad.list[i].xy).x > 5)
+      if(xytoxy(KeyPad.list[i].xy).y > 5)
       {
-        Midi.noteOff(0, fn_keymap[current_keymap][xytoxy(KeyPad.list[i].xy).y - 6][xytoxy(KeyPad.list[i].xy).x], 0);
+        Midi.sentNoteOff(0, fn_keymap[current_keymap][xytoxy(KeyPad.list[i].xy).y - 6][xytoxy(KeyPad.list[i].xy).x], 0);
       }
     }
 
-    if(KeyPad.list[i].velocity != 0)
+    if(KeyPad.list[i].velocity > 0)
     {
       #ifdef DEBUG
       CompositeSerial.print("ReadKey ");
       CompositeSerial.println(KeyPad.list[i].xy, HEX);
       #endif
-      if(xytoxy(KeyPad.list[i].xy).x > 5)
+      if(xytoxy(KeyPad.list[i].xy).y > 5)
       {
-        Midi.noteOn(0, fn_keymap[current_keymap][xytoxy(KeyPad.list[i].xy).y - 6][xytoxy(KeyPad.list[i].xy).x], 127);
+        Midi.sentNoteOn(0, fn_keymap[current_keymap][xytoxy(KeyPad.list[i].xy).y - 6][xytoxy(KeyPad.list[i].xy).x], 127);
       }
       switch(KeyPad.list[i].xy)
       {
@@ -141,6 +141,9 @@ void UI::fnKeyAction()
         setCurrentKeyMap(2);
         break;
 
+        case 0x05:
+        unipad_mode = !unipad_mode;
+
         // //midi_enable
         // case 0x00:
         // midi_enable = !midi_enable;
@@ -157,7 +160,7 @@ void UI::fnKeyAction()
         // break;
 
         //gamma_enable
-        case 0x76:
+        case 0x75:
         gamma_enable = !gamma_enable;
         break;
 
@@ -262,6 +265,14 @@ void UI::fnRender()
   LED.setXYHEX(0x00, LED.toBrightness(keymap_colour[0], LOWSTATEBRIGHTNESS), true, true); //Keymap selector 1
   LED.setXYHEX(0x10, LED.toBrightness(keymap_colour[1], LOWSTATEBRIGHTNESS), true, true); //Keymap selector 1
   LED.setXYHEX(0x20, LED.toBrightness(keymap_colour[2], LOWSTATEBRIGHTNESS), true, true); //Keymap selector 1
+  if(unipad_mode)
+  {
+    LED.setXYHEX(0x05, 0xFFFF00, true, true);
+  }
+  else
+  {
+    LED.setXYHEX(0x05, LED.toBrightness(0xFFFF00, LOWSTATEBRIGHTNESS), true, true);
+  }
 
   switch(current_keymap)
   {

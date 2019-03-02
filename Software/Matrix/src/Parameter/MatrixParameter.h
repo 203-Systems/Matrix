@@ -30,6 +30,7 @@ typedef volatile int64_t vs64;
 // } BRIGHTNESS;
 
 #define MATRIXPROTORE //Hardware model selector
+#define V150 //Version selector
 #define DEBUG
 
 //HardwareMapping
@@ -96,8 +97,14 @@ typedef volatile int64_t vs64;
 #endif
 
 #ifdef MATRIXPROTORE
-//LED
+// LED
+#ifdef V120
 #define LED_PIN PB7
+#endif
+#ifdef V150
+#define LED_PIN PC7
+#endif-
+
 #define POWERCORD_PIN PA9
 //KeyPad
 #define SO_DATA PB12
@@ -105,7 +112,14 @@ typedef volatile int64_t vs64;
 #define SI_DATA PC6
 #define SI_CLOCK PB14
 #define SI_SCAN PB15
+
+#ifdef V120
 #define FN_PIN PA0
+#endif
+#ifdef V150
+#define FN_PIN PB7
+#endif
+
 //ANALOG(TouchBar)
 #define ANALOG0 PA3
 #define ANALOG1 PA4
@@ -165,14 +179,14 @@ typedef volatile int64_t vs64;
 #define VID2 0x0203 // for device ID USE
 #define PID  0x1000
 #define PID2 0x1000 // for device ID USE
-#define FWVERSION "Alpha"
+#define FWVERSION "0.5"
 
 //LED
 #define NUM_LEDS 64
 #define NUM_BOTTOM_LEDS 36
-#define NUM_TOTAL_LEDS 96   //64+32
-#define NUM_POWERCORD_LEDS 60
-#define FPS 100
+#define NUM_TOTAL_LEDS 100   //64+32
+#define NUM_POWERCORD_LEDS 120
+#define FPS 50
 #define LOWSTATEBRIGHTNESS 0.25
 
 #define XSIZE 8 //Max 256 key support due to the m2p and libary data type limition

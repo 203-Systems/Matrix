@@ -44,6 +44,14 @@ void MIDI::noteOn(u8 channel, u8 note, u8 velocity)
   CompositeSerial.println(velocity);
   #endif
 
+  //LED.on(channel);
+
+// if(channel == 5)
+//   channel = 1; //unipad support
+
+if(unipad_mode)
+  channel = 1;
+
   for(u8 y = 0; y < YSIZE; y++)
   {
     for(u8 x = 0; x < XSIZE; x++)

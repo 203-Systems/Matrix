@@ -586,26 +586,26 @@
  616              		.file 4 "usb_descriptor.c"
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 usb_descriptor.c
-     /tmp/cc12CMl1.s:38     .data.usbStringDescriptor:0000000000000000 usbStringDescriptor
-     /tmp/cc12CMl1.s:170    .bss.u8_usbStringInterface:0000000000000000 u8_usbStringInterface
-     /tmp/cc12CMl1.s:494    .data.u8_usbStringAlt2:0000000000000000 u8_usbStringAlt2
-     /tmp/cc12CMl1.s:382    .data.u8_usbStringAlt1:0000000000000000 u8_usbStringAlt1
-     /tmp/cc12CMl1.s:250    .data.u8_usbStringAlt0:0000000000000000 u8_usbStringAlt0
-     /tmp/cc12CMl1.s:150    .data.u8_usbStringSerial:0000000000000000 u8_usbStringSerial
-     /tmp/cc12CMl1.s:226    .data.u8_usbStringProduct:0000000000000000 u8_usbStringProduct
-     /tmp/cc12CMl1.s:188    .data.u8_usbStringVendor:0000000000000000 u8_usbStringVendor
-     /tmp/cc12CMl1.s:93     .data.u8_usbStringLangId:0000000000000000 u8_usbStringLangId
-     /tmp/cc12CMl1.s:607    .data.usbConfigDescriptorDFU:0000000000000000 usbConfigDescriptorDFU
-     /tmp/cc12CMl1.s:101    .data.u8_usbConfigDescriptorDFU:0000000000000000 u8_usbConfigDescriptorDFU
-     /tmp/cc12CMl1.s:86     .data.usbFunctionalDescriptor:0000000000000000 usbFunctionalDescriptor
-     /tmp/cc12CMl1.s:175    .data.u8_usbFunctionalDescriptor:0000000000000000 u8_usbFunctionalDescriptor
-     /tmp/cc12CMl1.s:219    .data.usbDeviceDescriptorDFU:0000000000000000 usbDeviceDescriptorDFU
-     /tmp/cc12CMl1.s:63     .data.u8_usbDeviceDescriptorDFU:0000000000000000 u8_usbDeviceDescriptorDFU
+     /tmp/cc15aexu.s:38     .data.usbStringDescriptor:0000000000000000 usbStringDescriptor
+     /tmp/cc15aexu.s:170    .bss.u8_usbStringInterface:0000000000000000 u8_usbStringInterface
+     /tmp/cc15aexu.s:494    .data.u8_usbStringAlt2:0000000000000000 u8_usbStringAlt2
+     /tmp/cc15aexu.s:382    .data.u8_usbStringAlt1:0000000000000000 u8_usbStringAlt1
+     /tmp/cc15aexu.s:250    .data.u8_usbStringAlt0:0000000000000000 u8_usbStringAlt0
+     /tmp/cc15aexu.s:150    .data.u8_usbStringSerial:0000000000000000 u8_usbStringSerial
+     /tmp/cc15aexu.s:226    .data.u8_usbStringProduct:0000000000000000 u8_usbStringProduct
+     /tmp/cc15aexu.s:188    .data.u8_usbStringVendor:0000000000000000 u8_usbStringVendor
+     /tmp/cc15aexu.s:93     .data.u8_usbStringLangId:0000000000000000 u8_usbStringLangId
+     /tmp/cc15aexu.s:607    .data.usbConfigDescriptorDFU:0000000000000000 usbConfigDescriptorDFU
+     /tmp/cc15aexu.s:101    .data.u8_usbConfigDescriptorDFU:0000000000000000 u8_usbConfigDescriptorDFU
+     /tmp/cc15aexu.s:86     .data.usbFunctionalDescriptor:0000000000000000 usbFunctionalDescriptor
+     /tmp/cc15aexu.s:175    .data.u8_usbFunctionalDescriptor:0000000000000000 u8_usbFunctionalDescriptor
+     /tmp/cc15aexu.s:219    .data.usbDeviceDescriptorDFU:0000000000000000 usbDeviceDescriptorDFU
+     /tmp/cc15aexu.s:63     .data.u8_usbDeviceDescriptorDFU:0000000000000000 u8_usbDeviceDescriptorDFU
                             *COM*:0000000000000004 wTransferSize
-     /tmp/cc12CMl1.s:35     .data.usbStringDescriptor:0000000000000000 $d
-     /tmp/cc12CMl1.s:83     .data.usbFunctionalDescriptor:0000000000000000 $d
-     /tmp/cc12CMl1.s:171    .bss.u8_usbStringInterface:0000000000000000 $d
-     /tmp/cc12CMl1.s:216    .data.usbDeviceDescriptorDFU:0000000000000000 $d
-     /tmp/cc12CMl1.s:604    .data.usbConfigDescriptorDFU:0000000000000000 $d
+     /tmp/cc15aexu.s:35     .data.usbStringDescriptor:0000000000000000 $d
+     /tmp/cc15aexu.s:83     .data.usbFunctionalDescriptor:0000000000000000 $d
+     /tmp/cc15aexu.s:171    .bss.u8_usbStringInterface:0000000000000000 $d
+     /tmp/cc15aexu.s:216    .data.usbDeviceDescriptorDFU:0000000000000000 $d
+     /tmp/cc15aexu.s:604    .data.usbConfigDescriptorDFU:0000000000000000 $d
 
 NO UNDEFINED SYMBOLS

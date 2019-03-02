@@ -528,14 +528,14 @@
  346              		.file 5 "usb_lib/usb_core.h"
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 usb_int.c
-     /tmp/ccqXVdx8.s:19     .text.CTR_LP:0000000000000000 $t
-     /tmp/ccqXVdx8.s:24     .text.CTR_LP:0000000000000000 CTR_LP
-     /tmp/ccqXVdx8.s:242    .text.CTR_LP:0000000000000134 $d
+     /tmp/ccDutLOT.s:19     .text.CTR_LP:0000000000000000 $t
+     /tmp/ccDutLOT.s:24     .text.CTR_LP:0000000000000000 CTR_LP
+     /tmp/ccDutLOT.s:242    .text.CTR_LP:0000000000000134 $d
                             *COM*:0000000000000002 SaveRState
                             *COM*:0000000000000002 SaveTState
-     /tmp/ccqXVdx8.s:254    .text.CTR_HP:0000000000000000 $t
-     /tmp/ccqXVdx8.s:259    .text.CTR_HP:0000000000000000 CTR_HP
-     /tmp/ccqXVdx8.s:331    .text.CTR_HP:000000000000005c $d
+     /tmp/ccDutLOT.s:254    .text.CTR_HP:0000000000000000 $t
+     /tmp/ccDutLOT.s:259    .text.CTR_HP:0000000000000000 CTR_HP
+     /tmp/ccDutLOT.s:331    .text.CTR_HP:000000000000005c $d
                      .debug_frame:0000000000000010 $d
 
 UNDEFINED SYMBOLS

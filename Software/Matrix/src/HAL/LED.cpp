@@ -8,6 +8,8 @@
 LED::LED()
 {
   FastLED.addLeds<NEOPIXEL, LED_PIN>(leds, NUM_TOTAL_LEDS);
+  if(dynamic_brightness)
+    LED::dynamicBrightness(500);
   //setBrightnesss(brightness);
   //LED::setBrightness(brightness);
   // if(POWERCORD)
@@ -25,11 +27,13 @@ void LED::setBrightness(u8 b)
 
 void LED::dynamicBrightness(u16 mah)
 {
+  dynamic_brightness = true;
   FastLED.setMaxPowerInVoltsAndMilliamps(5,mah);
 }
 
 void LED::nextBrightnessState()
 {
+  dynamic_brightness = false;
   // if(brightness >= 192) //Bright AF
   // {
   //   LED::setBrightness(32);
@@ -58,15 +62,15 @@ void LED::nextBrightnessState()
   // {
   //   LED::setBrightness(32);
   // }
-  for(u8 i = 0; i < 5 ; i++)  //sizeof(brightness_level)
+  for(u8 i = 0; i < sizeof(brightness_level); i++)  //
   {
     if(brightness_level[i] > brightness)
     {
       FastLED.setBrightness(brightness_level[i]);
       return;
     }
-    FastLED.setBrightness(brightness_level[0]);
   }
+  FastLED.setBrightness(brightness_level[0]);
 }
 
 void LED::fill(u32 WRGB, bool overlay /*= false*/)

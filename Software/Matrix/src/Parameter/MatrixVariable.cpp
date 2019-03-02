@@ -3,13 +3,14 @@
 //DeviceInfo
 extern u8 device_id = 203; //0~255 0 for off
 extern Modes current_mode = Normal;
-extern u8 current_keymap = 1;
+extern u8 current_keymap = 0;
 extern u8 app_id = 0;
 
+extern bool unipad_mode = false;
 //LED setting
 extern u8 brightness = 16;
-extern bool dynamic_brightness = true;
-extern u8 brightness_level[5] = {32,64,96,128,160};
+extern bool dynamic_brightness = false;
+extern u8 brightness_level[8] = {32,64,96,128,160,192,224,255};
 
 extern u32 palette[3][128] =     //WRGB Colour Palette
 {{            //MatrixColorPalette
@@ -459,7 +460,7 @@ extern u8 keymap [3][YSIZE][XSIZE] =
   {255, 255, 255, 255, 255, 255, 255, 255}}};
 
 extern u8 fn_keymap[3][2][XSIZE] = //Key session in fn menu ） 255 for disable
-{{{255, 255, 255, 255, 255, 255, 255, 255}, //Key
+{{{108, 109, 110, 111, 112, 113, 114, 115}, //Key
   {100, 101, 102, 103, 104, 105, 106, 107}
   },{
   {104, 105, 106, 107, 108, 109, 110, 111}, //unmapped mk2
@@ -469,7 +470,7 @@ extern u8 fn_keymap[3][2][XSIZE] = //Key session in fn menu ） 255 for disable
   {255, 255, 255, 255, 255, 255, 255, 255}}};
 
 extern u32 fn_keymap_idle_color[3][2][XSIZE]
-{{{0, 0, 0, 0, 0, 0, 0, 0}, //Drum Rock
+{{{0x00FF00FF, 0x00FF00FF, 0x00FF00FF, 0x00FF00FF, 0x00FF00FF, 0x00FF00FF, 0x00FF00FF, 0x00FF00FF}, //Drum Rock
   {0x00FF00FF, 0x00FF00FF, 0x00FF00FF, 0x00FF00FF, 0x00FF00FF, 0x00FF00FF, 0x00FF00FF, 0x00FF00FF}
 },{
   {0x00FF5400, 0x00FF5400, 0x00FF5400, 0x00FF5400, 0x00FF5400, 0x00FF5400, 0x00FF5400, 0x00FF5400}, //Unmapped MK2
@@ -479,7 +480,7 @@ extern u32 fn_keymap_idle_color[3][2][XSIZE]
   {0, 0, 0, 0, 0, 0, 0, 0}}};
 
 extern u32 fn_keymap_active_color[3][2][XSIZE]
-{{{0, 0, 0, 0, 0, 0, 0, 0}, //Drum Rock
+{{{0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF}, //Drum Rock
   {0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF}
   },{
   {0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF}, //Unmapped MK2
