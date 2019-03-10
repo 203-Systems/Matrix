@@ -2,9 +2,9 @@
 
 #define DEBUG //CDC info
 
-extern KeyPad KeyPad;
-extern LED LED;
-extern MIDI Midi;
+// extern KeyPad KeyPad;
+//extern LED LED;
+// extern MIDI Midi;
 
 UI::UI()
 {
@@ -29,11 +29,11 @@ void UI::fnMenu()
   while(1)
   {
     if(midi_enable);
-    USBmidi.poll();
+    Midi.poll();
     // if (m2p_enable)
     // CDC.Poll();
 
-    if(uiTimer.tick(1000/FPS))
+    if(uiTimer.tick(1000/fps))
     {
       UI::fnRender();
 
@@ -316,7 +316,7 @@ u8 UI::numSelector8bit(u8 currentNum, u32 colour, bool ignore_gamma /* = false *
   // LED.fill(0, true);
   while(!KeyPad.fnChanged)
   {
-    if(uiTimer.tick(1000/FPS))
+    if(uiTimer.tick(1000/fps))
     {
       if(KeyPad.scan())
       {

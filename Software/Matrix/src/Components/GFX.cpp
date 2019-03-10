@@ -1,6 +1,6 @@
 #include "GFX.h"
 
-extern LED LED;
+//extern LED LED;
 
 GFX::GFX() // Constructor
 {

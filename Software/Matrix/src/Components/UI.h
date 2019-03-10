@@ -49,4 +49,6 @@ private:
   Timer uiTimer;
 };
 
+extern UI UI;
+
 #endif

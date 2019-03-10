@@ -8,7 +8,7 @@ enum ColorMode { Off, On, W, RGB, RGBW, HEX, Palette};
 class Color
 {
 public:
-  Color(ColorMode mode, u32 p1, u8 p2, u8 p3, u8 p4, u8 p5);
+  Color(ColorMode mode, u32 p1, u8 p2 = 0, u8 p3 = 0, u8 p4 = 0, u8 p5 = 0);
   operator u32() const;
   u32 applyGamma(u32 color);
 protected:

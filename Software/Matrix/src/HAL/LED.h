@@ -6,6 +6,7 @@
 #include "../Parameter/MatrixVariable.h"
 #include "../Parameter/MatrixParameter.h"
 #include "../Core/MatrixSystem.h"
+//#include "../Components/Color.h"
 
 
 // enum LEDMoDE{ on, off, w, rgb, wrgb, hex, palette};
@@ -17,7 +18,7 @@ public:
   LED();
   void nextBrightnessState();
   void setBrightness(u8 b);
-  void dynamicBrightness(u16 mah = 500);
+  void dynamicBrightness(u16 mah);
   void fill(u32 WRGB, bool overlay = false);
 
   // void setLED(INDEXMoDE indexmode, LEDMoDE ledmode, u8 x1, u8 y1, u32 p1, u8 p2, u8 p3, u8 p4);
@@ -56,13 +57,13 @@ public:
   u32 readXYLED(u8 xy);
   u32 readLED(u8 index);
   u32 toBrightness(u32 hex, float f);
+
 private:
   bool overlay_mode = false;
   CRGB leds[NUM_TOTAL_LEDS];
   CRGB buffer[NUM_TOTAL_LEDS];
 };
 
-
-
+extern LED LED;
 
 #endif

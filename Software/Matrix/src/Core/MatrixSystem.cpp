@@ -22,7 +22,7 @@ void setupUSB()
   //USBComposite.setProductString(DEVICENAME);
   USBComposite.setSerialString(SERIALSTRING);
 
-  USBmidi.registerComponent();
+  Midi.registerComponent();
   CompositeSerial.registerComponent();
   USBComposite.begin();
 
@@ -31,73 +31,6 @@ void setupUSB()
 void bootDevice()
 {
 
-}
-
-u16 setupEEPROM()
-{
-  EEPROM.PageBase0 = 0x8020000;
-  EEPROM.PageBase1 = 0x8022000;
-  EEPROM.PageSize  = 0x2000;
-  return EEPROM.init();
-}
-
-void variableLoad()
-{
-  if(EEPROM.read(0) != 1)
-  {
-    initEEPROM();
-    return;
-  }
-
-  device_id = EEPROM.read(1);
-  rotation = EEPROM.read(2);
-  brightness = EEPROM.read(3);
-  gamma_enable = EEPROM.read(4);
-  midi_enable = EEPROM.read(5);
-  m2p_enable = EEPROM.read(6);
-  powercord_enable = EEPROM.read(7);
-  massage_return = EEPROM.read(8);
-
-  // if(EEPROM.read(9))
-  // loadPalette();
-  //
-  // if(EEPROM.read(518))
-  // loadKeymap();
-
-  current_keymap = EEPROM.read(582);
-  // if(EEPROM.read(583))
-  // loadTouchmap();
-}
-
-void initEEPROM()
-{
-  EEPROM.format();
-  EEPROM.write(0, 1);
-  EEPROM.write(1, device_id);
-  EEPROM.write(2, rotation);
-  EEPROM.write(3, brightness);
-  EEPROM.write(4, (u8)gamma_enable);
-  EEPROM.write(5, (u8)midi_enable);
-  EEPROM.write(6, (u8)m2p_enable);
-  EEPROM.write(7, (u8)powercord_enable);
-  EEPROM.write(8, (u8)massage_return);
-  EEPROM.write(9, false);
-
-  for(int i = 10; i < 518; i++)
-  {
-    EEPROM.write(i, 0xFF);
-  }
-
-  EEPROM.write(518, false);
-
-  for(int i = 0; i < 64; i++)
-  {
-    EEPROM.write(i + 519, 0);
-  }
-
-  EEPROM.write(583, current_keymap);
-  EEPROM.write(584, false);
-  EEPROM.write(585, 0);
 }
 
 
@@ -117,13 +50,8 @@ void setDeviceID()
 
 void setDeviceID(u8 id)
 {
-  #ifdef DEBUG
-  CompositeSerial.print("EEPROM init info: ");
-  CompositeSerial.println(EEPROM.write(1, id));
-  #else
-  EEPROM.write(1, id);
-  #endif
-  device_id = EEPROM.read(1);
+  EEPROM_USER.write(1, id);
+  device_id = EEPROM_USER.read(1);
 }
 
 
@@ -151,20 +79,20 @@ void formatEEPROM()
 {
   // #ifdef DEBUG
   // SerialComposite.print("EEPROM Format info :")
-  EEPROM.format();
+  EEPROM_USER.format();
 }
 
-void loadPalette()
-{
-  for(int i = 0; i < 128; i++)
-  {
-    palette[2][i] =
-    EEPROM.read(i * 4 + 10)*0x1000000 + //W
-    EEPROM.read(i * 4 + 11)*0x10000 + //R
-    EEPROM.read(i * 4 + 12)*0x100 + //G
-    EEPROM.read(i * 4 + 13); //B
-  }
-}
+// void loadPalette()
+// {
+//   for(int i = 0; i < 128; i++)
+//   {
+//     palette[2][i] =
+//     EEPROM_USER.read(i * 4 + 10)*0x1000000 + //W
+//     EEPROM_USER.read(i * 4 + 11)*0x10000 + //R
+//     EEPROM_USER.read(i * 4 + 12)*0x100 + //G
+//     EEPROM_USER.read(i * 4 + 13); //B
+//   }
+// }
 
 void loadKeymap()
 {
@@ -172,27 +100,27 @@ void loadKeymap()
   {
     for(int x = 0; x < XSIZE; x++)
     {
-      keymap[2][y][x] = EEPROM.read(y * XSIZE + x + 519);
+      keymap[2][y][x] = EEPROM_USER.read(y * XSIZE + x + 519);
     }
   }
 }
 
 void updatePaletteRGB()
 {
-  EEPROM.write(9, true);
+  EEPROM_USER.write(9, true);
   if(CompositeSerial.peek() < 128)
   {
     u8 colour = CompositeSerial.read();
-    EEPROM.write(colour * 4 + 10, 0x00);
-    EEPROM.write(colour * 4 + 11, CompositeSerial.read());
-    EEPROM.write(colour * 4 + 12, CompositeSerial.read());
-    EEPROM.write(colour * 4 + 13, CompositeSerial.read());
+    EEPROM_USER.write(colour * 4 + 10, 0x00);
+    EEPROM_USER.write(colour * 4 + 11, CompositeSerial.read());
+    EEPROM_USER.write(colour * 4 + 12, CompositeSerial.read());
+    EEPROM_USER.write(colour * 4 + 13, CompositeSerial.read());
 
     palette[2][colour] =
-    EEPROM.read(colour * 4 + 10) * 0x1000000 +
-    EEPROM.read(colour * 4 + 11) * 0x10000 +
-    EEPROM.read(colour * 4 + 12) * 0x100 +
-    EEPROM.read(colour * 4 + 13);
+    EEPROM_USER.read(colour * 4 + 10) * 0x1000000 +
+    EEPROM_USER.read(colour * 4 + 11) * 0x10000 +
+    EEPROM_USER.read(colour * 4 + 12) * 0x100 +
+    EEPROM_USER.read(colour * 4 + 13);
   }
   else if(CompositeSerial.peek() == 255)
   {
@@ -202,20 +130,20 @@ void updatePaletteRGB()
 
 void updatePaletteWRGB()
 {
-  EEPROM.write(9, true);
+  EEPROM_USER.write(9, true);
   if(CompositeSerial.peek() < 128)
   {
     u8 colour = CompositeSerial.read();
-    EEPROM.write(colour * 4 + 10, CompositeSerial.read());
-    EEPROM.write(colour * 4 + 11, CompositeSerial.read());
-    EEPROM.write(colour * 4 + 12, CompositeSerial.read());
-    EEPROM.write(colour * 4 + 13, CompositeSerial.read());
+    EEPROM_USER.write(colour * 4 + 10, CompositeSerial.read());
+    EEPROM_USER.write(colour * 4 + 11, CompositeSerial.read());
+    EEPROM_USER.write(colour * 4 + 12, CompositeSerial.read());
+    EEPROM_USER.write(colour * 4 + 13, CompositeSerial.read());
 
     palette[2][colour] =
-    EEPROM.read(colour * 4 + 10) * 0x1000000 +
-    EEPROM.read(colour * 4 + 11) * 0x10000 +
-    EEPROM.read(colour * 4 + 12) * 0x100 +
-    EEPROM.read(colour * 4 + 13);
+    EEPROM_USER.read(colour * 4 + 10) * 0x1000000 +
+    EEPROM_USER.read(colour * 4 + 11) * 0x10000 +
+    EEPROM_USER.read(colour * 4 + 12) * 0x100 +
+    EEPROM_USER.read(colour * 4 + 13);
   }
   else if(CompositeSerial.peek() == 255)
   {
@@ -225,7 +153,7 @@ void updatePaletteWRGB()
 
 void resetPalette()
 {
-  EEPROM.write(9, false);
+  EEPROM_USER.write(9, false);
   // for(int i = 0; i < sizeof(palette[0]); i++)
   // {
   //   palette[2][i] = palette[0][i];
@@ -245,9 +173,9 @@ void updateCustomKeymap()
     u8 x = CompositeSerial.read();
     u8 y = CompositeSerial.read();
 
-    EEPROM.write(y * XSIZE + x + 519, CompositeSerial.read());
+    EEPROM_USER.write(y * XSIZE + x + 519, CompositeSerial.read());
 
-    keymap[2][y][x] = EEPROM.read(y * XSIZE + x + 519);
+    keymap[2][y][x] = EEPROM_USER.read(y * XSIZE + x + 519);
   }
 }
 
@@ -265,8 +193,8 @@ void resetCustomKeymap()
 
 void setBrightnesss(u8 b) //Triple s to fix due to an unknow bug
 {
-  EEPROM.write(3, b);
-  //brightness = EEPROM.read(3);
+  EEPROM_USER.write(3, b);
+  //brightness = EEPROM_USER.read(3);
   brightness = b;
   //FastLED.setBrightness(brightness);
 
@@ -275,14 +203,14 @@ void setBrightnesss(u8 b) //Triple s to fix due to an unknow bug
 
 // void setTouchSensitive(u8 s)
 // {
-//   EEPROM.write(583, s);
+//   EEPROM_USER.write(583, s);
 //   touch_sensitive = s;
 // }
 
 void setCurrentKeyMap(u8 k) //Triple s to fix due to an unknow bug
 {
-  // EEPROM.write(583, k);
-  // current_keymap = EEPROM.read(583);
+  // EEPROM_USER.write(583, k);
+  // current_keymap = EEPROM_USER.read(583);
   current_keymap = k;
   return;
 }
@@ -399,11 +327,11 @@ void setRotation(u8 r)
 {
   #ifdef DEBUG
   CompositeSerial.print("Set Rotation: ");
-  CompositeSerial.println(EEPROM.write(2, r));
+  CompositeSerial.println(EEPROM_USER.write(2, r));
   #else
-  EEPROM.write(2, r);
+  EEPROM_USER.write(2, r);
   #endif
-  //rotation = EEPROM.read(2);
+  //rotation = EEPROM_USER.read(2);
   rotation = r;
 }
 

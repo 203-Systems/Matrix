@@ -17,12 +17,12 @@ public:
   void handleNoteOn(unsigned int channel, unsigned int note, unsigned int velocity) override;
 };
 
-extern usbmidi USBmidi;
-
 class MIDI
 {
 public:
+  usbmidi USBmidi;
   MIDI();
+  void registerComponent();
   void noteOn(u8 channel, u8 note, u8 velocity);
   void noteOff(u8 channel, u8 note, u8 velocity);
   void poll();
@@ -31,5 +31,7 @@ public:
   void sentNoteOn(u8 channel, u8 note, u8 velocity);
   void sentNoteOff(u8 channel, u8 note, u8 velocity);
 };
+
+extern MIDI Midi;
 
 #endif

@@ -9,7 +9,6 @@ BootAnimation
 NexusRevamped while USB unreconized
 
 */
-
 #include <Arduino.h>
 #include <USBMIDI.h>
 #include <USBComposite.h>
@@ -27,22 +26,13 @@ NexusRevamped while USB unreconized
 //#include "src/protocol/M2P.h"
 #include "src/Components/UI.h"
 
-UI UI;
-MIDI Midi;
-//M2P M2P;
-LED LED;
-KeyPad KeyPad;
-usbmidi USBmidi;
 Timer mainTimer;
 
 void setup()
 {
   specialBoot();
-  u16 eeprom_code = setupEEPROM();
   variableLoad();
   LED.setBrightness(brightness);
-  if(dynamic_brightness)
-  LED.dynamicBrightness();
   setupUSB();
 
   #ifdef DEBUG
@@ -64,8 +54,6 @@ void setup()
   LED.update();
 
   #ifdef DEBUG
-  CompositeSerial.print("EEPROM CODE: ");
-  CompositeSerial.println(eeprom_code);
   CompositeSerial.println("Enter Main Program");
   #endif
 }
@@ -117,7 +105,7 @@ void readKey()
 //
 //     while(KeyPad.fnChanged && KeyPad.fn)
 //     {
-//       if (mainTimer.tick(1000/FPS))
+//       if (mainTimer.tick(1000/fps))
 //       {
 //         KeyPad.scan();
 //         for(int i = 0; i < MULTIPRESS; i++)
@@ -154,11 +142,11 @@ void loop()
   // }
 
   if (midi_enable);
-  USBmidi.poll();
+  Midi.poll();
   // if (m2p_enable)
   // CDC.Poll();
 
-  if (mainTimer.tick(1000/FPS))
+  if (mainTimer.tick(1000/fps))
   {
     readKey();
     LED.update();
@@ -248,7 +236,7 @@ void factoryTest()
 
   while(!KeyPad.fn)
   {
-    if (mainTimer.tick(1000/FPS))
+    if (mainTimer.tick(1000/fps))
     {
       if(KeyPad.scan())
       {

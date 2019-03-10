@@ -4,9 +4,6 @@
 #include <USBComposite.h>
 #endif
 
-extern LED LED;
-extern MIDI Midi;
-
 void usbmidi::handleNoteOff(unsigned int channel, unsigned int note, unsigned int velocity)
 {
   Midi.noteOff(channel,note,velocity);
@@ -22,14 +19,20 @@ void usbmidi::handleNoteOn(unsigned int channel, unsigned int note, unsigned int
   //leds[IndexInKeyMap(note)] = colour[channel][velocity];
 }
 
+
 MIDI::MIDI()
 {
-  //usbmidi usbmidi;
+
+}
+
+void MIDI::registerComponent()
+{
+  USBmidi.registerComponent();
 }
 
 void MIDI::poll()
 {
-  USBMIDI.poll();
+  USBmidi.poll();
 }
 
 void MIDI::noteOn(u8 channel, u8 note, u8 velocity)

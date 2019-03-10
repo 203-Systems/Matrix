@@ -1,18 +1,20 @@
 #include "../Parameter/MatrixVariable.h"
 
 //DeviceInfo
-extern u8 device_id = 203; //0~255 0 for off
-extern Modes current_mode = Normal;
+extern u8 device_id = 0; //0~255 0 for off
+//extern Modes current_mode = Normal;
 extern u8 current_keymap = 0;
-extern u8 app_id = 0;
-
+//extern u8 app_id = 0;
+extern u8 bsootAnimationSelector = 1; // 0 for off, 1 for kaskobi
 extern bool unipad_mode = false;
+extern bool debug_mode = false;
 //LED setting
 extern u8 brightness = 16;
-extern bool dynamic_brightness = false;
-extern u8 brightness_level[8] = {32,64,96,128,160,192,224,255};
+extern u16 max_mAh = 500;
+extern u8 brightness_level[6] = {16,32,64,96,128,160};
+extern u8 fps = 60;
 
-extern u32 palette[3][128] =     //WRGB Colour Palette
+extern u32 palette[4][128] =     //WRGB Colour Palette
 {{            //MatrixColorPalette
   0x00000000, //0
   0x00050505, //1
@@ -271,8 +273,8 @@ extern u32 palette[3][128] =     //WRGB Colour Palette
   0x003F3100, //125
   0x00B35F00, //126
   0x004B1502  //127,
-},{           //Custom Colour palette default use 203 palette
-  0x00000000, // Enable？
+},{           //Custom Colour palette 1 default use 203 palette
+  0x00000000, //0
   0x00050505, //1
   0x00101010, //2
   0x00242424, //3
@@ -399,7 +401,136 @@ extern u32 palette[3][128] =     //WRGB Colour Palette
   0x00FF0040, //124
   0x00FF0C49, //125
   0x00FF1F57, //126
-  0x00FF3F6F //127
+  0x00FF3F6F  //127
+},{           //Custom Colour palette 2 default use 203 palette
+  0x00000000, //0
+  0x00050505, //1
+  0x00101010, //2
+  0x00242424, //3
+  0x004E4E4E, //4
+  0x00727272, //5
+  0x00AFAFAF, //6
+  0x00FFFFFF, //7
+  0x00130000, //8
+  0x00270000, //9
+  0x005D0000, //10
+  0x00A20000, //11
+  0x00FF0000, //12
+  0x00FF0C0C, //13
+  0x00FF1F1F, //14
+  0x00FF3F3F, //15
+  0x00130500, //16
+  0x00270A00, //17
+  0x005D1700, //18
+  0x00A22900, //19
+  0x00FF4000, //20
+  0x00FF490C, //21
+  0x00FF571F, //22
+  0x00FF6F3F, //23
+  0x00130A00, //24
+  0x00271400, //25
+  0x005D2F00, //26
+  0x00A25100, //27
+  0x00FF8000, //28
+  0x00FF860C, //29
+  0x00FF8F1F, //30
+  0x00FF9F3F, //31
+  0x00130E00, //32
+  0x00271D00, //33
+  0x005D4600, //34
+  0x00A27A00, //35
+  0x00FFBF00, //36
+  0x00FFC20C, //37
+  0x00FFC71F, //38
+  0x00FFCF3F, //39
+  0x00131300, //40
+  0x00272700, //41
+  0x005D5D00, //42
+  0x00A2A200, //43
+  0x00FFFF00, //44
+  0x00FFFF0C, //45
+  0x00FFFF1F, //46
+  0x00FFFF3F, //47
+  0x000A1300, //48
+  0x00142700, //49
+  0x002F5D00, //50
+  0x0051A200, //51
+  0x0080FF00, //52
+  0x0086FF0C, //53
+  0x008FFF1F, //54
+  0x009FFF3F, //55
+  0x00001300, //56
+  0x00002700, //57
+  0x00005D00, //58
+  0x0000A200, //59
+  0x0000FF00, //60
+  0x000CFF0C, //61
+  0x001FFF1F, //62
+  0x003FFF3F, //63
+  0x0000130D, //64
+  0x0000271A, //65
+  0x00005D3E, //66
+  0x0000A26C, //67
+  0x0000FFAA, //68
+  0x000CFFAE, //69
+  0x001FFFB4, //70
+  0x003FFFBF, //71
+  0x00001113, //72
+  0x00002727, //73
+  0x00005D5D, //74
+  0x0000A2A2, //75
+  0x0000FFFF, //76
+  0x000CFFFF, //77
+  0x001FFFFF, //78
+  0x003FFFFF, //79
+  0x00000A13, //80
+  0x00001427, //81
+  0x00002F5D, //82
+  0x000051A2, //83
+  0x000080FF, //84
+  0x000C86FF, //85
+  0x001F8FFF, //86
+  0x003F9FFF, //87
+  0x00000013, //88
+  0x00000027, //89
+  0x0000005D, //90
+  0x000000A2, //91
+  0x000000FF, //92
+  0x000C0CFF, //93
+  0x001F1FFF, //94
+  0x003F3FFF, //95
+  0x000A0013, //96
+  0x00140027, //97
+  0x002F005D, //98
+  0x005100A2, //99
+  0x008000FF, //100
+  0x00860CFF, //101
+  0x008F1FFF, //102
+  0x009F3FFF, //103
+  0x00130013, //104
+  0x00270027, //105
+  0x005D005D, //106
+  0x00A200A2, //107
+  0x00FF00FF, //108
+  0x00FF0CFF, //109
+  0x00FF1FFF, //110
+  0x00FF3F9F, //111
+  0x0013000A, //112
+  0x00270014, //113
+  0x005D002F, //114
+  0x00A20051, //115
+  0x00FF0080, //116
+  0x00FF0C86, //117
+  0x00FF1F8F, //118
+  0x00FF3F9F, //119
+  0x00130005, //120
+  0x0027000A, //121
+  0x005D0017, //122
+  0x00A20029, //123
+  0x00FF0040, //124
+  0x00FF0C49, //125
+  0x00FF1F57, //126
+  0x00FF3F6F  //127
 }};
 
 extern u8 led_gamma[256] =
@@ -421,17 +552,21 @@ extern u8 led_gamma[256] =
   215, 218, 220, 223, 225, 228, 231, 233, 236, 239, 241, 244, 247, 249, 252, 255
 };
 
-extern u8 bottom_led_map [3][NUM_BOTTOM_LEDS] =
-{{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35},
+extern u8 bottom_led_map [5][NUM_BOTTOM_LEDS] =
+{
   {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35},
-  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,}};
+  {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35},
+  {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35},
+  {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35},
+  {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35}
+};
 
 
 //KeyPad
-extern u32 keymap_colour[3] = //Keymap mode color ref in fn menu
-{0x00FF00FF, 0x00FF5400, 0x0000FF66};
+extern u32 keymap_colour[5] = //Keymap mode color ref in fn menu
+{0x00FF00FF, 0x00FF5400, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF};
 
-extern u8 keymap [3][YSIZE][XSIZE] =
+extern u8 keymap [5][YSIZE][XSIZE] =
 {{{64, 65, 66, 67, 96, 97, 98, 99}, //Drum Rock
   {60, 61, 62, 63, 92, 93, 94, 95},
   {56, 57, 58, 59, 88, 89, 90, 91},
@@ -450,50 +585,92 @@ extern u8 keymap [3][YSIZE][XSIZE] =
   {21, 22, 23, 24, 25, 26, 27, 28},
   {11, 12, 13, 14, 15, 16, 17, 18}
   },{
-  {255, 255, 255, 255, 255, 255, 255, 255}, //User Custom
-  {255, 255, 255, 255, 255, 255, 255, 255},
-  {255, 255, 255, 255, 255, 255, 255, 255},
-  {255, 255, 255, 255, 255, 255, 255, 255},
-  {255, 255, 255, 255, 255, 255, 255, 255},
-  {255, 255, 255, 255, 255, 255, 255, 255},
-  {255, 255, 255, 255, 255, 255, 255, 255},
-  {255, 255, 255, 255, 255, 255, 255, 255}}};
+  {64, 65, 66, 67, 96, 97, 98, 99}, //User Custom 1
+  {60, 61, 62, 63, 92, 93, 94, 95},
+  {56, 57, 58, 59, 88, 89, 90, 91},
+  {52, 53, 54, 55, 84, 85, 86, 87},
+  {48, 49, 50, 51, 80, 81, 82, 83},
+  {44, 45, 46, 47, 76, 77, 78, 79},
+  {40, 41, 42, 43, 72, 73, 74, 75},
+  {36, 37, 38, 39, 68, 69, 70, 71}
+  },{
+  {64, 65, 66, 67, 96, 97, 98, 99}, //User Custom 2
+  {60, 61, 62, 63, 92, 93, 94, 95},
+  {56, 57, 58, 59, 88, 89, 90, 91},
+  {52, 53, 54, 55, 84, 85, 86, 87},
+  {48, 49, 50, 51, 80, 81, 82, 83},
+  {44, 45, 46, 47, 76, 77, 78, 79},
+  {40, 41, 42, 43, 72, 73, 74, 75},
+  {36, 37, 38, 39, 68, 69, 70, 71}
+  },{
+  {64, 65, 66, 67, 96, 97, 98, 99}, //User Custom 3
+  {60, 61, 62, 63, 92, 93, 94, 95},
+  {56, 57, 58, 59, 88, 89, 90, 91},
+  {52, 53, 54, 55, 84, 85, 86, 87},
+  {48, 49, 50, 51, 80, 81, 82, 83},
+  {44, 45, 46, 47, 76, 77, 78, 79},
+  {40, 41, 42, 43, 72, 73, 74, 75},
+  {36, 37, 38, 39, 68, 69, 70, 71}
+}};
 
-extern u8 fn_keymap[3][2][XSIZE] = //Key session in fn menu ） 255 for disable
-{{{108, 109, 110, 111, 112, 113, 114, 115}, //Key
+
+
+extern u8 fn_keymap[5][2][XSIZE] = //Key session in fn menu ） 255 for disable
+{{{108, 109, 110, 111, 112, 113, 114, 115}, //Mapped MK2
   {100, 101, 102, 103, 104, 105, 106, 107}
   },{
-  {104, 105, 106, 107, 108, 109, 110, 111}, //unmapped mk2
+  {104, 105, 106, 107, 108, 109, 110, 111}, // nmapped mk2
   {19, 29, 39, 49, 59, 69, 79, 89}
   },{
-  {255, 255, 255, 255, 255, 255, 255, 255}, //User custom
-  {255, 255, 255, 255, 255, 255, 255, 255}}};
+  {108, 109, 110, 111, 112, 113, 114, 115}, //User Custom1
+  {100, 101, 102, 103, 104, 105, 106, 107}
+  },{
+  {108, 109, 110, 111, 112, 113, 114, 115}, //User Custom2
+  {100, 101, 102, 103, 104, 105, 106, 107}
+  },{
+  {108, 109, 110, 111, 112, 113, 114, 115}, //User Custom3
+  {100, 101, 102, 103, 104, 105, 106, 107}
+}};
 
-extern u32 fn_keymap_idle_color[3][2][XSIZE]
+extern u32 fn_keymap_idle_color[5][2][XSIZE]
 {{{0x00FF00FF, 0x00FF00FF, 0x00FF00FF, 0x00FF00FF, 0x00FF00FF, 0x00FF00FF, 0x00FF00FF, 0x00FF00FF}, //Drum Rock
   {0x00FF00FF, 0x00FF00FF, 0x00FF00FF, 0x00FF00FF, 0x00FF00FF, 0x00FF00FF, 0x00FF00FF, 0x00FF00FF}
 },{
   {0x00FF5400, 0x00FF5400, 0x00FF5400, 0x00FF5400, 0x00FF5400, 0x00FF5400, 0x00FF5400, 0x00FF5400}, //Unmapped MK2
   {0x00FF5400, 0x00FF5400, 0x00FF5400, 0x00FF5400, 0x00FF5400, 0x00FF5400, 0x00FF5400, 0x00FF5400}
 },{
-  {0, 0, 0, 0, 0, 0, 0, 0}, //User custom
-  {0, 0, 0, 0, 0, 0, 0, 0}}};
+  {0x00404040, 0x00404040, 0x00404040, 0x00404040, 0x00404040, 0x00404040, 0x00404040, 0x00404040}, //User custom 1
+  {0x00404040, 0x00404040, 0x00404040, 0x00404040, 0x00404040, 0x00404040, 0x00404040, 0x00404040}
+},{
+  {0x00404040, 0x00404040, 0x00404040, 0x00404040, 0x00404040, 0x00404040, 0x00404040, 0x00404040}, //User custom 2
+  {0x00404040, 0x00404040, 0x00404040, 0x00404040, 0x00404040, 0x00404040, 0x00404040, 0x00404040}
+},{
+  {0x00404040, 0x00404040, 0x00404040, 0x00404040, 0x00404040, 0x00404040, 0x00404040, 0x00404040}, //User custom 3
+  {0x00404040, 0x00404040, 0x00404040, 0x00404040, 0x00404040, 0x00404040, 0x00404040, 0x00404040}
+}};
 
-extern u32 fn_keymap_active_color[3][2][XSIZE]
+extern u32 fn_keymap_active_color[5][2][XSIZE]
 {{{0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF}, //Drum Rock
   {0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF}
   },{
   {0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF}, //Unmapped MK2
   {0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF}
-  },{
-  {0, 0, 0, 0, 0, 0, 0, 0}, //User custom
-  {0, 0, 0, 0, 0, 0, 0, 0}}};
+},{
+  {0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF}, //User Custom 1
+  {0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF}
+},{
+  {0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF}, //User Custom 2
+  {0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF}
+},{
+  {0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF}, //User Custom 3
+  {0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF}
+}};
 
 
-//TouchBar
-extern u8 touch_sensitive = 0;
+// //TouchBar
+// extern u8 touch_sensitive = 0;
 
-//Sysex
+//System
 extern u8 rotation = 0;
 extern u8 midi_channel = 0;
 extern bool gamma_enable = false; //Wont effect colour palette

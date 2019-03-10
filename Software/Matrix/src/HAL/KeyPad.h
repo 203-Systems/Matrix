@@ -39,4 +39,6 @@ private:
   u8 keypadChanged[XSIZE];
 };
 
+extern KeyPad KeyPad;
+
 #endif

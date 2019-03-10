@@ -8,8 +8,8 @@
 LED::LED()
 {
   FastLED.addLeds<NEOPIXEL, LED_PIN>(leds, NUM_TOTAL_LEDS);
-  if(dynamic_brightness)
-    LED::dynamicBrightness(500);
+  FastLED.setMaxRefreshRate(fps);
+  LED::dynamicBrightness(max_mAh);
   //setBrightnesss(brightness);
   //LED::setBrightness(brightness);
   // if(POWERCORD)
@@ -27,13 +27,11 @@ void LED::setBrightness(u8 b)
 
 void LED::dynamicBrightness(u16 mah)
 {
-  dynamic_brightness = true;
   FastLED.setMaxPowerInVoltsAndMilliamps(5,mah);
 }
 
 void LED::nextBrightnessState()
 {
-  dynamic_brightness = false;
   // if(brightness >= 192) //Bright AF
   // {
   //   LED::setBrightness(32);

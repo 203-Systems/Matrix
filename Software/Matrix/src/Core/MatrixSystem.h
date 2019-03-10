@@ -11,6 +11,7 @@
 #include "../Protocol/MIDI.h"
 #include "../Parameter/MatrixVariable.h"
 #include "../Parameter/MatrixParameter.h"
+#include "../Core/EEPROM.h"
 
 struct XY
 {
@@ -21,14 +22,6 @@ struct XY
 void bootDevice();
 
 void setupUSB();
-u16 setupEEPROM();
-
-void variableLoad();
-//load from EEPROM
-void loadPalette();
-void loadKeymap();
-
-void initEEPROM();
 
 //Sysex set
 void reset();
