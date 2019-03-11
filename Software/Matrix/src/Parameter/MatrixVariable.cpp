@@ -1,11 +1,11 @@
 #include "../Parameter/MatrixVariable.h"
 
 //DeviceInfo
-extern u8 device_id = 0; //0~255 0 for off
+extern u8 device_id = 203; //0~255 0 for off
 //extern Modes current_mode = Normal;
 extern u8 current_keymap = 0;
 //extern u8 app_id = 0;
-extern u8 bsootAnimationSelector = 1; // 0 for off, 1 for kaskobi
+extern u8 bootAnimationSelector = 1; // 0 for off, 1 for kaskobi
 extern bool unipad_mode = false;
 extern bool debug_mode = false;
 //LED setting
@@ -791,3 +791,6 @@ extern u8 half_height_num_font[10][3] = {
   {B0000, B1100, B1111},  //9
   //{B0000, B0000, B0000},  //space
 };
+
+extern u8 report_code[10] = {1,1,1,1,1,1,1,1,1,1};
+extern u8 available_report_code = 0;

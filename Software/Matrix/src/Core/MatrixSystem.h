@@ -37,8 +37,8 @@ void setgamma(bool g);
 void updateCustomKeymap();
 void resetCustomKeymap();
 void setBrightnesss(u8 b);
+void setCurrentKeyMap(u8 m);
 //void setTouchSensitive(u8 s);
-void setCurrentKeyMap(u8 k);
 
 //Sysex get
 // void getDeviceInfo();
@@ -67,6 +67,7 @@ u8 xytoxy(u8 x, u8 y);
 XY xytoxy(u8 xy);
 u8 xyRotation(u8 xy);
 u8 xyReverseRotation(u8 xy);
+void recordReportCode(u8 code);
 //u8 xyToIndex(u8 X,u8 Y);
 
 #endif

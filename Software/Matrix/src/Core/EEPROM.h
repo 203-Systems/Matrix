@@ -3,11 +3,8 @@
 
 #include "../Parameter/MatrixVariable.h"
 #include "../Parameter/MatrixParameter.h"
+#include "../Core/MatrixSystem.h"
 #include <EEPROM.h>
-
-extern EEPROMClass EEPROM_USER;
-extern EEPROMClass EEPROM_PALETTE;
-extern EEPROMClass EEPROM_SYS;
 
 void setupEEPROM();
 

@@ -64,6 +64,6 @@ private:
   CRGB buffer[NUM_TOTAL_LEDS];
 };
 
-extern LED LED;
+//extern LED LED;
 
 #endif

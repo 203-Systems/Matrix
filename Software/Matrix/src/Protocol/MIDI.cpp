@@ -4,6 +4,8 @@
 #include <USBComposite.h>
 #endif
 
+extern LED LED;
+
 void usbmidi::handleNoteOff(unsigned int channel, unsigned int note, unsigned int velocity)
 {
   Midi.noteOff(channel,note,velocity);

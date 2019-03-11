@@ -2,9 +2,11 @@
 
 #define DEBUG //CDC info
 
-// extern KeyPad KeyPad;
-//extern LED LED;
-// extern MIDI Midi;
+extern KeyPad KeyPad;
+extern LED LED;
+extern MIDI Midi;
+
+u8 next_code = 0;
 
 UI::UI()
 {
@@ -13,6 +15,7 @@ UI::UI()
 
 void UI::enterFNmenu()
 {
+  next_code = 0;
   #ifdef DEBUG
   CompositeSerial.println("Enter FN");
   #endif
@@ -160,9 +163,9 @@ void UI::fnKeyAction()
         // break;
 
         //gamma_enable
-        case 0x75:
-        gamma_enable = !gamma_enable;
-        break;
+        // case 0x75:
+        // gamma_enable = !gamma_enable;
+        // break;
 
         case 0x70:
         LED.fill(0xFF0000, true);
@@ -174,16 +177,26 @@ void UI::fnKeyAction()
         LED.fill(0xFFFF00, true);
         LED.update();
         resetDevice();
+        reset();
         break;
 
         case 0x71:
-        setDeviceID(UI::numSelector8bit(device_id, 0x00FFAA, true));
+        setDeviceID(UI::numSelector8bit(device_id, 0x0000FFAA, true));
         break;
 
         case 0x61:
         LED.fill(0, true);
         LED.update();
         reset();
+        break;
+
+        case 0x75:
+        CompositeSerial.print("Code N");
+        CompositeSerial.print(next_code);
+        CompositeSerial.print(" ");
+        CompositeSerial.println(report_code[next_code]);
+        UI::numSelector8bit(report_code[next_code],0x00FF0000, true);
+        next_code ++;
         break;
       }
     }
@@ -243,15 +256,7 @@ void UI::fnRender()
   // }
 
 
-  //gamma enable
-  if(gamma_enable)
-  {
-    LED.setXYHEX(0x76, 0x00FFFFFF, true, true);
-  }
-  else
-  {
-    LED.setXYHEX(0x76, LED.toBrightness(0x00FFFFFF, LOWSTATEBRIGHTNESS), true, true);
-  }
+    LED.setXYHEX(0x75, 0x00FF0000, true, true);
 
   //Extra
   // LED.setXYHEX(0x77, 0x00FFFFFF, true); //Setting

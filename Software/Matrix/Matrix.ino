@@ -26,11 +26,16 @@ NexusRevamped while USB unreconized
 //#include "src/protocol/M2P.h"
 #include "src/Components/UI.h"
 
+UI UI;
+MIDI Midi;
+LED LED;
+KeyPad KeyPad;
 Timer mainTimer;
 
 void setup()
 {
   specialBoot();
+  setupEEPROM();
   variableLoad();
   LED.setBrightness(brightness);
   setupUSB();

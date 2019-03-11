@@ -60,11 +60,11 @@ void LED::nextBrightnessState()
   // {
   //   LED::setBrightness(32);
   // }
-  for(u8 i = 0; i < sizeof(brightness_level); i++)  //
+  for(u8 i = 0; i < 6; i++)  //
   {
     if(brightness_level[i] > brightness)
     {
-      FastLED.setBrightness(brightness_level[i]);
+      setBrightness(brightness_level[i]);
       return;
     }
   }
