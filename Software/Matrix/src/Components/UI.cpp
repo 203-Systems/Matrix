@@ -107,6 +107,8 @@ void UI::fnKeyAction()
         case 0x43:
         case 0x44:
         LED.nextBrightnessState();
+        CompositeSerial.print("Brightness ");
+        CompositeSerial.println(brightness);
         break;
 
         //rotation

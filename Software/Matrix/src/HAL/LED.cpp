@@ -68,7 +68,7 @@ void LED::nextBrightnessState()
       return;
     }
   }
-  FastLED.setBrightness(brightness_level[0]);
+  setBrightness(brightness_level[0]);
 }
 
 void LED::fill(u32 WRGB, bool overlay /*= false*/)
