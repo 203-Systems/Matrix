@@ -3,9 +3,12 @@ Project Matrix
 Copyright © 203 Industries 2017–2019. All rights reserved.
 
 TODO
+EEPROM load KeyMap
+EEPROM sys stuff
+microsecond timer
 Play Animation
+Play Midi
 Play Text
-BootAnimation
 NexusRevamped while USB unreconized
 
 */
@@ -34,10 +37,11 @@ Timer mainTimer;
 
 void setup()
 {
+  loadDeviceConfig();
   specialBoot();
   setupEEPROM();
   variableLoad();
-  LED.setBrightness(brightness);
+  setupLED();
   setupUSB();
 
   #ifdef DEBUG
