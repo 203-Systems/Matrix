@@ -51,6 +51,7 @@ void setup()
   mainTimer.recordCurrent();
   while(!USBComposite.isReady())
   {
+    UI.kaskobiWaitAnimation();
     if (mainTimer.isLonger(3000))
     {
       LED.fill(0xff0000); //NexusRevamped Entence point
@@ -58,7 +59,7 @@ void setup()
     }
   }
 
-  UI.kBootAnimation();
+  UI.kaskobiBootAnimation();
   LED.fill(0x000000);
   LED.update();
 

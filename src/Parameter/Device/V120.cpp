@@ -1,0 +1,75 @@
+#include "../DeviceSelector.h"
+
+void loadConfigV120()
+{
+  //LED
+   LED_PIN = PB7;
+
+   POWERCORD_PIN = PA9;
+
+  //KeyPad
+   SO_DATA = PB12;
+   SO_CLOCK = PB13;
+   SI_DATA = PC6;
+   SI_CLOCK = PB14;
+   SI_SCAN = PB15;
+
+   FN_PIN = PA0;
+
+  //ANALOG(TouchBar)
+   ANALOG0 = PA3;
+   ANALOG1 = PA4;
+   ANALOG2 = PA5;
+   ANALOG3 = PA6;
+   ANALOG4 = PA7;
+   ANALOG5 = PC4;
+   ANALOG6 = PC5;
+   ANALOG7 = PB0;
+   ANALOG8 = PB1;
+   ANALOG9 = PA0;
+   ANALOG10 = PA1;
+   ANALOG11 = PA2;
+  //I2C
+   I2C_SCL = PB8;
+   I2C_SDA = PB9;
+  //SPI
+   SPI_SCK = PB3;
+   SPI_MISO = PD1;
+   SPI_MOSI = PB5;
+   SPI_CS1 = PA15;
+   SPI_CS2 = PB6;
+  //Serial1 (USB-C)
+   TX1 = PA9;
+   RX1 = PA10;
+  //Serial3 (Matrix Mod)
+   TX3 = PB10;
+   RX3 = PB11;
+  //Serial2/4/5 (m2p futureproof)
+   TX2 = PA2;
+   RX2 = PA3;
+   TX4 = PB4;
+   RX4 = PC10;
+   TX5 = PC11;
+   RX5 = PC12;
+
+  //SerialAvailabble
+  USBMIDI_AVAILABLE = true;
+  USBCDC_AVAILABLE = true;
+  SERIAL1_AVAILABLE = true;
+  SERIAL2_AVAILABLE = false;
+  SERIAL3_AVAILABLE = true;
+  SERIAL4_AVAILABLE = true;
+  SERIAL5_AVAILABLE = true;
+
+  SUPPORT_WRGB = false;
+
+  //EEPROM
+  EEPROM_ENABLE = true;
+  EEPROM_USER_ADDS_0 = 0x803E000;
+  EEPROM_USER_ADDS_1 = 0x803E800;
+  EEPROM_PALETTE_ADDS_0 = 0x803D000;
+  EEPROM_PALETTE_ADDS_1 = 0x803D800;
+  EEPROM_SYS_ADDS_0 = 0x803F000;
+  EEPROM_SYS_ADDS_1 = 0x803F800;
+  EEPROM_PAGESIZE = 0x800;
+}
