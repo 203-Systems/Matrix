@@ -6,7 +6,7 @@ extern MIDI Midi;
 
 void UI::kaskobiWaitAnimation()
 {
-  if(uiTimer.tick(500))
+  if(uiTimer.tick(400))
   {
     if(LED.readXYLED(0x07))
     {

@@ -10,12 +10,14 @@
 //#include "../protocol/MIDI.h"
 //#include <USBComposite.h>
 
-//typedef enum{ IDLE, PRESSED, HOLD, RELEASED } KeyState;
+enum KeyState {IDLE, PRESSED, HOLD, RELEASED };
 
 struct Key {
   u8 xy = 0;
   s8 velocity = 0;
-  //KeyState kstate = IDLE;
+  KeyState kstate = IDLE;
+  u32 activedTime = 0;
+  bool changed = false;
 };
 
 class KeyPad
@@ -32,11 +34,13 @@ public:
   bool fnChanged;
   u8 timesFNpressed = 0;
   Timer fnTimer;
+  //Key fn;
 private:
   void updateList();
   bool fnCache;
   u8 keypadState[XSIZE]; // y is define by type, u8, u16 , u32, u64
   u8 keypadChanged[XSIZE];
+  //Key keypadStats [XSIZE];
 };
 
 //extern KeyPad KeyPad;

@@ -80,7 +80,7 @@ void MIDI::noteOff(u8 channel, u8 note, u8 velocity)
 
   if (massage_return)
   {
-    USBMIDI::sentNoteOff(channel, note, velocity);
+    MIDI::sentNoteOff(channel, note, velocity);
     // if (CDCenable)
     // {
     //   CDC.print(channel);
@@ -106,14 +106,14 @@ void MIDI::sentXYon(u8 xy, u8 velocity)
   #endif
 
 
-  USBMIDI::sentNoteOn(midi_channel, keymap[current_keymap][y][x], 127);
+  MIDI::sentNoteOn(midi_channel, keymap[current_keymap][y][x], 127);
 }
 
 void MIDI::sentXYoff(u8 xy, u8 velocity)
 {
   u8 y = xy & 0x0F;
   u8 x = (xy & 0xF0) >> 4;
-  USBMIDI.sentNoteOff(midi_channel, keymap[current_keymap][y][x], 0);
+  MIDI::sentNoteOff(midi_channel, keymap[current_keymap][y][x], 0);
 }
 
 void MIDI::handleNoteOff(unsigned int channel, unsigned int note, unsigned int velocity)
@@ -139,6 +139,11 @@ void MIDI::registerComponent()
 bool MIDI::available()
 {
   return USBMIDI.available();
+}
+
+void MIDI::poll()
+{
+  USBMIDI.poll();
 }
 
 void MIDI::sentNoteOn(u8 channel, u8 note, u8 velocity)

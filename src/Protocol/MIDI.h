@@ -8,15 +8,12 @@
 #include "../Parameter/MatrixParameter.h"
 #include "../Core/MatrixSystem.h"
 
-//USBMIDI USBMidi;
-
-class MIDI: public USBMIDI
+class MIDI: public USBMidi
 {
 public:
   MIDI();
   void noteOn(u8 channel, u8 note, u8 velocity);
   void noteOff(u8 channel, u8 note, u8 velocity);
-  void poll();
   void sentXYon(u8 xy, u8 velocity);
   void sentXYoff(u8 xy, u8 velocity);
 
@@ -41,6 +38,7 @@ public:
   //From parrent
   void registerComponent();
   bool available();
+  void poll();
 
   void sentNoteOn(u8 channel, u8 note, u8 velocity);
   void sentNoteOff(u8 channel, u8 note, u8 velocity);
