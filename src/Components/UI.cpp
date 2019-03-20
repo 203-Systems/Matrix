@@ -115,7 +115,7 @@ void UI::fnKeyAction()
         case 0x32:
         case 0x42:
         // LED.fill(0, true);
-        // rotationCW(0); //Well, this dont do shit.
+        // rotationCW(0); //Well, this don't do shit.
         break;
         case 0x53:
         case 0x54:
@@ -133,20 +133,23 @@ void UI::fnKeyAction()
         rotationCW(3); //270
         break;
 
-        case 0x00:
-        case 0x01: //due to
+        case 0x10:
         setCurrentKeyMap(0);
         break;
-        case 0x10:
-        case 0x11:
+        case 0x20:
         setCurrentKeyMap(1);
         break;
-        case 0x20:
-        case 0x21:
+        case 0x30:
         setCurrentKeyMap(2);
         break;
+        case 0x40:
+        setCurrentKeyMap(3);
+        break;
+        case 0x50:
+        setCurrentKeyMap(4);
+        break;
 
-        case 0x05:
+        case 0x60:
         unipad_mode = !unipad_mode;
 
         // //midi_enable
@@ -169,37 +172,37 @@ void UI::fnKeyAction()
         // gamma_enable = !gamma_enable;
         // break;
 
-        case 0x70:
+        case 0x06: //DFU
         LED.fill(0xFF0000, true);
         LED.update();
         enterBootloader();
         break;
 
-        case 0x60:
-        LED.fill(0xFFFF00, true);
-        LED.update();
-        resetDevice();
-        reset();
-        break;
+        // case 0x60:
+        // LED.fill(0xFFFF00, true);
+        // LED.update();
+        // resetDevice();
+        // reset();
+        // break;
 
-        case 0x71:
+        case 0x75:
         setDeviceID(UI::numSelector8bit(device_id, 0x0000FFAA, true));
         break;
 
-        case 0x61:
-        LED.fill(0, true);
-        LED.update();
-        reset();
-        break;
+        // case 0x61: //RESET
+        // LED.fill(0, true);
+        // LED.update();
+        // reset();
+        // break;
 
-        case 0x75:
-        CompositeSerial.print("Code N");
-        CompositeSerial.print(next_code);
-        CompositeSerial.print(" ");
-        CompositeSerial.println(report_code[next_code]);
-        UI::numSelector8bit(report_code[next_code],0x00FF0000, true);
-        next_code ++;
-        break;
+        // case 0x75:   //ERROR CODE
+        // CompositeSerial.print("Code N");
+        // CompositeSerial.print(next_code);
+        // CompositeSerial.print(" ");
+        // CompositeSerial.println(report_code[next_code]);
+        // UI::numSelector8bit(report_code[next_code],0x00FF0000, true);
+        // next_code ++;
+        // break;
       }
     }
   }
@@ -258,27 +261,27 @@ void UI::fnRender()
   // }
 
 
-    LED.setXYHEX(0x75, 0x00FF0000, true, true);
-
   //Extra
   // LED.setXYHEX(0x77, 0x00FFFFFF, true); //Setting
   // LED.setXYHEX(0x07, 0x00FFFFFF, true); //AppLauncher
   // LED.setXYHEX(0x17, 0x00FFFFFF, true); //Text Selctor
-  LED.setXYHEX(0x70, 0x00FF0000, true, true); //DFU
-  LED.setXYHEX(0x71, 0x0000FFAA, true, true); //Device ID
-  LED.setXYHEX(0x60, 0x00FFFF00, true, true); //reset device
-  LED.setXYHEX(0x61, 0x0000FF66, true, true); //reboot
+  LED.setXYHEX(0x05, 0x00FF0000, true, true); //DFU
+  LED.setXYHEX(0x75, 0x0000FFAA, true, true); //Device ID
+  //LED.setXYHEX(0x60, 0x00FFFF00, true, true); //reset device
+  //LED.setXYHEX(0x61, 0x0000FF66, true, true); //reboot
 
-  LED.setXYHEX(0x00, LED.toBrightness(keymap_colour[0], LOWSTATEBRIGHTNESS), true, true); //Keymap selector 1
-  LED.setXYHEX(0x10, LED.toBrightness(keymap_colour[1], LOWSTATEBRIGHTNESS), true, true); //Keymap selector 1
-  LED.setXYHEX(0x20, LED.toBrightness(keymap_colour[2], LOWSTATEBRIGHTNESS), true, true); //Keymap selector 1
+  LED.setXYHEX(0x10, LED.toBrightness(keymap_colour[0], LOWSTATEBRIGHTNESS), true, true); //Keymap selector 1
+  LED.setXYHEX(0x20, LED.toBrightness(keymap_colour[1], LOWSTATEBRIGHTNESS), true, true); //Keymap selector 1
+  LED.setXYHEX(0x30, LED.toBrightness(keymap_colour[2], LOWSTATEBRIGHTNESS), true, true); //Keymap selector 1
+  LED.setXYHEX(0x40, LED.toBrightness(keymap_colour[2], LOWSTATEBRIGHTNESS), true, true); //Keymap selector 1
+  LED.setXYHEX(0x50, LED.toBrightness(keymap_colour[2], LOWSTATEBRIGHTNESS), true, true); //Keymap selector 1
   if(unipad_mode)
   {
-    LED.setXYHEX(0x05, 0xFFFF00, true, true);
+    LED.setXYHEX(0x60, 0xFFFF00, true, true);
   }
   else
   {
-    LED.setXYHEX(0x05, LED.toBrightness(0xFFFF00, LOWSTATEBRIGHTNESS), true, true);
+    LED.setXYHEX(0x60, LED.toBrightness(0xFFFF00, LOWSTATEBRIGHTNESS), true, true);
   }
 
   switch(current_keymap)
