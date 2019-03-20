@@ -77,9 +77,9 @@ void loadDeviceConfig()
 
                           switch(MATRIX_VERSION)
                           {
-                            case 110:
-                            loadConfigV110();
-                            break;
+                            // case 110:
+                            // loadConfigV110();
+                            // break;
 
                             case 120:
                             loadConfigV120();
@@ -93,10 +93,6 @@ void loadDeviceConfig()
                             loadConfigV150();
                             break;
                           }
-    break;
-
-    default:
-      loadConfigV150();
     break;
   }
 }
