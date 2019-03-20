@@ -3,6 +3,8 @@
 
 #include "../Parameter/MatrixParameter.h"
 
+extern u8 device_config;
+
 extern u8 LED_PIN;
 
 extern u8 POWERCORD_PIN;

@@ -24,6 +24,7 @@ class KeyPad
 {
 public:
   KeyPad();
+  void init();
   bool scan();
   bool checkXY(u8 x, u8 y);
   bool checkXY(u8 xy);

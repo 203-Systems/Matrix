@@ -64,14 +64,16 @@ typedef volatile const int64_t vsc64;
 #define PID2 0x1000 // for device ID USE
 #define FWVERSION "1.0 __DATE__"
 
-#define MATRIX_MODEL                    *(u32 *) (0x08001FE0)
-#define MATRIX_VERSION                  *(u32 *) (0x08001FE4)
-#define MATRIX_PRODUCTION_BATCH         *(u32 *) (0x08001FE8)
-#define MATRIX_PRODUCTION_FACTORY_CODE  *(u32 *) (0x08001FEC)
+#define BOOTLOADER_VERSION   *(u32 *) (0x08001E00)
+#define MATRIX_MODEL         *(u32 *) (0x08001E04)
+#define MATRIX_VERSION       *(u32 *) (0x08001E08)
+#define MATRIX_BATCH         *(u32 *) (0x08001E0C)
 
 #define DEVICE_SERIAL_1   *(u32 *) (0x1FFFF7E8)
 #define DEVICE_SERIAL_2   *(u32 *) (0x1FFFF7E8+0x04)
 #define DEVICE_SERIAL_3   *(u32 *) (0x1FFFF7E8+0x08)
+
+#define MXPT 0x4D585054
 
 
 //LED
@@ -79,7 +81,7 @@ typedef volatile const int64_t vsc64;
 #define NUM_BOTTOM_LEDS 36
 #define NUM_TOTAL_LEDS 100   //64+32
 #define NUM_POWERCORD_LEDS 120
-#define LOWSTATEBRIGHTNESS 0.25
+#define LOWSTATEBRIGHTNESS 0.4
 
 #define XSIZE 8 //Max 256 key support due to the m2p and libary data type limition
 #define YSIZE 8 // need tp change data type in keypad.h

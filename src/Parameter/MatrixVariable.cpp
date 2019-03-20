@@ -1,7 +1,7 @@
 #include "../Parameter/MatrixVariable.h"
 
 //DeviceInfo
-extern u8 device_id = 203; //0~255 0 for off
+extern u8 device_id = 0; //0~255 0 for off
 //extern Modes current_mode = Normal;
 extern u8 current_keymap = 0;
 //extern u8 app_id = 0;
@@ -9,7 +9,7 @@ extern u8 bootAnimationSelector = 1; // 0 for off, 1 for kaskobi
 extern bool unipad_mode = false;
 extern bool debug_mode = false;
 //LED setting
-extern u8 brightness = 16;
+extern u8 brightness = 128;
 extern u16 max_mAh = 500;
 extern u8 brightness_level[6] = {16,32,64,96,128,160};
 extern u8 fps = 60;

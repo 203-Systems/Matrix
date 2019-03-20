@@ -2,10 +2,13 @@
 
 void loadConfigV150()
 {
+
+  device_config = 150;
+
   //LED
   LED_PIN = PC7;
-
   POWERCORD_PIN = PA9;
+  
   //KeyPad
   SO_DATA = PB12;
   SO_CLOCK = PB13;

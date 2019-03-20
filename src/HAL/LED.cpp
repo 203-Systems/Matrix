@@ -7,6 +7,17 @@
 
 LED::LED()
 {
+  //setBrightnesss(brightness);
+  //LED::setBrightness(brightness);
+  // if(POWERCORD)
+  //{
+  //   CRGB pc_leds[NUM_POWERCORD_LEDS];
+  //   FastLED.addLeds<WS2812B, POWERCORD_PIN>(pc_leds, NUM_POWERCORD_LEDS);
+  // }
+};
+
+void LED::init()
+{
   switch(LED_PIN)
   {
     case PB7:
@@ -17,18 +28,11 @@ LED::LED()
     FastLED.addLeds<NEOPIXEL, PC7>(leds, NUM_TOTAL_LEDS);
     break;
 
-  }
+    FastLED.setMaxRefreshRate(fps);
+    LED::dynamicBrightness(max_mAh);
 
-  FastLED.setMaxRefreshRate(fps);
-  LED::dynamicBrightness(max_mAh);
-  //setBrightnesss(brightness);
-  //LED::setBrightness(brightness);
-  // if(POWERCORD)
-  //{
-  //   CRGB pc_leds[NUM_POWERCORD_LEDS];
-  //   FastLED.addLeds<WS2812B, POWERCORD_PIN>(pc_leds, NUM_POWERCORD_LEDS);
-  // }
-};
+  }
+}
 
 void LED::setBrightness(u8 b)
 {

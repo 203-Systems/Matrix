@@ -1,6 +1,6 @@
 #include "UI.h"
 
-#define DEBUG //CDC info
+//#define DEBUG //CDC info
 
 extern KeyPad KeyPad;
 extern LED LED;
@@ -20,6 +20,11 @@ void UI::enterFNmenu()
   CompositeSerial.println("Enter FN");
   #endif
 
+  CompositeSerial.println(BOOTLOADER_VERSION);
+  CompositeSerial.println(MATRIX_MODEL, HEX);
+  CompositeSerial.println(MATRIX_VERSION);
+  CompositeSerial.println(MATRIX_BATCH);
+  CompositeSerial.println(device_config);
   LED.enableOverlayMode();
   fnMenu();
 }
@@ -150,7 +155,8 @@ void UI::fnKeyAction()
         break;
 
         case 0x60:
-        unipad_mode = !unipad_mode;
+        setUnipadMode(!unipad_mode);
+        break;
 
         // //midi_enable
         // case 0x00:
@@ -172,7 +178,7 @@ void UI::fnKeyAction()
         // gamma_enable = !gamma_enable;
         // break;
 
-        case 0x06: //DFU
+        case 0x05: //DFU
         LED.fill(0xFF0000, true);
         LED.update();
         enterBootloader();
@@ -273,8 +279,8 @@ void UI::fnRender()
   LED.setXYHEX(0x10, LED.toBrightness(keymap_colour[0], LOWSTATEBRIGHTNESS), true, true); //Keymap selector 1
   LED.setXYHEX(0x20, LED.toBrightness(keymap_colour[1], LOWSTATEBRIGHTNESS), true, true); //Keymap selector 1
   LED.setXYHEX(0x30, LED.toBrightness(keymap_colour[2], LOWSTATEBRIGHTNESS), true, true); //Keymap selector 1
-  LED.setXYHEX(0x40, LED.toBrightness(keymap_colour[2], LOWSTATEBRIGHTNESS), true, true); //Keymap selector 1
-  LED.setXYHEX(0x50, LED.toBrightness(keymap_colour[2], LOWSTATEBRIGHTNESS), true, true); //Keymap selector 1
+  LED.setXYHEX(0x40, LED.toBrightness(keymap_colour[3], LOWSTATEBRIGHTNESS), true, true); //Keymap selector 1
+  LED.setXYHEX(0x50, LED.toBrightness(keymap_colour[4], LOWSTATEBRIGHTNESS), true, true); //Keymap selector 1
   if(unipad_mode)
   {
     LED.setXYHEX(0x60, 0xFFFF00, true, true);
@@ -287,16 +293,19 @@ void UI::fnRender()
   switch(current_keymap)
   {
     case 0:
-    LED.setXYHEX(0x00, keymap_colour[0], true, true);
+    LED.setXYHEX(0x10, keymap_colour[0], true, true);
     break;
     case 1:
-    LED.setXYHEX(0x10, keymap_colour[1], true, true);
+    LED.setXYHEX(0x20, keymap_colour[1], true, true);
     break;
     case 2:
-    LED.setXYHEX(0x20, keymap_colour[2], true, true);
+    LED.setXYHEX(0x30, keymap_colour[2], true, true);
     break;
-    default:
-    LED.setXYHEX(0x01, 0xFF0000, true, true);
+    case 3:
+    LED.setXYHEX(0x40, keymap_colour[3], true, true);
+    break;
+    case 4:
+    LED.setXYHEX(0x50, keymap_colour[4], true, true);
     break;
   }
 

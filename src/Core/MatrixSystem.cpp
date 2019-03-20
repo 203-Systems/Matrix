@@ -5,6 +5,7 @@ EEPROMClass EEPROM_PALETTE;
 EEPROMClass EEPROM_SYS;
 
 extern LED LED;
+extern KeyPad KeyPad;
 extern MIDI Midi;
 
 void setupUSB()
@@ -33,9 +34,11 @@ void setupUSB()
 
 }
 
-void setupLED()
+void setupHardware()
 {
+  LED.init();
   LED.setBrightness(brightness);
+  KeyPad.init();
 }
 
 void bootDevice()
@@ -104,6 +107,12 @@ void setCurrentKeyMap(u8 m)
 {
   EEPROM_USER.write(E_CURRENT_KEYMAP, m);
   current_keymap = m;
+}
+
+void setUnipadMode(bool u)
+{
+  EEPROM_USER.write(E_UNIPAD_MODE, u);
+  unipad_mode = u;
 }
 
 //Sysex get

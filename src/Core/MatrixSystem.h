@@ -8,6 +8,8 @@
 #include <USBComposite.h>
 #include <USBMIDI.h>
 #include <FastLED.h>
+#include "../HAL/Keypad.h"
+#include "../HAL/LED.h"
 #include "../Protocol/MIDI.h"
 #include "../Parameter/MatrixVariable.h"
 #include "../Parameter/MatrixParameter.h"
@@ -23,7 +25,7 @@ struct XY
 void bootDevice();
 
 void setupUSB();
-void setupLED();
+void setupHardware();
 
 //Sysex set
 void reset();
@@ -40,6 +42,7 @@ void updateCustomKeymap();
 void resetCustomKeymap();
 void setBrightnesss(u8 b);
 void setCurrentKeyMap(u8 m);
+void setUnipadMode(bool u);
 //void setTouchSensitive(u8 s);
 
 //Sysex get

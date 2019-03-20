@@ -16,6 +16,7 @@ class LED
 {
 public:
   LED();
+  void init();
   void nextBrightnessState();
   void setBrightness(u8 b);
   void dynamicBrightness(u16 mah);

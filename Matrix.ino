@@ -42,7 +42,7 @@ void setup()
   specialBoot();
   setupEEPROM();
   variableLoad();
-  setupLED();
+  setupHardware();
   setupUSB();
 
   #ifdef DEBUG
@@ -52,7 +52,7 @@ void setup()
   mainTimer.recordCurrent();
   while(!USBComposite.isReady())
   {
-    if (mainTimer.isLonger(3000))
+    if (mainTimer.isLonger(10000))
     {
       LED.fill(0xff0000); //NexusRevamped Entence point
       LED.update();
@@ -61,6 +61,7 @@ void setup()
     {
       UI.kaskobiWaitAnimation();
     }
+
   }
 
   UI.kaskobiBootAnimation();
@@ -223,7 +224,7 @@ void specialBoot()
 {
   if (KeyPad.scan())
   {
-    if(KeyPad.checkXY(1, 1) && KeyPad.checkXY(0, 0))
+    if(KeyPad.checkXY(0, 5) && KeyPad.checkXY(0, 6) && KeyPad.checkXY(0, 7))
     {
       formatEEPROM();
       LED.fill(0xFF00FF);
@@ -232,11 +233,6 @@ void specialBoot()
     if(KeyPad.checkXY(1, 1) && KeyPad.checkXY(0, 0))
     {
       factoryTest();
-    }
-
-    if(KeyPad.checkXY(0x00) && KeyPad.checkXY(0x02))
-    {
-      setDeviceID(203);
     }
 
   }

@@ -6,6 +6,11 @@
 
 KeyPad::KeyPad()
 {
+
+}
+
+void KeyPad::init()
+{
   pinMode(SO_DATA, OUTPUT);
   pinMode(SO_CLOCK, OUTPUT);
 
