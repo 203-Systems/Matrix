@@ -52,7 +52,7 @@ typedef volatile const int64_t vsc64;
 //     MAX = 196,
 // } BRIGHTNESS;
 
-#define DEBUG
+//#define DEBUG
 
 //DeviceInfo
 #define DEVICENAME "Matrix"

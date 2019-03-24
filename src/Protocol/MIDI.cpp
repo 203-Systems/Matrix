@@ -6,10 +6,10 @@
 
 extern LED LED;
 
-MIDI::MIDI()
-{
-
-}
+// MIDI::MIDI()
+// {
+//
+// }
 
 void MIDI::noteOn(u8 channel, u8 note, u8 velocity)
 {
@@ -131,20 +131,20 @@ void MIDI::handleNoteOn(unsigned int channel, unsigned int note, unsigned int ve
   //leds[IndexInKeyMap(note)] = colour[channel][velocity];
 }
 
-void MIDI::registerComponent()
-{
-  USBMIDI.registerComponent();
-}
+// void MIDI::registerComponent()
+// {
+//   USBMIDI.registerComponent();
+// }
 
-bool MIDI::available()
-{
-  return USBMIDI.available();
-}
+// bool MIDI::available()
+// {
+//   return USBMIDI.available();
+// }
 
-void MIDI::poll()
-{
-  USBMIDI.poll();
-}
+// void MIDI::poll()
+// {
+//   USBMIDI.poll();
+// }
 
 void MIDI::sentNoteOn(u8 channel, u8 note, u8 velocity)
 {
@@ -165,72 +165,72 @@ void MIDI::sentNoteOff(u8 channel, u8 note, u8 velocity)
   USBMIDI.sendNoteOff(channel, note, velocity);
 }
 
-void sendVelocityChange(u8 channel, u8 note, u8 velocity)
-{
-  USBMIDI.sendVelocityChange(channel, note, velocity);
-}
-
-void sendControlChange(u8 channel, u8 controller, u8 value)
-{
-  USBMIDI.sendControlChange(channel, controller, value);
-}
-
-void sendProgramChange(u8 channel, u8 program)
-{
-  USBMIDI.sendProgramChange(channel,program);
-}
-
-void sendAfterTouch(u8 channel, u8 velocity)
-{
-  USBMIDI.sendAfterTouch(channel, velocity);
-}
-
-void sendPitchChange(u16 pitch)
-{
-  USBMIDI.sendPitchChange(pitch);
-}
-
-void sendSongPosition(u16 position)
-{
-  USBMIDI.sendSongPosition(position);
-}
-
-void sendSongSelect(u8 song)
-{
-  USBMIDI.sendSongSelect(song);
-}
-
-void sendTuneRequest()
-{
-  USBMIDI.sendTuneRequest();
-}
-
-void sendSync()
-{
-  USBMIDI.sendSync();
-}
-
-void sendStart()
-{
-  USBMIDI.sendStart();
-}
-
-void sendContinue()
-{
-  USBMIDI.sendContinue();
-}
-
-void sendStop()
-{
-  USBMIDI.sendStop();
-}
-
-void sendActiveSense()
-{
-  USBMIDI.sendActiveSense();
-}
-
-void sendReset()
-{
-  USBMIDI.sendReset();
-}
+// void MIDI::sendVelocityChange(u8 channel, u8 note, u8 velocity)
+// {
+//   USBMIDI.sendVelocityChange(channel, note, velocity);
+// }
+//
+// void MIDI::sendControlChange(u8 channel, u8 controller, u8 value)
+// {
+//   USBMIDI.sendControlChange(channel, controller, value);
+// }
+//
+// void MIDI::sendProgramChange(u8 channel, u8 program)
+// {
+//   USBMIDI.sendProgramChange(channel,program);
+// }
+//
+// void MIDI::sendAfterTouch(u8 channel, u8 velocity)
+// {
+//   USBMIDI.sendAfterTouch(channel, velocity);
+// }
+//
+// void MIDI::sendPitchChange(u16 pitch)
+// {
+//   USBMIDI.sendPitchChange(pitch);
+// }
+//
+// void MIDI::sendSongPosition(u16 position)
+// {
+//   USBMIDI.sendSongPosition(position);
+// }
+//
+// void MIDI::sendSongSelect(u16 song)
+// {
+//   USBMIDI.sendSongSelect(song);
+// }
+//
+// void MIDI::sendTuneRequest()
+// {
+//   USBMIDI.sendTuneRequest();
+// }
+//
+// void MIDI::sendSync()
+// {
+//   USBMIDI.sendSync();
+// }
+//
+// void MIDI::sendStart()
+// {
+//   USBMIDI.sendStart();
+// }
+//
+// void MIDI::sendContinue()
+// {
+//   USBMIDI.sendContinue();
+// }
+//
+// void MIDI::sendStop()
+// {
+//   USBMIDI.sendStop();
+// }
+//
+// void MIDI::sendActiveSense()
+// {
+//   USBMIDI.sendActiveSense();
+// }
+//
+// void MIDI::sendReset()
+// {
+//   USBMIDI.sendReset();
+// }

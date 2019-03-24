@@ -12,6 +12,9 @@ Play Text
 NexusRevamped while USB unreconized
 
 */
+
+#define DEBUG
+
 #include <Arduino.h>
 #include <USBMIDI.h>
 #include <USBComposite.h>
@@ -157,7 +160,7 @@ void loop()
   // }
 
   if (midi_enable);
-  Midi.poll();
+    Midi.poll();
   // if (m2p_enable)
   // CDC.Poll();
 

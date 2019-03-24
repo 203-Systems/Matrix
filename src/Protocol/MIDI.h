@@ -11,7 +11,7 @@
 class MIDI: public USBMidi
 {
 public:
-  MIDI();
+  //MIDI();
   void noteOn(u8 channel, u8 note, u8 velocity);
   void noteOff(u8 channel, u8 note, u8 velocity);
   void sentXYon(u8 xy, u8 velocity);
@@ -36,26 +36,26 @@ public:
   // void handleReset() override;
 
   //From parrent
-  void registerComponent();
-  bool available();
-  void poll();
+  //void registerComponent();
+  //bool available();
+  //void poll();
 
   void sentNoteOn(u8 channel, u8 note, u8 velocity);
   void sentNoteOff(u8 channel, u8 note, u8 velocity);
-  void sendVelocityChange(u8 channel, u8 note, u8 velocity);
-  void sendControlChange(u8 channel, u8 controller, u8 value);
-  void sendProgramChange(u8 channel, u8 program);
-  void sendAfterTouch(u8 channel, u8 velocity);
-  void sendPitchChange(u16 pitch);
-  void sendSongPosition(u16 position);
-  void sendSongSelect(u16 song);
-  void sendTuneRequest();
-  void sendSync();
-  void sendStart();
-  void sendContinue();
-  void sendStop();
-  void sendActiveSense();
-  void sendReset();
+  // void sendVelocityChange(u8 channel, u8 note, u8 velocity);
+  // void sendControlChange(u8 channel, u8 controller, u8 value);
+  // void sendProgramChange(u8 channel, u8 program);
+  // void sendAfterTouch(u8 channel, u8 velocity);
+  // void sendPitchChange(u16 pitch);
+  // void sendSongPosition(u16 position);
+  // void sendSongSelect(u16 song);
+  // void sendTuneRequest();
+  // void sendSync();
+  // void sendStart();
+  // void sendContinue();
+  // void sendStop();
+  // void sendActiveSense();
+  // void sendReset();
 };
 
 #endif
