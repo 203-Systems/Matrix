@@ -55,6 +55,9 @@ typedef volatile const int64_t vsc64;
 //#define DEBUG
 
 //DeviceInfo
+
+//#define DEBUG
+
 #define DEVICENAME "Matrix"
 #define MAUNFACTURERNAME "203 Industries"
 #define SERIALSTRING "Prototype"
@@ -88,6 +91,6 @@ typedef volatile const int64_t vsc64;
 
 //KeyPad
 #define MULTIPRESS 10 //Key Press Process At Once
-#define MULTITAP_THRESHOLD 500
+#define MULTITAP_THRESHOLD 300
 
 #endif

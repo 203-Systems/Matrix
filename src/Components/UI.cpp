@@ -18,14 +18,15 @@ void UI::enterFNmenu()
   next_code = 0;
   #ifdef DEBUG
   CompositeSerial.println("Enter FN");
+  // CompositeSerial.println(BOOTLOADER_VERSION);
+  // CompositeSerial.println(MATRIX_MODEL, HEX);
+  // CompositeSerial.println(MATRIX_VERSION);
+  // CompositeSerial.println(MATRIX_BATCH);
+  // CompositeSerial.println(device_config);
   #endif
 
-  CompositeSerial.println(BOOTLOADER_VERSION);
-  CompositeSerial.println(MATRIX_MODEL, HEX);
-  CompositeSerial.println(MATRIX_VERSION);
-  CompositeSerial.println(MATRIX_BATCH);
-  CompositeSerial.println(device_config);
   LED.enableOverlayMode();
+  hadAction = false;
   fnMenu();
 }
 
@@ -60,7 +61,7 @@ void UI::fnMenu()
             UI::exitFNmenu();
             return;
           }
-          else if(!KeyPad.fn && KeyPad.fnTimer.isLonger(MULTITAP_THRESHOLD)) //if fn off and longer then threshold, will count as hold, release to back to main menu
+          else if(!KeyPad.fn && (KeyPad.fnTimer.isLonger(MULTITAP_THRESHOLD) || hadAction)) //if fn off and longer then threshold, will count as hold, release to back to main menu
           {
             UI::exitFNmenu();
             return;
@@ -87,6 +88,15 @@ void UI::fnKeyAction()
     if(KeyPad.list[i].velocity == -1)
     return;
 
+    hadAction = true;
+
+    #ifdef DEBUG
+    CompositeSerial.print("FN Key Action ");
+    CompositeSerial.print(xytoxy(KeyPad.list[i].xy).y);
+    CompositeSerial.print(" ");
+    CompositeSerial.print(xytoxy(KeyPad.list[i].xy).x);
+    #endif
+
     if(KeyPad.list[i].velocity == 0){
       if(xytoxy(KeyPad.list[i].xy).y > 5)
       {
@@ -112,8 +122,10 @@ void UI::fnKeyAction()
         case 0x43:
         case 0x44:
         LED.nextBrightnessState();
+        #ifdef DEBUG
         CompositeSerial.print("Brightness ");
         CompositeSerial.println(brightness);
+        #endif
         break;
 
         //rotation

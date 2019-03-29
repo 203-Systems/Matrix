@@ -12,9 +12,6 @@ Play Text
 NexusRevamped while USB unreconized
 
 */
-
-#define DEBUG
-
 #include <Arduino.h>
 #include <USBMIDI.h>
 #include <USBComposite.h>
@@ -62,12 +59,28 @@ void setup()
     }
     else
     {
-      UI.kaskobiWaitAnimation();
-    }
+      switch(bootAnimationSelector)
+      {
+        case 0:
+        break;
 
+        case 1:
+        UI.kaskobiWaitAnimation();
+        break;
+      }
+    }
   }
 
-  UI.kaskobiBootAnimation();
+  switch(bootAnimationSelector)
+  {
+    case 0:
+    break;
+
+    case 1:
+    UI.kaskobiBootAnimation();
+    break;
+  }
+
   LED.fill(0x000000);
   LED.update();
 
@@ -159,13 +172,15 @@ void loop()
   //   ttt--;
   // }
 
-  if (midi_enable);
-    Midi.poll();
-  // if (m2p_enable)
-  // CDC.Poll();
+  // // if (midi_enable);
+  // if (mainTimer.tick(1000/fps))
+  Midi.poll();
+  // // if (m2p_enable)
+  // // CDC.Poll();
 
-  if (mainTimer.tick(1000/fps))
+  if (mainTimer.tick(16))
   {
+    Midi.offScan();
     readKey();
     LED.update();
     //LED.Rainbow();
@@ -238,6 +253,11 @@ void specialBoot()
       factoryTest();
     }
 
+    if(KeyPad.checkXY(0, 7) && KeyPad.checkXY(7, 7))
+    {
+      brightness = 255;
+    }
+
   }
 }
 
@@ -260,7 +280,7 @@ void factoryTest()
 
           if(KeyPad.list[i].velocity > 0)
           {
-              LED.setXYHEX(KeyPad.list[i].xy, 0xFFFFFF, true, true);
+            LED.setXYHEX(KeyPad.list[i].xy, 0xFFFFFF, true, true);
           }
         }
         LED.update();

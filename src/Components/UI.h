@@ -48,6 +48,7 @@ public:
   void kaskobiBootAnimation();
 private:
   Timer uiTimer;
+  bool hadAction = false;
 };
 
 //extern UI UI;

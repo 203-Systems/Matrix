@@ -56,6 +56,11 @@ public:
   // void sendStop();
   // void sendActiveSense();
   // void sendReset();
+
+  void offScan();
+
+private:
+  s8 offMap[128];
 };
 
 #endif

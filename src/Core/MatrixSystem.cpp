@@ -304,7 +304,7 @@ u8 xytoxy(u8 x, u8 y)
 XY xytoxy(u8 xy)
 {
   XY nxy;
-  nxy.x = xy & 0xF0 >> 4;
+  nxy.x = (xy & 0xF0) >> 4;
   nxy.y = xy & 0x0F;
   return nxy;
 }
@@ -366,10 +366,12 @@ u8 xyReverseRotation(u8 xy)
 
 void recordReportCode(u8 code)
 {
+  #ifdef DEBUG
   CompositeSerial.print("Code loged N");
   CompositeSerial.print(available_report_code);
   CompositeSerial.print(" ");
   CompositeSerial.println(code);
+  #endif
   report_code[available_report_code] = code;
   available_report_code ++;
   if(available_report_code ==  10)

@@ -28,8 +28,8 @@ void LED::init()
     FastLED.addLeds<NEOPIXEL, PC7>(leds, NUM_TOTAL_LEDS);
     break;
 
-    FastLED.setMaxRefreshRate(fps);
-    LED::dynamicBrightness(max_mAh);
+    //FastLED.setMaxRefreshRate(fps);
+    //LED::dynamicBrightness(max_mAh);
 
   }
 }
@@ -75,7 +75,7 @@ void LED::nextBrightnessState()
   // {
   //   LED::setBrightness(32);
   // }
-  for(u8 i = 0; i < 6; i++)  //
+  for(u8 i = 0; i < sizeof(brightness_level); i++)  //
   {
     if(brightness_level[i] > brightness)
     {

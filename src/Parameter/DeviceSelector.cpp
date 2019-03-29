@@ -65,7 +65,7 @@ extern bool SUPPORT_WRGB = 0;
 extern bool EEPROM_ENABLE = 0;
 extern u32 EEPROM_USER_ADDS_0 = 0;
 extern u32 EEPROM_USER_ADDS_1 = 0;
-extern u32 EEPROM_PALETTE_ADDS_0 = 0;   
+extern u32 EEPROM_PALETTE_ADDS_0 = 0;
 extern u32 EEPROM_PALETTE_ADDS_1 = 0;
 extern u32 EEPROM_SYS_ADDS_0 = 0;
 extern u32 EEPROM_SYS_ADDS_1 = 0;
@@ -73,6 +73,14 @@ extern u32 EEPROM_PAGESIZE = 0;
 
 void loadDeviceConfig()
 {
+  #ifdef V120
+  loadConfigV120();
+  #endif
+
+  #ifdef V150
+  loadConfigV150();
+  #endif
+
   switch(MATRIX_MODEL)
   {
     case MXPT: //MXTP

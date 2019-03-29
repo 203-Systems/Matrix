@@ -25,26 +25,41 @@ void MIDI::noteOn(u8 channel, u8 note, u8 velocity)
 
   //LED.on(channel);
 
-// if(channel == 5)
-//   channel = 1; //unipad support
+  // if(channel == 5)
+  //   channel = 1; //unipad support
 
-if(unipad_mode)
+  if(unipad_mode)
   channel = 1;
 
-  for(u8 y = 0; y < YSIZE; y++)
+  switch(current_keymap)
   {
-    for(u8 x = 0; x < XSIZE; x++)
+    case 0:
+    if(note > 35 && note < 100 )
+    LED.setXYPalette(user1_keymap_optimized[note-36], channel, velocity);
+    break;
+    case 1:
+    LED.setXYPalette(xytoxy(8 - note/10,  note % 10 - 1), channel, velocity);
+    break;
+    case 2:
+    case 3:
+    case 4:
+    for(u8 y = 0; y < YSIZE; y++)
     {
-      if(note == keymap[current_keymap][y][x])
-      LED.setXYPalette(xytoxy(x, y), channel, velocity);
+      for(u8 x = 0; x < XSIZE; x++)
+      {
+        if(note == keymap[current_keymap][y][x])
+        LED.setXYPalette(xytoxy(x, y), channel, velocity);
+      }
     }
   }
-  //BottomLED
-  for(u8 i = 0;i < NUM_BOTTOM_LEDS; i++)
-  {
-    if(note == bottom_led_map[current_keymap][i])
-    LED.setPalette(i+NUM_LEDS, channel ,velocity);
-  }
+
+  offMap[note] = -1;
+  // // BottomLED
+  // for(u8 i = 0;i < NUM_BOTTOM_LEDS; i++)
+  // {
+  //   if(note == bottom_led_map[current_keymap][i])
+  //   LED.setPalette(i+NUM_LEDS, channel ,velocity);
+  // }
 
   if (massage_return)
   {
@@ -63,20 +78,23 @@ if(unipad_mode)
 
 void MIDI::noteOff(u8 channel, u8 note, u8 velocity)
 {
-  for(u8 y = 0; y < YSIZE; y++)
-  {
-    for(u8 x = 0; x < XSIZE; x++)
-    {
-      if(note == keymap[current_keymap][y][x])
-      LED.offXY(xytoxy(x, y));
-    }
-  }
-  //BottomLED
-  for(u8 i = 0;i < NUM_BOTTOM_LEDS; i++)
-  {
-    if(note == bottom_led_map[current_keymap][i])
-    LED.off(i+NUM_LEDS);
-  }
+
+  #ifdef DEBUG
+  CompositeSerial.print("MIDI Off \t");
+  CompositeSerial.print(channel);
+  CompositeSerial.print("\t");
+  CompositeSerial.print(note);
+  CompositeSerial.print("\t");
+  CompositeSerial.println(velocity);
+  #endif
+
+  offMap[note] = 2;
+  // //BottomLED
+  // for(u8 i = 0;i < NUM_BOTTOM_LEDS; i++)
+  // {
+  //   if(note == bottom_led_map[current_keymap][i])
+  //   LED.off(i+NUM_LEDS);
+  // }
 
   if (massage_return)
   {
@@ -96,6 +114,7 @@ void MIDI::sentXYon(u8 xy, u8 velocity)
 {
   u8 y = xy & 0x0F;
   u8 x = (xy & 0xF0) >> 4;
+
   #ifdef DEBUG
   CompositeSerial.print("MIDI XY Out \t");
   CompositeSerial.print(x);
@@ -144,6 +163,7 @@ void MIDI::handleNoteOn(unsigned int channel, unsigned int note, unsigned int ve
 // void MIDI::poll()
 // {
 //   USBMIDI.poll();
+//   MIDI::offScan();
 // }
 
 void MIDI::sentNoteOn(u8 channel, u8 note, u8 velocity)
@@ -162,6 +182,11 @@ void MIDI::sentNoteOn(u8 channel, u8 note, u8 velocity)
 
 void MIDI::sentNoteOff(u8 channel, u8 note, u8 velocity)
 {
+  if(unipad_mode)
+  {
+    USBMIDI.sendNoteOn(channel, note, 0);
+    return;
+  }
   USBMIDI.sendNoteOff(channel, note, velocity);
 }
 
@@ -234,3 +259,38 @@ void MIDI::sentNoteOff(u8 channel, u8 note, u8 velocity)
 // {
 //   USBMIDI.sendReset();
 // }
+
+
+void MIDI::offScan()
+{
+  for(u8 note = 0; note < 128; note ++)
+  {
+    if(offMap[note] != -1)
+    {
+      if(offMap[note] == 0)
+      switch(current_keymap)
+      {
+        case 0:
+        if(note > 35 && note < 100 )
+        LED.offXY(user1_keymap_optimized[note - 36]);
+        break;
+        case 1:
+        LED.offXY(xytoxy(8 - note/10,  note%10 - 1));
+        break;
+        case 2:
+        case 3:
+        case 4:
+        for(u8 y = 0; y < YSIZE; y++)
+        {
+          for(u8 x = 0; x < XSIZE; x++)
+          {
+            if(note == keymap[current_keymap][y][x])
+            LED.offXY(xytoxy(x, y));
+          }
+        }
+        break;
+      }
+      offMap[note] --;
+    }
+  }
+}
