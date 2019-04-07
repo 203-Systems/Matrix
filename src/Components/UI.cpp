@@ -89,7 +89,7 @@ void UI::fnKeyAction()
     if(KeyPad.list[i].velocity == -1)
     return;
 
-    hadAction = true;
+    //hadAction = true;
 
     #ifdef DEBUG
     CompositeSerial.print("FN Key Action ");
@@ -122,11 +122,14 @@ void UI::fnKeyAction()
         case 0x34:
         case 0x43:
         case 0x44:
-        nextBrightnessState();
+        if(!KeyPad.fn || KeyPad.fnTimer.isLonger(200))
+        {
+          nextBrightnessState();
         #ifdef DEBUG
         CompositeSerial.print("Brightness ");
         CompositeSerial.println(brightness);
         #endif
+        }
         break;
 
         //rotation

@@ -91,6 +91,6 @@ typedef volatile const int64_t vsc64;
 
 //KeyPad
 #define MULTIPRESS 10 //Key Press Process At Once
-#define MULTITAP_THRESHOLD 300
+#define MULTITAP_THRESHOLD 200
 
 #endif
