@@ -320,7 +320,7 @@ void LED::enableOverlayMode()
     overlay_mode = true;
     for(int i = 0; i < NUM_TOTAL_LEDS; i++)
     {
-      buffer[i] == leds[i];
+      buffer[i] = leds[i];
     }
   }
   LED::fill(0, true);
@@ -331,10 +331,10 @@ void LED::disableOverlayMode()
   if(overlay_mode)
   {
     overlay_mode = false;
-    LED::fill(0);
+    //LED::fill(0);
     for(int i = 0; i < NUM_TOTAL_LEDS; i++)
     {
-      leds[i] == buffer[i];
+      leds[i] = buffer[i];
     }
   }
   LED::update();

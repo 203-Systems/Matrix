@@ -135,8 +135,7 @@ void UI::fnKeyAction()
         //rotation
         case 0x32:
         case 0x42:
-        // LED.fill(0, true);
-        // rotationCW(0); //Well, this don't do shit.
+        LED.fill(0); //Clean Canvas
         break;
         case 0x53:
         case 0x54:
