@@ -37,7 +37,6 @@ void setupUSB()
 void setupHardware()
 {
   LED.init();
-  LED.setBrightness(brightness);
   KeyPad.init();
 }
 
@@ -95,12 +94,24 @@ void setgamma(bool g)
   EEPROM_USER.write(E_GAMMA_ENABLE,g);
 }
 
+void nextBrightnessState()
+{
+  for(u8 i = 0; i < sizeof(brightness_level); i++)  //
+  {
+    if(brightness_level[i] > brightness)
+    {
+      setBrightnesss(brightness_level[i]);
+      return;
+    }
+  }
+  setBrightnesss(brightness_level[0]);
+}
 
 void setBrightnesss(u8 b) //Triple s to fix due to an unknow bug
 {
   EEPROM_USER.write(E_BRIGHTNESS, b);
   brightness = b;
-  FastLED.setBrightness(brightness);
+  LED.setBrightness(brightness);
 }
 
 void setCurrentKeyMap(u8 m)

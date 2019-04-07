@@ -6,9 +6,9 @@ extern EEPROMClass EEPROM_SYS;
 
 void setupEEPROM()
 {
-  recordReportCode(EEPROM_USER.init(EEPROM_USER_ADDS_0, EEPROM_USER_ADDS_1, EEPROM_PAGESIZE));
-  recordReportCode(EEPROM_PALETTE.init(EEPROM_PALETTE_ADDS_0, EEPROM_PALETTE_ADDS_1, EEPROM_PAGESIZE));
-  recordReportCode(EEPROM_SYS.init(EEPROM_SYS_ADDS_0, EEPROM_SYS_ADDS_1, EEPROM_PAGESIZE));
+  recordReportCode(EEPROM_USER.init(eeprom_user_adds_0, eeprom_user_adds_1, eeprom_pagesize));
+  recordReportCode(EEPROM_PALETTE.init(eeprom_palette_adds_0, eeprom_palette_adds_1, eeprom_pagesize));
+  recordReportCode(EEPROM_SYS.init(eeprom_sys_adds_0, eeprom_sys_adds_1, eeprom_pagesize));
 }
 
 void variableLoad()

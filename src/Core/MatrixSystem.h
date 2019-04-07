@@ -40,6 +40,7 @@ void resetPalette();
 void setgamma(bool g);
 void updateCustomKeymap();
 void resetCustomKeymap();
+void nextBrightnessState();
 void setBrightnesss(u8 b);
 void setCurrentKeyMap(u8 m);
 void setUnipadMode(bool u);

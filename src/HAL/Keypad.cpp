@@ -11,14 +11,14 @@ KeyPad::KeyPad()
 
 void KeyPad::init()
 {
-  pinMode(SO_DATA, OUTPUT);
-  pinMode(SO_CLOCK, OUTPUT);
+  pinMode(so_data, OUTPUT);
+  pinMode(so_clock, OUTPUT);
 
-  pinMode(SI_SCAN, OUTPUT);
-  pinMode(SI_CLOCK, OUTPUT);
-  pinMode(SI_DATA, INPUT_PULLDOWN);
+  pinMode(si_scan, OUTPUT);
+  pinMode(si_clock, OUTPUT);
+  pinMode(si_data, INPUT_PULLDOWN);
 
-  pinMode(FN_PIN, INPUT_PULLDOWN);
+  pinMode(fn_pin, INPUT_PULLDOWN);
 }
 
 bool KeyPad::scan()
@@ -26,27 +26,27 @@ bool KeyPad::scan()
   bool changed = false;
   for (u8 x = 0; x < XSIZE; x++) //for 0 - 7 do
   {
-    //shiftOut(SO_DATA, SO_CLOCK, MSBFIRST, 1 << x); // bit shift a logic high (1) value by i
+    //shiftOut(so_data, so_clock, MSBFIRST, 1 << x); // bit shift a logic high (1) value by i
     if( x == 0)
     {
-      digitalWrite(SO_DATA, HIGH);
+      digitalWrite(so_data, HIGH);
     }
 
-    digitalWrite(SO_CLOCK, HIGH);
-    digitalWrite(SO_DATA, LOW);
-    digitalWrite(SO_CLOCK, LOW);
+    digitalWrite(so_clock, HIGH);
+    digitalWrite(so_data, LOW);
+    digitalWrite(so_clock, LOW);
 
-    digitalWrite(SI_SCAN, LOW); //165's load Active at Low
-    digitalWrite(SI_SCAN, HIGH);
+    digitalWrite(si_scan, LOW); //165's load Active at Low
+    digitalWrite(si_scan, HIGH);
 
 
     for (s8 y = YSIZE-1; y >= 0; y--) //y could go negative so use int instead uint
     {
-      digitalWrite(SI_CLOCK, LOW);
+      digitalWrite(si_clock, LOW);
 
-      if (digitalRead(SI_DATA) != bitRead(keypadState[x],y))
+      if (digitalRead(si_data) != bitRead(keypadState[x],y))
       {
-        // if (digitalRead(SI_DATA))
+        // if (digitalRead(si_data))
         // {
         //   KeyPad::On(x,y);
         // }
@@ -55,11 +55,11 @@ bool KeyPad::scan()
         //   KeyPad::Off(x,y);
         // }
         changed = true;
-        bitWrite(keypadState[x], y, digitalRead(SI_DATA));
+        bitWrite(keypadState[x], y, digitalRead(si_data));
         bitWrite(keypadChanged[x], y, 1);
         // CompositeSerial.println(y * 0x10 + x);
         #ifdef DEBUG
-        if(digitalRead(SI_DATA))
+        if(digitalRead(si_data))
         {
           CompositeSerial.print("KeyPad On \t");
         }
@@ -81,17 +81,17 @@ bool KeyPad::scan()
 
 
 
-      digitalWrite(SI_CLOCK, HIGH);
+      digitalWrite(si_clock, HIGH);
     }
 
 
   }
 
-  if(digitalRead(FN_PIN) != fnCache)
+  if(digitalRead(fn_pin) != fnCache)
   {
     changed = true;
     fnChanged = true;
-    fnCache = digitalRead(FN_PIN);
+    fnCache = digitalRead(fn_pin);
     if(fnCache)
     {
       // if(lastFNpressed == 0)
@@ -174,15 +174,16 @@ void KeyPad::updateList()
   }
 }
 
-bool KeyPad::checkXY(u8 x, u8 y)
+bool KeyPad::checkXY(u8 x, u8 y, bool no_rotation)
 {
-  return KeyPad::checkXY(xytoxy(x, y));
+  return KeyPad::checkXY(xytoxy(x, y), no_rotation);
 }
 
-bool KeyPad::checkXY(u8 xy)
+bool KeyPad::checkXY(u8 xy, bool no_rotation)
 {
-  u8 xyr = xyReverseRotation(xy);
-  return bitRead(keypadState[(xyr & 0xF0) >> 4], xyr & 0x0F);
+  if(!no_rotation)
+    xy = xyReverseRotation(xy);
+  return bitRead(keypadState[(xy & 0xF0) >> 4], xy & 0x0F);
 }
 
 // void KeyPad::On(uint8 x, uint8 y)

@@ -7,18 +7,17 @@
 
 LED::LED()
 {
-  //setBrightnesss(brightness);
   //LED::setBrightness(brightness);
   // if(POWERCORD)
   //{
   //   CRGB pc_leds[NUM_POWERCORD_LEDS];
-  //   FastLED.addLeds<WS2812B, POWERCORD_PIN>(pc_leds, NUM_POWERCORD_LEDS);
+  //   FastLED.addLeds<WS2812B, powercord_pin>(pc_leds, NUM_POWERCORD_LEDS);
   // }
-};
+}
 
 void LED::init()
 {
-  switch(LED_PIN)
+  switch(led_pin)
   {
     case PB7:
     FastLED.addLeds<NEOPIXEL, PB7>(leds, NUM_TOTAL_LEDS);
@@ -27,63 +26,24 @@ void LED::init()
     case PC7:
     FastLED.addLeds<NEOPIXEL, PC7>(leds, NUM_TOTAL_LEDS);
     break;
-
-    //FastLED.setMaxRefreshRate(fps);
-    //LED::dynamicBrightness(max_mAh);
-
   }
+
+  FastLED.setBrightness(brightness);
+  FastLED.setCorrection(led_color_correction);
+  FastLED.setTemperature(0xFFFFFFFF);
+  //FastLED.setMaxRefreshRate(fps);
+  //LED::dynamicBrightness(max_mAh);
 }
 
 void LED::setBrightness(u8 b)
 {
   FastLED.setBrightness(b);
-  setBrightnesss(b);
+  //setBrightnesss(b);
 }
 
 void LED::dynamicBrightness(u16 mah)
 {
   FastLED.setMaxPowerInVoltsAndMilliamps(5,mah);
-}
-
-void LED::nextBrightnessState()
-{
-  // if(brightness >= 192) //Bright AF
-  // {
-  //   LED::setBrightness(32);
-  // }
-  // else if(brightness >= 160) //VeryBright
-  // {
-  //   LED::setBrightness(192);
-  // }
-  // else if(brightness >= 128) //Bright
-  // {
-  //   LED::setBrightness(160);
-  // }
-  // else if(brightness >= 96) //Normal
-  // {
-  //   LED::setBrightness(128);
-  // }
-  // else if(brightness >= 64) //Dim
-  // {
-  //   LED::setBrightness(96);
-  // }
-  // else if(brightness >= 32) //VeryDim
-  // {
-  //   LED::setBrightness(64);
-  // }
-  // else
-  // {
-  //   LED::setBrightness(32);
-  // }
-  for(u8 i = 0; i < sizeof(brightness_level); i++)  //
-  {
-    if(brightness_level[i] > brightness)
-    {
-      setBrightness(brightness_level[i]);
-      return;
-    }
-  }
-  setBrightness(brightness_level[0]);
 }
 
 void LED::fill(u32 WRGB, bool overlay /*= false*/)

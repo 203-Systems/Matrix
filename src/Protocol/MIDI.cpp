@@ -38,7 +38,8 @@ void MIDI::noteOn(u8 channel, u8 note, u8 velocity)
     LED.setXYPalette(user1_keymap_optimized[note-36], channel, velocity);
     break;
     case 1:
-    LED.setXYPalette(xytoxy(8 - note/10,  note % 10 - 1), channel, velocity);
+    if(note % 10 - 1 < 8)
+    LED.setXYPalette(xytoxy(note % 10 - 1, 8 - note/10), channel, velocity);
     break;
     case 2:
     case 3:
@@ -275,7 +276,8 @@ void MIDI::offScan()
         LED.offXY(user1_keymap_optimized[note - 36]);
         break;
         case 1:
-        LED.offXY(xytoxy(8 - note/10,  note%10 - 1));
+        if(note % 10 - 1 < 8)
+        LED.offXY(xytoxy(note % 10 - 1, 8 - note/10));
         break;
         case 2:
         case 3:

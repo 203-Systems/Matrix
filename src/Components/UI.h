@@ -9,6 +9,7 @@
 #include "../HAL/KeyPad.h"
 #include "../HAL/LED.h"
 #include "../HAL/Timer.h"
+#include "../Components/UIelement.h"
 
 //#include "../protocol/MIDI.h"
 //#include <USBComposite.h>
@@ -38,17 +39,14 @@ public:
   u8 numSelector6bit(u8 currentNum, u32 colour, bool ignore_gamma = false);
   u32 numSelectorRGB(u32 currentNum, u32 colour, bool ignore_gamma = false);
   u32 numSelectorWRGB(u32 currentNum, u32 colour, bool ignore_gamma = false);
-  void renderText(char ascii[], u8 xy, u8 speed, u32 colour, bool ignore_gamma = false);
-  void renderAscii(char ascii, u8 xy, u32 colour, bool ignore_gamma = false);
-  void renderHalfHeightNum(u8 num, u8 xy, u32 colour, bool ignore_gamma = false);
-  void renderHalfHeightDigit(u8 num, u8 xy, u32 colour, bool ignore_gamma = false);
-  u8 binary8bitInput(u8 currentNum, u8 y, u32 colour, bool ignore_gamma = false);
+  //void scrollText(char ascii[], u8 xy, u8 speed, u32 colour, bool ignore_gamma = false);
 
   void kaskobiWaitAnimation();
   void kaskobiBootAnimation();
 private:
   Timer uiTimer;
   bool hadAction = false;
+  u8 brightness_cache;
 };
 
 //extern UI UI;

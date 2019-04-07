@@ -17,7 +17,7 @@ extern bool debug_mode;
 //LED setting
 extern u8 brightness;
 extern u16 max_mAh;
-extern u8 brightness_level[9];
+extern u8 brightness_level[8];
 extern u32 palette[4][128];
 extern u8 led_gamma[256];
 extern u8 fps;
@@ -42,10 +42,6 @@ extern bool midi_enable;
 extern bool m2p_enable;
 extern bool powercord_enable;
 extern bool massage_return;
-
-extern u8 font[96][6];
-
-extern u8 half_height_num_font[10][3];
 
 extern u8 report_code[10];
 extern u8 available_report_code;

@@ -30,6 +30,7 @@ NexusRevamped while USB unreconized
 #include "src/Components/UI.h"
 
 UI UI;
+//UIelement uielement;
 MIDI Midi;
 LED LED;
 KeyPad KeyPad;
@@ -37,12 +38,12 @@ Timer mainTimer;
 
 void setup()
 {
-  digitalWrite(LED_PIN,LOW);
+  digitalWrite(led_pin,LOW);
   loadDeviceConfig();
-  specialBoot();
   setupEEPROM();
   variableLoad();
   setupHardware();
+  specialBoot();
   setupUSB();
 
   #ifdef DEBUG
@@ -54,7 +55,7 @@ void setup()
   {
     if (mainTimer.isLonger(10000))
     {
-      LED.fill(0xff0000); //NexusRevamped Entence point
+      LED.setXYHEX(0x07,0xff0000); //NexusRevamped Entence point
       LED.update();
     }
     else
@@ -242,21 +243,21 @@ void specialBoot()
 {
   if (KeyPad.scan())
   {
-    if(KeyPad.checkXY(0, 5) && KeyPad.checkXY(0, 6) && KeyPad.checkXY(0, 7))
+    if(KeyPad.checkXY(0, 5, true) && KeyPad.checkXY(0, 6, true) && KeyPad.checkXY(0, 7, true))
     {
       formatEEPROM();
       LED.fill(0xFF00FF);
     }
 
-    if(KeyPad.checkXY(1, 1) && KeyPad.checkXY(0, 0))
+    if(KeyPad.checkXY(1, 1, true) && KeyPad.checkXY(0, 0, true))
     {
       factoryTest();
     }
 
-    if(KeyPad.checkXY(0, 7) && KeyPad.checkXY(7, 7))
-    {
-      brightness = 255;
-    }
+    // if(KeyPad.checkXY(0, 7, true) && KeyPad.checkXY(7, 7, true))
+    // {
+    //   brightness = 255;
+    // }
 
   }
 }

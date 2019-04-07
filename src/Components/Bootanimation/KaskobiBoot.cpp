@@ -6,6 +6,10 @@ extern MIDI Midi;
 
 void UI::kaskobiWaitAnimation()
 {
+  brightness_cache = brightness;
+  if(brightness > 160)
+    LED.setBrightness(160);
+
   if(uiTimer.tick(400))
   {
     if(LED.readXYLED(0x07))
@@ -31,17 +35,18 @@ void UI::kaskobiBootAnimation() //8x8 only
     {
       while(!uiTimer.isLonger(delay))
       {
-        if(Midi.available())
-        {
-          LED.disableOverlayMode();
-          return;
-        }
+        // if(Midi.available())
+        // {
+        //   LED.disableOverlayMode();
+        //   return;
+        // }
 
         KeyPad.scan();
         if(KeyPad.fnChanged)
         {
           if(!KeyPad.fn)
           {
+            LED.setBrightness(brightness_cache);
             LED.disableOverlayMode();
             return;
           }
@@ -69,7 +74,7 @@ void UI::kaskobiBootAnimation() //8x8 only
   // }
 
   //Stage2
-  delay = 25;
+  delay = 15;
 
   //shuffle the array
   u8 shuffle[NUM_LEDS];
@@ -77,7 +82,7 @@ void UI::kaskobiBootAnimation() //8x8 only
   {
     shuffle[i] = i;
   }
-  randomSeed(analogRead(PC3) * analogRead(PC4) * analogRead(PC5) );
+  randomSeed(analogRead(PC3) * analogRead(PC4) * analogRead(PC5));
   u8 n = sizeof(shuffle) / sizeof(shuffle[0]);
   for (u8 i = 0; i < n - 1; i++)
   {
@@ -87,22 +92,23 @@ void UI::kaskobiBootAnimation() //8x8 only
     shuffle[j] = t;
   }
 
-  for(int i = 0; i <NUM_LEDS+5; i++)
+  for(int i = 0; i <NUM_LEDS+15; i++)
   {
 
     while(!uiTimer.isLonger(delay))
     {
-      if(Midi.available())
-      {
-        LED.disableOverlayMode();
-        return;
-      }
+      // if(Midi.available())
+      // {
+      //   LED.disableOverlayMode();
+      //   return;
+      // }
 
       KeyPad.scan();
       if(KeyPad.fnChanged)
       {
         if(!KeyPad.fn)
         {
+            LED.setBrightness(brightness_cache);
             LED.disableOverlayMode();
             return;
         }
@@ -110,20 +116,22 @@ void UI::kaskobiBootAnimation() //8x8 only
     }
     uiTimer.recordCurrent();
     if(i < NUM_LEDS)
-    LED.setPalette(shuffle[i], 0, 44, true);
-    if(i > 0 && i < NUM_LEDS + 1)
-    LED.setPalette(shuffle[i-1], 0, 28, true);
-    if(i > 1 && i < NUM_LEDS + 2)
-    LED.setPalette(shuffle[i-2], 0, 12, true);
-    if(i > 2 && i < NUM_LEDS + 3)
-    LED.setPalette(shuffle[i-3], 0, 116, true);
-    if(i > 3 && i < NUM_LEDS + 4)
-    LED.setPalette(shuffle[i-4], 0, 102, true);
-    if(i > 4 && i < NUM_LEDS + 5)
-    LED.off(shuffle[i-5], true);
+      LED.setPalette(shuffle[i], 0, 44, true);
+    if(i > 0 && i < NUM_LEDS + 2)
+      LED.setPalette(shuffle[i-2], 0, 28, true);
+    if(i > 1 && i < NUM_LEDS + 4)
+      LED.setPalette(shuffle[i-4], 0, 12, true);
+    if(i > 2 && i < NUM_LEDS + 6)
+      LED.setPalette(shuffle[i-6], 0, 116, true);
+    if(i > 3 && i < NUM_LEDS + 8)
+      LED.setPalette(shuffle[i-8], 0, 102, true);
+    if(i > 4 && i < NUM_LEDS + 10)
+      LED.off(shuffle[i-10], true);
+
     LED.update();
   }
   //end
+  LED.setBrightness(brightness_cache);
   LED.disableOverlayMode();
   return;
 }

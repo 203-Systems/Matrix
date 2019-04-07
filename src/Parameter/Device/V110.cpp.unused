@@ -4,72 +4,72 @@
 void loadConfigV110()
 {
   //LED
-  LED_PIN = PB7;
-  POWERCORD_PIN = PA9;
+  led_pin = PB7;
+  powercord_pin = PA9;
 
   //KeyPad
-  SO_DATA = PB12;
-  SO_CLOCK = PB13;
-  SI_DATA = PA8;
-  SI_CLOCK  = PB14;
-  SI_SCAN = PB15;
-  FN_PIN = PC15;
+  so_data = PB12;
+  so_clock = PB13;
+  si_data = PA8;
+  si_clock  = PB14;
+  si_scan = PB15;
+  fn_pin = PC15;
 
-  //ANALOG(TouchBar)
-  ANALOG0 = PA0;
-  ANALOG1 = PA1;
-  ANALOG2 = PA2;
-  ANALOG3 = PA3;
-  ANALOG4 = PA4;
-  ANALOG5 = PA5;
-  ANALOG6 = PA6;
-  ANALOG7 = PA7;
-  ANALOG8 = PB0;
-  ANALOG9 = PB1;
-  ANALOG10 = 0;
-  ANALOG11 = 0;
+  //analog(TouchBar)
+  analog0 = PA0;
+  analog1 = PA1;
+  analog2 = PA2;
+  analog3 = PA3;
+  analog4 = PA4;
+  analog5 = PA5;
+  analog6 = PA6;
+  analog7 = PA7;
+  analog8 = PB0;
+  analog9 = PB1;
+  analog10 = 0;
+  analog11 = 0;
   //I2C
-  I2C_SCL = PB8;
-  I2C_SDA = PB9;
+  i2c_scl = PB8;
+  i2c_sda = PB9;
   //SPI
-  SPI_SCK = PB3;
-  SPI_MISO = PB4;
-  SPI_MOSI = PB5;
-  SPI_CS1 = PA15;
-  SPI_CS2 = PB6;
+  spi_sck = PB3;
+  spi_miso = PB4;
+  spi_mosi= PB5;
+  spi_cs1 = PA15;
+  spi_cs2 = PB6;
 
   //Serial1 (USB-C)
-  TX1 = PA9;
-  RX1 = PA10;
+  tx1 = PA9;
+  rx1 = PA10;
   //Serial3 (Matrix Mod)
-  TX3 = PB10;
-  RX3 = PB11;
+  tx3 = PB10;
+  rx3 = PB11;
   //Serial2/4/5 (m2p futureproof)
-  TX2 = 0;
-  RX2 = 0;
-  TX4 = 0;
-  RX4 = 0;
-  TX5 = 0;
-  RX5 = 0;
+  tx2 = 0;
+  rx2 = 0;
+  tx4 = 0;
+  rx4 = 0;
+  tx5 = 0;
+  rx5 = 0;
 
   //SerialAvailabble
-  USBMIDI_AVAILABLE = true;
-  USBCDC_AVAILABLE = true;
-  SERIAL1_AVAILABLE = true;
-  SERIAL2_AVAILABLE = false;
-  SERIAL3_AVAILABLE = true;
-  SERIAL4_AVAILABLE = false;
-  SERIAL5_AVAILABLE = false;
+  usbmidi_available = true;
+  usbcdc_available = true;
+  serial1_available = true;
+  serial2_available = false;
+  serial3_available = true;
+  serial4_available = false;
+  serial5_available = false;
 
-  SUPPORT_WRGB = false;
+  support_wrgb = false;
 
   //EEPROM
-  EEPROM_ENABLE = false;
-  EEPROM_USER_ADDS_0 = 0;
-  EEPROM_USER_ADDS_1 = 0;
-  EEPROM_PALETTE_ADDS_0 = 0;
-  EEPROM_PALETTE_ADDS_1 = 0;
-  EEPROM_SYS_ADDS_0 = 0;
-  EEPROM_SYS_ADDS_1 = 0;
-  EEPROM_PAGESIZE = 0x400;
+  eeprom_enable = false;
+  eeprom_user_adds_0 = 0;
+  eeprom_user_adds_1 = 0;
+  eeprom_palette_adds_0 = 0;
+  eeprom_palette_adds_1 = 0;
+  eeprom_sys_adds_0 = 0;
+  eeprom_sys_adds_1 = 0;
+  eeprom_pagesize = 0x400;
 }

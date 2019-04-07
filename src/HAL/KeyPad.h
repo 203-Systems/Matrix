@@ -26,8 +26,8 @@ public:
   KeyPad();
   void init();
   bool scan();
-  bool checkXY(u8 x, u8 y);
-  bool checkXY(u8 xy);
+  bool checkXY(u8 x, u8 y, bool no_rotation = false);
+  bool checkXY(u8 xy, bool no_rotation = false);
 
   Key list[MULTIPRESS];
   //u32 FNholded = 0;
