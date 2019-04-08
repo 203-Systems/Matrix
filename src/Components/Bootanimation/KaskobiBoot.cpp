@@ -26,6 +26,7 @@ void UI::kaskobiWaitAnimation()
 
 void UI::kaskobiBootAnimation() //8x8 only
 {
+  LED.fill(0);
   LED.enableOverlayMode();
   //StageOne
   u16 delay = 60;
@@ -83,13 +84,14 @@ void UI::kaskobiBootAnimation() //8x8 only
     shuffle[i] = i;
   }
   randomSeed(analogRead(PC3) * analogRead(PC4) * analogRead(PC5));
-  u8 n = sizeof(shuffle) / sizeof(shuffle[0]);
-  for (u8 i = 0; i < n - 1; i++)
+
+  for (u16 i = 0; i < 500; i++)
   {
-    u8 j = random(0, n - i);
-    u8 t = shuffle[i];
-    shuffle[i] = shuffle[j];
-    shuffle[j] = t;
+    u8 r1 = random(0, NUM_LEDS);
+    u8 r2 = random(0, NUM_LEDS);
+    u8 t = shuffle[r1];
+    shuffle[r1] = shuffle[r2];
+    shuffle[r2] = t;
   }
 
   for(int i = 0; i <NUM_LEDS+15; i++)

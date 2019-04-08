@@ -28,6 +28,11 @@ void MIDI::noteOn(u8 channel, u8 note, u8 velocity)
   // if(channel == 5)
   //   channel = 1; //unipad support
 
+  if(velocity == 0)
+  {
+    MIDI::noteOff(channel, note, velocity)
+  }
+
   if(unipad_mode)
   channel = 1;
 

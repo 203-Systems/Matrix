@@ -84,6 +84,9 @@ void UI::exitFNmenu()
 
 void UI::fnKeyAction()
 {
+  //flags
+  bool flag_rotated = false;
+
   for(int i = 0; i < MULTIPRESS; i++)
   {
     if(KeyPad.list[i].velocity == -1)
@@ -125,10 +128,10 @@ void UI::fnKeyAction()
         if(!KeyPad.fn || KeyPad.fnTimer.isLonger(200))
         {
           nextBrightnessState();
-        #ifdef DEBUG
-        CompositeSerial.print("Brightness ");
-        CompositeSerial.println(brightness);
-        #endif
+          #ifdef DEBUG
+          CompositeSerial.print("Brightness ");
+          CompositeSerial.println(brightness);
+          #endif
         }
         break;
 
@@ -139,18 +142,30 @@ void UI::fnKeyAction()
         break;
         case 0x53:
         case 0x54:
-        LED.fill(0, true);
-        rotationCW(1); //90
+        if(!flag_rotated)
+        {
+          LED.fill(0, true);
+          rotationCW(1); //90
+          flag_rotated = true;
+        }
         break;
         case 0x35:
         case 0x45:
-        LED.fill(0, true);
-        rotationCW(2); //180
+        if(!flag_rotated)
+        {
+          LED.fill(0, true);
+          rotationCW(2); //190
+          flag_rotated = true;
+        }
         break;
         case 0x23:
         case 0x24:
-        LED.fill(0, true);
-        rotationCW(3); //270
+        if(!flag_rotated)
+        {
+          LED.fill(0, true);
+          rotationCW(3); //270
+          flag_rotated = true;
+        }
         break;
 
         case 0x10:
