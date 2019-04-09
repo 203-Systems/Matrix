@@ -225,6 +225,10 @@ void UI::fnKeyAction()
         setDeviceID(UI::numSelector8bit(device_id, 0x0000FFAA, true));
         break;
 
+        case 0x74:
+        setDeviceID(UI::numSelector8bit(device_id, 0x0000FFAA, true));
+        break;
+
         // case 0x61: //RESET
         // LED.fill(0, true);
         // LED.update();
@@ -302,6 +306,7 @@ void UI::fnRender()
   // LED.setXYHEX(0x07, 0x00FFFFFF, true); //AppLauncher
   // LED.setXYHEX(0x17, 0x00FFFFFF, true); //Text Selctor
   LED.setXYHEX(0x05, 0x00FF0000, true, true); //DFU
+  LED.setXYHEX(0x74, 0x0000FFAA, true, true); //White
   LED.setXYHEX(0x75, 0x0000FFAA, true, true); //Device ID
   //LED.setXYHEX(0x60, 0x00FFFF00, true, true); //reset device
   //LED.setXYHEX(0x61, 0x0000FF66, true, true); //reboot
@@ -392,6 +397,42 @@ u8 UI::numSelector6bit(u8 currentNum, u32 colour, bool ignore_gamma /* = false *
 u32 UI::numSelectorRGB(u32 currentNum, u32 colour, bool ignore_gamma /* = false */)
 {
 
+  u8 R = (currentNum & 0xFF0000) >> 16;
+  u8 G = (currentNum & 0xFF00) >> 8;
+  u8 B = currentNum & 0xFF;
+  while(!KeyPad.fnChanged)
+  {
+    if(uiTimer.tick(1000/fps))
+    {
+      if(KeyPad.scan())
+      {
+        LED.fill(0);
+
+        if(R != uielement.binary8bitInput(R, 5, 0xFF0000, ignore_gamma))
+        {
+          R = uielement.binary8bitInput(R, 5, 0xFF0000, ignore_gamma);
+          colour = R << 16 + colour & 0x00FFFF;
+          uielement.renderHalfHeightNum(currentNum, 0x73, colour, ignore_gamma);
+        }
+        else if(G != uielement.binary8bitInput(G, 6, 0x00FF00, ignore_gamma))
+        {
+          G = uielement.binary8bitInput(G, 6, 0x00FF00, ignore_gamma);
+          colour = G << 8 + colour & 0xFF00FF;
+          uielement.renderHalfHeightNum(currentNum, 0x73, colour, ignore_gamma);
+        }
+        else if(B != uielement.binary8bitInput(B, 7, 0x0000FF, ignore_gamma))
+        {
+          B = uielement.binary8bitInput(B, 7, 0x0000FF, ignore_gamma);
+          colour = B + colour & 0xFFFF00;
+          uielement.renderHalfHeightNum(currentNum, 0x73, colour, ignore_gamma);
+        }
+
+        LED.update();
+      }
+    }
+  }
+  LED.fill(0, true);
+  return currentNum;
 }
 
 u32 UI::numSelectorWRGB(u32 currentNum, u32 colour, bool ignore_gamma /* = false */)

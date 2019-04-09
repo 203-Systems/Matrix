@@ -19,6 +19,7 @@ public:
   void init();
   void nextBrightnessState();
   void setBrightness(u8 b);
+  void setColourCorrection(u32 c);
   void dynamicBrightness(u16 mah);
   void fill(u32 WRGB, bool overlay = false);
 

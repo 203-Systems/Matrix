@@ -114,6 +114,13 @@ void setBrightnesss(u8 b) //Triple s to fix due to an unknow bug
   LED.setBrightness(brightness);
 }
 
+void setBrightnesss(u32 c) //Triple s to fix due to an unknow bug
+{
+  EEPROM_USER.write(E_COLOUR_CORRECTION, c);
+  led_color_correction = c;
+  LED.setColourCorrection(led_color_correction);
+}
+
 void setCurrentKeyMap(u8 m)
 {
   EEPROM_USER.write(E_CURRENT_KEYMAP, m);
