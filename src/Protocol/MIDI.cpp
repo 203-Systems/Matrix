@@ -30,7 +30,7 @@ void MIDI::noteOn(u8 channel, u8 note, u8 velocity)
 
   if(velocity == 0)
   {
-    MIDI::noteOff(channel, note, velocity)
+    MIDI::noteOff(channel, note, velocity);
   }
 
   if(unipad_mode)
