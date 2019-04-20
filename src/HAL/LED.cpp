@@ -38,7 +38,7 @@ void LED::init()
 void LED::setBrightness(u8 b)
 {
   FastLED.setBrightness(b);
-  //setBrightnesss(b);
+  //setBrightness(b);
 }
 
 void setColourCorrection(u32 c)
@@ -363,4 +363,21 @@ u32 LED::toBrightness(u32 hex, float f)
   u8 b = ((hex & 0x000000FF) * f);
 
   return w * 0x1000000 + r * 0x10000 + g * 0x100 + b;
+}
+
+bool LED::rotationCW(u8 r)
+{
+  if(r != 0 && r < 4)
+  {
+    for(int i = 0; i < NUM_LEDS; i++)
+    {
+      buffer[i] = leds[i];
+      leds[i] = 0;
+    }
+
+    for(int i = 0; i < NUM_LEDS; i++)
+    {
+      leds[i] = buffer[xyToIndex(xyRotation(indexToXY(i),r))];
+    }
+  }
 }

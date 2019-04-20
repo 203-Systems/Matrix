@@ -41,7 +41,7 @@ void setgamma(bool g);
 void updateCustomKeymap();
 void resetCustomKeymap();
 void nextBrightnessState();
-void setBrightnesss(u8 b);
+void setBrightness(u8 b);
 void setCurrentKeyMap(u8 m);
 void setUnipadMode(bool u);
 //void setTouchSensitive(u8 s);
@@ -72,7 +72,9 @@ u8 bottomLEDrotation(int index);
 u8 xytoxy(u8 x, u8 y);
 XY xytoxy(u8 xy);
 u8 xyRotation(u8 xy);
+u8 xyRotation(u8 xy, u8 r);
 u8 xyReverseRotation(u8 xy);
+u8 xyReverseRotation(u8 xy, u8 r);
 void recordReportCode(u8 code);
 //u8 xyToIndex(u8 X,u8 Y);
 

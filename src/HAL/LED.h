@@ -60,6 +60,8 @@ public:
   u32 readLED(u8 index);
   u32 toBrightness(u32 hex, float f);
 
+  bool rotationCW(u8 r);
+
 private:
   bool overlay_mode = false;
   CRGB leds[NUM_TOTAL_LEDS];

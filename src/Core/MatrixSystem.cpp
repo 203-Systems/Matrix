@@ -100,21 +100,21 @@ void nextBrightnessState()
   {
     if(brightness_level[i] > brightness)
     {
-      setBrightnesss(brightness_level[i]);
+      setBrightness(brightness_level[i]);
       return;
     }
   }
-  setBrightnesss(brightness_level[0]);
+  setBrightness(brightness_level[0]);
 }
 
-void setBrightnesss(u8 b) //Triple s to fix due to an unknow bug
+void setBrightness(u8 b)
 {
   EEPROM_USER.write(E_BRIGHTNESS, b);
   brightness = b;
   LED.setBrightness(brightness);
 }
 
-void setBrightnesss(u32 c) //Triple s to fix due to an unknow bug
+void setBrightness(u32 c) //Triple s to fix due to an unknow bug
 {
   EEPROM_USER.write(E_COLOUR_CORRECTION, c);
   led_color_correction = c;
@@ -239,6 +239,7 @@ void rotationCW(u8 r)
   {
     setRotation(r);
   }
+  LED.rotationCW(r);
 }
 
 void setRotation(u8 r)
@@ -355,6 +356,33 @@ u8 xyRotation(u8 xy)
   return xr * 0x10 + yr;
 }
 
+u8 xyRotation(u8 xy, u8 r)
+{
+  u8 x = (xy & 0xF0) >> 4;
+  u8 y = xy & 0x0F;
+  u8 xr;
+  u8 yr;
+  switch(r)
+  {
+    case 1:
+    xr = y;
+    yr = 7 - x;
+    break;
+    case 2:
+    xr = 7 - x;
+    yr = 7 - y;
+    break;
+    case 3:
+    xr = 7 - y;
+    yr = x;
+    break;
+    default:
+    xr = x;
+    yr = y;
+  }
+  return xr * 0x10 + yr;
+}
+
 u8 xyReverseRotation(u8 xy)
 {
   u8 x = (xy & 0xF0) >> 4;
@@ -381,6 +409,34 @@ u8 xyReverseRotation(u8 xy)
   }
   return xr * 0x10 + yr;
 }
+
+u8 xyReverseRotation(u8 xy, u8 r)
+{
+  u8 x = (xy & 0xF0) >> 4;
+  u8 y = xy & 0x0F;
+  u8 xr;
+  u8 yr;
+  switch(r)
+  {
+    case 1:
+    xr = 7 - y;
+    yr = x;
+    break;
+    case 2:
+    xr = 7 - x;
+    yr = 7 - y;
+    break;
+    case 3:
+    xr = y;
+    yr = 7 - x;
+    break;
+    default:
+    xr = x;
+    yr = y;
+  }
+  return xr * 0x10 + yr;
+}
+
 
 void recordReportCode(u8 code)
 {
