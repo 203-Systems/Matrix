@@ -114,13 +114,6 @@ void setBrightness(u8 b)
   LED.setBrightness(brightness);
 }
 
-void setBrightness(u32 c) //Triple s to fix due to an unknow bug
-{
-  EEPROM_USER.write(E_COLOUR_CORRECTION, c);
-  led_color_correction = c;
-  LED.setColourCorrection(led_color_correction);
-}
-
 void setCurrentKeyMap(u8 m)
 {
   EEPROM_USER.write(E_CURRENT_KEYMAP, m);
@@ -133,6 +126,15 @@ void setUnipadMode(bool u)
   unipad_mode = u;
 }
 
+void setLedCorrection(u32 c)
+{
+    EEPROM_USER.write(E_COLOUR_CORRECTION_1, c >> 16);
+    EEPROM_USER.write(E_COLOUR_CORRECTION_2, c & 0xFFFF);
+    LED.setColourCorrection(c);
+    #ifdef DEBUG
+    CompositeSerial.print("Set Colour Correction ");CompositeSerial.println(c);
+    #endif
+}
 //Sysex get
 // void getDeviceInfo()
 // {
@@ -435,6 +437,16 @@ u8 xyReverseRotation(u8 xy, u8 r)
     yr = y;
   }
   return xr * 0x10 + yr;
+}
+
+u32 toBrightness(u32 hex, float f)
+{
+  u8 w = (((hex & 0xFF000000) >> 24) * f);
+  u8 r = (((hex & 0x00FF0000) >> 16) * f);
+  u8 g = (((hex & 0x0000FF00) >> 8) * f);
+  u8 b = ((hex & 0x000000FF) * f);
+
+  return w * 0x1000000 + r * 0x10000 + g * 0x100 + b;
 }
 
 

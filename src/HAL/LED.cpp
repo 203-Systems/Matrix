@@ -41,7 +41,7 @@ void LED::setBrightness(u8 b)
   //setBrightness(b);
 }
 
-void setColourCorrection(u32 c)
+void LED::setColourCorrection(u32 c)
 {
   FastLED.setCorrection(c);
 }
@@ -355,15 +355,7 @@ u32 LED::readLED(u8 index)
   return leds[indexRotation(index)];
 }
 
-u32 LED::toBrightness(u32 hex, float f)
-{
-  u8 w = (((hex & 0xFF000000) >> 24) * f);
-  u8 r = (((hex & 0x00FF0000) >> 16) * f);
-  u8 g = (((hex & 0x0000FF00) >> 8) * f);
-  u8 b = ((hex & 0x000000FF) * f);
 
-  return w * 0x1000000 + r * 0x10000 + g * 0x100 + b;
-}
 
 bool LED::rotationCW(u8 r)
 {

@@ -38,7 +38,7 @@ void loadSetting()
   bootAnimationSelector = EEPROM_USER.read(E_BOOTANIMATION);
   debug_mode = EEPROM_USER.read(E_DEBUG_ENABLE);
   current_keymap = EEPROM_USER.read(E_CURRENT_KEYMAP);
-  led_color_correction = EEPROM_USER.read(E_COLOUR_CORRECTION);
+  led_color_correction = (EEPROM_USER.read(E_COLOUR_CORRECTION_1) << 16) + EEPROM_USER.read(E_COLOUR_CORRECTION_2);
 }
 
 void loadKeyMap()
@@ -83,7 +83,8 @@ void saveSetting()
   EEPROM_USER.write(E_BOOTANIMATION, bootAnimationSelector);
   EEPROM_USER.write(E_DEBUG_ENABLE, (u8)debug_mode);
   EEPROM_USER.write(E_CURRENT_KEYMAP, current_keymap);
-  EEPROM_USER.write(E_COLOUR_CORRECTION, led_color_correction);
+  EEPROM_USER.write(E_COLOUR_CORRECTION_1, led_color_correction >> 8);
+  EEPROM_USER.write(E_COLOUR_CORRECTION_2, led_color_correction & 0xFFFF);
 }
 
 void saveKeyMap()

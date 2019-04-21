@@ -16,9 +16,10 @@ class UIelement
 public:
   UIelement();
   void renderAscii(char ascii, u8 xy, u32 colour, bool ignore_gamma = false);
-  void renderHalfHeightNum(u8 num, u8 xy, u32 colour, bool ignore_gamma = false);
+  void renderHalfHeightNum(u8 num, u8 xy, u32 colour, u32 sec_colour, bool ignore_gamma = false);
   void renderHalfHeightDigit(u8 num, u8 xy, u32 colour, bool ignore_gamma = false);
   u8 binary8bitInput(u8 currentNum, u8 y, u32 colour, bool ignore_gamma = false);
+  u8 simple8bitInput(s16 currentNum, u8 y, u32 colour, bool ignore_gamma = false);
 private:
   u8 font[96][6] = {
     {4, 0b00000000, 0b00000000, 0b00000000, 0b00000000}, // 32 = Space

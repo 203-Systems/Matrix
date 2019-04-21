@@ -43,29 +43,20 @@ typedef volatile const int16_t vsc16;
 typedef volatile const int32_t vsc32;
 typedef volatile const int64_t vsc64;
 
-// typedef enum {
-//     VERYDIM = 16,
-//     DIM = 32,
-//     NORMAL = 64,
-//     BRIGHT = 96,
-//     VERYBRIGHT = 128,
-//     MAX = 196,
-// } BRIGHTNESS;
-
-//#define DEBUG
-
 //DeviceInfo
 
 //#define DEBUG
 
 #define DEVICENAME "Matrix"
+#define __RET6__
 #define MAUNFACTURERNAME "203 Industries"
 #define SERIALSTRING "Prototype"
 #define VID  0x0203
 #define VID2 0x0203 // for device ID USE
 #define PID  0x1000
 #define PID2 0x1000 // for device ID USE
-#define FWVERSION "1.0 __DATE__"
+#define FWVERSION "0.1.2.5b"
+
 
 #define BOOTLOADER_VERSION   *(u32 *) (0x08001E00)
 #define MATRIX_MODEL         *(u32 *) (0x08001E04)

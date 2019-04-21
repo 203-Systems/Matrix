@@ -83,7 +83,8 @@ void UI::kaskobiBootAnimation() //8x8 only
   {
     shuffle[i] = i;
   }
-  randomSeed(analogRead(PC3) * analogRead(PC4) * analogRead(PC5));
+  //randomSeed(analogRead(PC3) * analogRead(PC4) * analogRead(PC5));
+  randomSeed(micros());
 
   for (u16 i = 0; i < 500; i++)
   {

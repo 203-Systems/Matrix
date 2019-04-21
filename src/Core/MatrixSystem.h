@@ -44,6 +44,7 @@ void nextBrightnessState();
 void setBrightness(u8 b);
 void setCurrentKeyMap(u8 m);
 void setUnipadMode(bool u);
+void setLedCorrection(u32 c);
 //void setTouchSensitive(u8 s);
 
 //Sysex get
@@ -75,6 +76,7 @@ u8 xyRotation(u8 xy);
 u8 xyRotation(u8 xy, u8 r);
 u8 xyReverseRotation(u8 xy);
 u8 xyReverseRotation(u8 xy, u8 r);
+u32 toBrightness(u32 hex, float f);
 void recordReportCode(u8 code);
 //u8 xyToIndex(u8 X,u8 Y);
 

@@ -51,9 +51,10 @@ void setup()
   #endif
 
   mainTimer.recordCurrent();
-  while(!USBComposite.isReady())
+  while(!USBComposite.isReady() && !KeyPad.fn)
   {
-    if (mainTimer.isLonger(10000))
+    KeyPad.scan();
+    if (mainTimer.isLonger(9900))
     {
       LED.setXYHEX(0x07,0xff0000); //NexusRevamped Entence point
       LED.update();
@@ -72,14 +73,17 @@ void setup()
     }
   }
 
-  switch(bootAnimationSelector)
+  if(!KeyPad.fn)
   {
-    case 0:
-    break;
+    switch(bootAnimationSelector)
+    {
+      case 0:
+      break;
 
-    case 1:
-    UI.kaskobiBootAnimation();
-    break;
+      case 1:
+      UI.kaskobiBootAnimation();
+      break;
+    }
   }
 
   LED.fill(0x000000);
@@ -162,22 +166,10 @@ void readKey()
 //   }
 // }
 
-
-//
-// int ttt = 63;
 void loop()
 {
-  // if(USBmidi.available())
-  // {
-  //   LED.on(ttt);
-  //   ttt--;
-  // }
 
-  // // if (midi_enable);
-  // if (mainTimer.tick(1000/fps))
   Midi.poll();
-  // // if (m2p_enable)
-  // // CDC.Poll();
 
   if (mainTimer.tick(16))
   {
@@ -189,30 +181,7 @@ void loop()
   }
 }
 
-// test
-// void loop()
-// {
-//   for(int p = 0; p < 2; p++)
-//   {
-//     for(int n = 0; n < 2; n++)
-//     {
-//       for(int c = 0; c < 64; c++)
-//       {
-//         LED.setPalette(p,c,c+n*64);
-//       }
-//       LED.update();
-//       delay(1000);
-//       while(KeyPad.scan() == 0)
-//       {
-//
-//       }
-//       while(KeyPad.scan() == 0)
-//       {
-//
-//       }
-//     }
-//   }
-// }
+
 //
 // void loop()
 // {
