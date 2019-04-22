@@ -35,6 +35,8 @@ MIDI Midi;
 LED LED;
 KeyPad KeyPad;
 Timer mainTimer;
+Timer keypadTimer;
+Timer fnTimer;
 
 void setup()
 {
@@ -98,14 +100,23 @@ void readKey()
 {
   if (KeyPad.scan())
   {
-    if(KeyPad.fnChanged)
+    if(fn_hold)
     {
-      // if(KeyPad.timesFNpressed == 5)
-      // UI.ShowDeviceInfo();
-      // if(KeyPad.timesFNpressed == 10)
-      // UI.EasterEgg();)
-      if(KeyPad.fn)
-      UI.enterFNmenu();
+      if(KeyPad.fnChanged)
+      {
+        if(KeyPad.fn)
+        fnTimer.recordCurrent();
+        if(fnTimer.isLonger(300))
+        UI.enterFNmenu();
+      }
+    }
+    else
+    {
+      if(KeyPad.fnChanged)
+      {
+        if(KeyPad.fn)
+        UI.enterFNmenu();
+      }
     }
 
     for(int i = 0; i < MULTIPRESS; i++)
@@ -171,42 +182,17 @@ void loop()
 
   Midi.poll();
 
+  if (keypadTimer.tick(4))
+  {
+    readKey();
+  }
+
   if (mainTimer.tick(16))
   {
     Midi.offScan();
-    readKey();
     LED.update();
-    //LED.Rainbow();
-    //CompositeSerial.println("Running");
   }
 }
-
-
-//
-// void loop()
-// {
-//   for(int n = 0; n < 2; n++)
-//   {
-//     // for(int i = 0; i < 2; i++)
-//     // {
-//     for(int c = 0; c < 64; c++)
-//     {
-//       LED.setPalette(0,c,c+n*64);
-//     }
-//     LED.update();
-//     while(KeyPad.scan() == 0)
-//     {
-//
-//     }
-//         delay(50);
-//     while(KeyPad.scan() == 0)
-//     {
-//
-//     }
-//     //   gamma_enable = !gamma_enable;
-//     // }
-//   }
-//}
 
 void specialBoot()
 {

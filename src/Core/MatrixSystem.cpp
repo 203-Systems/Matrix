@@ -26,7 +26,7 @@ void setupUSB()
 
   USBComposite.setManufacturerString(MAUNFACTURERNAME);
   //USBComposite.setProductString(DEVICENAME);
-  USBComposite.setSerialString(SERIALSTRING);
+  USBComposite.setSerialString(getDeviceIDString());
 
   Midi.registerComponent();
   CompositeSerial.registerComponent();
@@ -125,12 +125,18 @@ void setUnipadMode(bool u)
   EEPROM_USER.write(E_UNIPAD_MODE, u);
   unipad_mode = u;
 }
+void setFnHold(bool h)
+{
+  EEPROM_USER.write(E_FN_HOLD, h);
+  fn_hold = h;
+}
 
 void setLedCorrection(u32 c)
 {
     EEPROM_USER.write(E_COLOUR_CORRECTION_1, c >> 16);
     EEPROM_USER.write(E_COLOUR_CORRECTION_2, c & 0xFFFF);
     LED.setColourCorrection(c);
+    led_color_correction = c;
     #ifdef DEBUG
     CompositeSerial.print("Set Colour Correction ");CompositeSerial.println(c);
     #endif

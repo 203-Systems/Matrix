@@ -44,6 +44,7 @@ void nextBrightnessState();
 void setBrightness(u8 b);
 void setCurrentKeyMap(u8 m);
 void setUnipadMode(bool u);
+void setFnHold(bool h);
 void setLedCorrection(u32 c);
 //void setTouchSensitive(u8 s);
 

@@ -13,7 +13,7 @@ void setupEEPROM()
 
 void variableLoad()
 {
-  if(EEPROM_USER.read(E_INIT) != 203)
+  if(EEPROM_USER.read(E_INIT) != FWVERSION)
   {
     initEEPROM();
     return;
@@ -39,6 +39,8 @@ void loadSetting()
   debug_mode = EEPROM_USER.read(E_DEBUG_ENABLE);
   current_keymap = EEPROM_USER.read(E_CURRENT_KEYMAP);
   led_color_correction = (EEPROM_USER.read(E_COLOUR_CORRECTION_1) << 16) + EEPROM_USER.read(E_COLOUR_CORRECTION_2);
+  led_color_temperture = (EEPROM_USER.read(E_COLOUR_TEMPERTURE_1) << 16) + EEPROM_USER.read(E_COLOUR_TEMPERTURE_2);
+  fn_hold = EEPROM_USER.read(E_FN_HOLD);
 }
 
 void loadKeyMap()
@@ -69,7 +71,7 @@ void initEEPROM()
 
 void saveSetting()
 {
-  EEPROM_USER.write(E_INIT, 203);
+  EEPROM_USER.write(E_INIT, FWVERSION);
   EEPROM_USER.write(E_DEVICE_ID, device_id);
   EEPROM_USER.write(E_ROTATION, rotation);
   EEPROM_USER.write(E_BRIGHTNESS, brightness);

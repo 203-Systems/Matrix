@@ -230,6 +230,11 @@ void UI::fnKeyAction()
         setLedCorrection(UI::numSelectorRGB(led_color_correction, true));
         break;
 
+        case 0x73:
+        setFnHold(!fn_hold);
+        break;
+
+
         // case 0x61: //RESET
         // LED.fill(0, true);
         // LED.update();
@@ -324,6 +329,15 @@ void UI::fnRender()
   else
   {
     LED.setXYHEX(0x60, toBrightness(0xFFFF00, LOWSTATEBRIGHTNESS), true, true);
+  }
+
+  if(fn_hold)
+  {
+    LED.setXYHEX(0x73, 0xA0FF00, true, true);
+  }
+  else
+  {
+    LED.setXYHEX(0x73, toBrightness(0xA0FF00, LOWSTATEBRIGHTNESS), true, true);
   }
 
   switch(current_keymap)

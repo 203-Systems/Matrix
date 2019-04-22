@@ -8,11 +8,13 @@ extern u8 current_keymap = 0;
 extern u8 bootAnimationSelector = 1; // 0 for off, 1 for kaskobi
 extern bool unipad_mode = false;
 extern bool debug_mode = false;
+extern bool fn_hold = false;
 //LED setting
 extern u8 brightness = 128;
-extern u16 max_mAh = 750;
+extern u16 max_mAh = 1500;
 extern u8 brightness_level[8] = {16,32,64,96,128,160,216,255};
 extern u8 fps = 60;
+extern u32 led_color_temperture = 0xFFFFFF;
 
 extern u32 palette[4][128] =     //WRGB Colour Palette
 {{            //MatrixColorPalette

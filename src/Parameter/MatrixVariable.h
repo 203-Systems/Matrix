@@ -13,6 +13,7 @@ extern u8 current_keymap;
 extern u8 bootAnimationSelector;
 extern bool unipad_mode;
 extern bool debug_mode;
+extern bool fn_hold;
 
 //LED setting
 extern u8 brightness;
@@ -21,6 +22,7 @@ extern u8 brightness_level[8];
 extern u32 palette[4][128];
 extern u8 led_gamma[256];
 extern u8 fps;
+extern u32 led_color_temperture;
 
 //KeyMap
 extern u32 keymap_colour[5];

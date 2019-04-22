@@ -55,7 +55,9 @@ typedef volatile const int64_t vsc64;
 #define VID2 0x0203 // for device ID USE
 #define PID  0x1000
 #define PID2 0x1000 // for device ID USE
-#define FWVERSION "0.1.2.5b"
+#define FWVERSION 0126
+#define FWVERSION_STRING "0.1.2.6b"
+
 
 
 #define BOOTLOADER_VERSION   *(u32 *) (0x08001E00)
