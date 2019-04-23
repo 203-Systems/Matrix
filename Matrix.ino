@@ -207,10 +207,15 @@ void specialBoot()
       factoryTest();
     }
 
-    // if(KeyPad.checkXY(0, 7, true) && KeyPad.checkXY(7, 7, true))
-    // {
-    //   brightness = 255;
-    // }
+    if(KeyPad.checkXY(7, 0, true))
+    {
+      setBrightness(16);
+    }
+
+    if(KeyPad.checkXY(7, 0, true) && KeyPad.checkXY(6, 1, true))
+    {
+      setBrightness(255);
+    }
 
   }
 }
