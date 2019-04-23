@@ -87,6 +87,8 @@ bool KeyPad::scan()
 
   }
 
+  fnChanged = false;
+
   if(digitalRead(fn_pin) != fnCache)
   {
     changed = true;
@@ -115,10 +117,7 @@ bool KeyPad::scan()
       fn = false;
     }
   }
-  else
-  {
-    fnChanged = false;
-  }
+
   if(changed)
   updateList();
 

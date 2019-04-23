@@ -36,7 +36,6 @@ LED LED;
 KeyPad KeyPad;
 Timer mainTimer;
 Timer keypadTimer;
-Timer fnTimer;
 
 void setup()
 {
@@ -100,17 +99,7 @@ void readKey()
 {
   if (KeyPad.scan())
   {
-    if(fn_hold)
-    {
-      if(KeyPad.fnChanged)
-      {
-        if(KeyPad.fn)
-        fnTimer.recordCurrent();
-        if(fnTimer.isLonger(300))
-        UI.enterFNmenu();
-      }
-    }
-    else
+    if(!fn_hold)
     {
       if(KeyPad.fnChanged)
       {
@@ -134,6 +123,15 @@ void readKey()
       {
         Midi.sentXYoff(KeyPad.list[i].xy, 0);
       }
+    }
+  }
+
+  if(KeyPad.fn && fn_hold)
+  {
+    if(KeyPad.fnTimer.isLonger(200))
+    {
+      UI.enterFNmenu();
+      KeyPad.fnTimer.recordCurrent();
     }
   }
 }

@@ -62,7 +62,7 @@ void UI::fnMenu()
             UI::exitFNmenu();
             return;
           }
-          else if(!KeyPad.fn && (KeyPad.fnTimer.isLonger(MULTITAP_THRESHOLD) || hadAction)) //if fn off and longer then threshold, will count as hold, release to back to main menu
+          else if(!KeyPad.fn && !fn_hold  && (KeyPad.fnTimer.isLonger(MULTITAP_THRESHOLD)|| hadAction )) //if fn off and longer then threshold, will count as hold, release to back to main menu
           {
             UI::exitFNmenu();
             return;
