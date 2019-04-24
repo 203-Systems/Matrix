@@ -180,7 +180,7 @@ void loop()
 
   Midi.poll();
 
-  if (keypadTimer.tick(4))
+  if (keypadTimer.tick(8))
   {
     readKey();
   }
