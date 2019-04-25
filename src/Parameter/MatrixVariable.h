@@ -19,12 +19,17 @@ extern bool fn_hold;
 extern u8 brightness;
 extern u16 max_mAh;
 extern u8 brightness_level[8];
-extern u32 palette[4][128];
-extern u8 led_gamma[256];
 extern u8 fps;
 extern u32 led_color_temperture;
 
+extern u16 fps_micros;
+extern u16 keypad_scanrate_micros;
+
+extern u32 palette[4][128];
+extern u8 led_gamma[256];
+
 //KeyMap
+extern u8 keypad_scanrate;
 extern u32 keymap_colour[5];
 extern u8 keymap [5][YSIZE][XSIZE];
 extern u8 bottom_led_map [5][NUM_BOTTOM_LEDS];

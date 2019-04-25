@@ -29,7 +29,11 @@ void setupUSB()
   USBComposite.setSerialString(getDeviceIDString());
 
   Midi.registerComponent();
+
+  #ifdef DEBUG
   CompositeSerial.registerComponent();
+  #endif
+  
   USBComposite.begin();
 
 }

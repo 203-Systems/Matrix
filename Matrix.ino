@@ -34,8 +34,9 @@ UI UI;
 MIDI Midi;
 LED LED;
 KeyPad KeyPad;
-Timer mainTimer;
-Timer keypadTimer;
+MicroTimer mainTimer;
+MicroTimer keypadTimer;
+MicroTimer microTimer;
 
 void setup()
 {
@@ -55,7 +56,7 @@ void setup()
   while(!USBComposite.isReady() && !KeyPad.fn)
   {
     KeyPad.scan();
-    if (mainTimer.isLonger(9900))
+    if (mainTimer.isLonger(9900000))
     {
       LED.setXYHEX(0x07,0xff0000); //NexusRevamped Entence point
       LED.update();
@@ -128,7 +129,7 @@ void readKey()
 
   if(KeyPad.fn && fn_hold)
   {
-    if(KeyPad.fnTimer.isLonger(200))
+    if(KeyPad.fnTimer.isLonger(200000))
     {
       UI.enterFNmenu();
       KeyPad.fnTimer.recordCurrent();
@@ -180,15 +181,21 @@ void loop()
 
   Midi.poll();
 
-  if (keypadTimer.tick(8))
+  if (keypadTimer.tick(keypad_scanrate_micros))
   {
     readKey();
   }
 
-  if (mainTimer.tick(16))
+  if (mainTimer.tick(fps_micros))
   {
     Midi.offScan();
+    #ifdef DEBUG
+    microTimer.recordCurrent();
+    #endif
     LED.update();
+    #ifdef DEBUG
+    CompositeSerial.println(microTimer.sinceLastTick());
+    #endif
   }
 }
 

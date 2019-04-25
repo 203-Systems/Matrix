@@ -13,8 +13,11 @@ extern bool fn_hold = false;
 extern u8 brightness = 128;
 extern u16 max_mAh = 2000;
 extern u8 brightness_level[8] = {16,32,64,96,128,160,216,255};
-extern u8 fps = 60;
+extern u8 fps = 250;
 extern u32 led_color_temperture = 0xFFFFFFFF;
+
+extern u16 fps_micros = 1000000 / fps;
+extern u16 keypad_scanrate_micros = 1000000 / keypad_scanrate;
 
 extern u32 palette[4][128] =     //WRGB Colour Palette
 {{            //MatrixColorPalette
@@ -436,6 +439,8 @@ extern u8 bottom_led_map [5][NUM_BOTTOM_LEDS] =
 
 
 //KeyPad
+extern u8 keypad_scanrate = 125;
+
 extern u32 keymap_colour[5] = //Keymap mode color ref in fn menu
 {0x00FF00FF, 0x00FF5400, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF};
 
