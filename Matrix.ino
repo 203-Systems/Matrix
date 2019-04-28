@@ -129,7 +129,7 @@ void readKey()
 
   if(KeyPad.fn && fn_hold)
   {
-    if(KeyPad.fnTimer.isLonger(200000))
+    if(KeyPad.fnTimer.isLonger(200))
     {
       UI.enterFNmenu();
       KeyPad.fnTimer.recordCurrent();
