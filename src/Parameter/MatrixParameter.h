@@ -55,7 +55,7 @@ typedef volatile const int64_t vsc64;
 #define VID2 0x0203 // for device ID USE
 #define PID  0x1000
 #define PID2 0x1000 // for device ID USE
-#define FWVERSION 0133
+#define FWVERSION 0140
 #define FWVERSION_STRING "0.1.3.3b"
 
 
@@ -84,6 +84,7 @@ typedef volatile const int64_t vsc64;
 
 //KeyPad
 #define MULTIPRESS 10 //Key Press Process At Once
-#define MULTITAP_THRESHOLD 250
+#define HOLD_THRESHOLD 250
+#define MULTITAP_THRESHOLD 150
 
 #endif

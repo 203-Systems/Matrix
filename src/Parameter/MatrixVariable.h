@@ -38,8 +38,10 @@ extern u32 fn_keymap_idle_color[5][2][XSIZE];
 extern u32 fn_keymap_active_color[5][2][XSIZE];
 
 extern u8 user1_keymap_optimized[64];
+
 //TouchBar
-//extern u8 touch_sensitive;
+extern s16 touch_threshold;
+extern u8 touch_keymap[5][8];
 
 //Sysex
 extern u8 rotation;

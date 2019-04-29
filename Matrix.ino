@@ -24,6 +24,7 @@ NexusRevamped while USB unreconized
 #include "src/HAL/KeyPad.h"
 #include "src/HAL/LED.h"
 #include "src/HAL/Timer.h"
+#include "src/HAL/ADCTouch.h"
 //#include "src/Protocol/USBmidi.h"
 #include "src/Protocol/MIDI.h"
 //#include "src/protocol/M2P.h"
@@ -34,6 +35,7 @@ UI UI;
 MIDI Midi;
 LED LED;
 KeyPad KeyPad;
+ADCTouch TouchBar;
 MicroTimer mainTimer;
 MicroTimer keypadTimer;
 MicroTimer microTimer;
@@ -137,7 +139,28 @@ void readKey()
   }
 }
 
+void readTouch()
+{
+  if(TouchBar.scan())
+  {
+    for(u8 x = 0; x < 8; x++)
+    {
+      switch(TouchBar.changelist[x].kstate)
+      {
+        case IDLE:
+        return;
 
+        case PRESSED:
+        Midi.sentNoteOn(0, touch_keymap[current_keymap][x], 127);
+        break;
+
+        case RELEASED:
+        Midi.sentNoteOff(0, touch_keymap[current_keymap][x], 0);
+        break;
+      }
+    }
+  }
+}
 
 // void factoryTest()
 // {
@@ -184,18 +207,19 @@ void loop()
   if (keypadTimer.tick(keypad_scanrate_micros))
   {
     readKey();
+    readTouch();
   }
 
   if (mainTimer.tick(fps_micros))
   {
     Midi.offScan();
-    #ifdef DEBUG
-    microTimer.recordCurrent();
-    #endif
+    // #ifdef DEBUG
+    // microTimer.recordCurrent();
+    // #endif
     LED.update();
-    #ifdef DEBUG
-    CompositeSerial.println(microTimer.sinceLastTick());
-    #endif
+    // #ifdef DEBUG
+    // CompositeSerial.println(microTimer.sinceLastTick());
+    // #endif
   }
 }
 

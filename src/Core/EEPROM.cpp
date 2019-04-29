@@ -41,6 +41,7 @@ void loadSetting()
   led_color_correction = (EEPROM_USER.read(E_COLOUR_CORRECTION_1) << 16) + EEPROM_USER.read(E_COLOUR_CORRECTION_2);
   led_color_temperture = (EEPROM_USER.read(E_COLOUR_TEMPERTURE_1) << 16) + EEPROM_USER.read(E_COLOUR_TEMPERTURE_2);
   fn_hold = EEPROM_USER.read(E_FN_HOLD);
+  touch_threshold = EEPROM_USER.read(E_TOUCH_THRESHOLD);
 }
 
 void loadKeyMap()
@@ -87,6 +88,7 @@ void saveSetting()
   EEPROM_USER.write(E_CURRENT_KEYMAP, current_keymap);
   EEPROM_USER.write(E_COLOUR_CORRECTION_1, led_color_correction >> 8);
   EEPROM_USER.write(E_COLOUR_CORRECTION_2, led_color_correction & 0xFFFF);
+  EEPROM_USER.write(E_TOUCH_THRESHOLD, touch_threshold);
 }
 
 void saveKeyMap()

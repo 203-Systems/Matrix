@@ -13,7 +13,7 @@ extern bool fn_hold = false;
 extern u8 brightness = 128;
 extern u16 max_mAh = 2000;
 extern u8 brightness_level[8] = {16,32,64,96,128,160,216,255};
-extern u8 fps = 250;
+extern u8 fps = 125;
 extern u32 led_color_temperture = 0xFFFFFFFF;
 
 extern u16 fps_micros = 1000000 / fps;
@@ -439,7 +439,7 @@ extern u8 bottom_led_map [5][NUM_BOTTOM_LEDS] =
 
 
 //KeyPad
-extern u8 keypad_scanrate = 125;
+extern u8 keypad_scanrate = 80;
 
 extern u32 keymap_colour[5] = //Keymap mode color ref in fn menu
 {0x00FF00FF, 0x00FF5400, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF};
@@ -548,8 +548,18 @@ extern u32 fn_keymap_active_color[5][2][XSIZE]
 }};
 
 
-// //TouchBar
-// extern u8 touch_sensitive = 0;
+//TouchBar
+extern s16 touch_threshold = 60;
+extern u8 touch_keymap[5][8] =
+{
+  {100, 101, 102, 103, 104, 105, 106, 107},
+  {89, 79, 69, 59, 49, 39, 29, 19},
+  {100, 101, 102, 103, 104, 105, 106, 107},
+  {100, 101, 102, 103, 104, 105, 106, 107},
+  {100, 101, 102, 103, 104, 105, 106, 107}
+};
+
+
 
 //System
 extern u8 rotation = 0;

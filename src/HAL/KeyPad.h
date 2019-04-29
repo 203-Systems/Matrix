@@ -6,17 +6,14 @@
 #include "../Parameter/MatrixParameter.h"
 #include "../Core/MatrixSystem.h"
 #include "../HAL/Timer.h"
-//#include "MatrixSystem.h"
-//#include "../protocol/MIDI.h"
-//#include <USBComposite.h>
 
-enum KeyState {IDLE, PRESSED, HOLD, RELEASED };
+//enum KeyState {IDLE, PRESSED, HOLD, RELEASED };
 
 struct Key {
   u8 xy = 0;
   s8 velocity = 0;
-  KeyState kstate = IDLE;
-  u32 activedTime = 0;
+  //KeyState kstate = IDLE;
+  u32 activeTime = 0;
   bool changed = false;
 };
 

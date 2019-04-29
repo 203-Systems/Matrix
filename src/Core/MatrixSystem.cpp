@@ -7,6 +7,7 @@ EEPROMClass EEPROM_SYS;
 extern LED LED;
 extern KeyPad KeyPad;
 extern MIDI Midi;
+extern ADCTouch TouchBar;
 
 void setupUSB()
 {
@@ -30,10 +31,8 @@ void setupUSB()
 
   Midi.registerComponent();
 
-  #ifdef DEBUG
   CompositeSerial.registerComponent();
-  #endif
-  
+
   USBComposite.begin();
 
 }
@@ -42,6 +41,7 @@ void setupHardware()
 {
   LED.init();
   KeyPad.init();
+  TouchBar.init();
 }
 
 void bootDevice()
@@ -129,10 +129,17 @@ void setUnipadMode(bool u)
   EEPROM_USER.write(E_UNIPAD_MODE, u);
   unipad_mode = u;
 }
+
 void setFnHold(bool h)
 {
   EEPROM_USER.write(E_FN_HOLD, h);
   fn_hold = h;
+}
+
+void setTouchThreshold(u16 t)
+{
+  EEPROM_USER.write(E_TOUCH_THRESHOLD, t);
+  touch_threshold = t;
 }
 
 void setLedCorrection(u32 c)
@@ -239,6 +246,11 @@ void setLedCorrection(u32 c)
 // }
 
 //special
+void resetTouchBar()
+{
+  TouchBar.init();
+}
+
 
 void rotationCW(u8 r)
 {
@@ -449,8 +461,23 @@ u8 xyReverseRotation(u8 xy, u8 r)
   return xr * 0x10 + yr;
 }
 
-u32 toBrightness(u32 hex, float f)
+u8 touchbarRotate(u8 id)
 {
+  switch(rotation)
+  {
+    case 0:
+    case 1:
+      return id;
+    case 2:
+    case 3:
+      return 7-id;
+  }
+}
+
+u32 toBrightness(u32 hex, float f, bool on)
+{
+  if(on)
+    return hex;
   u8 w = (((hex & 0xFF000000) >> 24) * f);
   u8 r = (((hex & 0x00FF0000) >> 16) * f);
   u8 g = (((hex & 0x0000FF00) >> 8) * f);

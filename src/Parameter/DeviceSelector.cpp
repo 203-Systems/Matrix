@@ -17,18 +17,18 @@ extern u8 si_scan = 0;
 extern u8 fn_pin = 0;
 
 //analog(TouchBar)
-extern u8 analog0 = 0;
-extern u8 analog1 = 0;
-extern u8 analog2 = 0;
-extern u8 analog3 = 0;
-extern u8 analog4 = 0;
-extern u8 analog5 = 0;
-extern u8 analog6 = 0;
-extern u8 analog7 = 0;
-extern u8 analog8 = 0;
-extern u8 analog9 = 0;
-extern u8 analog10 = 0;
-extern u8 analog11 = 0;
+extern u8 analog0 = PA3;
+extern u8 analog1 = PA4;
+extern u8 analog2 = PA5;
+extern u8 analog3 = PA6;
+extern u8 analog4 = PA7;
+extern u8 analog5 = PC4;
+extern u8 analog6 = PC5;
+extern u8 analog7 = PB0;
+extern u8 analog8 = PB1;
+extern u8 analog9 = PA0;
+extern u8 analog10 = PA1;
+extern u8 analog11 = PA2;
 //I2C
 extern u8 i2c_scl = 0;
 extern u8 i2c_sda = 0;
@@ -85,7 +85,7 @@ void loadDeviceConfig()
 
   switch(MATRIX_MODEL)
   {
-    case MXPT: //MXTP
+    case MXPT: //MXPT
 
                           switch(MATRIX_VERSION)
                           {

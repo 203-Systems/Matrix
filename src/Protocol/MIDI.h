@@ -40,8 +40,8 @@ public:
   //bool available();
   //void poll();
 
-  void sentNoteOn(u8 channel, u8 note, u8 velocity);
-  void sentNoteOff(u8 channel, u8 note, u8 velocity);
+  void sentNoteOn(u8 channel, u8 note, u8 velocity = 127);
+  void sentNoteOff(u8 channel, u8 note, u8 velocity = 0);
   // void sendVelocityChange(u8 channel, u8 note, u8 velocity);
   // void sendControlChange(u8 channel, u8 controller, u8 value);
   // void sendProgramChange(u8 channel, u8 program);

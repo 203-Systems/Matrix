@@ -17,6 +17,8 @@ UI::UI()
 void UI::enterFNmenu()
 {
   next_code = 0;
+  konami_progress = 0;
+
   #ifdef DEBUG
   CompositeSerial.println("Enter FN");
   // CompositeSerial.println(BOOTLOADER_VERSION);
@@ -36,6 +38,7 @@ void UI::fnMenu()
   #ifdef DEBUG
   CompositeSerial.println("FN");
   #endif
+  UI::fnRender();
   while(1)
   {
     if(midi_enable);
@@ -45,7 +48,7 @@ void UI::fnMenu()
 
     if(uiTimer.tick(1000/fps))
     {
-      UI::fnRender();
+      //
 
       if(KeyPad.scan())
       {
@@ -62,13 +65,14 @@ void UI::fnMenu()
             UI::exitFNmenu();
             return;
           }
-          else if(!KeyPad.fn && !fn_hold  && (KeyPad.fnTimer.isLonger(MULTITAP_THRESHOLD)|| hadAction )) //if fn off and longer then threshold, will count as hold, release to back to main menu
+          else if(!KeyPad.fn && !fn_hold  && (KeyPad.fnTimer.isLonger(HOLD_THRESHOLD)|| hadAction )) //if fn off and longer then threshold, will count as hold, release to back to main menu
           {
             UI::exitFNmenu();
             return;
           }
         }
-        fnKeyAction();
+        UI::fnKeyAction();
+        UI::fnRender();
       }
     }
   }
@@ -86,11 +90,12 @@ void UI::fnKeyAction()
 {
   //flags
   bool flag_rotated = false;
+  bool konami = false;
 
   for(int i = 0; i < MULTIPRESS; i++)
   {
     if(KeyPad.list[i].velocity == -1)
-    return;
+    break;
 
     //hadAction = true;
 
@@ -106,6 +111,7 @@ void UI::fnKeyAction()
       {
         Midi.sentNoteOff(0, fn_keymap[current_keymap][xytoxy(KeyPad.list[i].xy).y - 6][xytoxy(KeyPad.list[i].xy).x], 0);
       }
+      konami = true; //So off don't reset it.
     }
 
     if(KeyPad.list[i].velocity > 0)
@@ -139,10 +145,20 @@ void UI::fnKeyAction()
         case 0x32:
         case 0x42:
         LED.fill(0); //Clean Canvas
+        if(konami_progress < 2)
+        {
+          konami_progress++;
+          konami = true;
+        }
         break;
         case 0x53:
         case 0x54:
-        if(!flag_rotated)
+        if(konami_progress == 5 || konami_progress == 7)
+        {
+          konami_progress++;
+          konami = true;
+        }
+        else if(!flag_rotated)
         {
           LED.fill(0, true);
           rotationCW(1); //90
@@ -151,7 +167,12 @@ void UI::fnKeyAction()
         break;
         case 0x35:
         case 0x45:
-        if(!flag_rotated)
+        if(konami_progress == 2 || konami_progress == 3)
+        {
+          konami_progress++;
+          konami = true;
+        }
+        else if(!flag_rotated)
         {
           LED.fill(0, true);
           rotationCW(2); //190
@@ -160,7 +181,12 @@ void UI::fnKeyAction()
         break;
         case 0x23:
         case 0x24:
-        if(!flag_rotated)
+        if(konami_progress == 4 || konami_progress == 6)
+        {
+          konami_progress++;
+          konami = true;
+        }
+        else if(!flag_rotated)
         {
           LED.fill(0, true);
           rotationCW(3); //270
@@ -209,7 +235,17 @@ void UI::fnKeyAction()
         // break;
 
         case 0x05: //DFU
-        LED.fill(0xFF0000, true);
+        LED.fill(0,true);
+        LED.setXYHEX(0x32,0xFF0000, true);
+        LED.setXYHEX(0x42,0xFF0000, true);
+        LED.setXYHEX(0x23,0xFF0000, true);
+        LED.setXYHEX(0x33,0xFF0000, true);
+        LED.setXYHEX(0x43,0xFF0000, true);
+        LED.setXYHEX(0x53,0xFF0000, true);
+        LED.setXYHEX(0x34,0xFF0000, true);
+        LED.setXYHEX(0x44,0xFF0000, true);
+        LED.setXYHEX(0x35,0xFF0000, true);
+        LED.setXYHEX(0x45,0xFF0000, true);
         LED.update();
         enterBootloader();
         break;
@@ -220,39 +256,84 @@ void UI::fnKeyAction()
         // resetDevice();
         // reset();
         // break;
-
-        case 0x75:
-        setDeviceID(UI::numSelector8bit(device_id, 0x0000FFAA, 0x00FFFFFF, true));
-        break;
-
-        case 0x74:
-        LED.setColourCorrection(0xFFFFFF);
-        setLedCorrection(UI::numSelectorRGB(led_color_correction, true));
-        break;
-
-        case 0x73:
-        setFnHold(!fn_hold);
-        break;
-
-
-        // case 0x61: //RESET
-        // LED.fill(0, true);
-        // LED.update();
-        // reset();
-        // break;
-
-        // case 0x75:   //ERROR CODE
-        // CompositeSerial.print("Code N");
-        // CompositeSerial.print(next_code);
-        // CompositeSerial.print(" ");
-        // CompositeSerial.println(report_code[next_code]);
-        // UI::numSelector8bit(report_code[next_code],0x00FF0000, true);
-        // next_code ++;
-        // break;
       }
+
+      if(konami_progress >= 8)
+      {
+        switch(KeyPad.list[i].xy)
+        {
+          case 0x16:
+          case 0x17:
+          case 0x26:
+          case 0x27:
+          if(konami_progress == 9)
+          {
+            konami_progress = 0; //Tetris Entence Point
+          }
+          break;
+          case 0x56:
+          case 0x57:
+          case 0x66:
+          case 0x67:
+          if(konami_progress == 8)
+          {
+            konami_progress++;
+            konami = true;
+          }
+          break;
+        }
+      }
+      else
+      {
+        switch(KeyPad.list[i].xy)
+        {
+          case 0x75:
+          setDeviceID(UI::numSelector8bit(device_id, 0x0000FFAA, 0x00FFFFFF, true));
+          break;
+
+          case 0x74:
+          LED.setColourCorrection(0xFFFFFF);
+          setLedCorrection(UI::numSelectorRGB(led_color_correction, true));
+          break;
+
+          case 0x73:
+          setFnHold(!fn_hold);
+          break;
+
+          case 0x65:
+          setTouchThreshold(UI::numSelector8bit(touch_threshold, 0x004000AA, 0x00FFFFFF, true));
+          resetTouchBar();
+          break;
+        }
+      }
+
+
+      // case 0x61: //RESET
+      // LED.fill(0, true);
+      // LED.update();
+      // reset();
+      // break;
+
+      // case 0x75:   //ERROR CODE
+      // CompositeSerial.print("Code N");
+      // CompositeSerial.print(next_code);
+      // CompositeSerial.print(" ");
+      // CompositeSerial.println(report_code[next_code]);
+      // UI::numSelector8bit(report_code[next_code],0x00FF0000, true);
+      // next_code ++;
+      // break;
     }
   }
-  fnRender();
+
+  if(konami == false)
+  {
+    konami_progress = 0;
+  }
+
+//  #ifdef DEBUG
+  CompositeSerial.print("Konami: ");
+  CompositeSerial.println(konami_progress);
+//  #endif
 }
 
 void UI::fnRender()
@@ -260,6 +341,8 @@ void UI::fnRender()
   // #ifdef DEBUG
   // CompositeSerial.println("Render");
   // #endif
+  LED.fill(0, true);
+
   //brightness
   LED.setXYHEX(0x33, 0xFFFFFFFF, true, true);
   LED.setXYHEX(0x34, 0xFFFFFFFF, true, true);
@@ -314,6 +397,7 @@ void UI::fnRender()
   LED.setXYHEX(0x05, 0x00FF0000, true, true); //DFU
   LED.setXYHEX(0x74, 0x00FFFFFF, true, true); //White
   LED.setXYHEX(0x75, 0x0000FFAA, true, true); //Device ID
+  LED.setXYHEX(0x65, 0x004000FF, true, true); //TouchBar_threshold
   //LED.setXYHEX(0x60, 0x00FFFF00, true, true); //reset device
   //LED.setXYHEX(0x61, 0x0000FF66, true, true); //reboot
 
@@ -359,17 +443,31 @@ void UI::fnRender()
     break;
   }
 
-  for(u8 y = 6; y < 8; y++)
+  if(konami_progress >= 8)
   {
-    for(u8 x = 0; x < 8; x++)
+    LED.setXYHEX(0x16, 0xFF0000, true, true);
+    LED.setXYHEX(0x17, 0xFF0000, true, true);
+    LED.setXYHEX(0x26, 0xFF0000, true, true);
+    LED.setXYHEX(0x27, 0xFF0000, true, true);
+    LED.setXYHEX(0x56, 0xFF0000, true, true);
+    LED.setXYHEX(0x57, 0xFF0000, true, true);
+    LED.setXYHEX(0x66, 0xFF0000, true, true);
+    LED.setXYHEX(0x67, 0xFF0000, true, true);
+  }
+  else
+  {
+    for(u8 y = 6; y < 8; y++)
     {
-      if(KeyPad.checkXY(x, y))
+      for(u8 x = 0; x < 8; x++)
       {
-        LED.setXYHEX(xytoxy(x, y), fn_keymap_active_color[current_keymap][y - 6][x], true, true);
-      }
-      else
-      {
-        LED.setXYHEX(xytoxy(x, y), fn_keymap_idle_color[current_keymap][y - 6][x], true, true);
+        if(KeyPad.checkXY(x, y))
+        {
+          LED.setXYHEX(xytoxy(x, y), fn_keymap_active_color[current_keymap][y - 6][x], true, true);
+        }
+        else
+        {
+          LED.setXYHEX(xytoxy(x, y), fn_keymap_idle_color[current_keymap][y - 6][x], true, true);
+        }
       }
     }
   }
@@ -462,25 +560,25 @@ u32 UI::numSelectorRGB(u32 colour, bool ignore_gamma /* = false */)
   return colour;
 }
 
-u32 UI::numSelectorWRGB(u32 colour, bool ignore_gamma /* = false */)
-{
-
-}
-
-void UI::showDeviceInfo()
-{
-
-}
-
-void UI::showASCII(char ascii[], u32 colour, bool ignore_gamma /* = false */)
-{
-
-}
-
-void UI::playAnimation(char animation[])
-{
-
-}
+// u32 UI::numSelectorWRGB(u32 colour, bool ignore_gamma /* = false */)
+// {
+//
+// }
+//
+// void UI::showDeviceInfo()
+// {
+//
+// }
+//
+// void UI::showASCII(char ascii[], u32 colour, bool ignore_gamma /* = false */)
+// {
+//
+// }
+//
+// void UI::playAnimation(char animation[])
+// {
+//
+// }
 
 // void UI::scrollText(char ascii[], u8 xy, u8 speed, u32 colour, bool ignore_gamma /* = false */)
 // {
