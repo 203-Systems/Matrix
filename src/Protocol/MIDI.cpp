@@ -94,7 +94,7 @@ void MIDI::noteOff(u8 channel, u8 note, u8 velocity)
   CompositeSerial.println(velocity);
   #endif
 
-  offMap[note] = 2;
+  offMap[note] = 5;
   // //BottomLED
   // for(u8 i = 0;i < NUM_BOTTOM_LEDS; i++)
   // {

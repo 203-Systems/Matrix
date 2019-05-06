@@ -330,10 +330,10 @@ void UI::fnKeyAction()
     konami_progress = 0;
   }
 
-//  #ifdef DEBUG
+  #ifdef DEBUG
   CompositeSerial.print("Konami: ");
   CompositeSerial.println(konami_progress);
-//  #endif
+  #endif
 }
 
 void UI::fnRender()
