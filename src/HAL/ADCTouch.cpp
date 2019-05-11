@@ -36,7 +36,7 @@ bool ADCTouch::scan()
   for(u8 x = 0; x < 8; x++)
   {
     int keyReading = touchbar_buttons[x].read();
-    bool keyState = keyReading > touch_threshold;
+    bool keyState = keyReading > touch_threshold || keyReading < touch_threshold * -1 ;
 
     #ifdef DEBUG
     CompositeSerial.print(touchbar_buttons[x].read());

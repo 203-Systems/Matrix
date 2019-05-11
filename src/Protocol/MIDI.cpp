@@ -94,7 +94,36 @@ void MIDI::noteOff(u8 channel, u8 note, u8 velocity)
   CompositeSerial.println(velocity);
   #endif
 
-  offMap[note] = 5;
+  if(stfu)
+  {
+    offMap[note] = stfu;
+  }
+  else
+  {
+    switch(current_keymap)
+    {
+      case 0:
+      if(note > 35 && note < 100 )
+      LED.offXY(user1_keymap_optimized[note - 36]);
+      break;
+      case 1:
+      if(note % 10 - 1 < 8)
+      LED.offXY(xytoxy(note % 10 - 1, 8 - note/10));
+      break;
+      case 2:
+      case 3:
+      case 4:
+      for(u8 y = 0; y < YSIZE; y++)
+      {
+        for(u8 x = 0; x < XSIZE; x++)
+        {
+          if(note == keymap[current_keymap][y][x])
+          LED.offXY(xytoxy(x, y));
+        }
+      }
+      break;
+    }
+  }
   // //BottomLED
   // for(u8 i = 0;i < NUM_BOTTOM_LEDS; i++)
   // {
@@ -269,35 +298,38 @@ void MIDI::sentNoteOff(u8 channel, u8 note, u8 velocity)
 
 void MIDI::offScan()
 {
-  for(u8 note = 0; note < 128; note ++)
+  if(stfu)
   {
-    if(offMap[note] != -1)
+    for(u8 note = 0; note < 128; note ++)
     {
-      if(offMap[note] == 0)
-      switch(current_keymap)
+      if(offMap[note] != -1)
       {
-        case 0:
-        if(note > 35 && note < 100 )
-        LED.offXY(user1_keymap_optimized[note - 36]);
-        break;
-        case 1:
-        if(note % 10 - 1 < 8)
-        LED.offXY(xytoxy(note % 10 - 1, 8 - note/10));
-        break;
-        case 2:
-        case 3:
-        case 4:
-        for(u8 y = 0; y < YSIZE; y++)
+        if(offMap[note] == 0)
+        switch(current_keymap)
         {
-          for(u8 x = 0; x < XSIZE; x++)
+          case 0:
+          if(note > 35 && note < 100 )
+          LED.offXY(user1_keymap_optimized[note - 36]);
+          break;
+          case 1:
+          if(note % 10 - 1 < 8)
+          LED.offXY(xytoxy(note % 10 - 1, 8 - note/10));
+          break;
+          case 2:
+          case 3:
+          case 4:
+          for(u8 y = 0; y < YSIZE; y++)
           {
-            if(note == keymap[current_keymap][y][x])
-            LED.offXY(xytoxy(x, y));
+            for(u8 x = 0; x < XSIZE; x++)
+            {
+              if(note == keymap[current_keymap][y][x])
+              LED.offXY(xytoxy(x, y));
+            }
           }
+          break;
         }
-        break;
+        offMap[note] --;
       }
-      offMap[note] --;
     }
   }
 }

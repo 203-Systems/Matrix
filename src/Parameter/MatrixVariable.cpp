@@ -13,12 +13,12 @@ extern bool fn_hold = false;
 extern u8 brightness = 128;
 extern u16 max_mAh = 2000;
 extern u8 brightness_level[8] = {16,32,64,96,128,160,216,255};
-extern u8 fps = 200;
+extern u8 fps = 125;
 extern u32 led_color_temperture = 0xFFFFFFFF;
 
 extern u16 fps_micros = 1000000 / fps;
 
-extern u8 keypad_scanrate = 50;
+extern u8 keypad_scanrate = 60;
 extern u16 keypad_scanrate_micros = 1000000 / keypad_scanrate;
 
 extern u32 palette[4][128] =     //WRGB Colour Palette
@@ -570,6 +570,7 @@ extern bool midi_enable = true;
 extern bool m2p_enable = false;
 extern bool powercord_enable = false;
 extern bool massage_return = false;
+extern u8 stfu = 3;
 
 extern u8 report_code[10] = {1,1,1,1,1,1,1,1,1,1};
 extern u8 available_report_code = 0;

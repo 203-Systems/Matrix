@@ -51,6 +51,7 @@ extern bool midi_enable;
 extern bool m2p_enable;
 extern bool powercord_enable;
 extern bool massage_return;
+extern u8 stfu;
 
 extern u8 report_code[10];
 extern u8 available_report_code;

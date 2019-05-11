@@ -207,7 +207,7 @@ void loop()
   if (keypadTimer.tick(keypad_scanrate_micros))
   {
     readKey();
-    readTouch();
+    //readTouch();
   }
 
   if (mainTimer.tick(fps_micros))
