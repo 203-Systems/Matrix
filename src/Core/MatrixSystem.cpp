@@ -30,8 +30,10 @@ void setupUSB()
   USBComposite.setSerialString(getDeviceIDString());
 
   Midi.registerComponent();
+  Midi.setRXPacketSize(256);
+  Midi.setTXPacketSize(64);
 
-  CompositeSerial.registerComponent();
+  //CompositeSerial.registerComponent();
 
   USBComposite.begin();
 
@@ -42,6 +44,7 @@ void setupHardware()
   LED.init();
   KeyPad.init();
   TouchBar.init();
+  applyColourCorrectionToPalette();
 }
 
 void bootDevice()
@@ -71,6 +74,18 @@ void setDeviceID(u8 id)
 
 void enterBootloader()
 {
+  LED.fill(0,true);
+  LED.setXYHEX(0x32,0xFF0000, true);
+  LED.setXYHEX(0x42,0xFF0000, true);
+  LED.setXYHEX(0x23,0xFF0000, true);
+  LED.setXYHEX(0x33,0xFF0000, true);
+  LED.setXYHEX(0x43,0xFF0000, true);
+  LED.setXYHEX(0x53,0xFF0000, true);
+  LED.setXYHEX(0x34,0xFF0000, true);
+  LED.setXYHEX(0x44,0xFF0000, true);
+  LED.setXYHEX(0x35,0xFF0000, true);
+  LED.setXYHEX(0x45,0xFF0000, true);
+  LED.update();
   bkp_init();
   bkp_enable_writes();
   bkp_write(10, 0x424C);
@@ -90,6 +105,34 @@ void formatEEPROM()
   // SerialComposite.print("EEPROM Format info :")
   EEPROM_USER.format();
   EEPROM_PALETTE.format();
+}
+
+void applyColourCorrectionToPalette()
+{
+  cW = (led_color_correction & 0xFF000000) >> 24;
+  cR = (led_color_correction & 0xFF0000) >> 16;
+  cG = (led_color_correction & 0xFF00) >> 8;
+  cB = led_color_correction & 0xFF;
+  for(u8 p = 0; p < 4; p++)
+  {
+    for(u8 i = 0; i < 128; i++)
+    {
+      palette[p][i] = applyColourCorrection(palette[p][i]);
+    }
+  }
+}
+
+u32 applyColourCorrection(u32 input)
+{
+  u8 pW = (input & 0xFF000000) >> 24;
+  u8 pR = (input & 0xFF0000) >> 16;
+  u8 pG = (input & 0xFF00) >> 8;
+  u8 pB = input & 0xFF;
+  pW = scale8_video(pW, cW);
+  pR = scale8_video(pR, cR);
+  pG = scale8_video(pG, cG);
+  pB = scale8_video(pB, cB);
+  return pW * 0x1000000 + pR * 0x10000 + pG * 0x100 + pB;
 }
 
 void setgamma(bool g)
@@ -144,13 +187,13 @@ void setTouchThreshold(u16 t)
 
 void setLedCorrection(u32 c)
 {
-    EEPROM_USER.write(E_COLOUR_CORRECTION_1, c >> 16);
-    EEPROM_USER.write(E_COLOUR_CORRECTION_2, c & 0xFFFF);
-    LED.setColourCorrection(c);
-    led_color_correction = c;
-    #ifdef DEBUG
-    CompositeSerial.print("Set Colour Correction ");CompositeSerial.println(c);
-    #endif
+  EEPROM_USER.write(E_COLOUR_CORRECTION_1, c >> 16);
+  EEPROM_USER.write(E_COLOUR_CORRECTION_2, c & 0xFFFF);
+  //LED.setColourCorrection(c);
+  led_color_correction = c;
+  #ifdef DEBUG
+  CompositeSerial.print("Set Colour Correction ");CompositeSerial.println(c);
+  #endif
 }
 //Sysex get
 // void getDeviceInfo()
@@ -467,17 +510,17 @@ u8 touchbarRotate(u8 id)
   {
     case 0:
     case 1:
-      return id;
+    return id;
     case 2:
     case 3:
-      return 7-id;
+    return 7-id;
   }
 }
 
 u32 toBrightness(u32 hex, float f, bool on)
 {
   if(on)
-    return hex;
+  return hex;
   u8 w = (((hex & 0xFF000000) >> 24) * f);
   u8 r = (((hex & 0x00FF0000) >> 16) * f);
   u8 g = (((hex & 0x0000FF00) >> 8) * f);
@@ -498,5 +541,5 @@ void recordReportCode(u8 code)
   report_code[available_report_code] = code;
   available_report_code ++;
   if(available_report_code ==  10)
-    available_report_code = 0;
+  available_report_code = 0;
 }

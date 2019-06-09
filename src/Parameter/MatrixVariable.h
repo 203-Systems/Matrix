@@ -36,6 +36,7 @@ extern u8 bottom_led_map [5][NUM_BOTTOM_LEDS];
 extern u8 fn_keymap[5][2][XSIZE];
 extern u32 fn_keymap_idle_color[5][2][XSIZE];
 extern u32 fn_keymap_active_color[5][2][XSIZE];
+extern u8 keymap_fn [5];
 
 extern u8 user1_keymap_optimized[64];
 
@@ -52,6 +53,11 @@ extern bool m2p_enable;
 extern bool powercord_enable;
 extern bool massage_return;
 extern u8 stfu;
+
+extern u8 cW;
+extern u8 cR;
+extern u8 cG;
+extern u8 cB;
 
 extern u8 report_code[10];
 extern u8 available_report_code;

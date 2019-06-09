@@ -43,6 +43,13 @@ private:
   void exitFNmenu();
   void fnKeyAction();
   void fnRender();
+
+  void enterSettingMenu();
+  void settingMenu();
+  void exitSettingMenu();
+  void settingKeyAction();
+  void settingRender();
+
   Timer uiTimer;
   bool hadAction = false;
   u8 brightness_cache;

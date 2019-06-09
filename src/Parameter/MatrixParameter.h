@@ -48,15 +48,15 @@ typedef volatile const int64_t vsc64;
 //#define DEBUG-
 
 #define DEVICENAME "Matrix"
-#define __RET6__
+//#define __RET6__
 #define MAUNFACTURERNAME "203 Industries"
 #define SERIALSTRING "Prototype"
 #define VID  0x0203
 #define VID2 0x0203 // for device ID USE
 #define PID  0x1000
 #define PID2 0x1000 // for device ID USE
-#define FWVERSION 0140
-#define FWVERSION_STRING "0.1.3.3b"
+#define FWVERSION 0500
+#define FWVERSION_STRING "0.5.0.0b"
 
 
 
@@ -75,7 +75,7 @@ typedef volatile const int64_t vsc64;
 //LED
 #define NUM_LEDS 64
 #define NUM_BOTTOM_LEDS 36
-#define NUM_TOTAL_LEDS 100   //64+32
+#define NUM_TOTAL_LEDS 64   //64+32
 #define NUM_POWERCORD_LEDS 120
 #define LOWSTATEBRIGHTNESS 0.4
 
@@ -83,7 +83,7 @@ typedef volatile const int64_t vsc64;
 #define YSIZE 8 // need tp change data type in keypad.h
 
 //KeyPad
-#define MULTIPRESS 10 //Key Press Process At Once
+#define MULTIPRESS 10 //Key Pre-ss Process At Once
 #define HOLD_THRESHOLD 250
 #define MULTITAP_THRESHOLD 150
 

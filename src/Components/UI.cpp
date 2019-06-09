@@ -30,7 +30,7 @@ void UI::enterFNmenu()
 
   LED.enableOverlayMode();
   hadAction = false;
-  fnMenu();
+  UI::fnMenu();
 }
 
 void UI::fnMenu()
@@ -120,10 +120,12 @@ void UI::fnKeyAction()
       CompositeSerial.print("ReadKey ");
       CompositeSerial.println(KeyPad.list[i].xy, HEX);
       #endif
+
       if(xytoxy(KeyPad.list[i].xy).y > 5)
       {
         Midi.sentNoteOn(0, fn_keymap[current_keymap][xytoxy(KeyPad.list[i].xy).y - 6][xytoxy(KeyPad.list[i].xy).x], 127);
       }
+
       switch(KeyPad.list[i].xy)
       {
         //Brightness
@@ -194,24 +196,29 @@ void UI::fnKeyAction()
         }
         break;
 
-        case 0x10:
+        case 0x05:
+        UI::enterSettingMenu();
+
+        case 0x20:
         setCurrentKeyMap(0);
         break;
-        case 0x20:
+        case 0x30:
         setCurrentKeyMap(1);
         break;
-        case 0x30:
+        case 0x40:
         setCurrentKeyMap(2);
         break;
-        case 0x40:
-        setCurrentKeyMap(3);
-        break;
-        case 0x50:
-        setCurrentKeyMap(4);
-        break;
+        // case 0x40:
+        // setCurrentKeyMap(3);
+        // break;
+        // case 0x50:
+        // setCurrentKeyMap(4);
+        // break;
 
-        case 0x60:
+        case 0x50:
         setUnipadMode(!unipad_mode);
+        if(unipad_mode)
+        setCurrentKeyMap(1);
         break;
 
         // //midi_enable
@@ -223,32 +230,6 @@ void UI::fnKeyAction()
         // case 0x01:
         // m2p_enable = !m2p_enable;
         // break;
-        //
-        // //powercord_enable
-        // case 0x67:
-        // powercord_enable = !powercord_enable;
-        // break;
-
-        //gamma_enable
-        // case 0x75:
-        // gamma_enable = !gamma_enable;
-        // break;
-
-        case 0x05: //DFU
-        LED.fill(0,true);
-        LED.setXYHEX(0x32,0xFF0000, true);
-        LED.setXYHEX(0x42,0xFF0000, true);
-        LED.setXYHEX(0x23,0xFF0000, true);
-        LED.setXYHEX(0x33,0xFF0000, true);
-        LED.setXYHEX(0x43,0xFF0000, true);
-        LED.setXYHEX(0x53,0xFF0000, true);
-        LED.setXYHEX(0x34,0xFF0000, true);
-        LED.setXYHEX(0x44,0xFF0000, true);
-        LED.setXYHEX(0x35,0xFF0000, true);
-        LED.setXYHEX(0x45,0xFF0000, true);
-        LED.update();
-        enterBootloader();
-        break;
 
         // case 0x60:
         // LED.fill(0xFFFF00, true);
@@ -256,6 +237,10 @@ void UI::fnKeyAction()
         // resetDevice();
         // reset();
         // break;
+
+        case 0x75:
+        setFnHold(!fn_hold);
+        break;
       }
 
       if(konami_progress >= 8)
@@ -287,23 +272,12 @@ void UI::fnKeyAction()
       {
         switch(KeyPad.list[i].xy)
         {
-          case 0x75:
-          setDeviceID(UI::numSelector8bit(device_id, 0x0000FFAA, 0x00FFFFFF, true));
-          break;
 
-          case 0x74:
-          LED.setColourCorrection(0xFFFFFF);
-          setLedCorrection(UI::numSelectorRGB(led_color_correction, true));
-          break;
 
-          case 0x73:
-          setFnHold(!fn_hold);
-          break;
-
-          case 0x65:
-          setTouchThreshold(UI::numSelector8bit(touch_threshold, 0x004000AA, 0x00FFFFFF, true));
-          resetTouchBar();
-          break;
+          // case 0x65:
+          // setTouchThreshold(UI::numSelector8bit(touch_threshold, 0x004000AA, 0x00FFFFFF, true));
+          // resetTouchBar();
+          // break;
         }
       }
 
@@ -359,6 +333,9 @@ void UI::fnRender()
   LED.setXYHEX(0x35, toBrightness(0x0000FF00, LOWSTATEBRIGHTNESS), true, true);
   LED.setXYHEX(0x45, toBrightness(0x0000FF00, LOWSTATEBRIGHTNESS), true, true);
 
+  //Menu
+  LED.setXYHEX(0x05, 0xFFFFFFFF, true, true);
+
   // //Midi enable0x
   // if(midi_enable)
   // {
@@ -394,53 +371,50 @@ void UI::fnRender()
   // LED.setXYHEX(0x77, 0x00FFFFFF, true); //Setting
   // LED.setXYHEX(0x07, 0x00FFFFFF, true); //AppLauncher
   // LED.setXYHEX(0x17, 0x00FFFFFF, true); //Text Selctor
-  LED.setXYHEX(0x05, 0x00FF0000, true, true); //DFU
-  LED.setXYHEX(0x74, 0x00FFFFFF, true, true); //White
-  LED.setXYHEX(0x75, 0x0000FFAA, true, true); //Device ID
-  LED.setXYHEX(0x65, 0x004000FF, true, true); //TouchBar_threshold
+  //LED.setXYHEX(0x65, 0x004000FF, true, true); //TouchBar_threshold
   //LED.setXYHEX(0x60, 0x00FFFF00, true, true); //reset device
   //LED.setXYHEX(0x61, 0x0000FF66, true, true); //reboot
 
-  LED.setXYHEX(0x10, toBrightness(keymap_colour[0], LOWSTATEBRIGHTNESS), true, true); //Keymap selector 1
-  LED.setXYHEX(0x20, toBrightness(keymap_colour[1], LOWSTATEBRIGHTNESS), true, true); //Keymap selector 1
-  LED.setXYHEX(0x30, toBrightness(keymap_colour[2], LOWSTATEBRIGHTNESS), true, true); //Keymap selector 1
-  LED.setXYHEX(0x40, toBrightness(keymap_colour[3], LOWSTATEBRIGHTNESS), true, true); //Keymap selector 1
-  LED.setXYHEX(0x50, toBrightness(keymap_colour[4], LOWSTATEBRIGHTNESS), true, true); //Keymap selector 1
+  LED.setXYHEX(0x20, toBrightness(keymap_colour[0], LOWSTATEBRIGHTNESS), true, true); //Keymap selector 1
+  LED.setXYHEX(0x30, toBrightness(keymap_colour[1], LOWSTATEBRIGHTNESS), true, true); //Keymap selector 1
+  LED.setXYHEX(0x40, toBrightness(keymap_colour[2], LOWSTATEBRIGHTNESS), true, true); //Keymap selector 1
+  //LED.setXYHEX(0x40, toBrightness(keymap_colour[3], LOWSTATEBRIGHTNESS), true, true); //Keymap selector 1
+  //LED.setXYHEX(0x50, toBrightness(keymap_colour[4], LOWSTATEBRIGHTNESS), true, true); //Keymap selector 1
   if(unipad_mode)
   {
-    LED.setXYHEX(0x60, 0xFFFF00, true, true);
+    LED.setXYHEX(0x50, 0xFFFF00, true, true);
   }
   else
   {
-    LED.setXYHEX(0x60, toBrightness(0xFFFF00, LOWSTATEBRIGHTNESS), true, true);
+    LED.setXYHEX(0x50, toBrightness(0xFFFF00, LOWSTATEBRIGHTNESS), true, true);
   }
 
   if(fn_hold)
   {
-    LED.setXYHEX(0x73, 0xA0FF00, true, true);
+    LED.setXYHEX(0x75, 0xA0FF00, true, true);
   }
   else
   {
-    LED.setXYHEX(0x73, toBrightness(0xA0FF00, LOWSTATEBRIGHTNESS), true, true);
+    LED.setXYHEX(0x75, toBrightness(0xA0FF00, LOWSTATEBRIGHTNESS), true, true);
   }
 
   switch(current_keymap)
   {
     case 0:
-    LED.setXYHEX(0x10, keymap_colour[0], true, true);
+    LED.setXYHEX(0x20, keymap_colour[0], true, true);
     break;
     case 1:
-    LED.setXYHEX(0x20, keymap_colour[1], true, true);
+    LED.setXYHEX(0x30, keymap_colour[1], true, true);
     break;
     case 2:
-    LED.setXYHEX(0x30, keymap_colour[2], true, true);
+    LED.setXYHEX(0x40, keymap_colour[2], true, true);
     break;
-    case 3:
-    LED.setXYHEX(0x40, keymap_colour[3], true, true);
-    break;
-    case 4:
-    LED.setXYHEX(0x50, keymap_colour[4], true, true);
-    break;
+    // case 3:
+    // LED.setXYHEX(0x40, keymap_colour[3], true, true);
+    // break;
+    // case 4:
+    // LED.setXYHEX(0x50, keymap_colour[4], true, true);
+    // break;
   }
 
   if(konami_progress >= 8)
@@ -477,6 +451,82 @@ void UI::fnRender()
 
   LED.update();
 }
+
+void UI::enterSettingMenu()
+{
+  LED.fill(0, true);
+  LED.update();
+  UI::settingMenu();
+}
+
+void UI::settingMenu()
+{
+  UI::settingRender();
+  while(1)
+  {
+    if(midi_enable);
+    Midi.poll();
+    // if (m2p_enable)
+    // CDC.Poll();
+
+    if(uiTimer.tick(1000/fps))
+    {
+      if(KeyPad.scan())
+      {
+        if(KeyPad.fnChanged)
+        {
+          // if(KeyPad.timesFNpressed > 9)
+          // UI::easterEgg();
+
+          if(KeyPad.fn)
+          {
+            UI::exitSettingMenu();
+            return;
+          }
+        }
+        UI::settingKeyAction();
+        UI::settingRender();
+      }
+    }
+  }
+}
+
+void UI::exitSettingMenu()
+{
+}
+
+
+void UI::settingKeyAction()
+{
+  for(int i = 0; i < MULTIPRESS; i++)
+  {
+    if(KeyPad.list[i].velocity == -1)
+    break;
+
+    switch(KeyPad.list[i].xy)
+    {
+      case 0x07: //DFU
+      enterBootloader();
+      break;
+      // case 0x67:
+      // LED.setColourCorrection(0xFFFFFF);
+      // setLedCorrection(UI::numSelectorRGB(led_color_correction, true));
+      // break;
+      case 0x77:
+      setDeviceID(UI::numSelector8bit(device_id, 0x0000FFAA, 0x00FFFFFF, true));
+      break;
+    }
+  }
+}
+
+void UI::settingRender()
+{
+  LED.setXYHEX(0x07, 0x00FF0000, true, true); //DFU
+  //LED.setXYHEX(0x67, 0x00FFFFFF, true, true); //White
+  LED.setXYHEX(0x77, 0x0000FFAA, true, true); //Device ID
+  LED.update();
+}
+
 
 u8 UI::numSelector8bit(u8 currentNum, u32 colour, u32 sec_colour, bool ignore_gamma /* = false */)
 {

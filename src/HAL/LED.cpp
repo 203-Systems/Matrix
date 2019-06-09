@@ -27,12 +27,13 @@ void LED::init()
     FastLED.addLeds<NEOPIXEL, PC7>(leds, NUM_TOTAL_LEDS);
     break;
   }
-
+  FastLED.setDither(0);
   FastLED.setBrightness(brightness);
-  FastLED.setCorrection(led_color_correction);
+  //FastLED.setCorrection(led_color_correction);
+
   //FastLED.setTemperature(0xFFFFFFFF);
   //FastLED.setMaxRefreshRate(fps);
-  LED::dynamicBrightness(max_mAh);
+  //LED::dynamicBrightness(max_mAh);
 }
 
 void LED::setBrightness(u8 b)
@@ -54,6 +55,7 @@ void LED::dynamicBrightness(u16 mah)
 void LED::fill(u32 WRGB, bool overlay /*= false*/)
 {
   //fill_solid(leds,NUM_TOTAL_LEDS,CRGB::Black);
+  WRGB = applyColourCorrection(WRGB);
   for(int i = 0; i < NUM_TOTAL_LEDS; i++)
   {
     if(!overlay_mode || overlay)
@@ -138,6 +140,8 @@ void LED::setHEX(s16 index, u32 hex, bool overlay /*= false*/, bool ignore_gamma
   if(index < 0)
   return;
 
+  hex = applyColourCorrection(hex);
+
   if(!overlay_mode || overlay)
   {
     if(gamma_enable && !ignore_gamma)
@@ -203,7 +207,7 @@ void LED::setXYHEX(u8 xy, u32 hex, bool overlay /*= false*/, bool ignore_gamma /
   // CompositeSerial.print("\t");
   // CompositeSerial.println(hex, HEX);
   // #endif
-
+  hex = applyColourCorrection(hex);
   if(!overlay_mode || overlay)
   {
     if(gamma_enable && !ignore_gamma)

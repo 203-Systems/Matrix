@@ -36,9 +36,10 @@ MIDI Midi;
 LED LED;
 KeyPad KeyPad;
 ADCTouch TouchBar;
-MicroTimer mainTimer;
-MicroTimer keypadTimer;
+Timer mainTimer;
+Timer keypadTimer;
 MicroTimer microTimer;
+bool scanKeypad = true;
 
 void setup()
 {
@@ -110,6 +111,20 @@ void readKey()
         UI.enterFNmenu();
       }
     }
+    else
+    {
+      if(KeyPad.fnChanged)
+      {
+        if(KeyPad.fn)
+        {
+          Midi.sentNoteOn(0, keymap_fn[current_keymap]);
+        }
+        else
+        {
+          Midi.sentNoteOff(0, keymap_fn[current_keymap]);
+        }
+      }
+    }
 
     for(int i = 0; i < MULTIPRESS; i++)
     {
@@ -133,6 +148,7 @@ void readKey()
   {
     if(KeyPad.fnTimer.isLonger(200))
     {
+      Midi.sentNoteOff(0, keymap_fn[current_keymap]);
       UI.enterFNmenu();
       KeyPad.fnTimer.recordCurrent();
     }
@@ -204,14 +220,16 @@ void loop()
 
   Midi.poll();
 
-  if (keypadTimer.tick(keypad_scanrate_micros))
-  {
-    readKey();
-    //readTouch();
-  }
+  // if (keypadTimer.tick(keypad_scanrate_micros))
+  // {
+  //   readKey();
+  //   //readTouch();
+  // }
 
   if (mainTimer.tick(fps_micros))
   {
+    readKey();
+
     Midi.offScan();
     // #ifdef DEBUG
     // microTimer.recordCurrent();
@@ -253,7 +271,7 @@ void specialBoot()
 
 void factoryTest()
 {
-  //LED.setBrightness(16);
+  LED.setBrightness(64);
   LED.fill(0);
   LED.update();
 

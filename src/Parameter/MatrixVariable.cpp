@@ -11,15 +11,15 @@ extern bool debug_mode = false;
 extern bool fn_hold = false;
 //LED setting
 extern u8 brightness = 128;
-extern u16 max_mAh = 2000;
+extern u16 max_mAh = 1000;
 extern u8 brightness_level[8] = {16,32,64,96,128,160,216,255};
-extern u8 fps = 125;
+extern u8 fps = 60;
 extern u32 led_color_temperture = 0xFFFFFFFF;
 
-extern u16 fps_micros = 1000000 / fps;
+extern u16 fps_micros = 1000 / fps;
 
-extern u8 keypad_scanrate = 60;
-extern u16 keypad_scanrate_micros = 1000000 / keypad_scanrate;
+extern u8 keypad_scanrate = 50;
+extern u16 keypad_scanrate_micros = 1000 / keypad_scanrate;
 
 extern u32 palette[4][128] =     //WRGB Colour Palette
 {{            //MatrixColorPalette
@@ -492,6 +492,8 @@ extern u8 keymap [5][YSIZE][XSIZE] =
   {36, 37, 38, 39, 68, 69, 70, 71}
 }};
 
+extern u8 keymap_fn [5] = {0, 0, 0, 0, 0};
+
 extern u8 user1_keymap_optimized[64] =
 {0x07, 0x17, 0x27, 0x37, 0x06, 0x16, 0x26, 0x36, 0x05, 0x15, 0x25, 0x35, 0x04, 0x14, 0x24, 0x34, 0x03, 0x13, 0x23, 0x33, 0x02, 0x12, 0x22, 0x32, 0x01, 0x11, 0x21, 0x31, 0x00, 0x10, 0x20, 0x30, 0x47, 0x57, 0x67, 0x77, 0x46, 0x56, 0x66, 0x76, 0x45, 0x55, 0x65, 0x75, 0x44, 0x54, 0x64, 0x74, 0x43, 0x53, 0x63, 0x73, 0x42, 0x52, 0x62, 0x72, 0x41, 0x51, 0x61, 0x71, 0x40, 0x50, 0x60, 0x70};
 
@@ -570,7 +572,12 @@ extern bool midi_enable = true;
 extern bool m2p_enable = false;
 extern bool powercord_enable = false;
 extern bool massage_return = false;
-extern u8 stfu = 3;
+extern u8 stfu = 2;
+
+extern u8 cW = 255;
+extern u8 cR = 255;
+extern u8 cG = 255;
+extern u8 cB = 255;
 
 extern u8 report_code[10] = {1,1,1,1,1,1,1,1,1,1};
 extern u8 available_report_code = 0;
