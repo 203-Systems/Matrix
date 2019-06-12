@@ -93,8 +93,8 @@ void ADCTouch::cleanList()
   {
     changelist[i].id = 0xFFFF;
     changelist[i].kstate = IDLE;
-    listUsed = 0;
   }
+  listUsed = 0;
 }
 
 bool ADCTouch::addtoList(u8 id, KeyStates keyState)

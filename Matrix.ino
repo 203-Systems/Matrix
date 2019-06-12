@@ -103,196 +103,191 @@ void readKey()
 {
   if (KeyPad.scan())
   {
-    if(!fn_hold)
+
+    if(fn_hold)
     {
-      if(KeyPad.fnChanged)
+      if(KeyPad.fn.changed)
       {
-        if(KeyPad.fn)
-        UI.enterFNmenu();
+        if(KeyPad.fn.state = PRESSED)
+        {
+          Midi.sentNoteOn(0, keymap_fn[current_keymap]);
+        }
+        else if(KeyPad.fn.state = RELEASED)
+        {
+          Midi.sentNoteOff(0, keymap_fn[current_keymap]);
+        }
+        else if(KeyPad.fn.state = HOLD)
+        {
+          Midi.sentNoteOff(0, keymap_fn[current_keymap]);
+          UI.enterFNmenu();
+          KeyPad.fn.activeTime = 0xFFFFFFFF; //Prevent back to FN
+        }
       }
     }
     else
     {
-      if(KeyPad.fnChanged)
+      if(KeyPad.fn.changed)
       {
-        if(KeyPad.fn)
-        {
-          Midi.sentNoteOn(0, keymap_fn[current_keymap]);
-        }
-        else
-        {
-          Midi.sentNoteOff(0, keymap_fn[current_keymap]);
-        }
+        if(KeyPad.fn.state = PRESSED)
+        UI.enterFNmenu();
       }
     }
 
     for(int i = 0; i < MULTIPRESS; i++)
     {
-      if(KeyPad.list[i].velocity== -1)
+      if(KeyPad.changelist[i] == -1)
       return;
-      if(KeyPad.list[i].velocity > 0)
+      u8 x = xytox(KeyPad.changelist[i]);
+      u8 y = xytoy(KeyPad.changelist[i]);
+      if(KeyPad.keypadState[x][y].state = PRESSED)
       {
-        if(midi_enable)
-        {
-          Midi.sentXYon(KeyPad.list[i].xy, KeyPad.list[i].velocity);
-        }
+        Midi.sentXYon(KeyPad.list[i].xy, KeyPad.list[i].velocity);
       }
-      else
+      else if(KeyPad.keypadState[x][y].state = RELEASED)
       {
         Midi.sentXYoff(KeyPad.list[i].xy, 0);
       }
     }
   }
 
-  if(KeyPad.fn && fn_hold)
+  void readTouch()
   {
-    if(KeyPad.fnTimer.isLonger(200))
+    if(TouchBar.scan())
     {
-      Midi.sentNoteOff(0, keymap_fn[current_keymap]);
-      UI.enterFNmenu();
-      KeyPad.fnTimer.recordCurrent();
-    }
-  }
-}
-
-void readTouch()
-{
-  if(TouchBar.scan())
-  {
-    for(u8 x = 0; x < 8; x++)
-    {
-      switch(TouchBar.changelist[x].kstate)
+      for(u8 x = 0; x < 8; x++)
       {
-        case IDLE:
-        return;
+        switch(TouchBar.changelist[x].kstate)
+        {
+          case IDLE:
+          return;
 
-        case PRESSED:
-        Midi.sentNoteOn(0, touch_keymap[current_keymap][x], 127);
-        break;
+          case PRESSED:
+          Midi.sentNoteOn(0, touch_keymap[current_keymap][x], 127);
+          break;
 
-        case RELEASED:
-        Midi.sentNoteOff(0, touch_keymap[current_keymap][x], 0);
-        break;
+          case RELEASED:
+          Midi.sentNoteOff(0, touch_keymap[current_keymap][x], 0);
+          break;
+        }
       }
     }
   }
-}
 
-// void factoryTest()
-// {
-//   u32 testcolor[] = {0xFFFFFF, 0xFF0000, 0x00FF00, 0x0000FF, 0xFFFF00, 0x00FFFF};
-//
-//   for(int i = 0; i < 6; i ++)
-//   {
-//     LED.fill(testcolor[i]);
-//     LED.update();
-//     while(!KeyPad.scan()){}
-//
-//     while(KeyPad.fnChanged && KeyPad.fn)
-//     {
-//       if (mainTimer.tick(1000/fps))
-//       {
-//         KeyPad.scan();
-//         for(int i = 0; i < MULTIPRESS; i++)
-//         {
-//           if(KeyPad.list[i].velocity > 128)
-//           break;
-//           if(KeyPad.list[i].velocity > 0)
-//           {
-//             if(LED.readXYLED(KeyPad.list[i].xy) != testcolor[i])
-//             {
-//               LED.setXYHEX(KeyPad.list[i].xy, testcolor[i]);
-//             }
-//             else
-//             {
-//               LED.offXY(KeyPad.list[i].xy);
-//             }
-//           }
-//         }
-//         LED.update();
-//       }
-//     }
-//   }
-// }
-
-void loop()
-{
-
-  Midi.poll();
-
-  // if (keypadTimer.tick(keypad_scanrate_micros))
+  // void factoryTest()
   // {
-  //   readKey();
-  //   //readTouch();
+  //   u32 testcolor[] = {0xFFFFFF, 0xFF0000, 0x00FF00, 0x0000FF, 0xFFFF00, 0x00FFFF};
+  //
+  //   for(int i = 0; i < 6; i ++)
+  //   {
+  //     LED.fill(testcolor[i]);
+  //     LED.update();
+  //     while(!KeyPad.scan()){}
+  //
+  //     while(KeyPad.fnChanged && KeyPad.fn)
+  //     {
+  //       if (mainTimer.tick(1000/fps))
+  //       {
+  //         KeyPad.scan();
+  //         for(int i = 0; i < MULTIPRESS; i++)
+  //         {
+  //           if(KeyPad.list[i].velocity > 128)
+  //           break;
+  //           if(KeyPad.list[i].velocity > 0)
+  //           {
+  //             if(LED.readXYLED(KeyPad.list[i].xy) != testcolor[i])
+  //             {
+  //               LED.setXYHEX(KeyPad.list[i].xy, testcolor[i]);
+  //             }
+  //             else
+  //             {
+  //               LED.offXY(KeyPad.list[i].xy);
+  //             }
+  //           }
+  //         }
+  //         LED.update();
+  //       }
+  //     }
+  //   }
   // }
 
-  if (mainTimer.tick(fps_micros))
+  void loop()
   {
-    readKey();
 
-    Midi.offScan();
-    // #ifdef DEBUG
-    // microTimer.recordCurrent();
-    // #endif
-    LED.update();
-    // #ifdef DEBUG
-    // CompositeSerial.println(microTimer.sinceLastTick());
-    // #endif
+    Midi.poll();
+
+    // if (keypadTimer.tick(keypad_scanrate_micros))
+    // {
+    //   readKey();
+    //   //readTouch();
+    // }
+
+    if (mainTimer.tick(fps_micros))
+    {
+      readKey();
+
+      Midi.offScan();
+      // #ifdef DEBUG
+      // microTimer.recordCurrent();
+      // #endif
+      LED.update();
+      // #ifdef DEBUG
+      // CompositeSerial.println(microTimer.sinceLastTick());
+      // #endif
+    }
   }
-}
 
-void specialBoot()
-{
-  if (KeyPad.scan())
+  void specialBoot()
   {
-    if(KeyPad.checkXY(0, 5, true) && KeyPad.checkXY(0, 6, true) && KeyPad.checkXY(0, 7, true))
+    if (KeyPad.scan())
     {
-      formatEEPROM();
-      LED.fill(0xFF00FF);
-    }
-
-    if(KeyPad.checkXY(1, 1, true) && KeyPad.checkXY(0, 0, true))
-    {
-      factoryTest();
-    }
-
-    if(KeyPad.checkXY(7, 0, true))
-    {
-      setBrightness(16);
-    }
-
-    if(KeyPad.checkXY(7, 0, true) && KeyPad.checkXY(6, 1, true))
-    {
-      setBrightness(255);
-    }
-
-  }
-}
-
-void factoryTest()
-{
-  LED.setBrightness(64);
-  LED.fill(0);
-  LED.update();
-
-  while(!KeyPad.fn)
-  {
-    if (mainTimer.tick(1000/fps))
-    {
-      if(KeyPad.scan())
+      if(KeyPad.checkXY(0, 5, true) && KeyPad.checkXY(0, 6, true) && KeyPad.checkXY(0, 7, true))
       {
-        for(int i = 0; i < MULTIPRESS; i++)
-        {
-          // if(KeyPad.list[i].velocity== -1)
-          // break;
+        formatEEPROM();
+        LED.fill(0xFF00FF);
+      }
 
-          if(KeyPad.list[i].velocity > 0)
+      if(KeyPad.checkXY(1, 1, true) && KeyPad.checkXY(0, 0, true))
+      {
+        factoryTest();
+      }
+
+      if(KeyPad.checkXY(7, 0, true))
+      {
+        setBrightness(16);
+      }
+
+      if(KeyPad.checkXY(7, 0, true) && KeyPad.checkXY(6, 1, true))
+      {
+        setBrightness(255);
+      }
+
+    }
+  }
+
+  void factoryTest()
+  {
+    LED.setBrightness(64);
+    LED.fill(0);
+    LED.update();
+
+    while(!KeyPad.fn)
+    {
+      if (mainTimer.tick(1000/fps))
+      {
+        if(KeyPad.scan())
+        {
+          for(int i = 0; i < MULTIPRESS; i++)
           {
-            LED.setXYHEX(KeyPad.list[i].xy, 0xFFFFFF, true, true);
+            // if(KeyPad.list[i].velocity== -1)
+            // break;
+
+            if(KeyPad.list[i].velocity > 0)
+            {
+              LED.setXYHEX(KeyPad.list[i].xy, 0xFFFFFF, true, true);
+            }
           }
+          LED.update();
         }
-        LED.update();
       }
     }
   }
-}

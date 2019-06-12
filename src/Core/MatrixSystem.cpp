@@ -387,14 +387,23 @@ u8 xytoxy(u8 x, u8 y)
   return x * 0x10 + y;
 }
 
-XY xytoxy(u8 xy)
+// XY xytoxy(u8 xy)
+// {
+//   XY nxy;
+//   nxy.x = (xy & 0xF0) >> 4;
+//   nxy.y = xy & 0x0F;
+//   return nxy;
+// }
+
+u8 xytox(u8 xy)
 {
-  XY nxy;
-  nxy.x = (xy & 0xF0) >> 4;
-  nxy.y = xy & 0x0F;
-  return nxy;
+  return (xy & 0xF0) >> 4;
 }
 
+u8 xytoy(u8 xy)
+{
+  return xy & 0x0F;
+}
 
 u8 xyRotation(u8 xy)
 {
@@ -529,6 +538,10 @@ u32 toBrightness(u32 hex, float f, bool on)
   return w * 0x1000000 + r * 0x10000 + g * 0x100 + b;
 }
 
+u16 velocityCurve(u16 input)
+{
+  return input;
+}
 
 void recordReportCode(u8 code)
 {

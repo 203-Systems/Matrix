@@ -1,35 +1,24 @@
 #include "../DeviceSelector.h"
 
-void loadConfigV120()
+void loadConfigV200()
 {
 
-  device_config = 120;
+  device_config = 200;
 
   //LED
-  led_pin = PB7;
-  powercord_pin = PA9;
+  led_pin = PC7;
+  powercord = PA8;
+  powercord_detection = PC9;
 
-  led_color_correction = 0xFFFFFF;
+  led_color_correction = 0xC0FFD8;
 
   //KeyPad
-  keypad_type = 1;
-  keyPins[16] = {PB12, PB13, PC6, PB14, PB15};
+  keypad_type = 2;
+  keyPins[16] = {PB15, PB14, PB13, PB12, PC6, PC15, PC14, PC13, //X (SOURCE)
+                 PB1, PB0, PA2, PA1, PA0, PA3, PC5, PC4}; // Y (RECIVE)
 
-  fn_pin = PA0;
+  fn_pin = PB7;
 
-  //analog(TouchBar)
-  analog0 = PA3;
-  analog1 = PA4;
-  analog2 = PA5;
-  analog3 = PA6;
-  analog4 = PA7;
-  analog5 = PC4;
-  analog6 = PC5;
-  analog7 = PB0;
-  analog8 = PB1;
-  analog9 = PA0;
-  analog10 = PA1;
-  analog11 = PA2;
   //I2C
   i2c_scl = PB8;
   i2c_sda = PB9;
@@ -39,7 +28,7 @@ void loadConfigV120()
   spi_mosi= PB5;
   spi_cs1 = PA15;
   spi_cs2 = PB6;
-  //Serial1 (USB-C)
+  //Serial1
   tx1 = PA9;
   rx1 = PA10;
   //Serial3 (Matrix Mod)
@@ -73,4 +62,6 @@ void loadConfigV120()
   eeprom_sys_adds_0 = 0x803F000;
   eeprom_sys_adds_1 = 0x803F800;
   eeprom_pagesize = 0x800;
+
+  touch_type = 1; //TTP229
 }

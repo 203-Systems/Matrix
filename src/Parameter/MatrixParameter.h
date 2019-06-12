@@ -86,5 +86,6 @@ typedef volatile const int64_t vsc64;
 #define MULTIPRESS 10 //Key Pre-ss Process At Once
 #define HOLD_THRESHOLD 250
 #define MULTITAP_THRESHOLD 150
+#define AFTERTOUCH_THRESHOLD 0
 
 #endif

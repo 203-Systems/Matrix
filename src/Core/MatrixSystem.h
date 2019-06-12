@@ -17,11 +17,11 @@
 #include "../Parameter/DeviceSelector.h"
 #include "../Core/EEPROM.h"
 
-struct XY
-{
-  u8 x;
-  u8 y;
-};
+// struct XY
+// {
+//   u8 x;
+//   u8 y;
+// };
 
 void bootDevice();
 
@@ -81,7 +81,9 @@ u8 indexToXY(u8 index);
 u8 indexRotation(int index);
 u8 bottomLEDrotation(int index);
 u8 xytoxy(u8 x, u8 y);
-XY xytoxy(u8 xy);
+//XY xytoxy(u8 xy);
+u8 xytox(u8 xy);
+u8 xytoy(u8 xy);
 u8 xyRotation(u8 xy);
 u8 xyRotation(u8 xy, u8 r);
 u8 xyReverseRotation(u8 xy);
@@ -89,6 +91,7 @@ u8 xyReverseRotation(u8 xy, u8 r);
 u8 touchbarRotate(u8 id);
 u32 toBrightness(u32 hex, float f, bool on = false);
 void recordReportCode(u8 code);
+u16 velocityCurve(u16 input);
 //u8 xyToIndex(u8 X,u8 Y);
 
 #endif

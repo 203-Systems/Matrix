@@ -4,15 +4,20 @@ extern u8 device_config = 0;
 
 extern u8 led_pin = 0;
 extern u8 powercord_pin = 0;
+extern u8 powercord_detection = 0;
 
 extern u32 led_color_correction = 0xFFFFFFFF;
 
 //KeyPad
-extern u8 so_data = 0;
-extern u8 so_clock = 0;
-extern u8 si_data = 0;
-extern u8 si_clock = 0;
-extern u8 si_scan = 0;
+extern u8 keypad_type = 1;
+extern u8 keyPins[16] = {0};
+extern bool velocity_sensitivity = false;
+
+#define KEYPAD_SO_DATA keyPins[0]
+#define KEYPAD_SO_CLOCK keyPins[1]
+#define KEYPAD_SI_DATA keyPins[2]
+#define KEYPAD_SI_CLOCK keyPins[3]
+#define KEYPAD_SI_LATCH keyPins[4]
 
 extern u8 fn_pin = 0;
 
@@ -73,6 +78,8 @@ extern u32 eeprom_sys_adds_0 = 0;
 extern u32 eeprom_sys_adds_1 = 0;
 extern u32 eeprom_pagesize = 0;
 
+extern u8 touch_type = 0;
+
 void loadDeviceConfig()
 {
   #ifdef V120
@@ -99,6 +106,10 @@ void loadDeviceConfig()
 
                             case 150:
                             loadConfigV150();
+                            break;
+
+                            case 200:
+                            loadConfigV200();
                             break;
                           }
     break;
