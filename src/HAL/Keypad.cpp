@@ -1,8 +1,9 @@
 #include "KeyPad.h"
 #include <USBComposite.h>
 
-// extern MIDI Midi;
-//
+#ifdef DEBUG
+#include <USBComposite.h>
+#endif
 
 KeyPad::KeyPad()
 {
@@ -15,11 +16,11 @@ void KeyPad::init()
   switch(keypad_type)
   {
     case 1:
-    return Keypad::initType1();
+    return KeyPad::initType1();
     case 2:
-    return Keypad::initType2();
+    return KeyPad::initType2();
     case 3:
-    return Keypad::initType3();
+    return KeyPad::initType3();
   }
 }
 
@@ -39,12 +40,12 @@ void KeyPad::initType2()
 {
   for(u8 x = 0; x < XSIZE; x ++)
   {
-    pinMode(keyPins(x), OUTPUT);
-    digitalWrite(keyPins(x), LOW);
+    pinMode(keyPins[x], OUTPUT);
+    digitalWrite(keyPins[x], LOW);
   }
   for(u8 y = 0; y < YSIZE; y ++)
   {
-    pinMode(keyPins(Y + XSIZE), INPUT_PULLDOWN);
+    pinMode(keyPins[y + XSIZE], INPUT_PULLDOWN);
   }
 }
 
@@ -52,26 +53,27 @@ void KeyPad::initType3()
 {
   for(u8 x = 0; x < XSIZE; x ++)
   {
-    pinMode(keyPins(x), OUTPUT);
-    digitalWrite(keyPins(x), LOW);
+    pinMode(keyPins[x], OUTPUT);
+    digitalWrite(keyPins[x], LOW);
   }
   for(u8 y = 0; y < YSIZE; y ++)
   {
-    pinMode(keyPins(Y + XSIZE), INPUT_PULLDOWN);
+    pinMode(keyPins[y + XSIZE], INPUT_PULLDOWN);
   }
 }
 
 
 bool KeyPad::scan()
 {
+  KeyPad::cleanList();
   switch(keypad_type)
   {
     case 1:
-    return Keypad::scanType1();
+    return KeyPad::scanType1();
     case 2:
-    return Keypad::scanType2();
-    case 2:
-    return Keypad::scanType3();
+    return KeyPad::scanType2();
+    case 3:
+    return KeyPad::scanType3();
   }
 }
 
@@ -79,7 +81,7 @@ bool KeyPad::scanType1() //1.x 165/164 solution
 {
   bool changed = false;
 
-  change = change || scanFN();
+  changed = changed || scanFN();
 
   for (u8 x = 0; x < XSIZE; x++) //for 0 - 7 do
   {
@@ -107,14 +109,19 @@ bool KeyPad::scanType1() //1.x 165/164 solution
         changed = true;
         if(!KeyPad::addtoList(xytoxy(x,y)))
         return changed;
+        #ifdef DEBUG
+        CompositeSerial.print("Key Action ");
+        CompositeSerial.print(xytoxy(x,y), HEX);
+        CompositeSerial.print(" ");
+        CompositeSerial.print(keypadState[x][y].state);
+        CompositeSerial.print(" ");
+        CompositeSerial.println(keypadState[x][y].velocity);
+        #endif
       }
 
       digitalWrite(KEYPAD_SI_CLOCK, HIGH);
     }
   }
-
-  if(changed)
-  updateList();
 
   return changed;
 }
@@ -155,7 +162,7 @@ bool KeyPad::scanType3()
     digitalWrite(x, HIGH);
     for(u8 y = 0; y < YSIZE; y ++)
     {
-      keypadState[x][y] = KeyPad::updateKey(keypadState[x][y], velocityCurve(digitalRead(y + 8));
+      keypadState[x][y] = KeyPad::updateKey(keypadState[x][y], velocityCurve((float)4095 /analogRead(y + 8)));
       if(keypadState[x][y].changed)
       {
         changed = true;
@@ -171,81 +178,92 @@ bool KeyPad::scanType3()
 
 bool KeyPad::scanFN()
 {
-  fn = updateKey(fn, digitalRead(fn_pin))
+  fn = updateKey(fn, digitalRead(fn_pin));
+  #ifdef DEBUG
+  if(fn.changed)
+  {
+    CompositeSerial.print("FN Action ");
+    CompositeSerial.print(fn.velocity);
+    CompositeSerial.print(" ");
+    CompositeSerial.print(fn.hold);
+    CompositeSerial.print(" ");
+    CompositeSerial.println(fn.holdTime());
+  }
+  #endif
   return fn.changed;
 }
 
 /*
 Action Checklist:
 Nothing (All)
+To Long Term State(Pressed, Hold, Release)
 Active (Idle, Release)
 Release(Pressed, Active, Hold, Hold Actived)
-To Long Term State(Pressed, Hold, Release)
-Hold Timer Threshold reached (Actived)
 Aftertouch (Pressed, Actived, Hold, Hold Actived)
 */
 
-Key KeyPad::updateKey(key currentKey, u16 input)
+KeyInfo KeyPad::updateKey(KeyInfo currentKey, float input)
 {
   currentKey.changed = false;
-  switch(currentKey.keyState)
+
+  if(currentKey.state == PRESSED)
   {
-    case IDLE:
-    case RELEASED:
-    if(input)
+    currentKey.state = ACTIVED;
+  }
+
+  if(currentKey.state == RELEASED)
+  {
+    currentKey.state = IDLE;
+    currentKey.hold = false;
+  }
+
+  if(currentKey.state == IDLE && input)
+  {
+    currentKey.state = PRESSED;
+    currentKey.velocity = input;
+    currentKey.activeTime = millis();
+    currentKey.changed = true;
+    return currentKey;
+  }
+
+  if(currentKey.state == ACTIVED && input == 0)
+  {
+    currentKey.state = RELEASED;
+    currentKey.velocity = 0;
+    currentKey.changed = true;
+    return currentKey;
+  }
+
+  if(currentKey.state == ACTIVED && !currentKey.hold)
+  {
+    if(millis() - currentKey.activeTime > HOLD_THRESHOLD)
     {
-      currentKey.keyState = PRESSED;
-      currentKey.velocity = input;
-      currentKey.activeTime = millis();
+      currentKey.hold = true;
       currentKey.changed = true;
-      break;
-    }
-
-    case PRESSED:
-    case ACTIVED:
-    case HOLD:
-    case HOLD_ACTIVATED:
-    if(!input)
-    {
-      currentKey.keyState = RELEASED;
-      currentKey.velocity = 0;
-      currentKey.changed = true;
-      break;
-    }
-
-    case PRESSED:
-    currentKey.keyState = ACTIVED;
-    case HOLD:
-    currentKey.keyState = HOLD_ACTIVED;
-    case RELEASED:
-    currentKey.keyState = IDLE;
-
-    case ACTIVED:
-    if(mills() - currentKey.activeTime > HOLD_THRESHOLD)
-    {
-      currentKey.keyState = HOLD;
-      currentKey.changed = true;
-    }
-
-
-    case PRESSED:
-    case ACTIVED:
-    case HOLD:
-    case HOLD_ACTIVATED:
-    if(abs(currentKey.velocity - input) > AFTERTOUCH_THRESHOLD)
-    {
-      currentKey.velocity = input;
-      currentKey.changed = true;
+      return currentKey;
     }
   }
+
+  /*
+  if(currentKey.state == ACTIVED)
+  {
+  if(abs(currentKey.velocity - input) > AFTERTOUCH_THRESHOLD)
+  {
+  currentKey.velocity = input;
+  currentKey.changed = true;
   return currentKey;
+}
+}
+*/
+
+return currentKey;
 }
 
 void KeyPad::cleanList()
 {
   for(u8 i = 0; i < MULTIPRESS; i++)
   {
-    changelist[i].state = -1;
+    changelist[i] = 0xFFFF;
   }
   listUsed = 0;
 }
@@ -254,7 +272,14 @@ bool KeyPad::addtoList(u16 id)
 {
   if(listUsed < MULTIPRESS)
   {
-    changelist[listUsed] = id;
+    if(id < 0x10000)
+    {
+      changelist[listUsed] = xyRotation(id);
+    }
+    else
+    {
+      changelist[listUsed] = id;
+    }
     listUsed ++;
   }
   else
@@ -323,8 +348,20 @@ u16 KeyPad::checkXY(u8 xy, bool no_rotation)
 {
   if(!no_rotation)
   xy = xyReverseRotation(xy);
-  return keypadVelocity[(xy & 0xF0) >> 4][xy & 0x0F];
+  return keypadState[xytox(xy)][xytoy(xy)].velocity;
 }
+
+KeyInfo KeyPad::getKey(u8 x, u8 y)
+{
+  return KeyPad::getKey(xytoxy(x,y));
+}
+
+KeyInfo KeyPad::getKey(u8 xy)
+{
+  xy = xyReverseRotation(xy);
+  return keypadState[xytox(xy)][xytoy(xy)];
+}
+
 
 // void KeyPad::On(uint8 x, uint8 y)
 // {

@@ -11,13 +11,7 @@ extern u32 led_color_correction = 0xFFFFFFFF;
 //KeyPad
 extern u8 keypad_type = 1;
 extern u8 keyPins[16] = {0};
-extern bool velocity_sensitivity = false;
-
-#define KEYPAD_SO_DATA keyPins[0]
-#define KEYPAD_SO_CLOCK keyPins[1]
-#define KEYPAD_SI_DATA keyPins[2]
-#define KEYPAD_SI_CLOCK keyPins[3]
-#define KEYPAD_SI_LATCH keyPins[4]
+extern u8 velocity_sensitivity = 1;  //for velocity sensitivy bit 1 for no velocity (binary) 8 for 8 bit(0~255)
 
 extern u8 fn_pin = 0;
 

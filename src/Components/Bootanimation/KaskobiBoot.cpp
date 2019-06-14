@@ -8,7 +8,7 @@ void UI::kaskobiWaitAnimation()
 {
   brightness_cache = brightness;
   if(brightness > 160)
-    LED.setBrightness(160);
+  LED.setBrightness(160);
 
   if(uiTimer.tick(400))
   {
@@ -18,7 +18,7 @@ void UI::kaskobiWaitAnimation()
     }
     else
     {
-        LED.onXY(0x07, true);
+      LED.onXY(0x07, true);
     }
     LED.update();
   }
@@ -43,14 +43,11 @@ void UI::kaskobiBootAnimation() //8x8 only
         // }
 
         KeyPad.scan();
-        if(KeyPad.fnChanged)
+        if(KeyPad.fn.state == PRESSED)
         {
-          if(!KeyPad.fn)
-          {
-            LED.setBrightness(brightness_cache);
-            LED.disableOverlayMode();
-            return;
-          }
+          LED.setBrightness(brightness_cache);
+          LED.disableOverlayMode();
+          return;
         }
       }
       uiTimer.recordCurrent();
@@ -107,29 +104,26 @@ void UI::kaskobiBootAnimation() //8x8 only
       // }
 
       KeyPad.scan();
-      if(KeyPad.fnChanged)
+      if(KeyPad.fn.state == PRESSED)
       {
-        if(!KeyPad.fn)
-        {
-            LED.setBrightness(brightness_cache);
-            LED.disableOverlayMode();
-            return;
-        }
+        LED.setBrightness(brightness_cache);
+        LED.disableOverlayMode();
+        return;
       }
     }
     uiTimer.recordCurrent();
     if(i < NUM_LEDS)
-      LED.setPalette(shuffle[i], 0, 44, true);
+    LED.setPalette(shuffle[i], 0, 44, true);
     if(i > 0 && i < NUM_LEDS + 2)
-      LED.setPalette(shuffle[i-2], 0, 28, true);
+    LED.setPalette(shuffle[i-2], 0, 28, true);
     if(i > 1 && i < NUM_LEDS + 4)
-      LED.setPalette(shuffle[i-4], 0, 12, true);
+    LED.setPalette(shuffle[i-4], 0, 12, true);
     if(i > 2 && i < NUM_LEDS + 6)
-      LED.setPalette(shuffle[i-6], 0, 116, true);
+    LED.setPalette(shuffle[i-6], 0, 116, true);
     if(i > 3 && i < NUM_LEDS + 8)
-      LED.setPalette(shuffle[i-8], 0, 102, true);
+    LED.setPalette(shuffle[i-8], 0, 102, true);
     if(i > 4 && i < NUM_LEDS + 10)
-      LED.off(shuffle[i-10], true);
+    LED.off(shuffle[i-10], true);
 
     LED.update();
   }

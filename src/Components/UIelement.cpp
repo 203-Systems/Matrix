@@ -10,21 +10,23 @@ UIelement::UIelement()
 
 void UIelement::renderAscii(char ascii, u8 xy, u32 colour, bool ignore_gamma /* = false */) //XY is the bottom right location
 {
-  XY nxy = xytoxy(xy);
+  u8 nx = xytox(xy);
+  u8 ny = xytoy(xy);
+
 
   if(ascii < 32 || ascii > 127)
   return;
 
   for(u8 x = 0; x < font[ascii - 32][0]; x++)
   {
-    if(nxy.x - x <= 0)
+    if(nx - x <= 0)
     {
       for(u8 y = 0; y < 8; y++)
       {
-        if(nxy.y - y <= 0)
+        if(ny - y <= 0)
         {
           if(bitRead(font[ascii - 32][font[ascii - 32][0] - x], 7 - y))
-          LED.setXYHEX(xytoxy(nxy.x - x, nxy.y - y), colour, true, ignore_gamma);
+          LED.setXYHEX(xytoxy(nx - x, ny - y), colour, true, ignore_gamma);
         }
       }
     }

@@ -550,6 +550,9 @@ extern u32 fn_keymap_active_color[5][2][XSIZE]
   {0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF}
 }};
 
+extern float velocity_threshold = 0;
+extern float aftertouch_threshold = 0;
+
 
 //TouchBar
 extern s16 touch_threshold = 60;

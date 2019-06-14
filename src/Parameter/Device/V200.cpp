@@ -7,15 +7,21 @@ void loadConfigV200()
 
   //LED
   led_pin = PC7;
-  powercord = PA8;
+  powercord_pin = PA8;
   powercord_detection = PC9;
 
   led_color_correction = 0xC0FFD8;
 
   //KeyPad
   keypad_type = 2;
-  keyPins[16] = {PB15, PB14, PB13, PB12, PC6, PC15, PC14, PC13, //X (SOURCE)
+  u8 type2keyPins[16] = {PB15, PB14, PB13, PB12, PC6, PC15, PC14, PC13, //X (SOURCE)
                  PB1, PB0, PA2, PA1, PA0, PA3, PC5, PC4}; // Y (RECIVE)
+  for(u8 i = 0; i < 16; i ++)
+  {
+    keyPins[i] = type2keyPins[i];
+  }
+  
+  velocity_sensitivity = 12;
 
   fn_pin = PB7;
 

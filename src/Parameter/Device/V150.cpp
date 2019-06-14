@@ -7,13 +7,17 @@ void loadConfigV150()
 
   //LED
   led_pin = PC7;
-  powercord = PA8;
+  powercord_pin = PA8;
 
   led_color_correction = 0xC0FFD8;
 
   //KeyPad
   keypad_type = 1;
-  keyPins[16] = {PB12, PB13, PC6, PB14, PB15};
+  keyPins[0] = PB12;
+  keyPins[1] = PB13;
+  keyPins[2] = PC6;
+  keyPins[3] = PB14;
+  keyPins[4] = PB15;
 
   fn_pin = PB7;
 

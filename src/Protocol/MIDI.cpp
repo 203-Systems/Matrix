@@ -15,7 +15,7 @@ void MIDI::noteOn(u8 channel, u8 note, u8 velocity)
 {
 
   #ifdef DEBUG
-  CompositeSerial.print("MIDI In \t");
+  CompositeSerial.print("MIDI In On\t");
   CompositeSerial.print(channel);
   CompositeSerial.print("\t");
   CompositeSerial.print(note);
@@ -86,6 +86,16 @@ void MIDI::noteOff(u8 channel, u8 note, u8 velocity)
 {
 
   #ifdef DEBUG
+  CompositeSerial.print("MIDI In Off\t");
+  CompositeSerial.print(channel);
+  CompositeSerial.print("\t");
+  CompositeSerial.print(note);
+  CompositeSerial.print("\t");
+  CompositeSerial.println(velocity);
+  #endif
+
+
+  #ifdef DEBUG
   CompositeSerial.print("MIDI Off \t");
   CompositeSerial.print(channel);
   CompositeSerial.print("\t");
@@ -151,7 +161,7 @@ void MIDI::sentXYon(u8 xy, u8 velocity)
   u8 x = (xy & 0xF0) >> 4;
 
   #ifdef DEBUG
-  CompositeSerial.print("MIDI XY Out \t");
+  CompositeSerial.print("MIDI XY Out On \t");
   CompositeSerial.print(x);
   CompositeSerial.print("\t");
   CompositeSerial.print(y);
@@ -160,13 +170,23 @@ void MIDI::sentXYon(u8 xy, u8 velocity)
   #endif
 
 
-  MIDI::sentNoteOn(midi_channel, keymap[current_keymap][y][x], 127);
+  MIDI::sentNoteOn(midi_channel, keymap[current_keymap][y][x], velocity);
 }
 
 void MIDI::sentXYoff(u8 xy, u8 velocity)
 {
   u8 y = xy & 0x0F;
   u8 x = (xy & 0xF0) >> 4;
+
+  #ifdef DEBUG
+  CompositeSerial.print("MIDI XY Out Off \t");
+  CompositeSerial.print(x);
+  CompositeSerial.print("\t");
+  CompositeSerial.print(y);
+  CompositeSerial.print("\t");
+  CompositeSerial.println(velocity);
+  #endif
+
   MIDI::sentNoteOff(midi_channel, keymap[current_keymap][y][x], 0);
 }
 
@@ -203,20 +223,29 @@ void MIDI::handleNoteOn(unsigned int channel, unsigned int note, unsigned int ve
 
 void MIDI::sentNoteOn(u8 channel, u8 note, u8 velocity)
 {
-  #ifdef DEBUG
-  CompositeSerial.print("MIDI Out \t");
-  CompositeSerial.print(channel);
-  CompositeSerial.print("\t");
-  CompositeSerial.print(note);
-  CompositeSerial.print("\t");
-  CompositeSerial.println(velocity);
-  #endif
+  // #ifdef DEBUG
+  // CompositeSerial.print("MIDI Out On \t");
+  // CompositeSerial.print(channel);
+  // CompositeSerial.print("\t");
+  // CompositeSerial.print(note);
+  // CompositeSerial.print("\t");
+  // CompositeSerial.println(velocity);
+  // #endif
 
   USBMIDI.sendNoteOn(channel, note, velocity);
 }
 
 void MIDI::sentNoteOff(u8 channel, u8 note, u8 velocity)
 {
+  // #ifdef DEBUG
+  // CompositeSerial.print("MIDI Out Off \t");
+  // CompositeSerial.print(channel);
+  // CompositeSerial.print("\t");
+  // CompositeSerial.print(note);
+  // CompositeSerial.print("\t");
+  // CompositeSerial.println(velocity);
+  // #endif
+
   if(unipad_mode)
   {
     USBMIDI.sendNoteOn(channel, note, 0);

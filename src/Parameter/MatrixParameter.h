@@ -45,18 +45,17 @@ typedef volatile const int64_t vsc64;
 
 //DeviceInfo
 
-//#define DEBUG-
+#define DEBUG
 
 #define DEVICENAME "Matrix"
-//#define __RET6__
 #define MAUNFACTURERNAME "203 Industries"
 #define SERIALSTRING "Prototype"
 #define VID  0x0203
 #define VID2 0x0203 // for device ID USE
 #define PID  0x1000
 #define PID2 0x1000 // for device ID USE
-#define FWVERSION 0500
-#define FWVERSION_STRING "0.5.0.0b"
+#define FWVERSION 0x0600
+#define FWVERSION_STRING "0.6.0.0b"
 
 
 
@@ -86,6 +85,5 @@ typedef volatile const int64_t vsc64;
 #define MULTIPRESS 10 //Key Pre-ss Process At Once
 #define HOLD_THRESHOLD 250
 #define MULTITAP_THRESHOLD 150
-#define AFTERTOUCH_THRESHOLD 0
 
 #endif

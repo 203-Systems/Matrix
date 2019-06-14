@@ -17,6 +17,14 @@ extern u32 led_color_correction;
 extern u8 keypad_type;
 extern u8 keyPins[16];
 
+#define KEYPAD_SO_DATA keyPins[0]
+#define KEYPAD_SO_CLOCK keyPins[1]
+#define KEYPAD_SI_DATA keyPins[2]
+#define KEYPAD_SI_CLOCK keyPins[3]
+#define KEYPAD_SI_LATCH keyPins[4]
+
+extern u8 velocity_sensitivity;
+
 extern u8 fn_pin;
 
 //analog(TouchBar)
@@ -83,5 +91,6 @@ void loadDeviceConfig();
 void loadConfigV110();
 void loadConfigV120();
 void loadConfigV150();
+void loadConfigV200();
 
 #endif

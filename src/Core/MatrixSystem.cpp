@@ -7,7 +7,7 @@ EEPROMClass EEPROM_SYS;
 extern LED LED;
 extern KeyPad KeyPad;
 extern MIDI Midi;
-extern ADCTouch TouchBar;
+//extern ADCTouch TouchBar;
 
 void setupUSB()
 {
@@ -26,14 +26,13 @@ void setupUSB()
   }
 
   USBComposite.setManufacturerString(MAUNFACTURERNAME);
-  //USBComposite.setProductString(DEVICENAME);
   USBComposite.setSerialString(getDeviceIDString());
 
   Midi.registerComponent();
-  Midi.setRXPacketSize(256);
-  Midi.setTXPacketSize(64);
+  // Midi.setRXPacketSize(256);
+  // Midi.setTXPacketSize(64);
 
-  //CompositeSerial.registerComponent();
+  CompositeSerial.registerComponent();
 
   USBComposite.begin();
 
@@ -43,7 +42,7 @@ void setupHardware()
 {
   LED.init();
   KeyPad.init();
-  TouchBar.init();
+  //TouchBar.init();
   applyColourCorrectionToPalette();
 }
 
@@ -289,10 +288,10 @@ void setLedCorrection(u32 c)
 // }
 
 //special
-void resetTouchBar()
-{
-  TouchBar.init();
-}
+// void resetTouchBar()
+// {
+//   TouchBar.init();
+// }
 
 
 void rotationCW(u8 r)
@@ -538,7 +537,7 @@ u32 toBrightness(u32 hex, float f, bool on)
   return w * 0x1000000 + r * 0x10000 + g * 0x100 + b;
 }
 
-u16 velocityCurve(u16 input)
+float velocityCurve(float input)
 {
   return input;
 }

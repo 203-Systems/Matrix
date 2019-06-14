@@ -37,6 +37,8 @@ extern u8 fn_keymap[5][2][XSIZE];
 extern u32 fn_keymap_idle_color[5][2][XSIZE];
 extern u32 fn_keymap_active_color[5][2][XSIZE];
 extern u8 keymap_fn [5];
+extern float velocity_threshold;
+extern float aftertouch_threshold;
 
 extern u8 user1_keymap_optimized[64];
 

@@ -41,10 +41,7 @@ void UI::fnMenu()
   UI::fnRender();
   while(1)
   {
-    if(midi_enable);
     Midi.poll();
-    // if (m2p_enable)
-    // CDC.Poll();
 
     if(uiTimer.tick(1000/fps))
     {
@@ -55,25 +52,29 @@ void UI::fnMenu()
         #ifdef DEBUG
         CompositeSerial.println("FnMenuKeyScaned");
         #endif
-        if(KeyPad.fnChanged)
+        if(KeyPad.fn.state == PRESSED)
         {
-          // if(KeyPad.timesFNpressed > 9)
-          // UI::easterEgg();
-
-          if(KeyPad.fn)
-          {
-            UI::exitFNmenu();
-            return;
-          }
-          else if(!KeyPad.fn && !fn_hold  && (KeyPad.fnTimer.isLonger(HOLD_THRESHOLD)|| hadAction )) //if fn off and longer then threshold, will count as hold, release to back to main menu
-          {
-            UI::exitFNmenu();
-            return;
-          }
+          UI::exitFNmenu();
+          return;
+        }
+        else if(KeyPad.fn.state == RELEASED && !fn_hold && (KeyPad.fn.hold || hadAction )) //if fn off and longer then threshold, will count as hold, release to back to main menu
+        {
+          UI::exitFNmenu();
+          return;
         }
         UI::fnKeyAction();
         UI::fnRender();
       }
+      // CompositeSerial.print("FN Status: ");
+      // CompositeSerial.print(KeyPad.fn.state);
+      // CompositeSerial.print(" ");
+      // CompositeSerial.print(KeyPad.fn.velocity);
+      // CompositeSerial.print(" ");
+      // CompositeSerial.print(KeyPad.fn.activeTime);
+      // CompositeSerial.print(" ");
+      // CompositeSerial.print(KeyPad.fn.hold);
+      // CompositeSerial.print(" ");
+      // CompositeSerial.println(KeyPad.fn.holdTime());
     }
   }
 }
@@ -94,46 +95,48 @@ void UI::fnKeyAction()
 
   for(int i = 0; i < MULTIPRESS; i++)
   {
-    if(KeyPad.list[i].velocity == -1)
+    if(KeyPad.changelist[i] == 0xFFFF)
     break;
+
+    u8 x = xytox(KeyPad.changelist[i]);
+    u8 y = xytoy(KeyPad.changelist[i]);
 
     //hadAction = true;
 
     #ifdef DEBUG
     CompositeSerial.print("FN Key Action ");
-    CompositeSerial.print(xytoxy(KeyPad.list[i].xy).y);
-    CompositeSerial.print(" ");
-    CompositeSerial.print(xytoxy(KeyPad.list[i].xy).x);
+    CompositeSerial.print(KeyPad.changelist[i]);
     #endif
 
-    if(KeyPad.list[i].velocity == 0){
-      if(xytoxy(KeyPad.list[i].xy).y > 5)
+    if(KeyPad.getKey(KeyPad.changelist[i]).state == RELEASED){
+      if(y > 5)
       {
-        Midi.sentNoteOff(0, fn_keymap[current_keymap][xytoxy(KeyPad.list[i].xy).y - 6][xytoxy(KeyPad.list[i].xy).x], 0);
+        Midi.sentNoteOff(0, fn_keymap[current_keymap][y - 6][x], 0);
       }
       konami = true; //So off don't reset it.
     }
 
-    if(KeyPad.list[i].velocity > 0)
+    if(KeyPad.getKey(KeyPad.changelist[i]).state == PRESSED)
     {
       #ifdef DEBUG
       CompositeSerial.print("ReadKey ");
-      CompositeSerial.println(KeyPad.list[i].xy, HEX);
+      CompositeSerial.println(KeyPad.changelist[i], HEX);
       #endif
 
-      if(xytoxy(KeyPad.list[i].xy).y > 5)
+      if(y > 5)
       {
-        Midi.sentNoteOn(0, fn_keymap[current_keymap][xytoxy(KeyPad.list[i].xy).y - 6][xytoxy(KeyPad.list[i].xy).x], 127);
+        Midi.sentNoteOn(0, fn_keymap[current_keymap][y - 6][x], KeyPad.getKey(KeyPad.changelist[i]).velocity * 127);
+        break;
       }
 
-      switch(KeyPad.list[i].xy)
+      switch(KeyPad.changelist[i])
       {
         //Brightness
         case 0x33:
         case 0x34:
         case 0x43:
         case 0x44:
-        if(!KeyPad.fn || KeyPad.fnTimer.isLonger(200))
+        if(!KeyPad.fn.velocity || KeyPad.fn.hold)
         {
           nextBrightnessState();
           #ifdef DEBUG
@@ -245,7 +248,7 @@ void UI::fnKeyAction()
 
       if(konami_progress >= 8)
       {
-        switch(KeyPad.list[i].xy)
+        switch(KeyPad.changelist[i])
         {
           case 0x16:
           case 0x17:
@@ -270,7 +273,7 @@ void UI::fnKeyAction()
       }
       else
       {
-        switch(KeyPad.list[i].xy)
+        switch(KeyPad.changelist[i])
         {
 
 
@@ -464,25 +467,16 @@ void UI::settingMenu()
   UI::settingRender();
   while(1)
   {
-    if(midi_enable);
     Midi.poll();
-    // if (m2p_enable)
-    // CDC.Poll();
 
     if(uiTimer.tick(1000/fps))
     {
       if(KeyPad.scan())
       {
-        if(KeyPad.fnChanged)
+        if(KeyPad.fn.state == PRESSED)
         {
-          // if(KeyPad.timesFNpressed > 9)
-          // UI::easterEgg();
-
-          if(KeyPad.fn)
-          {
-            UI::exitSettingMenu();
-            return;
-          }
+          UI::exitSettingMenu();
+          return;
         }
         UI::settingKeyAction();
         UI::settingRender();
@@ -500,21 +494,27 @@ void UI::settingKeyAction()
 {
   for(int i = 0; i < MULTIPRESS; i++)
   {
-    if(KeyPad.list[i].velocity == -1)
-    break;
+    if(KeyPad.changelist[i] == 0xFFFF)
+    return;
 
-    switch(KeyPad.list[i].xy)
+    u8 x = xytox(KeyPad.changelist[i]);
+    u8 y = xytoy(KeyPad.changelist[i]);
+
+    if(KeyPad.getKey(KeyPad.changelist[i]).state == PRESSED)
     {
-      case 0x07: //DFU
-      enterBootloader();
-      break;
-      // case 0x67:
-      // LED.setColourCorrection(0xFFFFFF);
-      // setLedCorrection(UI::numSelectorRGB(led_color_correction, true));
-      // break;
-      case 0x77:
-      setDeviceID(UI::numSelector8bit(device_id, 0x0000FFAA, 0x00FFFFFF, true));
-      break;
+      switch(KeyPad.changelist[i])
+      {
+        case 0x07: //DFU
+        enterBootloader();
+        break;
+        // case 0x67:
+        // LED.setColourCorrection(0xFFFFFF);
+        // setLedCorrection(UI::numSelectorRGB(led_color_correction, true));
+        // break;
+        case 0x77:
+        setDeviceID(UI::numSelector8bit(device_id, 0x0000FFAA, 0x00FFFFFF, true));
+        break;
+      }
     }
   }
 }
@@ -531,7 +531,7 @@ void UI::settingRender()
 u8 UI::numSelector8bit(u8 currentNum, u32 colour, u32 sec_colour, bool ignore_gamma /* = false */)
 {
   // LED.fill(0, true);
-  while(!KeyPad.fnChanged)
+  while(!KeyPad.fn.state == PRESSED)
   {
     if(uiTimer.tick(1000/fps))
     {
@@ -555,7 +555,7 @@ u8 UI::numSelector8bit(u8 currentNum, u32 colour, u32 sec_colour, bool ignore_ga
 
 u8 UI::numSelector6bit(u8 currentNum, u32 colour, u32 sec_colour, bool ignore_gamma /* = false */)
 {
-
+  return 0;
 }
 
 u32 UI::numSelectorRGB(u32 colour, bool ignore_gamma /* = false */)
@@ -565,7 +565,7 @@ u32 UI::numSelectorRGB(u32 colour, bool ignore_gamma /* = false */)
   u8 G = (colour & 0xFF00) >> 8;
   u8 B = colour & 0xFF;
   uielement.renderHalfHeightNum(R, 0x73, colour, 0xFF0000, ignore_gamma);
-  while(!KeyPad.fnChanged || !KeyPad.fn)
+  while(!KeyPad.fn.state == PRESSED)
   {
     if(KeyPad.scan())
     {

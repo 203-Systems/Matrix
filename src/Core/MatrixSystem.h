@@ -10,7 +10,7 @@
 #include <FastLED.h>
 #include "../HAL/Keypad.h"
 #include "../HAL/LED.h"
-#include "../HAL/ADCTouch.h"
+//#include "../HAL/ADCTouch.h"
 #include "../Protocol/MIDI.h"
 #include "../Parameter/MatrixVariable.h"
 #include "../Parameter/MatrixParameter.h"
@@ -70,7 +70,7 @@ void setLedCorrection(u32 c);
 
 //special
 //void nextBrightnessState();
-void resetTouchBar();
+//void resetTouchBar();
 void rotationCW(u8 r);
 void setRotation(u8 r);
 
