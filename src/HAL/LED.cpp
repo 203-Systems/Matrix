@@ -67,6 +67,7 @@ void LED::fill(u32 WRGB, bool overlay /*= false*/)
       buffer[i] = WRGB;
     }
   }
+  LED::changed = true;
   //FastLED.show();
 }
 
@@ -164,6 +165,7 @@ void LED::setHEX(s16 index, u32 hex, bool overlay /*= false*/, bool ignore_gamma
       buffer[indexRotation(index)] = applyGamma(hex);
     }
   }
+  LED::changed = true;
 }
 
 void LED::setPalette(s16 index, u8 pick_palette, u8 colour, bool overlay /*= false*/)
@@ -230,6 +232,7 @@ void LED::setXYHEX(u8 xy, u32 hex, bool overlay /*= false*/, bool ignore_gamma /
       buffer[xyToIndex(xy)] = hex;
     }
   }
+  LED::changed = true;
 }
 
 void LED::setXYPalette(u8 xy, u8 pick_palette, u8 colour, bool overlay /*= false*/)

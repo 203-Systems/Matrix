@@ -207,8 +207,13 @@ void readKey()
 
 void loop()
 {
-
   Midi.poll();
+
+  // if(LED.changed)
+  // {
+  //   LED.update();
+  //   LED.changed = false;
+  // }
 
   // if (keypadTimer.tick(keypad_scanrate_micros))
   // {
@@ -219,25 +224,16 @@ void loop()
   if (mainTimer.tick(fps_micros))
   {
     readKey();
-
+    LED.update();
+    LED.changed = false;
     Midi.offScan();
     // #ifdef DEBUG
     // microTimer.recordCurrent();
     // #endif
-    LED.update();
+    //LED.update();
     // #ifdef DEBUG
     // CompositeSerial.println(microTimer.sinceLastTick());
     // #endif
-    // CompositeSerial.print("FN Status: ");
-    // CompositeSerial.print(KeyPad.fn.state);
-    // CompositeSerial.print(" ");
-    // CompositeSerial.print(KeyPad.fn.velocity);
-    // CompositeSerial.print(" ");
-    // CompositeSerial.print(KeyPad.fn.activeTime);
-    // CompositeSerial.print(" ");
-    // CompositeSerial.print(KeyPad.fn.hold);
-    // CompositeSerial.print(" ");
-    // CompositeSerial.println(KeyPad.fn.holdTime());
   }
 }
 

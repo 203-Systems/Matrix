@@ -26,6 +26,7 @@ extern u16 fps_micros;
 extern u16 keypad_scanrate_micros;
 
 extern u32 palette[4][128];
+extern u32 default_palette[4][128] PROGMEM;
 extern u8 led_gamma[256];
 
 //KeyMap
@@ -53,7 +54,7 @@ extern bool gamma_enable; //Wont effect colour palette
 extern bool midi_enable;
 extern bool m2p_enable;
 extern bool powercord_enable;
-extern bool massage_return;
+extern bool midi_return;
 extern u8 stfu;
 
 extern u8 cW;

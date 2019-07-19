@@ -27,7 +27,11 @@ void MIDI::noteOn(u8 channel, u8 note, u8 velocity)
 
   // if(channel == 5)
   //   channel = 1; //unipad support
-
+  if(midi_return)
+  {
+    MIDI::sentNoteOn(channel, note, velocity);
+  }
+  
   if(velocity == 0)
   {
     MIDI::noteOff(channel, note, velocity);
@@ -66,19 +70,6 @@ void MIDI::noteOn(u8 channel, u8 note, u8 velocity)
   //   if(note == bottom_led_map[current_keymap][i])
   //   LED.setPalette(i+NUM_LEDS, channel ,velocity);
   // }
-
-  if (massage_return)
-  {
-    MIDI::sentNoteOn(channel, note, velocity);
-    // if (CDCenable)
-    // {
-    //   CDC.print(channel);
-    //   CDC.print("\ton\t");
-    //   CDC.print(note);
-    //   CDC.print("\t");
-    //   CDC.println(velocity);
-    // }
-  }
 }
 
 
@@ -103,6 +94,11 @@ void MIDI::noteOff(u8 channel, u8 note, u8 velocity)
   CompositeSerial.print("\t");
   CompositeSerial.println(velocity);
   #endif
+
+  if(midi_return)
+  {
+    MIDI::sentNoteOff(channel, note, velocity);
+  }
 
   if(stfu)
   {
@@ -141,18 +137,6 @@ void MIDI::noteOff(u8 channel, u8 note, u8 velocity)
   //   LED.off(i+NUM_LEDS);
   // }
 
-  if (massage_return)
-  {
-    MIDI::sentNoteOff(channel, note, velocity);
-    // if (CDCenable)
-    // {
-    //   CDC.print(channel);
-    //   CDC.print("\toff\t");
-    //   CDC.print(note);
-    //   CDC.print("\t");
-    //   CDC.println(velocity);
-    // }
-  }
 }
 
 void MIDI::sentXYon(u8 xy, u8 velocity)

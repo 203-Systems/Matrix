@@ -61,6 +61,8 @@ public:
   u32 toBrightness(u32 hex, float f);
 
   bool rotationCW(u8 r);
+  
+  bool changed = false;
 
 private:
   bool overlay_mode = false;
