@@ -27,10 +27,11 @@ void LED::init()
     FastLED.addLeds<NEOPIXEL, PC7>(leds, NUM_TOTAL_LEDS);
     break;
   }
-
+  FastLED.setDither(0);
   FastLED.setBrightness(brightness);
-  FastLED.setCorrection(led_color_correction);
-  FastLED.setTemperature(0xFFFFFFFF);
+  //FastLED.setCorrection(led_color_correction);
+
+  //FastLED.setTemperature(0xFFFFFFFF);
   //FastLED.setMaxRefreshRate(fps);
   //LED::dynamicBrightness(max_mAh);
 }
@@ -38,7 +39,12 @@ void LED::init()
 void LED::setBrightness(u8 b)
 {
   FastLED.setBrightness(b);
-  //setBrightnesss(b);
+  //setBrightness(b);
+}
+
+void LED::setColourCorrection(u32 c)
+{
+  FastLED.setCorrection(c);
 }
 
 void LED::dynamicBrightness(u16 mah)
@@ -49,6 +55,7 @@ void LED::dynamicBrightness(u16 mah)
 void LED::fill(u32 WRGB, bool overlay /*= false*/)
 {
   //fill_solid(leds,NUM_TOTAL_LEDS,CRGB::Black);
+  WRGB = applyColourCorrection(WRGB);
   for(int i = 0; i < NUM_TOTAL_LEDS; i++)
   {
     if(!overlay_mode || overlay)
@@ -60,6 +67,7 @@ void LED::fill(u32 WRGB, bool overlay /*= false*/)
       buffer[i] = WRGB;
     }
   }
+  LED::changed = true;
   //FastLED.show();
 }
 
@@ -133,6 +141,8 @@ void LED::setHEX(s16 index, u32 hex, bool overlay /*= false*/, bool ignore_gamma
   if(index < 0)
   return;
 
+  hex = applyColourCorrection(hex);
+
   if(!overlay_mode || overlay)
   {
     if(gamma_enable && !ignore_gamma)
@@ -155,6 +165,7 @@ void LED::setHEX(s16 index, u32 hex, bool overlay /*= false*/, bool ignore_gamma
       buffer[indexRotation(index)] = applyGamma(hex);
     }
   }
+  LED::changed = true;
 }
 
 void LED::setPalette(s16 index, u8 pick_palette, u8 colour, bool overlay /*= false*/)
@@ -198,7 +209,7 @@ void LED::setXYHEX(u8 xy, u32 hex, bool overlay /*= false*/, bool ignore_gamma /
   // CompositeSerial.print("\t");
   // CompositeSerial.println(hex, HEX);
   // #endif
-
+  hex = applyColourCorrection(hex);
   if(!overlay_mode || overlay)
   {
     if(gamma_enable && !ignore_gamma)
@@ -221,6 +232,7 @@ void LED::setXYHEX(u8 xy, u32 hex, bool overlay /*= false*/, bool ignore_gamma /
       buffer[xyToIndex(xy)] = hex;
     }
   }
+  LED::changed = true;
 }
 
 void LED::setXYPalette(u8 xy, u8 pick_palette, u8 colour, bool overlay /*= false*/)
@@ -342,20 +354,88 @@ void LED::disableOverlayMode()
 
 u32 LED::readXYLED(u8 xy)
 {
-  return leds[xyToIndex(xy)];
+  if(xytox(xy) < XSIZE && xytoy(xy) < YSIZE)
+    return (leds[xyToIndex(xy)].r << 16) + (leds[xyToIndex(xy)].g << 8) + (leds[xyToIndex(xy)].b);
+  return 0;
 }
 
 u32 LED::readLED(u8 index)
 {
-  return leds[indexRotation(index)];
+  return(leds[indexRotation(index)].r << 16) + (leds[indexRotation(index)].g << 8) + (leds[indexRotation(index)].b);
 }
 
-u32 LED::toBrightness(u32 hex, float f)
-{
-  u8 w = (((hex & 0xFF000000) >> 24) * f);
-  u8 r = (((hex & 0x00FF0000) >> 16) * f);
-  u8 g = (((hex & 0x0000FF00) >> 8) * f);
-  u8 b = ((hex & 0x000000FF) * f);
 
-  return w * 0x1000000 + r * 0x10000 + g * 0x100 + b;
+
+bool LED::rotationCW(u8 r)
+{
+  if(r != 0 && r < 4)
+  {
+    for(int i = 0; i < NUM_LEDS; i++)
+    {
+      buffer[i] = leds[i];
+      leds[i] = 0;
+    }
+
+    for(int i = 0; i < NUM_LEDS; i++)
+    {
+      leds[i] = buffer[xyToIndex(xyRotation(indexToXY(i),r))];
+    }
+  }
+}
+
+void LED::shift(Direction direction, u8 distance)
+{
+  for(u8 d = 0 ; d < distance; d++)
+  {
+    switch(direction)
+    {
+      case up:
+      for(s8 y = 0; y < 8; y++)
+      {
+        for(s8 x = 0; x < 8; x++)
+        {
+          LED::setXYHEX(xytoxy(x,y), LED::readXYLED(xytoxy(x + 1,y)), true);
+        }
+      }
+      break;
+      case right:
+      for(s8 x = 7; x >= 0; x--)
+      {
+        for(s8 y = 0; y < 8; y++)
+        {
+          LED::setXYHEX(xytoxy(x,y), LED::readXYLED(xytoxy(x - 1,y)), true);
+        }
+      }
+      break;
+      case down:
+      for(s8 y = 7; y >= 0; y--)
+      {
+        for(s8 x = 0; x < 8; x++)
+        {
+          LED::setXYHEX(xytoxy(x , y), LED::readXYLED(xytoxy(x,y - 1)), true);
+        }
+      }
+      break;
+      case left:
+      for(s8 x = 0; x < 8; x++)
+      {
+        // CompositeSerial.print("Coping coloum ");
+        // CompositeSerial.print(x);
+        // CompositeSerial.print(" to ");
+        // CompositeSerial.println(x - 1);
+        for(s8 y = 0; y < 8; y++)
+        {
+          // CompositeSerial.print(x);
+          // CompositeSerial.print(y);
+          // CompositeSerial.print(" RGB ");
+          // CompositeSerial.print(LED::readXYLED(xytoxy(x,y)), HEX);
+          // CompositeSerial.print(" to ");
+          // CompositeSerial.print(x - 1);
+          // CompositeSerial.println(y);
+          LED::setXYHEX(xytoxy(x, y), LED::readXYLED(xytoxy(x + 1,y)), true);
+        }
+      }
+      break;
+    }
+  }
 }

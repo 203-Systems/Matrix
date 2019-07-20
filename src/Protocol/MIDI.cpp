@@ -15,7 +15,7 @@ void MIDI::noteOn(u8 channel, u8 note, u8 velocity)
 {
 
   #ifdef DEBUG
-  CompositeSerial.print("MIDI In \t");
+  CompositeSerial.print("MIDI In On\t");
   CompositeSerial.print(channel);
   CompositeSerial.print("\t");
   CompositeSerial.print(note);
@@ -27,6 +27,15 @@ void MIDI::noteOn(u8 channel, u8 note, u8 velocity)
 
   // if(channel == 5)
   //   channel = 1; //unipad support
+  if(midi_return)
+  {
+    MIDI::sentNoteOn(channel, note, velocity);
+  }
+  
+  if(velocity == 0)
+  {
+    MIDI::noteOff(channel, note, velocity);
+  }
 
   if(unipad_mode)
   channel = 1;
@@ -61,24 +70,21 @@ void MIDI::noteOn(u8 channel, u8 note, u8 velocity)
   //   if(note == bottom_led_map[current_keymap][i])
   //   LED.setPalette(i+NUM_LEDS, channel ,velocity);
   // }
-
-  if (massage_return)
-  {
-    MIDI::sentNoteOn(channel, note, velocity);
-    // if (CDCenable)
-    // {
-    //   CDC.print(channel);
-    //   CDC.print("\ton\t");
-    //   CDC.print(note);
-    //   CDC.print("\t");
-    //   CDC.println(velocity);
-    // }
-  }
 }
 
 
 void MIDI::noteOff(u8 channel, u8 note, u8 velocity)
 {
+
+  #ifdef DEBUG
+  CompositeSerial.print("MIDI In Off\t");
+  CompositeSerial.print(channel);
+  CompositeSerial.print("\t");
+  CompositeSerial.print(note);
+  CompositeSerial.print("\t");
+  CompositeSerial.println(velocity);
+  #endif
+
 
   #ifdef DEBUG
   CompositeSerial.print("MIDI Off \t");
@@ -89,7 +95,41 @@ void MIDI::noteOff(u8 channel, u8 note, u8 velocity)
   CompositeSerial.println(velocity);
   #endif
 
-  offMap[note] = 2;
+  if(midi_return)
+  {
+    MIDI::sentNoteOff(channel, note, velocity);
+  }
+
+  if(stfu)
+  {
+    offMap[note] = stfu;
+  }
+  else
+  {
+    switch(current_keymap)
+    {
+      case 0:
+      if(note > 35 && note < 100 )
+      LED.offXY(user1_keymap_optimized[note - 36]);
+      break;
+      case 1:
+      if(note % 10 - 1 < 8)
+      LED.offXY(xytoxy(note % 10 - 1, 8 - note/10));
+      break;
+      case 2:
+      case 3:
+      case 4:
+      for(u8 y = 0; y < YSIZE; y++)
+      {
+        for(u8 x = 0; x < XSIZE; x++)
+        {
+          if(note == keymap[current_keymap][y][x])
+          LED.offXY(xytoxy(x, y));
+        }
+      }
+      break;
+    }
+  }
   // //BottomLED
   // for(u8 i = 0;i < NUM_BOTTOM_LEDS; i++)
   // {
@@ -97,18 +137,6 @@ void MIDI::noteOff(u8 channel, u8 note, u8 velocity)
   //   LED.off(i+NUM_LEDS);
   // }
 
-  if (massage_return)
-  {
-    MIDI::sentNoteOff(channel, note, velocity);
-    // if (CDCenable)
-    // {
-    //   CDC.print(channel);
-    //   CDC.print("\toff\t");
-    //   CDC.print(note);
-    //   CDC.print("\t");
-    //   CDC.println(velocity);
-    // }
-  }
 }
 
 void MIDI::sentXYon(u8 xy, u8 velocity)
@@ -117,7 +145,7 @@ void MIDI::sentXYon(u8 xy, u8 velocity)
   u8 x = (xy & 0xF0) >> 4;
 
   #ifdef DEBUG
-  CompositeSerial.print("MIDI XY Out \t");
+  CompositeSerial.print("MIDI XY Out On \t");
   CompositeSerial.print(x);
   CompositeSerial.print("\t");
   CompositeSerial.print(y);
@@ -126,13 +154,23 @@ void MIDI::sentXYon(u8 xy, u8 velocity)
   #endif
 
 
-  MIDI::sentNoteOn(midi_channel, keymap[current_keymap][y][x], 127);
+  MIDI::sentNoteOn(midi_channel, keymap[current_keymap][y][x], velocity);
 }
 
 void MIDI::sentXYoff(u8 xy, u8 velocity)
 {
   u8 y = xy & 0x0F;
   u8 x = (xy & 0xF0) >> 4;
+
+  #ifdef DEBUG
+  CompositeSerial.print("MIDI XY Out Off \t");
+  CompositeSerial.print(x);
+  CompositeSerial.print("\t");
+  CompositeSerial.print(y);
+  CompositeSerial.print("\t");
+  CompositeSerial.println(velocity);
+  #endif
+
   MIDI::sentNoteOff(midi_channel, keymap[current_keymap][y][x], 0);
 }
 
@@ -169,20 +207,29 @@ void MIDI::handleNoteOn(unsigned int channel, unsigned int note, unsigned int ve
 
 void MIDI::sentNoteOn(u8 channel, u8 note, u8 velocity)
 {
-  #ifdef DEBUG
-  CompositeSerial.print("MIDI Out \t");
-  CompositeSerial.print(channel);
-  CompositeSerial.print("\t");
-  CompositeSerial.print(note);
-  CompositeSerial.print("\t");
-  CompositeSerial.println(velocity);
-  #endif
+  // #ifdef DEBUG
+  // CompositeSerial.print("MIDI Out On \t");
+  // CompositeSerial.print(channel);
+  // CompositeSerial.print("\t");
+  // CompositeSerial.print(note);
+  // CompositeSerial.print("\t");
+  // CompositeSerial.println(velocity);
+  // #endif
 
   USBMIDI.sendNoteOn(channel, note, velocity);
 }
 
 void MIDI::sentNoteOff(u8 channel, u8 note, u8 velocity)
 {
+  // #ifdef DEBUG
+  // CompositeSerial.print("MIDI Out Off \t");
+  // CompositeSerial.print(channel);
+  // CompositeSerial.print("\t");
+  // CompositeSerial.print(note);
+  // CompositeSerial.print("\t");
+  // CompositeSerial.println(velocity);
+  // #endif
+
   if(unipad_mode)
   {
     USBMIDI.sendNoteOn(channel, note, 0);
@@ -264,35 +311,38 @@ void MIDI::sentNoteOff(u8 channel, u8 note, u8 velocity)
 
 void MIDI::offScan()
 {
-  for(u8 note = 0; note < 128; note ++)
+  if(stfu)
   {
-    if(offMap[note] != -1)
+    for(u8 note = 0; note < 128; note ++)
     {
-      if(offMap[note] == 0)
-      switch(current_keymap)
+      if(offMap[note] != -1)
       {
-        case 0:
-        if(note > 35 && note < 100 )
-        LED.offXY(user1_keymap_optimized[note - 36]);
-        break;
-        case 1:
-        if(note % 10 - 1 < 8)
-        LED.offXY(xytoxy(note % 10 - 1, 8 - note/10));
-        break;
-        case 2:
-        case 3:
-        case 4:
-        for(u8 y = 0; y < YSIZE; y++)
+        if(offMap[note] == 0)
+        switch(current_keymap)
         {
-          for(u8 x = 0; x < XSIZE; x++)
+          case 0:
+          if(note > 35 && note < 100 )
+          LED.offXY(user1_keymap_optimized[note - 36]);
+          break;
+          case 1:
+          if(note % 10 - 1 < 8)
+          LED.offXY(xytoxy(note % 10 - 1, 8 - note/10));
+          break;
+          case 2:
+          case 3:
+          case 4:
+          for(u8 y = 0; y < YSIZE; y++)
           {
-            if(note == keymap[current_keymap][y][x])
-            LED.offXY(xytoxy(x, y));
+            for(u8 x = 0; x < XSIZE; x++)
+            {
+              if(note == keymap[current_keymap][y][x])
+              LED.offXY(xytoxy(x, y));
+            }
           }
+          break;
         }
-        break;
+        offMap[note] --;
       }
-      offMap[note] --;
     }
   }
 }

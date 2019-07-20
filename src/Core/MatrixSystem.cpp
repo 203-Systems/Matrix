@@ -7,6 +7,7 @@ EEPROMClass EEPROM_SYS;
 extern LED LED;
 extern KeyPad KeyPad;
 extern MIDI Midi;
+//extern ADCTouch TouchBar;
 
 void setupUSB()
 {
@@ -25,11 +26,14 @@ void setupUSB()
   }
 
   USBComposite.setManufacturerString(MAUNFACTURERNAME);
-  //USBComposite.setProductString(DEVICENAME);
-  USBComposite.setSerialString(SERIALSTRING);
+  USBComposite.setSerialString(getDeviceIDString());
 
   Midi.registerComponent();
+  // Midi.setRXPacketSize(256);
+  // Midi.setTXPacketSize(64);
+
   CompositeSerial.registerComponent();
+
   USBComposite.begin();
 
 }
@@ -38,6 +42,8 @@ void setupHardware()
 {
   LED.init();
   KeyPad.init();
+  //TouchBar.init();
+  applyColourCorrectionToPalette();
 }
 
 void bootDevice()
@@ -67,6 +73,18 @@ void setDeviceID(u8 id)
 
 void enterBootloader()
 {
+  LED.fill(0,true);
+  LED.setXYHEX(0x32,0xFF0000, true);
+  LED.setXYHEX(0x42,0xFF0000, true);
+  LED.setXYHEX(0x23,0xFF0000, true);
+  LED.setXYHEX(0x33,0xFF0000, true);
+  LED.setXYHEX(0x43,0xFF0000, true);
+  LED.setXYHEX(0x53,0xFF0000, true);
+  LED.setXYHEX(0x34,0xFF0000, true);
+  LED.setXYHEX(0x44,0xFF0000, true);
+  LED.setXYHEX(0x35,0xFF0000, true);
+  LED.setXYHEX(0x45,0xFF0000, true);
+  LED.update();
   bkp_init();
   bkp_enable_writes();
   bkp_write(10, 0x424C);
@@ -88,6 +106,34 @@ void formatEEPROM()
   EEPROM_PALETTE.format();
 }
 
+void applyColourCorrectionToPalette()
+{
+  cW = (led_color_correction & 0xFF000000) >> 24;
+  cR = (led_color_correction & 0xFF0000) >> 16;
+  cG = (led_color_correction & 0xFF00) >> 8;
+  cB = led_color_correction & 0xFF;
+  for(u8 p = 0; p < 4; p++)
+  {
+    for(u8 i = 0; i < 128; i++)
+    {
+      palette[p][i] = applyColourCorrection(palette[p][i]);
+    }
+  }
+}
+
+u32 applyColourCorrection(u32 input)
+{
+  u8 pW = (input & 0xFF000000) >> 24;
+  u8 pR = (input & 0xFF0000) >> 16;
+  u8 pG = (input & 0xFF00) >> 8;
+  u8 pB = input & 0xFF;
+  pW = scale8_video(pW, cW);
+  pR = scale8_video(pR, cR);
+  pG = scale8_video(pG, cG);
+  pB = scale8_video(pB, cB);
+  return pW * 0x1000000 + pR * 0x10000 + pG * 0x100 + pB;
+}
+
 void setgamma(bool g)
 {
   gamma_enable = g;
@@ -100,14 +146,14 @@ void nextBrightnessState()
   {
     if(brightness_level[i] > brightness)
     {
-      setBrightnesss(brightness_level[i]);
+      setBrightness(brightness_level[i]);
       return;
     }
   }
-  setBrightnesss(brightness_level[0]);
+  setBrightness(brightness_level[0]);
 }
 
-void setBrightnesss(u8 b) //Triple s to fix due to an unknow bug
+void setBrightness(u8 b)
 {
   EEPROM_USER.write(E_BRIGHTNESS, b);
   brightness = b;
@@ -126,6 +172,28 @@ void setUnipadMode(bool u)
   unipad_mode = u;
 }
 
+void setFnHold(bool h)
+{
+  EEPROM_USER.write(E_FN_HOLD, h);
+  fn_hold = h;
+}
+
+void setTouchThreshold(u16 t)
+{
+  EEPROM_USER.write(E_TOUCH_THRESHOLD, t);
+  touch_threshold = t;
+}
+
+void setLedCorrection(u32 c)
+{
+  EEPROM_USER.write(E_COLOUR_CORRECTION_1, c >> 16);
+  EEPROM_USER.write(E_COLOUR_CORRECTION_2, c & 0xFFFF);
+  //LED.setColourCorrection(c);
+  led_color_correction = c;
+  #ifdef DEBUG
+  CompositeSerial.print("Set Colour Correction ");CompositeSerial.println(c);
+  #endif
+}
 //Sysex get
 // void getDeviceInfo()
 // {
@@ -220,6 +288,11 @@ void setUnipadMode(bool u)
 // }
 
 //special
+// void resetTouchBar()
+// {
+//   TouchBar.init();
+// }
+
 
 void rotationCW(u8 r)
 {
@@ -232,6 +305,7 @@ void rotationCW(u8 r)
   {
     setRotation(r);
   }
+  LED.rotationCW(r);
 }
 
 void setRotation(u8 r)
@@ -312,14 +386,23 @@ u8 xytoxy(u8 x, u8 y)
   return x * 0x10 + y;
 }
 
-XY xytoxy(u8 xy)
+// XY xytoxy(u8 xy)
+// {
+//   XY nxy;
+//   nxy.x = (xy & 0xF0) >> 4;
+//   nxy.y = xy & 0x0F;
+//   return nxy;
+// }
+
+u8 xytox(u8 xy)
 {
-  XY nxy;
-  nxy.x = (xy & 0xF0) >> 4;
-  nxy.y = xy & 0x0F;
-  return nxy;
+  return (xy & 0xF0) >> 4;
 }
 
+u8 xytoy(u8 xy)
+{
+  return xy & 0x0F;
+}
 
 u8 xyRotation(u8 xy)
 {
@@ -328,6 +411,33 @@ u8 xyRotation(u8 xy)
   u8 xr;
   u8 yr;
   switch(rotation)
+  {
+    case 1:
+    xr = y;
+    yr = 7 - x;
+    break;
+    case 2:
+    xr = 7 - x;
+    yr = 7 - y;
+    break;
+    case 3:
+    xr = 7 - y;
+    yr = x;
+    break;
+    default:
+    xr = x;
+    yr = y;
+  }
+  return xr * 0x10 + yr;
+}
+
+u8 xyRotation(u8 xy, u8 r)
+{
+  u8 x = (xy & 0xF0) >> 4;
+  u8 y = xy & 0x0F;
+  u8 xr;
+  u8 yr;
+  switch(r)
   {
     case 1:
     xr = y;
@@ -375,6 +485,63 @@ u8 xyReverseRotation(u8 xy)
   return xr * 0x10 + yr;
 }
 
+u8 xyReverseRotation(u8 xy, u8 r)
+{
+  u8 x = (xy & 0xF0) >> 4;
+  u8 y = xy & 0x0F;
+  u8 xr;
+  u8 yr;
+  switch(r)
+  {
+    case 1:
+    xr = 7 - y;
+    yr = x;
+    break;
+    case 2:
+    xr = 7 - x;
+    yr = 7 - y;
+    break;
+    case 3:
+    xr = y;
+    yr = 7 - x;
+    break;
+    default:
+    xr = x;
+    yr = y;
+  }
+  return xr * 0x10 + yr;
+}
+
+u8 touchbarRotate(u8 id)
+{
+  switch(rotation)
+  {
+    case 0:
+    case 1:
+    return id;
+    case 2:
+    case 3:
+    return 7-id;
+  }
+}
+
+u32 toBrightness(u32 hex, float f, bool on)
+{
+  if(on)
+  return hex;
+  u8 w = (((hex & 0xFF000000) >> 24) * f);
+  u8 r = (((hex & 0x00FF0000) >> 16) * f);
+  u8 g = (((hex & 0x0000FF00) >> 8) * f);
+  u8 b = ((hex & 0x000000FF) * f);
+
+  return w * 0x1000000 + r * 0x10000 + g * 0x100 + b;
+}
+
+float velocityCurve(float input)
+{
+  return input;
+}
+
 void recordReportCode(u8 code)
 {
   #ifdef DEBUG
@@ -386,5 +553,5 @@ void recordReportCode(u8 code)
   report_code[available_report_code] = code;
   available_report_code ++;
   if(available_report_code ==  10)
-    available_report_code = 0;
+  available_report_code = 0;
 }

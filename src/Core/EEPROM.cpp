@@ -13,7 +13,7 @@ void setupEEPROM()
 
 void variableLoad()
 {
-  if(EEPROM_USER.read(E_INIT) != 203)
+  if(EEPROM_USER.read(E_INIT) != FWVERSION)
   {
     initEEPROM();
     return;
@@ -33,11 +33,15 @@ void loadSetting()
   gamma_enable = EEPROM_USER.read(E_GAMMA_ENABLE);
   midi_enable = EEPROM_USER.read(E_MIDI_ENABLE);
   m2p_enable = EEPROM_USER.read(E_M2P_ENABLE);
-  massage_return = EEPROM_USER.read(E_RETURN_ENABLE);
+  midi_return = EEPROM_USER.read(E_RETURN_ENABLE);
   unipad_mode = EEPROM_USER.read(E_UNIPAD_MODE);
   bootAnimationSelector = EEPROM_USER.read(E_BOOTANIMATION);
   debug_mode = EEPROM_USER.read(E_DEBUG_ENABLE);
   current_keymap = EEPROM_USER.read(E_CURRENT_KEYMAP);
+  led_color_correction = (EEPROM_USER.read(E_COLOUR_CORRECTION_1) << 16) + EEPROM_USER.read(E_COLOUR_CORRECTION_2);
+  led_color_temperture = (EEPROM_USER.read(E_COLOUR_TEMPERTURE_1) << 16) + EEPROM_USER.read(E_COLOUR_TEMPERTURE_2);
+  fn_hold = EEPROM_USER.read(E_FN_HOLD);
+  touch_threshold = EEPROM_USER.read(E_TOUCH_THRESHOLD);
 }
 
 void loadKeyMap()
@@ -68,7 +72,7 @@ void initEEPROM()
 
 void saveSetting()
 {
-  EEPROM_USER.write(E_INIT, 203);
+  EEPROM_USER.write(E_INIT, FWVERSION);
   EEPROM_USER.write(E_DEVICE_ID, device_id);
   EEPROM_USER.write(E_ROTATION, rotation);
   EEPROM_USER.write(E_BRIGHTNESS, brightness);
@@ -77,11 +81,14 @@ void saveSetting()
   EEPROM_USER.write(E_GAMMA_ENABLE, (u8)gamma_enable);
   EEPROM_USER.write(E_MIDI_ENABLE, (u8)midi_enable);
   EEPROM_USER.write(E_M2P_ENABLE, (u8)m2p_enable);
-  EEPROM_USER.write(E_RETURN_ENABLE, (u8)massage_return);
+  EEPROM_USER.write(E_RETURN_ENABLE, (u8)midi_return);
   EEPROM_USER.write(E_UNIPAD_MODE, (u8)unipad_mode);
   EEPROM_USER.write(E_BOOTANIMATION, bootAnimationSelector);
   EEPROM_USER.write(E_DEBUG_ENABLE, (u8)debug_mode);
   EEPROM_USER.write(E_CURRENT_KEYMAP, current_keymap);
+  EEPROM_USER.write(E_COLOUR_CORRECTION_1, led_color_correction >> 8);
+  EEPROM_USER.write(E_COLOUR_CORRECTION_2, led_color_correction & 0xFFFF);
+  EEPROM_USER.write(E_TOUCH_THRESHOLD, touch_threshold);
 }
 
 void saveKeyMap()

@@ -9,15 +9,21 @@ extern u8 device_config;
 
 extern u8 led_pin;
 extern u8 powercord_pin;
+extern u8 powercord_detection;
 
 extern u32 led_color_correction;
 
 //KeyPad
-extern u8 so_data;
-extern u8 so_clock;
-extern u8 si_data;
-extern u8 si_clock;
-extern u8 si_scan;
+extern u8 keypad_type;
+extern u8 keyPins[16];
+
+#define KEYPAD_SO_DATA keyPins[0]
+#define KEYPAD_SO_CLOCK keyPins[1]
+#define KEYPAD_SI_DATA keyPins[2]
+#define KEYPAD_SI_CLOCK keyPins[3]
+#define KEYPAD_SI_LATCH keyPins[4]
+
+extern u8 velocity_sensitivity;
 
 extern u8 fn_pin;
 
@@ -79,9 +85,12 @@ extern u32 eeprom_sys_adds_0;
 extern u32 eeprom_sys_adds_1;
 extern u32 eeprom_pagesize;
 
+extern u8 touch_type;
+
 void loadDeviceConfig();
 void loadConfigV110();
 void loadConfigV120();
 void loadConfigV150();
+void loadConfigV200();
 
 #endif

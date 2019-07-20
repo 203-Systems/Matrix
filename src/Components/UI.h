@@ -28,25 +28,32 @@ class UI
 public:
   UI();
   void enterFNmenu();
+  //void showDeviceInfo();
+  //void showASCII(char ascii[], u32 colour, bool ignore_gamma = false);
+  //void playAnimation(char animation[]);
+  u8 numSelector8bit(u8 currentNum, u32 colour, u32 sec_colour, bool ignore_gamma = false);
+  u8 numSelector6bit(u8 currentNum, u32 colour, u32 sec_colour, bool ignore_gamma = false);
+  u32 numSelectorRGB(u32 colour, bool ignore_gamma = false);
+  //u32 numSelectorWRGB(u32 colour, bool ignore_gamma = false);
+  void scrollText(char ascii[], u32 colour, bool loop = false);
+  void kaskobiWaitAnimation();
+  void kaskobiBootAnimation();
+private:
   void fnMenu();
   void exitFNmenu();
   void fnKeyAction();
   void fnRender();
-  void showDeviceInfo();
-  void showASCII(char ascii[], u32 colour, bool ignore_gamma = false);
-  void playAnimation(char animation[]);
-  u8 numSelector8bit(u8 currentNum, u32 colour, bool ignore_gamma = false);
-  u8 numSelector6bit(u8 currentNum, u32 colour, bool ignore_gamma = false);
-  u32 numSelectorRGB(u32 currentNum, u32 colour, bool ignore_gamma = false);
-  u32 numSelectorWRGB(u32 currentNum, u32 colour, bool ignore_gamma = false);
-  //void scrollText(char ascii[], u8 xy, u8 speed, u32 colour, bool ignore_gamma = false);
 
-  void kaskobiWaitAnimation();
-  void kaskobiBootAnimation();
-private:
+  void enterSettingMenu();
+  void settingMenu();
+  void exitSettingMenu();
+  void settingKeyAction();
+  void settingRender();
+
   Timer uiTimer;
   bool hadAction = false;
   u8 brightness_cache;
+  u8 konami_progress = 0;
 };
 
 //extern UI UI;

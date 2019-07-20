@@ -11,6 +11,7 @@
 
 // enum LEDMoDE{ on, off, w, rgb, wrgb, hex, palette};
 // enum INDEXMoDE{ INDEX, XY };
+enum Direction : u8 {up, right, down, left};
 
 class LED
 {
@@ -19,6 +20,7 @@ public:
   void init();
   void nextBrightnessState();
   void setBrightness(u8 b);
+  void setColourCorrection(u32 c);
   void dynamicBrightness(u16 mah);
   void fill(u32 WRGB, bool overlay = false);
 
@@ -58,6 +60,11 @@ public:
   u32 readXYLED(u8 xy);
   u32 readLED(u8 index);
   u32 toBrightness(u32 hex, float f);
+
+  bool rotationCW(u8 r);
+  void shift(Direction direction, u8 distance);
+
+  bool changed = false;
 
 private:
   bool overlay_mode = false;
