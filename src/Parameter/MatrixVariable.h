@@ -64,4 +64,8 @@ extern u8 cB;
 
 extern u8 report_code[10];
 extern u8 available_report_code;
+
+extern u8 font[96][6];
+extern u8 half_height_num_font[10][3];
+
 #endif

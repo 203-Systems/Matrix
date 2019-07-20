@@ -507,6 +507,11 @@ void UI::settingKeyAction()
         case 0x07: //DFU
         enterBootloader();
         break;
+        case 0x17:
+        UI::scrollText("AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz", 0x00FF30);
+        break;
+        case 0x27:
+        break;
         // case 0x67:
         // LED.setColourCorrection(0xFFFFFF);
         // setLedCorrection(UI::numSelectorRGB(led_color_correction, true));
@@ -522,6 +527,8 @@ void UI::settingKeyAction()
 void UI::settingRender()
 {
   LED.setXYHEX(0x07, 0x00FF0000, true, true); //DFU
+  LED.setXYHEX(0x17, 0x0000FF30, true, true); //Device Info
+  LED.setXYHEX(0x27, 0x0000FF30, true, true); //Bootloader Info
   //LED.setXYHEX(0x67, 0x00FFFFFF, true, true); //White
   LED.setXYHEX(0x77, 0x0000FFAA, true, true); //Device ID
   LED.update();
@@ -630,33 +637,87 @@ u32 UI::numSelectorRGB(u32 colour, bool ignore_gamma /* = false */)
 //
 // }
 
-// void UI::scrollText(char ascii[], u8 xy, u8 speed, u32 colour, bool ignore_gamma /* = false */)
-// {
-//   u8 current = 0;
-//   u8 numOfChar;
-//   u8 space = 2;
-//   u8 firstX = font[ascii[0]][0] + XSIZE - 2;
-//   u8 lastX;
-//
-//   while(current > sizeof(ascii))
-//   {
-//     if(ascii[current] < 32)
-//     {
-//       speed = ascii[current];
-//     }
-//     else
-//     {
-//       UIe.renderAscii(ascii[current], xytoxy(firstX, 7), colour, ignore_gamma);
-//     }
-//
-//     lastX = firstX;
-//     numOfChar = 1;
-//
-//     while(lastX < XSIZE - space - 2)
-//     {
-//       //lastX = lastX + space +
-//     }
-//   }
-//   firstX--;
-//   while(uiTimer.tick(speed*2));
-// }
+void UI::scrollText(char ascii[], u32 colour, bool loop /* = false */)
+{
+
+  u8 speed = 100;
+  u8 spacing = 2;
+  u8 spacing_remaining = 0;
+  LED.fill(0, true);
+  LED.update();
+  // CompositeSerial.print("Text scroll: ");
+  // CompositeSerial.println(ascii);
+  // CompositeSerial.print("Text Size: ");
+  // CompositeSerial.println(strlen(ascii));
+  do
+  {
+    u8 current_char = 0;
+    while(current_char < strlen(ascii))
+    {
+      // CompositeSerial.print("Print Char: ");
+      // CompositeSerial.println(ascii[current_char]);
+      u8 current_char_progress = 0;
+      if(ascii[current_char] < 128)
+      {
+         if(ascii[current_char] < 32)
+        {
+          speed = ascii[current_char] * 10 + 10;
+          // CompositeSerial.print("Speed changed: ");
+          // CompositeSerial.println(speed);
+          break;
+        }
+        else
+        {
+          while(current_char_progress < font[ascii[current_char] - 32][0])
+          {
+            while(!uiTimer.tick(speed))
+            {
+              if(KeyPad.scan())
+              {
+                if(KeyPad.fn.state == PRESSED)
+                {
+                  LED.fill(0, true);
+                  return;
+                }
+              }
+            }
+            LED.shift(left, 1);
+            if(spacing_remaining)
+            {
+              spacing_remaining --;
+              LED.update();
+            }
+            else
+            {
+              for(u8 y = 0; y < 8; y++)
+              {
+                LED.setXYHEX(xytoxy(7,y), colour * bitRead(font[ascii[current_char] - 32][current_char_progress + 1], 7-y) , true);
+              }
+              LED.update();
+              current_char_progress++;
+            }
+          }
+        }
+      }
+      current_char ++;
+      spacing_remaining = spacing;
+    }
+    for(u8 c = 0; c < 8; c++)
+    {
+      while(!uiTimer.tick(speed))
+      {
+        if(KeyPad.scan())
+        {
+          if(KeyPad.fn.state == PRESSED)
+          {
+            LED.fill(0, true);
+            return;
+          }
+        }
+      }
+      LED.shift(left, 1);
+      LED.update();
+    }
+  }while(loop);
+  LED.fill(0, true);
+}

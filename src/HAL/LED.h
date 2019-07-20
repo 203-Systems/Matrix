@@ -11,6 +11,7 @@
 
 // enum LEDMoDE{ on, off, w, rgb, wrgb, hex, palette};
 // enum INDEXMoDE{ INDEX, XY };
+enum Direction : u8 {up, right, down, left};
 
 class LED
 {
@@ -61,7 +62,8 @@ public:
   u32 toBrightness(u32 hex, float f);
 
   bool rotationCW(u8 r);
-  
+  void shift(Direction direction, u8 distance);
+
   bool changed = false;
 
 private:

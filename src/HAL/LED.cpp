@@ -354,12 +354,14 @@ void LED::disableOverlayMode()
 
 u32 LED::readXYLED(u8 xy)
 {
-  return leds[xyToIndex(xy)];
+  if(xytox(xy) < XSIZE && xytoy(xy) < YSIZE)
+    return (leds[xyToIndex(xy)].r << 16) + (leds[xyToIndex(xy)].g << 8) + (leds[xyToIndex(xy)].b);
+  return 0;
 }
 
 u32 LED::readLED(u8 index)
 {
-  return leds[indexRotation(index)];
+  return(leds[indexRotation(index)].r << 16) + (leds[indexRotation(index)].g << 8) + (leds[indexRotation(index)].b);
 }
 
 
@@ -377,6 +379,63 @@ bool LED::rotationCW(u8 r)
     for(int i = 0; i < NUM_LEDS; i++)
     {
       leds[i] = buffer[xyToIndex(xyRotation(indexToXY(i),r))];
+    }
+  }
+}
+
+void LED::shift(Direction direction, u8 distance)
+{
+  for(u8 d = 0 ; d < distance; d++)
+  {
+    switch(direction)
+    {
+      case up:
+      for(s8 y = 0; y < 8; y++)
+      {
+        for(s8 x = 0; x < 8; x++)
+        {
+          LED::setXYHEX(xytoxy(x,y), LED::readXYLED(xytoxy(x + 1,y)), true);
+        }
+      }
+      break;
+      case right:
+      for(s8 x = 7; x >= 0; x--)
+      {
+        for(s8 y = 0; y < 8; y++)
+        {
+          LED::setXYHEX(xytoxy(x,y), LED::readXYLED(xytoxy(x - 1,y)), true);
+        }
+      }
+      break;
+      case down:
+      for(s8 y = 7; y >= 0; y--)
+      {
+        for(s8 x = 0; x < 8; x++)
+        {
+          LED::setXYHEX(xytoxy(x , y), LED::readXYLED(xytoxy(x,y - 1)), true);
+        }
+      }
+      break;
+      case left:
+      for(s8 x = 0; x < 8; x++)
+      {
+        // CompositeSerial.print("Coping coloum ");
+        // CompositeSerial.print(x);
+        // CompositeSerial.print(" to ");
+        // CompositeSerial.println(x - 1);
+        for(s8 y = 0; y < 8; y++)
+        {
+          // CompositeSerial.print(x);
+          // CompositeSerial.print(y);
+          // CompositeSerial.print(" RGB ");
+          // CompositeSerial.print(LED::readXYLED(xytoxy(x,y)), HEX);
+          // CompositeSerial.print(" to ");
+          // CompositeSerial.print(x - 1);
+          // CompositeSerial.println(y);
+          LED::setXYHEX(xytoxy(x, y), LED::readXYLED(xytoxy(x + 1,y)), true);
+        }
+      }
+      break;
     }
   }
 }
