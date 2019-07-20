@@ -560,6 +560,12 @@ void UI::settingKeyAction()
     u8 x = xytox(KeyPad.changelist[i]);
     u8 y = xytoy(KeyPad.changelist[i]);
 
+    String fw_str = "Matrix OS V" + String(FWVERSION_STRING);
+    CompositeSerial.println(fw_str);
+    String bl_str = "Matrix Bootloader V" + String(BOOTLOADER_VERSION);
+    CompositeSerial.println(bl_str);
+    char char_buffer[64];
+
     if(KeyPad.getKey(KeyPad.changelist[i]).state == RELEASED)
     {
       switch(KeyPad.changelist[i])
@@ -568,9 +574,12 @@ void UI::settingKeyAction()
         enterBootloader();
         break;
         case 0x17:
-        UI::scrollText("AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz", 0x00FF30);
+        fw_str.toCharArray(char_buffer,64);
+        UI::scrollText(char_buffer, 0x00FF30);
         break;
         case 0x27:
+        bl_str.toCharArray(char_buffer,64);
+        UI::scrollText(char_buffer, 0x00FF30);
         break;
         // case 0x67:
         // LED.setColourCorrection(0xFFFFFF);
@@ -589,9 +598,10 @@ void UI::settingKeyAction()
         UI::scrollText("Enter DFU Mode", 0xFF0000);
         break;
         case 0x17:
-        UI::scrollText("Device Firmware Info", 0x00FF30);
+        UI::scrollText("Device Firmware Version", 0x00FF30);
         break;
         case 0x27:
+        UI::scrollText("Device Bootloader Version", 0x00FF30);
         break;
         // case 0x67:
         // LED.setColourCorrection(0xFFFFFF);
@@ -729,10 +739,10 @@ void UI::scrollText(char ascii[], u32 colour, bool loop /* = false */)
   u8 spacing_remaining = 0;
   LED.fill(0, true);
   LED.update();
-  // CompositeSerial.print("Text scroll: ");
-  // CompositeSerial.println(ascii);
-  // CompositeSerial.print("Text Size: ");
-  // CompositeSerial.println(strlen(ascii));
+  CompositeSerial.print("Text scroll: ");
+  CompositeSerial.println(ascii);
+  CompositeSerial.print("Text Size: ");
+  CompositeSerial.println(strlen(ascii));
   do
   {
     u8 current_char = 0;
