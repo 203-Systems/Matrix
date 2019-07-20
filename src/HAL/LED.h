@@ -59,6 +59,9 @@ public:
   void disableOverlayMode();
   u32 readXYLED(u8 xy);
   u32 readLED(u8 index);
+  CRGB readXYCRGB(u8 xy);
+  CRGB readCRGB(u8 index);
+
   u32 toBrightness(u32 hex, float f);
 
   bool rotationCW(u8 r);

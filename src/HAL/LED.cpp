@@ -364,6 +364,18 @@ u32 LED::readLED(u8 index)
   return(leds[indexRotation(index)].r << 16) + (leds[indexRotation(index)].g << 8) + (leds[indexRotation(index)].b);
 }
 
+CRGB LED::readXYCRGB(u8 xy)
+{
+  if(xytox(xy) < XSIZE && xytoy(xy) < YSIZE)
+    return leds[xyToIndex(xy)];
+  return 0;
+}
+
+CRGB LED::readCRGB(u8 index)
+{
+  return leds[indexRotation(index)];
+}
+
 
 
 bool LED::rotationCW(u8 r)
@@ -394,7 +406,7 @@ void LED::shift(Direction direction, u8 distance)
       {
         for(s8 x = 0; x < 8; x++)
         {
-          LED::setXYHEX(xytoxy(x,y), LED::readXYLED(xytoxy(x + 1,y)), true);
+          leds[xyToIndex(xytoxy(x, y))] = LED::readXYCRGB(xytoxy(x, y + 1));
         }
       }
       break;
@@ -403,7 +415,7 @@ void LED::shift(Direction direction, u8 distance)
       {
         for(s8 y = 0; y < 8; y++)
         {
-          LED::setXYHEX(xytoxy(x,y), LED::readXYLED(xytoxy(x - 1,y)), true);
+          leds[xyToIndex(xytoxy(x, y))] = LED::readXYCRGB(xytoxy(x - 1, y));
         }
       }
       break;
@@ -412,7 +424,7 @@ void LED::shift(Direction direction, u8 distance)
       {
         for(s8 x = 0; x < 8; x++)
         {
-          LED::setXYHEX(xytoxy(x , y), LED::readXYLED(xytoxy(x,y - 1)), true);
+          leds[xyToIndex(xytoxy(x, y))] = LED::readXYCRGB(xytoxy(x, y - 1));
         }
       }
       break;
@@ -432,7 +444,7 @@ void LED::shift(Direction direction, u8 distance)
           // CompositeSerial.print(" to ");
           // CompositeSerial.print(x - 1);
           // CompositeSerial.println(y);
-          LED::setXYHEX(xytoxy(x, y), LED::readXYLED(xytoxy(x + 1,y)), true);
+          leds[xyToIndex(xytoxy(x, y))] = LED::readXYCRGB(xytoxy(x + 1, y));
         }
       }
       break;
