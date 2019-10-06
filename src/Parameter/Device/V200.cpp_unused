@@ -20,10 +20,11 @@ void loadConfigV200()
   {
     keyPins[i] = type2keyPins[i];
   }
-  
+
   velocity_sensitivity = 12;
 
   fn_pin = PB7;
+  fn_press_state = HIGH;
 
   //I2C
   i2c_scl = PB8;

@@ -6,6 +6,8 @@
 #define V120
 
 extern u8 device_config;
+extern String device_name;
+
 
 extern u8 led_pin;
 extern u8 powercord_pin;
@@ -26,6 +28,7 @@ extern u8 keyPins[16];
 extern u8 velocity_sensitivity;
 
 extern u8 fn_pin;
+extern bool fn_press_state;
 
 //analog(TouchBar)
 extern u8 analog0;
@@ -88,9 +91,10 @@ extern u32 eeprom_pagesize;
 extern u8 touch_type;
 
 void loadDeviceConfig();
-void loadConfigV110();
+//void loadConfigV110();
 void loadConfigV120();
 void loadConfigV150();
-void loadConfigV200();
+//void loadConfigV200();
+void loadConfigV210();
 
 #endif

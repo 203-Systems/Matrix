@@ -249,12 +249,15 @@ void LED::update()
 
 void LED::rainbow()
 {
+  while(true)
+  {
   int hue = 0;
   while(hue != 255)
   {
     fill_rainbow(leds, NUM_LEDS, hue++);
     FastLED.show();
   }
+}
 }
 
 // void LED::fillRegionOff(u8 xy1, u8 xy2, bool overlay /*= false*/)

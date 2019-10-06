@@ -11,7 +11,7 @@ extern MIDI Midi;
 
 void setupUSB()
 {
-
+  USBComposite.clear();
   if(device_id != 0)
   {
     USBComposite.setProductString((DEVICENAME + String(' ') + String(device_id)).c_str());

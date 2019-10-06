@@ -1,6 +1,8 @@
 #include "KeyPad.h"
 #include <USBComposite.h>
 
+#define DEBUG
+
 #ifdef DEBUG
 #include <USBComposite.h>
 #endif
@@ -13,14 +15,31 @@ KeyPad::KeyPad()
 
 void KeyPad::init()
 {
+  if(fn_press_state)
+  {
+    pinMode(fn_pin, INPUT_PULLDOWN);
+  }
+  else
+  {
+    pinMode(fn_pin, INPUT_PULLUP);
+  }
   switch(keypad_type)
   {
     case 1:
+    #ifdef DEBUG
+    CompositeSerial.print("KeyPad Mode 1 Initalized");
+    #endif
     return KeyPad::initType1();
     case 2:
+    #ifdef DEBUG
+    CompositeSerial.print("KeyPad Mode 2 Initalized");
+    #endif
     return KeyPad::initType2();
-    case 3:
-    return KeyPad::initType3();
+    // case 3:
+    // #ifdef DEBUG
+    // CompositeSerial.print("KeyPad Mode 3 Initalized");
+    // #endif
+    //return KeyPad::initType3();
   }
 }
 
@@ -32,8 +51,6 @@ void KeyPad::initType1()
   pinMode(KEYPAD_SI_LATCH, OUTPUT);
   pinMode(KEYPAD_SI_CLOCK, OUTPUT);
   pinMode(KEYPAD_SI_DATA, INPUT_PULLDOWN);
-
-  pinMode(fn_pin, INPUT_PULLDOWN);
 }
 
 void KeyPad::initType2()
@@ -47,9 +64,10 @@ void KeyPad::initType2()
   {
     pinMode(keyPins[y + XSIZE], INPUT_PULLDOWN);
   }
+
 }
 
-void KeyPad::initType3()
+/*void KeyPad::initType3()
 {
   for(u8 x = 0; x < XSIZE; x ++)
   {
@@ -60,8 +78,9 @@ void KeyPad::initType3()
   {
     pinMode(keyPins[y + XSIZE], INPUT_PULLDOWN);
   }
-}
 
+}
+*/
 
 bool KeyPad::scan()
 {
@@ -72,8 +91,8 @@ bool KeyPad::scan()
     return KeyPad::scanType1();
     case 2:
     return KeyPad::scanType2();
-    case 3:
-    return KeyPad::scanType3();
+    //case 3:
+    //return KeyPad::scanType3();
   }
 }
 
@@ -134,10 +153,10 @@ bool KeyPad::scanType2()
 
   for(u8 x = 0; x < XSIZE; x ++)
   {
-    digitalWrite(x, HIGH);
+    digitalWrite(keyPins[x], HIGH);
     for(u8 y = 0; y < YSIZE; y ++)
     {
-      keypadState[x][y] = KeyPad::updateKey(keypadState[x][y], digitalRead(y + 8));
+      keypadState[x][y] = KeyPad::updateKey(keypadState[x][y], digitalRead(keyPins[y+8]));
       if(keypadState[x][y].changed)
       {
         changed = true;
@@ -145,12 +164,12 @@ bool KeyPad::scanType2()
         return changed;
       }
     }
-    digitalWrite(x, LOW);
+    digitalWrite(keyPins[x], LOW);
   }
 
   return changed;
 }
-
+/*
 bool KeyPad::scanType3()
 {
   bool changed = false;
@@ -175,10 +194,17 @@ bool KeyPad::scanType3()
 
   return changed;
 }
-
+*/
 bool KeyPad::scanFN()
 {
-  fn = updateKey(fn, digitalRead(fn_pin));
+  if(fn_press_state)
+  {
+    fn = updateKey(fn, digitalRead(fn_pin));
+  }
+  else
+  {
+  fn = updateKey(fn, !digitalRead(fn_pin));
+  }
   #ifdef DEBUG
   if(fn.changed)
   {
@@ -217,7 +243,7 @@ KeyInfo KeyPad::updateKey(KeyInfo currentKey, float input)
     currentKey.hold = false;
   }
 
-  if(currentKey.state == IDLE && input)
+  if(currentKey.state == IDLE && input && millis() - currentKey.activeTime > debounce_threshold)
   {
     currentKey.state = PRESSED;
     currentKey.velocity = input;
@@ -226,10 +252,11 @@ KeyInfo KeyPad::updateKey(KeyInfo currentKey, float input)
     return currentKey;
   }
 
-  if(currentKey.state == ACTIVED && input == 0)
+  if(currentKey.state == ACTIVED && input == 0 && millis() - currentKey.activeTime > debounce_threshold)
   {
     currentKey.state = RELEASED;
     currentKey.velocity = 0;
+    currentKey.activeTime = millis();
     currentKey.changed = true;
     return currentKey;
   }

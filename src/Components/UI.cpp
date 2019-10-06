@@ -561,9 +561,7 @@ void UI::settingKeyAction()
     u8 y = xytoy(KeyPad.changelist[i]);
 
     String fw_str = "Matrix OS V" + String(FWVERSION_STRING);
-    CompositeSerial.println(fw_str);
     String bl_str = "Matrix Bootloader V" + String(BOOTLOADER_VERSION);
-    CompositeSerial.println(bl_str);
     char char_buffer[64];
 
     if(KeyPad.getKey(KeyPad.changelist[i]).state == RELEASED)
@@ -579,6 +577,10 @@ void UI::settingKeyAction()
         break;
         case 0x27:
         bl_str.toCharArray(char_buffer,64);
+        UI::scrollText(char_buffer, 0x00FF30);
+        break;
+        case 0x37:
+        device_name.toCharArray(char_buffer,64);
         UI::scrollText(char_buffer, 0x00FF30);
         break;
         // case 0x67:
@@ -603,6 +605,9 @@ void UI::settingKeyAction()
         case 0x27:
         UI::scrollText("Device Bootloader Version", 0x00FF30);
         break;
+        case 0x37:
+        UI::scrollText("Device Name", 0x00FF30);
+        break;
         // case 0x67:
         // LED.setColourCorrection(0xFFFFFF);
         // setLedCorrection(UI::numSelectorRGB(led_color_correction, true));
@@ -623,6 +628,7 @@ void UI::settingRender()
   LED.setXYHEX(0x07, 0x00FF0000, true, true); //DFU
   LED.setXYHEX(0x17, 0x0000FF30, true, true); //Device Info
   LED.setXYHEX(0x27, 0x0000FF30, true, true); //Bootloader Info
+  LED.setXYHEX(0x37, 0x0000FF30, true, true); //Device Name
   //LED.setXYHEX(0x67, 0x00FFFFFF, true, true); //White
   LED.setXYHEX(0x77, 0x0000FFAA, true, true); //Device ID
   LED.update();
@@ -739,10 +745,12 @@ void UI::scrollText(char ascii[], u32 colour, bool loop /* = false */)
   u8 spacing_remaining = 0;
   LED.fill(0, true);
   LED.update();
+  #ifdef DEBUG
   CompositeSerial.print("Text scroll: ");
   CompositeSerial.println(ascii);
   CompositeSerial.print("Text Size: ");
   CompositeSerial.println(strlen(ascii));
+  #endif
   do
   {
     u8 current_char = 0;

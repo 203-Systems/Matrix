@@ -1,6 +1,14 @@
+#define DEBUG
+
 #include "DeviceSelector.h"
 
+#ifdef DEBUG
+#include <USBComposite.h>
+#endif
+
 extern u8 device_config = 0;
+
+extern String device_name = "Matrix";
 
 extern u8 led_pin = 0;
 extern u8 powercord_pin = 0;
@@ -14,6 +22,7 @@ extern u8 keyPins[16] = {0};
 extern u8 velocity_sensitivity = 1;  //for velocity sensitivy bit 1 for no velocity (binary) 8 for 8 bit(0~255)
 
 extern u8 fn_pin = 0;
+extern bool fn_press_state = HIGH;
 
 //analog(TouchBar)
 extern u8 analog0 = PA3;
@@ -95,15 +104,24 @@ void loadDeviceConfig()
                             // break;
 
                             case 120:
+                            #ifdef DEBUG
+                            CompositeSerial.print("Device: Matrix Prototype V1.2");
+                            #endif
                             loadConfigV120();
                             break;
 
                             case 150:
+                            #ifdef DEBUG
+                            CompositeSerial.print("Device: Matrix Prototype V1.5");
+                            #endif
                             loadConfigV150();
                             break;
 
-                            case 200:
-                            loadConfigV200();
+                            case 210:
+                            #ifdef DEBUG
+                            CompositeSerial.print("Device: Matrix Prototype V2.1");
+                            #endif
+                            loadConfigV210();
                             break;
                           }
     break;

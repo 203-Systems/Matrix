@@ -5,6 +5,9 @@ void loadConfigV120()
 
   device_config = 120;
 
+  device_name = "Matrix Prototype V1.2";
+
+
   //LED
   led_pin = PB7;
   powercord_pin = PA9;
@@ -20,6 +23,7 @@ void loadConfigV120()
   keyPins[4] = PB15;
 
   fn_pin = PA0;
+  fn_press_state = HIGH;
 
   //analog(TouchBar)
   analog0 = PA3;

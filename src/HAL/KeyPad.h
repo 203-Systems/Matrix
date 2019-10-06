@@ -63,8 +63,8 @@ private:
   bool scanType1();
   void initType2();
   bool scanType2();
-  void initType3();
-  bool scanType3();
+  // void initType3();
+  // bool scanType3();
   bool scanFN();
   KeyInfo updateKey(KeyInfo currentKey, float input);
   void cleanList();

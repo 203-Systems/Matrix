@@ -12,6 +12,9 @@ Play Text
 NexusRevamped while USB unreconized
 
 */
+
+#define DEBUG
+
 #include <Arduino.h>
 #include <USBMIDI.h>
 #include <USBComposite.h>
@@ -44,13 +47,13 @@ bool flag_leftFN = false;
 
 void setup()
 {
+  setupUSB();
   digitalWrite(led_pin,LOW);
   loadDeviceConfig();
   setupEEPROM();
   variableLoad();
   setupHardware();
   specialBoot();
-  setupUSB();
 
   #ifdef DEBUG
   CompositeSerial.println("Setup Complete");
