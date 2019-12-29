@@ -1,4 +1,4 @@
-#define DEBUG
+//#define DEBUG
 
 #include "DeviceSelector.h"
 
@@ -14,7 +14,7 @@ extern u8 led_pin = 0;
 extern u8 powercord_pin = 0;
 extern u8 powercord_detection = 0;
 
-extern u32 led_color_correction = 0xFFFFFFFF;
+extern u32 led_colour_correction = 0xFFFFFFFF;
 
 //KeyPad
 extern u8 keypad_type = 1;

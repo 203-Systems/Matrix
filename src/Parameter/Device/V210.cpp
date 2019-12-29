@@ -11,7 +11,7 @@ void loadConfigV210()
   powercord_pin = PA8;
   powercord_detection = PC9;
 
-  led_color_correction = 0xC0FFD8;
+  led_colour_correction = 0xC0FFD8;
 
   //KeyPad
   keypad_type = 2;

@@ -45,7 +45,7 @@ typedef volatile const int64_t vsc64;
 
 //DeviceInfo
 
-#define DEBUG
+//#define DEBUG
 
 #define DEVICENAME "Matrix"
 #define MAUNFACTURERNAME "203 Industries"
@@ -54,8 +54,8 @@ typedef volatile const int64_t vsc64;
 #define VID2 0x0203 // for device ID USE
 #define PID  0x1000
 #define PID2 0x1000 // for device ID USE
-#define FWVERSION 0x0710
-#define FWVERSION_STRING "0.7.1b"
+#define FWVERSION 0x0078
+#define FWVERSION_STRING "0.7.8b"
 
 
 

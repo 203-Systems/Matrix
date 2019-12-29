@@ -13,7 +13,7 @@ extern u8 led_pin;
 extern u8 powercord_pin;
 extern u8 powercord_detection;
 
-extern u32 led_color_correction;
+extern u32 led_colour_correction;
 
 //KeyPad
 extern u8 keypad_type;

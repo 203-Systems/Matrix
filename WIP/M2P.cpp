@@ -130,7 +130,7 @@ void M2P::sysexSet()
   switch (CompositeSerial.read() & 0x0F)
   {
     case 8:
-    reset();
+    reboot();
     break;
     case 9:
     enterBootloader();

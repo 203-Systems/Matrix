@@ -4,16 +4,11 @@ Copyright © 203 Industries 2017–2019. All rights reserved.
 
 TODO
 EEPROM load KeyMap
-EEPROM sys stuff
-microsecond timer
 Play Animation
 Play Midi
-Play Text
 NexusRevamped while USB unreconized
 
 */
-
-#define DEBUG
 
 #include <Arduino.h>
 #include <USBMIDI.h>
@@ -48,7 +43,6 @@ bool flag_leftFN = false;
 void setup()
 {
   setupUSB();
-  digitalWrite(led_pin,LOW);
   loadDeviceConfig();
   setupEEPROM();
   variableLoad();

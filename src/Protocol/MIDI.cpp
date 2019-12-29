@@ -31,7 +31,7 @@ void MIDI::noteOn(u8 channel, u8 note, u8 velocity)
   {
     MIDI::sentNoteOn(channel, note, velocity);
   }
-  
+
   if(velocity == 0)
   {
     MIDI::noteOff(channel, note, velocity);
@@ -109,12 +109,12 @@ void MIDI::noteOff(u8 channel, u8 note, u8 velocity)
     switch(current_keymap)
     {
       case 0:
-      if(note > 35 && note < 100 )
+      if(note > 35 && note < 100)
       LED.offXY(user1_keymap_optimized[note - 36]);
       break;
       case 1:
-      if(note % 10 - 1 < 8)
-      LED.offXY(xytoxy(note % 10 - 1, 8 - note/10));
+      if(note % 10 - 1 < 8 && note / 10 - 1 < 8 && note > 10 && note < 89) //need add bottom light support
+        LED.offXY(xytoxy(note % 10 - 1, 8 - note/10));
       break;
       case 2:
       case 3:
@@ -321,11 +321,11 @@ void MIDI::offScan()
         switch(current_keymap)
         {
           case 0:
-          if(note > 35 && note < 100 )
+          if(note > 35 && note < 100)
           LED.offXY(user1_keymap_optimized[note - 36]);
           break;
           case 1:
-          if(note % 10 - 1 < 8)
+          if(note % 10 - 1 < 8 && note / 10 - 1 < 8 && note > 10 && note < 89)
           LED.offXY(xytoxy(note % 10 - 1, 8 - note/10));
           break;
           case 2:
