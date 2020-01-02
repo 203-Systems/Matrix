@@ -1,6 +1,6 @@
 /*
 Project Matrix
-Copyright © 203 Industries 2017–2019. All rights reserved.
+Copyright © 203 Industries 2017–2020. All rights reserved.
 
 TODO
 EEPROM load KeyMap
@@ -17,15 +17,11 @@ NexusRevamped while USB unreconized
 #include "src/Parameter/MatrixVariable.h"
 #include "src/Parameter/MatrixParameter.h"
 #include "src/Core/MatrixSystem.h"
-//#include "../Serials.h"
 #include "src/Core/MatrixSystem.h"
 #include "src/HAL/KeyPad.h"
 #include "src/HAL/LED.h"
 #include "src/HAL/Timer.h"
-//#include "src/HAL/ADCTouch.h"
-//#include "src/Protocol/USBmidi.h"
 #include "src/Protocol/MIDI.h"
-//#include "src/protocol/M2P.h"
 #include "src/Components/UI.h"
 
 UI UI;
@@ -35,9 +31,8 @@ LED LED;
 KeyPad KeyPad;
 //ADCTouch TouchBar;
 Timer mainTimer;
-Timer keypadTimer;
 MicroTimer microTimer;
-//bool scanKeypad = true;
+
 bool flag_leftFN = false;
 
 void setup()
@@ -53,44 +48,7 @@ void setup()
   CompositeSerial.println("Setup Complete");
   #endif
 
-  mainTimer.recordCurrent();
-  while(!USBComposite.isReady() && !KeyPad.fn.state == PRESSED)
-  {
-    KeyPad.scan();
-    if (mainTimer.isLonger(9900000))
-    {
-      LED.setXYHEX(0x07,0xff0000); //NexusRevamped Entence point
-      LED.update();
-    }
-    else
-    {
-      switch(bootAnimationSelector)
-      {
-        case 0:
-        break;
-
-        case 1:
-        UI.kaskobiWaitAnimation();
-        break;
-      }
-    }
-  }
-
-  if(!KeyPad.fn.velocity)
-  {
-    switch(bootAnimationSelector)
-    {
-      case 0:
-      break;
-
-      case 1:
-      UI.kaskobiBootAnimation();
-      break;
-    }
-  }
-
-  LED.fill(0x000000);
-  LED.update();
+  UI.enterBootAnimation();
 
   #ifdef DEBUG
   CompositeSerial.println("Enter Main Program");
@@ -231,67 +189,5 @@ void loop()
     // #ifdef DEBUG
     // CompositeSerial.println(microTimer.sinceLastTick());
     // #endif
-  }
-}
-
-void specialBoot()
-{
-  if (KeyPad.scan())
-  {
-    if(KeyPad.checkXY(0, 5, true) && KeyPad.checkXY(0, 6, true) && KeyPad.checkXY(0, 7, true))
-    {
-      formatEEPROM();
-      LED.fill(0xFF00FF);
-    }
-
-    if(KeyPad.checkXY(1, 1, true) && KeyPad.checkXY(0, 0, true))
-    {
-      factoryTest();
-    }
-
-    if(KeyPad.checkXY(7, 0, true))
-    {
-      setBrightness(16);
-    }
-
-    if(KeyPad.checkXY(7, 0, true) && KeyPad.checkXY(6, 1, true))
-    {
-      setBrightness(255);
-    }
-
-  }
-}
-
-void factoryTest()
-{
-  LED.setBrightness(64);
-  LED.fill(0);
-  LED.update();
-
-  while(KeyPad.fn.state != PRESSED)
-  {
-    if (mainTimer.tick(1000/fps))
-    {
-      if(KeyPad.scan())
-      {
-        for(int i = 0; i < MULTIPRESS; i++)
-        {
-          u8 x = xytox(KeyPad.changelist[i]);
-          u8 y = xytoy(KeyPad.changelist[i]);
-          if(KeyPad.getKey(KeyPad.changelist[i]).state == PRESSED)
-          {
-            if(LED.readLED(KeyPad.changelist[i]))
-            {
-              LED.offXY(KeyPad.changelist[i], true);
-            }
-            else
-            {
-              LED.setXYHEX(KeyPad.changelist[i], 0xFFFFFF, true, true);
-            }
-          }
-        }
-        LED.update();
-      }
-    }
   }
 }

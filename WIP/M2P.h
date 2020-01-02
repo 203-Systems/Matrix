@@ -26,7 +26,7 @@ public:
 private:
   u16 deviceAddress;
   u8 hostport;
-  u16 magicnumber[] = {781,156,31,6}; // decode diveder 
+  u16 magicnumber[] = {781,156,31,6}; // decode diveder
 };
 
 #endif

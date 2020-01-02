@@ -10,7 +10,7 @@
 #include <FastLED.h>
 #include "../HAL/Keypad.h"
 #include "../HAL/LED.h"
-//#include "../HAL/ADCTouch.h"
+#include "../HAL/Timer.h"
 #include "../Protocol/MIDI.h"
 #include "../Parameter/MatrixVariable.h"
 #include "../Parameter/MatrixParameter.h"
@@ -22,8 +22,8 @@
 //   u8 x;
 //   u8 y;
 // };
-
-void bootDevice();
+extern Timer mainTimer;
+extern MicroTimer microTimer;
 
 void setupUSB();
 void setupHardware();
@@ -85,6 +85,7 @@ u8 xytoxy(u8 x, u8 y);
 //XY xytoxy(u8 xy);
 u8 xytox(u8 xy);
 u8 xytoy(u8 xy);
+//u8 xyToIndex(u8 X,u8 Y);
 u8 xyRotation(u8 xy);
 u8 xyRotation(u8 xy, u8 r);
 u8 xyReverseRotation(u8 xy);
@@ -92,7 +93,9 @@ u8 xyReverseRotation(u8 xy, u8 r);
 u8 touchbarRotate(u8 id);
 u32 toBrightness(u32 hex, float f, bool dont_write = false);
 void recordReportCode(u8 code);
-u16 velocityCurve(u16 input);
-//u8 xyToIndex(u8 X,u8 Y);
+//u16 velocityCurve(u16 input);
+
+u8 convert_6BitTo8Bit(u8 input);
+u8 convert_7BitTo8Bit(u8 input);
 
 #endif

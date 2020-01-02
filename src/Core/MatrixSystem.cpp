@@ -52,11 +52,67 @@ void setupHardware()
   applyColourCorrectionToPalette();
 }
 
-void bootDevice()
+void specialBoot()
 {
+  if (KeyPad.scan())
+  {
+    if(KeyPad.checkXY(0, 5, true) && KeyPad.checkXY(0, 6, true) && KeyPad.checkXY(0, 7, true))
+    {
+      formatEEPROM();
+      LED.fill(0xFF00FF);
+    }
 
+    if(KeyPad.checkXY(1, 1, true) && KeyPad.checkXY(0, 0, true))
+    {
+      factoryTest();
+    }
+
+    if(KeyPad.checkXY(7, 0, true))
+    {
+      setBrightness(16);
+    }
+
+    if(KeyPad.checkXY(7, 0, true) && KeyPad.checkXY(6, 1, true))
+    {
+      setBrightness(255);
+    }
+
+  }
 }
 
+void factoryTest()
+{
+  LED.setBrightness(64);
+  LED.fill(0);
+  LED.update();
+
+  while(KeyPad.fn.state != PRESSED)
+  {
+    if (mainTimer.tick(1000/fps))
+    {
+      if(KeyPad.scan())
+      {
+        for(int i = 0; i < MULTIPRESS; i++)
+        {
+          u8 x = xytox(KeyPad.changelist[i]);
+          u8 y = xytoy(KeyPad.changelist[i]);
+          if(KeyPad.getKey(KeyPad.changelist[i]).state == PRESSED)
+          {
+            if(LED.readLED(KeyPad.changelist[i]))
+            {
+              LED.offXY(KeyPad.changelist[i], true);
+            }
+            else
+            {
+              LED.setXYHEX(KeyPad.changelist[i], 0xFFFFFF, true, true);
+            }
+          }
+        }
+        LED.update();
+      }
+    }
+  }
+}
 
 //Sysex set
 void reboot()
@@ -560,11 +616,6 @@ u32 toBrightness(u32 hex, float f, bool on)
   return w * 0x1000000 + r * 0x10000 + g * 0x100 + b;
 }
 
-float velocityCurve(float input)
-{
-  return input;
-}
-
 void recordReportCode(u8 code)
 {
   #ifdef DEBUG
@@ -577,4 +628,19 @@ void recordReportCode(u8 code)
   available_report_code ++;
   if(available_report_code ==  10)
   available_report_code = 0;
+}
+
+// float velocityCurve(float input)
+// {
+//   return input;
+// }
+
+u8 convert_6BitTo8Bit(u8 input)
+{
+  return map(input, 0, 63, 0, 255);
+}
+
+u8 convert_7BitTo8Bit(u8 input)
+{
+  return map(input, 0, 127, 0, 255);
 }

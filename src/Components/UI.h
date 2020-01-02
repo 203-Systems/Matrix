@@ -36,6 +36,9 @@ public:
   u32 numSelectorRGB(u32 colour, bool ignore_gamma = false);
   //u32 numSelectorWRGB(u32 colour, bool ignore_gamma = false);
   void scrollText(char ascii[], u32 colour, bool loop = false);
+
+  void enterBootAnimation();
+
   void kaskobiWaitAnimation();
   void kaskobiBootAnimation();
 private:

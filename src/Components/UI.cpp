@@ -57,7 +57,7 @@ void UI::fnMenu()
           UI::exitFNmenu();
           return;
         }
-        else if(KeyPad.fn.state == RELEASED && !fn_hold && (KeyPad.fn.hold || hadAction )) //if fn off and longer then threshold, will count as hold, release to back to main menu
+          else if(KeyPad.fn.state == RELEASED && !fn_hold && (KeyPad.fn.hold || hadAction )) //if fn off and longer then threshold, will count as hold, release to back to main menu
         {
           UI::exitFNmenu();
           return;
@@ -880,4 +880,46 @@ void UI::scrollText(char ascii[], u32 colour, bool loop /* = false */)
     }
   }while(loop);
   LED.fill(0, true);
+}
+
+void UI::enterBootAnimation()
+{
+  uiTimer.recordCurrent();
+  while(!USBComposite.isReady() && !KeyPad.fn.state == PRESSED)
+  {
+    KeyPad.scan();
+    if (uiTimer.isLonger(9900000))
+    {
+      LED.setXYHEX(0x07,0xff0000); //NexusRevamped Entence point
+      LED.update();
+    }
+    else
+    {
+      switch(bootAnimationSelector)
+      {
+        case 0:
+        break;
+
+        case 1:
+        UI::kaskobiWaitAnimation();
+        break;
+      }
+    }
+  }
+
+  if(!KeyPad.fn.velocity)
+  {
+    switch(bootAnimationSelector)
+    {
+      case 0:
+      break;
+
+      case 1:
+      UI::kaskobiBootAnimation();
+      break;
+    }
+  }
+
+  LED.fill(0x000000);
+  LED.update();
 }
