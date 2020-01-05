@@ -54,7 +54,6 @@ private:
   void settingRender();
 
   Timer uiTimer;
-  MicroTimer uiMicroTimer;
   bool hadAction = false;
   u8 brightness_cache;
   u8 konami_progress = 0;

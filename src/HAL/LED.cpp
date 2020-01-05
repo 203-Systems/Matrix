@@ -29,7 +29,7 @@ void LED::init()
   }
   FastLED.setDither(0);
   FastLED.setBrightness(brightness);
-  //FastLED.setCorrection(led_colour_correction);
+  //FastLED.setCorrection(led_color_correction);
 
   //FastLED.setTemperature(0xFFFFFFFF);
   //FastLED.setMaxRefreshRate(fps);
@@ -42,10 +42,10 @@ void LED::setBrightness(u8 b)
   //setBrightness(b);
 }
 
-// void LED::setColourCorrection(u32 c)
-// {
-//   FastLED.setCorrection(c);
-// }
+void LED::setColourCorrection(u32 c)
+{
+  FastLED.setCorrection(c);
+}
 
 void LED::dynamicBrightness(u16 mah)
 {

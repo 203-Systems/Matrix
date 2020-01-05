@@ -6,7 +6,6 @@
 #include "../Parameter/MatrixParameter.h"
 #include "../Core/MatrixSystem.h"
 #include "../HAL/Timer.h"
-#include "../HAL/TTP229.h"
 
 //enum KeyState {IDLE, PRESSED, HOLD, RELEASED };
 

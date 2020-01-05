@@ -54,12 +54,8 @@ typedef volatile const int64_t vsc64;
 #define VID2 0x0203 // for device ID USE
 #define PID  0x1000
 #define PID2 0x1000 // for device ID USE
-#define FWVERSION 0x0080 //x.xx.x Major.Minor.Patch - Build labels is disregrated
-#define FWVERSION_STRING "0.8.0a"
-#define MAJOR_VER 0
-#define MINOR_VER 8
-#define PARCH_VER 0
-#define BUILD_VER 1 //0 for Release, 1 for Alpha, 2 for Beta
+#define FWVERSION 0x0790
+#define FWVERSION_STRING "0.7.9b"
 
 
 

@@ -1,6 +1,6 @@
-#include <colour.h>
+#include <Color.h>
 
-colour::colour(colourMode mode, u32 p1, u8 p2, u8 p3, u8 p4, u8 p5, u8 p6)
+Color::Color(ColorMode mode, u32 p1, u8 p2, u8 p3, u8 p4, u8 p5, u8 p6)
 {
   switch(mode)
   {
@@ -49,11 +49,11 @@ operator u32() const
   return HEX;
 }
 
-u32 applyGamma(u32 colour)
+u32 applyGamma(u32 color)
 {
   HEX =
-  gamma[(colour & 0xff000000) >> 24] * 0x1000000 +
-  gamma[(colour & 0x00ff0000) >> 16] *0x10000 +
-  gamma[(colour & 0x0000ff00) >> 8] *0x100 +
-  gamma[(colour & 0x000000ff)];
+  gamma[(color & 0xff000000) >> 24] * 0x1000000 +
+  gamma[(color & 0x00ff0000) >> 16] *0x10000 +
+  gamma[(color & 0x0000ff00) >> 8] *0x100 +
+  gamma[(color & 0x000000ff)];
 }

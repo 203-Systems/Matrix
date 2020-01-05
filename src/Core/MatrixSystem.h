@@ -32,7 +32,7 @@ void specialBoot();
 void factoryTest();
 
 //Sysex set
-void reboot();
+void reset();
 void setDeviceID();
 void setDeviceID(u8 id);
 void enterBootloader();
@@ -52,8 +52,7 @@ void setCurrentKeyMap(u8 m);
 void setUnipadMode(bool u);
 void setFnHold(bool h);
 void setTouchThreshold(u16 t);
-void setColourCorrection(u32 c, bool temp = false);
-void setSTFU(u16 v);
+void setLedCorrection(u32 c);
 //void setTouchSensitive(u8 s);
 
 //Sysex get
@@ -91,7 +90,7 @@ u8 xyRotation(u8 xy, u8 r);
 u8 xyReverseRotation(u8 xy);
 u8 xyReverseRotation(u8 xy, u8 r);
 u8 touchbarRotate(u8 id);
-u32 toBrightness(u32 hex, float f, bool dont_write = false);
+u32 toBrightness(u32 hex, float f, bool on = false);
 void recordReportCode(u8 code);
 //u16 velocityCurve(u16 input);
 

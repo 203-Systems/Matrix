@@ -499,11 +499,11 @@ void UI::fnRender()
       {
         if(KeyPad.checkXY(x, y))
         {
-          LED.setXYHEX(xytoxy(x, y), fn_keymap_active_colour[current_keymap][y - 6][x], true, true);
+          LED.setXYHEX(xytoxy(x, y), fn_keymap_active_color[current_keymap][y - 6][x], true, true);
         }
         else
         {
-          LED.setXYHEX(xytoxy(x, y), fn_keymap_idle_colour[current_keymap][y - 6][x], true, true);
+          LED.setXYHEX(xytoxy(x, y), fn_keymap_idle_color[current_keymap][y - 6][x], true, true);
         }
       }
     }
@@ -563,8 +563,6 @@ void UI::settingKeyAction()
     String fw_str = "Matrix OS V" + String(FWVERSION_STRING);
     String bl_str = "Matrix Bootloader V" + String(BOOTLOADER_VERSION);
     char char_buffer[64];
-    u32 cache1;
-    u32 cache2;
 
     if(KeyPad.getKey(KeyPad.changelist[i]).state == RELEASED)
     {
@@ -585,35 +583,13 @@ void UI::settingKeyAction()
         device_name.toCharArray(char_buffer,64);
         UI::scrollText(char_buffer, 0x00FF30);
         break;
-        case 0x67:
-        cache1 = led_colour_correction;
-        setColourCorrection(0xFFFFFF, true);
-        cache2 = UI::numSelectorRGB(cache1, true);
-        if(cache2 != cache1)
-        {
-          LED.fill(0,true);
-          LED.update();
-          setColourCorrection(cache2);
-          reboot();
-        }
-        setColourCorrection(cache1, true);
-        break;
+        // case 0x67:
+        // LED.setColourCorrection(0xFFFFFF);
+        // setLedCorrection(UI::numSelectorRGB(led_color_correction, true));
+        // break;
         case 0x77:
         setDeviceID(UI::numSelector8bit(device_id, 0x0000FFAA, 0x00FFFFFF, true));
         break;
-        case 0x00:
-        switch(stfu)
-        {
-          case 0:
-          setSTFU(1);
-          break;
-          case 1:
-          setSTFU(2);
-          break;
-          case 2:
-          setSTFU(0);
-          break;
-        }
       }
     }
     else if(KeyPad.getKey(KeyPad.changelist[i]).state == ACTIVED && KeyPad.getKey(KeyPad.changelist[i]).hold)
@@ -632,25 +608,12 @@ void UI::settingKeyAction()
         case 0x37:
         UI::scrollText("Device Name", 0x00FF30);
         break;
-        case 0x67:
-        UI::scrollText("Colour Correction", 0xFFFFFF);
-        break;
+        // case 0x67:
+        // LED.setColourCorrection(0xFFFFFF);
+        // setLedCorrection(UI::numSelectorRGB(led_color_correction, true));
+        // break;
         case 0x77:
         UI::scrollText("Device ID", 0x00FFAA);
-        break;
-        case 0x00:
-        switch(stfu)
-        {
-          case 0:
-          UI::scrollText("Flicker Optimization Off", 0xAAFF00);
-          break;
-          case 1:
-          UI::scrollText("Flicker Optimization Level 1", 0xAAFF00);
-          break;
-          case 2:
-          UI::scrollText("Flicker Optimization Level 2", 0xAAFF00);
-          break;
-        }
         break;
         default:
         UI::scrollText("Setting Menu", 0x00FFFFFF);
@@ -666,36 +629,21 @@ void UI::settingRender()
   LED.setXYHEX(0x17, 0x0000FF30, true, true); //Device Info
   LED.setXYHEX(0x27, 0x0000FF30, true, true); //Bootloader Info
   LED.setXYHEX(0x37, 0x0000FF30, true, true); //Device Name
-  LED.setXYHEX(0x67, 0x00FFFFFF, true, true); //colour Correction
+  //LED.setXYHEX(0x67, 0x00FFFFFF, true, true); //White
   LED.setXYHEX(0x77, 0x0000FFAA, true, true); //Device ID
-  switch(stfu)
-  {
-    case 0:
-    LED.setXYHEX(0x00, 0x00202020, true, true); //STFU Off
-    break;
-    case 1:
-    LED.setXYHEX(0x00, toBrightness(0xAAFF00, LOWSTATEBRIGHTNESS), true, true); //STFU 1
-    break;
-    case 2:
-    LED.setXYHEX(0x00, 0xAAFF00, true, true); //STFU 2
-    break;
-  }
   LED.update();
 }
 
 
 u8 UI::numSelector8bit(u8 currentNum, u32 colour, u32 sec_colour, bool ignore_gamma /* = false */)
 {
-  LED.fill(0, true);
-  bool initalized = false;
+  // LED.fill(0, true);
   while(!KeyPad.fn.state == PRESSED)
   {
     if(uiTimer.tick(1000/fps))
     {
-      if(KeyPad.scan() || !initalized)
+      if(KeyPad.scan())
       {
-        if(!initalized)
-          initalized = true;
         LED.fill(0, true);
         currentNum = uielement.binary8bitInput(currentNum, 7, colour, ignore_gamma);
         currentNum = uielement.simple8bitInput(currentNum, 6, colour, ignore_gamma);
@@ -719,10 +667,6 @@ u8 UI::numSelector6bit(u8 currentNum, u32 colour, u32 sec_colour, bool ignore_ga
 
 u32 UI::numSelectorRGB(u32 colour, bool ignore_gamma /* = false */)
 {
-  #ifdef DEBUG
-  CompositeSerial.println("RGB Input mode");
-  #endif
-  bool initalized = false;
   LED.fill(0, true);
   u8 R = (colour & 0xFF0000) >> 16;
   u8 G = (colour & 0xFF00) >> 8;
@@ -730,10 +674,8 @@ u32 UI::numSelectorRGB(u32 colour, bool ignore_gamma /* = false */)
   uielement.renderHalfHeightNum(R, 0x73, colour, 0xFF0000, ignore_gamma);
   while(!KeyPad.fn.state == PRESSED)
   {
-    if(KeyPad.scan() || !initalized)
+    if(KeyPad.scan())
     {
-      if(!initalized)
-        initalized = true;
       if(R != uielement.simple8bitInput(R, 5, 0xFF0000, ignore_gamma))
       {
         LED.fill(0, true);

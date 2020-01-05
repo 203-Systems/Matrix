@@ -6,7 +6,7 @@
 #include "../Parameter/MatrixVariable.h"
 #include "../Parameter/MatrixParameter.h"
 #include "../Core/MatrixSystem.h"
-//#include "../Components/colour.h"
+//#include "../Components/Color.h"
 
 
 // enum LEDMoDE{ on, off, w, rgb, wrgb, hex, palette};
@@ -20,7 +20,7 @@ public:
   void init();
   void nextBrightnessState();
   void setBrightness(u8 b);
-  // void setColourCorrection(u32 c);
+  void setColourCorrection(u32 c);
   void dynamicBrightness(u16 mah);
   void fill(u32 WRGB, bool overlay = false);
 

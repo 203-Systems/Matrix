@@ -9,11 +9,6 @@ extern KeyPad KeyPad;
 extern MIDI Midi;
 //extern ADCTouch TouchBar;
 
-u8 cW = 255;
-u8 cR = 255;
-u8 cG = 255;
-u8 cB = 255;
-
 void setupUSB()
 {
   USBComposite.clear();
@@ -48,7 +43,6 @@ void setupHardware()
   LED.init();
   KeyPad.init();
   //TouchBar.init();
-  setColourCorrection(led_colour_correction, true);
   applyColourCorrectionToPalette();
 }
 
@@ -115,12 +109,8 @@ void factoryTest()
 }
 
 //Sysex set
-void reboot()
+void reset()
 {
-  bkp_init();
-  bkp_enable_writes();
-  bkp_write(10, 0x424D);
-  bkp_disable_writes();
   nvic_sys_reset();
 }
 
@@ -155,13 +145,13 @@ void enterBootloader()
   bkp_enable_writes();
   bkp_write(10, 0x424C);
   bkp_disable_writes();
-  nvic_sys_reset();
+  reset();
 }
 
 void resetDevice()
 {
   formatEEPROM();
-  reboot();
+  reset();
 }
 
 void formatEEPROM()
@@ -174,10 +164,10 @@ void formatEEPROM()
 
 void applyColourCorrectionToPalette()
 {
-  cW = (led_colour_correction & 0xFF000000) >> 24;
-  cR = (led_colour_correction & 0xFF0000) >> 16;
-  cG = (led_colour_correction & 0xFF00) >> 8;
-  cB = led_colour_correction & 0xFF;
+  cW = (led_color_correction & 0xFF000000) >> 24;
+  cR = (led_color_correction & 0xFF0000) >> 16;
+  cG = (led_color_correction & 0xFF00) >> 8;
+  cB = led_color_correction & 0xFF;
   for(u8 p = 0; p < 4; p++)
   {
     for(u8 i = 0; i < 128; i++)
@@ -250,28 +240,15 @@ void setTouchThreshold(u16 t)
   touch_threshold = t;
 }
 
-void setColourCorrection(u32 c, bool dont_write)
+void setLedCorrection(u32 c)
 {
-  if(!dont_write)
-  {
   EEPROM_USER.write(E_COLOUR_CORRECTION_1, c >> 16);
   EEPROM_USER.write(E_COLOUR_CORRECTION_2, c & 0xFFFF);
-  }
   //LED.setColourCorrection(c);
-  led_colour_correction = c;
-  cW = (c & 0xFF000000) >> 24;
-  cR = (c & 0xFF0000) >> 16;
-  cG = (c & 0xFF00) >> 8;
-  cB = c & 0xFF;
+  led_color_correction = c;
   #ifdef DEBUG
   CompositeSerial.print("Set Colour Correction ");CompositeSerial.println(c);
   #endif
-}
-
-void setSTFU(u16 v)
-{
-  stfu = v;
-  EEPROM_USER.write(E_STFU, v);
 }
 //Sysex get
 // void getDeviceInfo()

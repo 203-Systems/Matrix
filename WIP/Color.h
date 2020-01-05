@@ -1,16 +1,16 @@
-#ifndef colour_H
-#define colour_H
+#ifndef COLOR_H
+#define COLOR_H
 
 #include "../Core/MatrixSystem.h"
 #include "../Parameter/MatrixParameter.h"
 
-enum colourMode { Off, On, W, RGB, RGBW, HEX, Palette};
-class colour
+enum ColorMode { Off, On, W, RGB, RGBW, HEX, Palette};
+class Color
 {
 public:
-  colour(colourMode mode, u32 p1, u8 p2 = 0, u8 p3 = 0, u8 p4 = 0, u8 p5 = 0);
+  Color(ColorMode mode, u32 p1, u8 p2 = 0, u8 p3 = 0, u8 p4 = 0, u8 p5 = 0);
   operator u32() const;
-  u32 applyGamma(u32 colour);
+  u32 applyGamma(u32 color);
 protected:
   u32 HEX;
   u8 gamma[256] =
