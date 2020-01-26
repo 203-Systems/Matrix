@@ -45,7 +45,7 @@ typedef volatile const int64_t vsc64;
 
 //DeviceInfo
 
-//#define DEBUG
+#define DEBUG
 
 #define DEVICENAME "Matrix"
 #define MAUNFACTURERNAME "203 Industries"

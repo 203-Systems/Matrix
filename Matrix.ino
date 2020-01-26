@@ -44,10 +44,6 @@ void setup()
   setupHardware();
   specialBoot();
 
-  #ifdef DEBUG
-  CompositeSerial.println("Setup Complete");
-  #endif
-
   UI.enterBootAnimation();
 
   #ifdef DEBUG

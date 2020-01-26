@@ -57,6 +57,7 @@ private:
   MicroTimer uiMicroTimer;
   bool hadAction = false;
   u8 brightness_cache;
+  u16 onPause = 0;
   u8 konami_progress = 0;
 };
 

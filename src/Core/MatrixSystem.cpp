@@ -7,6 +7,7 @@ EEPROMClass EEPROM_SYS;
 extern LED LED;
 extern KeyPad KeyPad;
 extern MIDI Midi;
+
 //extern ADCTouch TouchBar;
 
 u8 cW = 255;
@@ -54,29 +55,34 @@ void setupHardware()
 
 void specialBoot()
 {
-  if (KeyPad.scan())
+  KeyPad.scan();
+  if(KeyPad.checkXY(0, 5, true) && KeyPad.checkXY(0, 6, true) && KeyPad.checkXY(0, 7, true))
   {
-    if(KeyPad.checkXY(0, 5, true) && KeyPad.checkXY(0, 6, true) && KeyPad.checkXY(0, 7, true))
-    {
-      formatEEPROM();
-      LED.fill(0xFF00FF);
-    }
+    LED.setXYHEX(0x33,0xFF00FF, true);
+    LED.setXYHEX(0x34,0xFF00FF, true);
+    LED.setXYHEX(0x43,0xFF00FF, true);
+    LED.setXYHEX(0x44,0xFF00FF, true);
+    LED.update();
+    initEEPROM();
+    return;
+  }
 
-    if(KeyPad.checkXY(1, 1, true) && KeyPad.checkXY(0, 0, true))
-    {
-      factoryTest();
-    }
+  if(KeyPad.checkXY(1, 1, true) && KeyPad.checkXY(0, 0, true))
+  {
+    factoryTest();
+    return;
+  }
 
-    if(KeyPad.checkXY(7, 0, true))
-    {
-      setBrightness(16);
-    }
+  if(KeyPad.checkXY(7, 0, true) && KeyPad.checkXY(7, 1, true))
+  {
+    setBrightness(16);
+    return;
+  }
 
-    if(KeyPad.checkXY(7, 0, true) && KeyPad.checkXY(6, 1, true))
-    {
-      setBrightness(255);
-    }
-
+  if(KeyPad.checkXY(7, 0, true) && KeyPad.checkXY(6, 1, true))
+  {
+    setBrightness(255);
+    return;
   }
 }
 
@@ -117,10 +123,6 @@ void factoryTest()
 //Sysex set
 void reboot()
 {
-  bkp_init();
-  bkp_enable_writes();
-  bkp_write(10, 0x424D);
-  bkp_disable_writes();
   nvic_sys_reset();
 }
 
@@ -160,16 +162,8 @@ void enterBootloader()
 
 void resetDevice()
 {
-  formatEEPROM();
+  initEEPROM();
   reboot();
-}
-
-void formatEEPROM()
-{
-  // #ifdef DEBUG
-  // SerialComposite.print("EEPROM Format info :")
-  EEPROM_USER.format();
-  EEPROM_PALETTE.format();
 }
 
 void applyColourCorrectionToPalette()
@@ -244,11 +238,11 @@ void setFnHold(bool h)
   fn_hold = h;
 }
 
-void setTouchThreshold(u16 t)
-{
-  EEPROM_USER.write(E_TOUCH_THRESHOLD, t);
-  touch_threshold = t;
-}
+// void setTouchThreshold(u16 t)
+// {
+//   EEPROM_USER.write(E_TOUCH_THRESHOLD, t);
+//   touch_threshold = t;
+// }
 
 void setColourCorrection(u32 c, bool dont_write)
 {

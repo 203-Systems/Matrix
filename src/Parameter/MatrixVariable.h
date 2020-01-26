@@ -45,7 +45,6 @@ extern u16 debounce_threshold;
 extern u8 user1_keymap_optimized[64];
 
 //TouchBar
-extern s16 touch_threshold;
 extern u8 touch_keymap[5][8];
 
 //Sysex

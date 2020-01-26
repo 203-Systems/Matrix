@@ -427,7 +427,6 @@ extern u16 debounce_threshold = 50;
 
 
 //TouchBar
-extern s16 touch_threshold = 60;
 extern u8 touch_keymap[5][8] =
 {
   {100, 101, 102, 103, 104, 105, 106, 107},

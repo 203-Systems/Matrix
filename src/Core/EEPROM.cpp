@@ -6,22 +6,24 @@ extern EEPROMClass EEPROM_SYS;
 
 void setupEEPROM()
 {
-  recordReportCode(EEPROM_USER.init(eeprom_user_adds_0, eeprom_user_adds_1, eeprom_pagesize));
-  recordReportCode(EEPROM_PALETTE.init(eeprom_palette_adds_0, eeprom_palette_adds_1, eeprom_pagesize));
-  recordReportCode(EEPROM_SYS.init(eeprom_sys_adds_0, eeprom_sys_adds_1, eeprom_pagesize));
+  EEPROM_USER.init(eeprom_user_adds_0, eeprom_user_adds_1, eeprom_pagesize);
+  EEPROM_PALETTE.init(eeprom_palette_adds_0, eeprom_palette_adds_1, eeprom_pagesize);
+  EEPROM_SYS.init(eeprom_sys_adds_0, eeprom_sys_adds_1, eeprom_pagesize);
 }
 
 void variableLoad()
 {
+  if(EEPROM_USER.read(E_INIT) != 0x0203)
+  {
+    initEEPROM();
+  }
   switch(EEPROM_USER.read(E_PREVIOUS_FW))
   {
-    case 0:
-      initEEPROM();
-      break;
     case FWVERSION:
       break;
-    case 0x0770:
-      EEPROM_USER.write(E_STFU, stfu);
+    default:
+      initEEPROM();
+      break;
   }
   loadSetting();
   //loadKeyMap();
@@ -33,7 +35,6 @@ void loadSetting()
   device_id = EEPROM_USER.read(E_DEVICE_ID);
   rotation =EEPROM_USER.read(E_ROTATION);
   brightness = EEPROM_USER.read(E_BRIGHTNESS);
-  max_mAh = EEPROM_USER.read(E_MAX_MA);
   fps = EEPROM_USER.read(E_FPS);
   gamma_enable = EEPROM_USER.read(E_GAMMA_ENABLE);
   midi_enable = EEPROM_USER.read(E_MIDI_ENABLE);
@@ -46,7 +47,6 @@ void loadSetting()
   led_colour_correction = (EEPROM_USER.read(E_COLOUR_CORRECTION_1) << 16) + EEPROM_USER.read(E_COLOUR_CORRECTION_2);
   led_colour_temperture = (EEPROM_USER.read(E_COLOUR_TEMPERTURE_1) << 16) + EEPROM_USER.read(E_COLOUR_TEMPERTURE_2);
   fn_hold = EEPROM_USER.read(E_FN_HOLD);
-  touch_threshold = EEPROM_USER.read(E_TOUCH_THRESHOLD);
   stfu = EEPROM_USER.read(E_STFU);
 }
 
@@ -78,11 +78,11 @@ void initEEPROM()
 
 void saveSetting()
 {
+  EEPROM_USER.write(E_INIT, 0x0203);
   EEPROM_USER.write(E_PREVIOUS_FW, FWVERSION);
   EEPROM_USER.write(E_DEVICE_ID, device_id);
   EEPROM_USER.write(E_ROTATION, rotation);
   EEPROM_USER.write(E_BRIGHTNESS, brightness);
-  EEPROM_USER.write(E_MAX_MA, max_mAh);
   EEPROM_USER.write(E_FPS, fps);
   EEPROM_USER.write(E_GAMMA_ENABLE, (u8)gamma_enable);
   EEPROM_USER.write(E_MIDI_ENABLE, (u8)midi_enable);
@@ -94,7 +94,7 @@ void saveSetting()
   EEPROM_USER.write(E_CURRENT_KEYMAP, current_keymap);
   EEPROM_USER.write(E_COLOUR_CORRECTION_1, led_colour_correction >> 8);
   EEPROM_USER.write(E_COLOUR_CORRECTION_2, led_colour_correction & 0xFFFF);
-  EEPROM_USER.write(E_TOUCH_THRESHOLD, touch_threshold);
+  EEPROM_USER.write(E_STFU, stfu);
 }
 
 // void saveKeyMap()

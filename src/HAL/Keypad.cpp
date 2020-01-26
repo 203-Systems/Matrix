@@ -158,6 +158,14 @@ bool KeyPad::scanType2()
       if(keypadState[x][y].changed)
       {
         changed = true;
+        #ifdef DEBUG
+        CompositeSerial.print("Key Action ");
+        CompositeSerial.print(xytoxy(x,y), HEX);
+        CompositeSerial.print(" ");
+        CompositeSerial.print(keypadState[x][y].state);
+        CompositeSerial.print(" ");
+        CompositeSerial.println(keypadState[x][y].velocity);
+        #endif
         if(!KeyPad::addtoList(xytoxy(x,y)))
         return changed;
       }

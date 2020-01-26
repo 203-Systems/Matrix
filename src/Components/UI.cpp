@@ -611,9 +611,22 @@ void UI::settingKeyAction()
           setSTFU(2);
           break;
           case 2:
+          default:
           setSTFU(0);
           break;
         }
+        break;
+        case 0x06:
+        LED.fill(0,true);
+        LED.setXYHEX(0x33,0xFF00FF, true);
+        LED.setXYHEX(0x34,0xFF00FF, true);
+        LED.setXYHEX(0x43,0xFF00FF, true);
+        LED.setXYHEX(0x44,0xFF00FF, true);
+        LED.update();
+        initEEPROM();
+        delay(500);
+        reboot();
+        break;
       }
     }
     else if(KeyPad.getKey(KeyPad.changelist[i]).state == ACTIVED && KeyPad.getKey(KeyPad.changelist[i]).hold)
@@ -642,7 +655,7 @@ void UI::settingKeyAction()
         switch(stfu)
         {
           case 0:
-          UI::scrollText("Flicker Optimization Off", 0xAAFF00);
+          UI::scrollText("Flicker Optimization Off", 0xA0A0A0);
           break;
           case 1:
           UI::scrollText("Flicker Optimization Level 1", 0xAAFF00);
@@ -650,7 +663,13 @@ void UI::settingKeyAction()
           case 2:
           UI::scrollText("Flicker Optimization Level 2", 0xAAFF00);
           break;
+          defalut:
+          UI::scrollText("Flicker Optimization Level ???", 0xFF0000);
+          break;
         }
+        break;
+        case 0x06:
+        UI::scrollText("Reset Device", 0xFF00FF);
         break;
         default:
         UI::scrollText("Setting Menu", 0x00FFFFFF);
@@ -668,6 +687,7 @@ void UI::settingRender()
   LED.setXYHEX(0x37, 0x0000FF30, true, true); //Device Name
   LED.setXYHEX(0x67, 0x00FFFFFF, true, true); //colour Correction
   LED.setXYHEX(0x77, 0x0000FFAA, true, true); //Device ID
+  LED.setXYHEX(0x06, 0x00FF00FF, true, true); //Reset EEPROM
   switch(stfu)
   {
     case 0:
@@ -679,6 +699,8 @@ void UI::settingRender()
     case 2:
     LED.setXYHEX(0x00, 0xAAFF00, true, true); //STFU 2
     break;
+    default:
+    LED.setXYHEX(0x00, 0xFF0000, true, true); //STFU ???
   }
   LED.update();
 }
@@ -885,7 +907,7 @@ void UI::scrollText(char ascii[], u32 colour, bool loop /* = false */)
 void UI::enterBootAnimation()
 {
   uiTimer.recordCurrent();
-  while(!USBComposite.isReady() && !KeyPad.fn.state == PRESSED)
+  while(!USBComposite.isReady() && !KeyPad.fn.hold)
   {
     KeyPad.scan();
     if (uiTimer.isLonger(9900000))

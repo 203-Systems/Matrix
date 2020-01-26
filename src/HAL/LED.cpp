@@ -131,12 +131,12 @@ void LED::setWRGB(s16 index, u8 w, u8 r, u8 g, u8 b, bool overlay /*= false*/)
 
 void LED::setHEX(s16 index, u32 hex, bool overlay /*= false*/, bool ignore_gamma /*= false*/)
 {
-  #ifdef DEBUG
-  CompositeSerial.print("LED Index \t");
-  CompositeSerial.print(index);
-  CompositeSerial.print("\t");
-  CompositeSerial.println(hex, HEX);
-  #endif
+  // #ifdef DEBUG
+  // CompositeSerial.print("LED Index \t");
+  // CompositeSerial.print(index);
+  // CompositeSerial.print("\t");
+  // CompositeSerial.println(hex, HEX);
+  // #endif
 
   if(index < 0)
   return;

@@ -8,30 +8,35 @@ void UI::kaskobiWaitAnimation()
 {
   brightness_cache = brightness;
   if(brightness > 128)
-  LED.setBrightness(128);
+    LED.setBrightness(128);
 
-
-  if(uiTimer.tick(800))
+  if(uiTimer.tick(300))
   {
-    if(LED.readXYLED(0x07))
+    if(onPause)
     {
-      for (u8 i = 7; i > 0; i--)
+      onPause --;
+    }
+    else if(LED.readXYLED(0x07))
+    {
+      for (u8 i = 64; i > 0; i--)
       {
-        LED.setXYW(0x07, (i*32)-1, true);
+        LED.setXYW(0x07, led_gamma[(i*4)-1], true);
         LED.update();
-        delay(12);
+        delay(10);
       }
       LED.offXY(0x07, true);
       LED.update();
+      onPause = 2;
     }
     else
     {
-      for (u8 i = 1; i <= 8; i++)
+      for (u8 i = 1; i <= 64; i++)
       {
-        LED.setXYW(0x07, (i*32)-1, true);
+        LED.setXYW(0x07, led_gamma[(i*4)-1], true);
         LED.update();
-        delay(12);
+        delay(10);
       }
+    onPause = 2;
     }
     uiTimer.recordCurrent();
   }

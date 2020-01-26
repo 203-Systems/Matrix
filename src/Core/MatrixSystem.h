@@ -37,7 +37,6 @@ void setDeviceID();
 void setDeviceID(u8 id);
 void enterBootloader();
 void resetDevice();
-void formatEEPROM();
 void applyColourCorrectionToPalette();
 u32 applyColourCorrection(u32 input);
 void updatePaletteRGB();
