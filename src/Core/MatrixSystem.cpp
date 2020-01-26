@@ -385,7 +385,7 @@ void setRotation(u8 r)
 {
   #ifdef DEBUG
   CompositeSerial.print("Set Rotation: ");
-  CompositeSerial.println(EEPROM_USER.write(2, r));
+  CompositeSerial.println(EEPROM_USER.write(E_ROTATION, r));
   #else
   EEPROM_USER.write(E_ROTATION, r);
   #endif

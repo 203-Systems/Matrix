@@ -15,14 +15,14 @@ void loadSetting();
 // void loadPalette();
 
 void initEEPROM();
-void saveSetting();
+void saveAllSetting();
 // void saveKeyMap();
 // void savePalette();
 
 enum EEPROM_USER_MAP
 {
   E_INIT = 0,
-  E_PREVIOUS_FW = 1,
+  E_EEPROMVERSION = 1,
   E_DEVICE_ID = 2,
   E_ROTATION = 3,
   E_BRIGHTNESS = 4,

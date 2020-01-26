@@ -16,24 +16,25 @@ void variableLoad()
   if(EEPROM_USER.read(E_INIT) != 0x0203)
   {
     initEEPROM();
+    saveAllSetting();
   }
-  switch(EEPROM_USER.read(E_PREVIOUS_FW))
+  switch(EEPROM_USER.read(E_EEPROMVERSION))
   {
-    case FWVERSION:
+    case EEPROMVERSION:
+      loadSetting();
+      //loadKeyMap();
+      //loadPalette();
       break;
     default:
       initEEPROM();
-      break;
+      saveAllSetting();
   }
-  loadSetting();
-  //loadKeyMap();
-  //loadPalette();
 }
 
 void loadSetting()
 {
   device_id = EEPROM_USER.read(E_DEVICE_ID);
-  rotation =EEPROM_USER.read(E_ROTATION);
+  rotation = EEPROM_USER.read(E_ROTATION);
   brightness = EEPROM_USER.read(E_BRIGHTNESS);
   fps = EEPROM_USER.read(E_FPS);
   gamma_enable = EEPROM_USER.read(E_GAMMA_ENABLE);
@@ -71,15 +72,14 @@ void initEEPROM()
   EEPROM_USER.format();
   EEPROM_PALETTE.format();
 
-  saveSetting();
   // saveKeyMap();
   // savePalette();
 }
 
-void saveSetting()
+void saveAllSetting()
 {
   EEPROM_USER.write(E_INIT, 0x0203);
-  EEPROM_USER.write(E_PREVIOUS_FW, FWVERSION);
+  EEPROM_USER.write(E_EEPROMVERSION, EEPROMVERSION);
   EEPROM_USER.write(E_DEVICE_ID, device_id);
   EEPROM_USER.write(E_ROTATION, rotation);
   EEPROM_USER.write(E_BRIGHTNESS, brightness);
@@ -94,6 +94,7 @@ void saveSetting()
   EEPROM_USER.write(E_CURRENT_KEYMAP, current_keymap);
   EEPROM_USER.write(E_COLOUR_CORRECTION_1, led_colour_correction >> 8);
   EEPROM_USER.write(E_COLOUR_CORRECTION_2, led_colour_correction & 0xFFFF);
+  EEPROM_USER.write(E_FN_HOLD, fn_hold);
   EEPROM_USER.write(E_STFU, stfu);
 }
 

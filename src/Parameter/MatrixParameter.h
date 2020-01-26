@@ -54,7 +54,7 @@ typedef volatile const int64_t vsc64;
 #define VID2 0x0203 // for device ID USE
 #define PID  0x1000
 #define PID2 0x1000 // for device ID USE
-#define FWVERSION 0x0080 //x.xx.x Major.Minor.Patch - Build labels is disregrated
+#define EEPROMVERSION 0 //Each EEPROM change will cause this to ++
 #define FWVERSION_STRING "0.8.0a"
 #define MAJOR_VER 0
 #define MINOR_VER 8
