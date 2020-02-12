@@ -27,7 +27,7 @@ void LED::init()
     FastLED.addLeds<NEOPIXEL, PC7>(leds, NUM_TOTAL_LEDS);
     break;
   }
-  FastLED.setDither(0);
+  //FastLED.setDither(0);
   FastLED.setBrightness(brightness);
   //FastLED.setCorrection(led_colour_correction);
 
@@ -129,9 +129,36 @@ void LED::setWRGB(s16 index, u8 w, u8 r, u8 g, u8 b, bool overlay /*= false*/)
   LED::setHEX(index, w * 0x1000000 + r * 0x10000 + g * 0x100 + b, overlay);
 }
 
-void LED::setHEX(s16 index, u32 hex, bool overlay /*= false*/, bool ignore_gamma /*= false*/)
+void LED::setHEX(s16 index, u32 hex, bool overlay /*= false*/)
 {
+  #ifdef DEBUG
+  CompositeSerial.print("LED Index \t");
+  CompositeSerial.print(index);
+  CompositeSerial.print("\t");
+  CompositeSerial.println(hex, HEX);
+  #endif
+
+  if(index < 0)
+  return;
+
+  //hex = applyColourCorrection(hex); CRGB, fix later
+
+  if(!overlay_mode || overlay)
+  {
+  leds[indexRotation(index)] = hex;
+  }
+  else
+  {
+  buffer[indexRotation(index)] = hex;
+  }
+  LED::changed = true;
+}
+
+void LED::setPalette(s16 index, u8 palette_selected, u8 value, bool overlay /*= false*/)
+{
+  //LED::setHEX(index, palette[pick_palette][colour], overlay);
   // #ifdef DEBUG
+
   // CompositeSerial.print("LED Index \t");
   // CompositeSerial.print(index);
   // CompositeSerial.print("\t");
@@ -141,36 +168,16 @@ void LED::setHEX(s16 index, u32 hex, bool overlay /*= false*/, bool ignore_gamma
   if(index < 0)
   return;
 
-  hex = applyColourCorrection(hex);
-
   if(!overlay_mode || overlay)
   {
-    if(gamma_enable && !ignore_gamma)
-    {
-      leds[indexRotation(index)] = hex;
-    }
-    else
-    {
-      leds[indexRotation(index)] = applyGamma(hex);
-    }
+  leds[indexRotation(index)] = palette[palette_selected][value];
   }
   else
   {
-    if(gamma_enable && !ignore_gamma)
-    {
-      buffer[indexRotation(index)] = hex;
-    }
-    else
-    {
-      buffer[indexRotation(index)] = applyGamma(hex);
-    }
+  buffer[indexRotation(index)] = palette[palette_selected][value];
   }
+  
   LED::changed = true;
-}
-
-void LED::setPalette(s16 index, u8 pick_palette, u8 colour, bool overlay /*= false*/)
-{
-  LED::setHEX(index, palette[pick_palette][colour], overlay, true);
 }
 
 
@@ -201,7 +208,7 @@ void LED::setXYWRGB(u8 xy, u8 w, u8 r, u8 g, u8 b, bool overlay /*= false*/)
 }
 
 
-void LED::setXYHEX(u8 xy, u32 hex, bool overlay /*= false*/, bool ignore_gamma /*= false*/)
+void LED::setXYHEX(u8 xy, u32 hex, bool overlay /*= false*/)
 {
   // #ifdef DEBUG
   // CompositeSerial.print("LED XY \t");
@@ -210,34 +217,48 @@ void LED::setXYHEX(u8 xy, u32 hex, bool overlay /*= false*/, bool ignore_gamma /
   // CompositeSerial.println(hex, HEX);
   // #endif
   hex = applyColourCorrection(hex);
+
   if(!overlay_mode || overlay)
   {
-    if(gamma_enable && !ignore_gamma)
-    {
-      leds[xyToIndex(xy)] = applyGamma(hex);
-    }
-    else
-    {
-      leds[xyToIndex(xy)] = hex;
-    }
+    leds[xyToIndex(xy)] = hex;
   }
   else
   {
-    if(gamma_enable && !ignore_gamma)
-    {
-      buffer[xyToIndex(xy)] = applyGamma(hex);
-    }
-    else
-    {
-      buffer[xyToIndex(xy)] = hex;
-    }
+    buffer[xyToIndex(xy)] = hex;
   }
+
   LED::changed = true;
 }
 
-void LED::setXYPalette(u8 xy, u8 pick_palette, u8 colour, bool overlay /*= false*/)
+void LED::setXYPalette(u8 xy, u8 palette_selected, u8 value, bool overlay /*= false*/)
 {
-  LED::setXYHEX(xy, palette[pick_palette][colour], overlay, true);
+  //LED::setXYHEX(xy, palette[pick_palette][colour], overlay);
+
+  #ifdef DEBUG
+  CompositeSerial.print("LED XY Palette\t");
+  CompositeSerial.print(xy, HEX);
+  CompositeSerial.print("\t");
+  CompositeSerial.print(palette_selected);
+  CompositeSerial.print("\t");
+  CompositeSerial.print(value);
+  CompositeSerial.print("\t");
+  CompositeSerial.print(palette[palette_selected][value].r);
+  CompositeSerial.print("\t");
+  CompositeSerial.print(palette[palette_selected][value].g);
+  CompositeSerial.print("\t");
+  CompositeSerial.println(palette[palette_selected][value].b);
+  #endif
+
+  if(!overlay_mode || overlay)
+  {
+    leds[xyToIndex(xy)] = palette[palette_selected][value];
+  }
+  else
+  {
+    buffer[xyToIndex(xy)] = palette[palette_selected][value];
+  }
+
+  LED::changed = true;
 }
 
 //Processing
@@ -318,15 +339,6 @@ void LED::rainbow()
 // {
 //   LED::fillRegionHEX(xy1, xy2, palette[p][c], overlay, true);
 // }
-
-u32 LED::applyGamma(u32 hex)
-{
-  return
-  led_gamma[(hex & 0xff000000) >> 24] * 0x1000000 +
-  led_gamma[(hex & 0x00ff0000) >> 16] *0x10000 +
-  led_gamma[(hex & 0x0000ff00) >> 8] *0x100 +
-  led_gamma[(hex & 0x000000ff)];
-}
 
 void LED::enableOverlayMode()
 {

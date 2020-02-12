@@ -6,7 +6,7 @@
 #include "../Parameter/MatrixVariable.h"
 #include "../Parameter/MatrixParameter.h"
 #include "../Core/MatrixSystem.h"
-//#include "../Components/colour.h"
+#include "../Components/Colour.h"
 
 
 // enum LEDMoDE{ on, off, w, rgb, wrgb, hex, palette};
@@ -32,8 +32,8 @@ public:
   void setW(s16 index, u8 w, bool overlay = false);
   void setRGB(s16 index, u8 r, u8 g, u8 b, bool overlay = false);
   void setWRGB(s16 index, u8 w, u8 r, u8 g, u8 b, bool overlay = false);
-  void setHEX(s16 index, u32 hex, bool overlay = false, bool ignore_gamma = false);
-  void setPalette(s16 index, u8 pick_palette, u8 colour, bool overlay = false);
+  void setHEX(s16 index, u32 hex, bool overlay = false);
+  void setPalette(s16 index, u8 palette_selected, u8 value, bool overlay = false);
 
   //XY
   void offXY(u8 xy, bool overlay = false);
@@ -41,20 +41,12 @@ public:
   void setXYW(u8 xy, u8 w, bool overlay = false);
   void setXYRGB(u8 xy, u8 w, u8 g, u8 b, bool overlay = false);
   void setXYWRGB(u8 xy, u8 w, u8 r, u8 g, u8 b, bool overlay = false);
-  void setXYHEX(u8 xy, u32 WRGB, bool overlay = false, bool ignore_gamma = false);
-  void setXYPalette(u8 xy, u8 pick_palette, u8 colour, bool overlay = false);
+  void setXYHEX(u8 xy, u32 WRGB, bool overlay = false);
+  void setXYPalette(u8 xy, u8 palette_selected, u8 value, bool overlay = false);
 
   //Processing
   void update();
   void rainbow();
-  // void fillRegionOff(u8 xy1, u8 xy2, bool overlay = false);
-  // void fillRegionOn(u8 xy1, u8 xy2, bool overlay = false);
-  // void fillRegionW(u8 xy1, u8 xy2, u8 w, bool overlay = false);
-  // void fillRegionWRGB(u8 xy1, u8 xy2, u8 w, u8 r, u8 g, u8 b, bool overlay = false);
-  // void fillRegionRGB(u8 xy1, u8 xy2, u8 r, u8 g, u8 b, bool overlay = false);
-  // void fillRegionHEX(u8 xy1, u8 xy2, u32 hex, bool overlay = false , bool ignore_gamma = false);
-  // void fillRegionPalette(u8 xy1, u8 xy2, u8 p, u8 c, bool overlay = false);
-  u32 applyGamma(u32 hex);
   void enableOverlayMode();
   void disableOverlayMode();
   u32 readXYLED(u8 xy);

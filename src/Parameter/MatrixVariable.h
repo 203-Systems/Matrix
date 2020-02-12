@@ -2,6 +2,7 @@
 #define MATRIX_VARIABLE
 
 #include <Arduino.h>
+#include <FastLED.h>
 #include "../Parameter/MatrixParameter.h"
 
 //enum Modes {Normal, Fn, Animation, Boot, Ascii, App};
@@ -21,13 +22,14 @@ extern u16 max_mAh;
 extern u8 brightness_level[8];
 extern u8 fps;
 extern u32 led_colour_temperture;
+extern u8 desatrate_rate;
 
 extern u16 fps_micros;
 extern u16 keypad_scanrate_micros;
 
-extern u32 palette[4][128];
-//extern u32 custom_palette[2][128];
-extern u8 led_gamma[256];
+extern CRGB pre_compilled_palette[3][128] PROGMEM;
+extern CRGB palette[6][128];
+extern u8 led_gamma[256] PROGMEM;
 
 //KeyMap
 extern u8 keypad_scanrate;

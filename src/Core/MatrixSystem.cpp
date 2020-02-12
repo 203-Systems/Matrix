@@ -7,8 +7,7 @@ EEPROMClass EEPROM_SYS;
 extern LED LED;
 extern KeyPad KeyPad;
 extern MIDI Midi;
-
-//extern ADCTouch TouchBar;
+extern USBCompositeSerial CompositeSerial;
 
 u8 cW = 255;
 u8 cR = 255;
@@ -34,10 +33,10 @@ void setupUSB()
   USBComposite.setManufacturerString(MAUNFACTURERNAME);
   USBComposite.setSerialString(getDeviceIDString());
 
-  Midi.registerComponent();
   // Midi.setRXPacketSize(256);
   // Midi.setTXPacketSize(64);
 
+  Midi.registerComponent();
   CompositeSerial.registerComponent();
 
   USBComposite.begin();
@@ -50,7 +49,7 @@ void setupHardware()
   KeyPad.init();
   //TouchBar.init();
   setColourCorrection(led_colour_correction, true);
-  applyColourCorrectionToPalette();
+  compilePalette();
 }
 
 void specialBoot()
@@ -110,7 +109,7 @@ void factoryTest()
             }
             else
             {
-              LED.setXYHEX(KeyPad.changelist[i], 0xFFFFFF, true, true);
+              LED.setXYHEX(KeyPad.changelist[i], 0xFFFFFF, true);
             }
           }
         }
@@ -166,32 +165,16 @@ void resetDevice()
   reboot();
 }
 
-void applyColourCorrectionToPalette()
+void compilePalette()
 {
-  cW = (led_colour_correction & 0xFF000000) >> 24;
-  cR = (led_colour_correction & 0xFF0000) >> 16;
-  cG = (led_colour_correction & 0xFF00) >> 8;
-  cB = led_colour_correction & 0xFF;
   for(u8 p = 0; p < 4; p++)
   {
     for(u8 i = 0; i < 128; i++)
     {
-      palette[p][i] = applyColourCorrection(palette[p][i]);
+      palette[p][i] = compileColour(pre_compilled_palette[p][i]);
     }
   }
-}
 
-u32 applyColourCorrection(u32 input)
-{
-  u8 pW = (input & 0xFF000000) >> 24;
-  u8 pR = (input & 0xFF0000) >> 16;
-  u8 pG = (input & 0xFF00) >> 8;
-  u8 pB = input & 0xFF;
-  pW = scale8_video(pW, cW);
-  pR = scale8_video(pR, cR);
-  pG = scale8_video(pG, cG);
-  pB = scale8_video(pB, cB);
-  return pW * 0x1000000 + pR * 0x10000 + pG * 0x100 + pB;
 }
 
 void setgamma(bool g)

@@ -209,8 +209,8 @@ void M2P::toMIDI()
   int Velocity = CompositeSerial.read();
   switch (Mode) {
     case 8:
-    Midi.sentNoteOff(Channel, Note, Velocity);
+    Midi.sendNoteOff(Channel, Note, Velocity);
     case 9:
-    Midi.sentNoteOn(Channel, Note, Velocity);
+    Midi.sendNoteOn(Channel, Note, Velocity);
   }
 }

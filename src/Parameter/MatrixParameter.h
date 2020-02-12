@@ -46,39 +46,37 @@ typedef volatile const int64_t vsc64;
 //DeviceInfo
 
 #define DEBUG
+// #define DISABLE_FASTLED_PRAGMA
 
 #define DEVICENAME "Matrix"
 #define MAUNFACTURERNAME "203 Industries"
 #define SERIALSTRING "Prototype"
-#define VID  0x0203
+#define VID 0x0203
 #define VID2 0x0203 // for device ID USE
-#define PID  0x1000
-#define PID2 0x1000 // for device ID USE
+#define PID 0x1000
+#define PID2 0x1000     // for device ID USE
 #define EEPROMVERSION 0 //Each EEPROM change will cause this to ++
-#define FWVERSION_STRING "0.8.0a"
+#define FWVERSION_STRING "0.7.9"
 #define MAJOR_VER 0
-#define MINOR_VER 8
-#define PARCH_VER 0
-#define BUILD_VER 1 //0 for Release, 1 for Alpha, 2 for Beta
+#define MINOR_VER 7
+#define PARCH_VER 9
+#define BUILD_VER 0 //0 for Release, 1 for Alpha, 2 for Beta
 
+#define BOOTLOADER_VERSION *(u32 *)(0x08001E00)
+#define MATRIX_MODEL *(u32 *)(0x08001E04)
+#define MATRIX_VERSION *(u32 *)(0x08001E08)
+#define MATRIX_BATCH *(u32 *)(0x08001E0C)
 
-
-#define BOOTLOADER_VERSION   *(u32 *) (0x08001E00)
-#define MATRIX_MODEL         *(u32 *) (0x08001E04)
-#define MATRIX_VERSION       *(u32 *) (0x08001E08)
-#define MATRIX_BATCH         *(u32 *) (0x08001E0C)
-
-#define DEVICE_SERIAL_1   *(u32 *) (0x1FFFF7E8)
-#define DEVICE_SERIAL_2   *(u32 *) (0x1FFFF7E8+0x04)
-#define DEVICE_SERIAL_3   *(u32 *) (0x1FFFF7E8+0x08)
+#define DEVICE_SERIAL_1 *(u32 *)(0x1FFFF7E8)
+#define DEVICE_SERIAL_2 *(u32 *)(0x1FFFF7E8 + 0x04)
+#define DEVICE_SERIAL_3 *(u32 *)(0x1FFFF7E8 + 0x08)
 
 #define MXPT 0x4D585054
-
 
 //LED
 #define NUM_LEDS 64
 #define NUM_BOTTOM_LEDS 36
-#define NUM_TOTAL_LEDS 64   //64+32
+#define NUM_TOTAL_LEDS 64 //64+32
 #define NUM_POWERCORD_LEDS 120
 #define LOWSTATEBRIGHTNESS 0.4
 

@@ -1,17 +1,9 @@
 /*
 Project Matrix
-Copyright © 203 Industries 2017–2020. All rights reserved.
-
-TODO
-EEPROM load KeyMap
-Play Animation
-Play Midi
-NexusRevamped while USB unreconized
-
+Copyright © 203 Industries 2016–2020. All rights reserved.
 */
 
 #include <Arduino.h>
-#include <USBMIDI.h>
 #include <USBComposite.h>
 #include <FastLED.h>
 #include "src/Parameter/MatrixVariable.h"
@@ -25,13 +17,12 @@ NexusRevamped while USB unreconized
 #include "src/Components/UI.h"
 
 UI UI;
-//UIelement uielement;
 MIDI Midi;
 LED LED;
 KeyPad KeyPad;
-//ADCTouch TouchBar;
 Timer mainTimer;
 MicroTimer microTimer;
+USBCompositeSerial CompositeSerial;
 
 bool flag_leftFN = false;
 
@@ -46,52 +37,52 @@ void setup()
 
   UI.enterBootAnimation();
 
-  #ifdef DEBUG
+#ifdef DEBUG
   CompositeSerial.println("Enter Main Program");
-  #endif
+#endif
 }
 
 void readKey()
 {
   if (KeyPad.scan())
   {
-    if(fn_hold)
+    if (fn_hold)
     {
-      if(KeyPad.fn.hold && !flag_leftFN)
+      if (KeyPad.fn.hold && !flag_leftFN)
       {
-        Midi.sentNoteOff(0, keymap_fn[current_keymap]);
+        Midi.sendNoteOff(0, keymap_fn[current_keymap]);
         UI.enterFNmenu();
         flag_leftFN = true; //Prevent back to FN
       }
-      else if(KeyPad.fn.state == PRESSED)
+      else if (KeyPad.fn.state == PRESSED)
       {
-        Midi.sentNoteOn(0, keymap_fn[current_keymap]);
+        Midi.sendNoteOn(0, keymap_fn[current_keymap]);
       }
-      else if(KeyPad.fn.state == RELEASED)
+      else if (KeyPad.fn.state == RELEASED)
       {
-        Midi.sentNoteOff(0, keymap_fn[current_keymap]);
+        Midi.sendNoteOff(0, keymap_fn[current_keymap]);
         flag_leftFN = false;
       }
     }
     else
     {
-      if(KeyPad.fn.state == PRESSED)
-      UI.enterFNmenu();
+      if (KeyPad.fn.state == PRESSED)
+        UI.enterFNmenu();
     }
 
-    for(int i = 0; i < MULTIPRESS; i++)
+    for (int i = 0; i < MULTIPRESS; i++)
     {
-      if(KeyPad.changelist[i] == 0xFFFF)
-      return;
+      if (KeyPad.changelist[i] == 0xFFFF)
+        return;
       u8 x = xytox(KeyPad.changelist[i]);
       u8 y = xytoy(KeyPad.changelist[i]);
-      if(KeyPad.getKey(KeyPad.changelist[i]).state == PRESSED)
+      if (KeyPad.getKey(KeyPad.changelist[i]).state == PRESSED)
       {
-        Midi.sentXYon(KeyPad.changelist[i], KeyPad.getKey(KeyPad.changelist[i]).velocity * 127);
+        Midi.sendXYon(KeyPad.changelist[i], KeyPad.getKey(KeyPad.changelist[i]).velocity * 127);
       }
-      else if(KeyPad.getKey(KeyPad.changelist[i]).state == RELEASED)
+      else if (KeyPad.getKey(KeyPad.changelist[i]).state == RELEASED)
       {
-        Midi.sentXYoff(KeyPad.changelist[i], 0);
+        Midi.sendXYoff(KeyPad.changelist[i], 0);
       }
     }
   }
@@ -108,11 +99,11 @@ void readKey()
 //         return;
 //
 //         case PRESSED:
-//         Midi.sentNoteOn(0, touch_keymap[current_keymap][x], 127);
+//         Midi.sendNoteOn(0, touch_keymap[current_keymap][x], 127);
 //         break;
 //
 //         case RELEASED:
-//         Midi.sentNoteOff(0, touch_keymap[current_keymap][x], 0);
+//         Midi.sendNoteOff(0, touch_keymap[current_keymap][x], 0);
 //         break;
 //       }
 //     }

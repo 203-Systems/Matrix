@@ -1,0 +1,17 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "C:\\Users\\caine\\AppData\\Local\\Arduino15\\packages\\stm32duino\\tools\\**",
+                "C:\\Users\\caine\\AppData\\Local\\Arduino15\\packages\\stm32duino\\hardware\\STM32F1\\2018.12.3\\**"
+            ],
+            "forcedInclude": [],
+            "intelliSenseMode": "msvc-x64",
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c11",
+            "cppStandard": "c++17"
+        }
+    ],
+    "version": 4
+}

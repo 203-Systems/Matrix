@@ -6,7 +6,6 @@
 #include <libmaple/bkp.h>
 #include <libmaple/nvic.h>
 #include <USBComposite.h>
-#include <USBMIDI.h>
 #include <FastLED.h>
 #include "../HAL/Keypad.h"
 #include "../HAL/LED.h"
@@ -16,12 +15,14 @@
 #include "../Parameter/MatrixParameter.h"
 #include "../Parameter/DeviceSelector.h"
 #include "../Core/EEPROM.h"
+#include "../Components/Colour.h"
 
 // struct XY
 // {
 //   u8 x;
 //   u8 y;
 // };
+
 extern Timer mainTimer;
 extern MicroTimer microTimer;
 
@@ -37,8 +38,7 @@ void setDeviceID();
 void setDeviceID(u8 id);
 void enterBootloader();
 void resetDevice();
-void applyColourCorrectionToPalette();
-u32 applyColourCorrection(u32 input);
+void compilePalette();
 void updatePaletteRGB();
 void updatePaletteWRGB();
 void resetPalette();

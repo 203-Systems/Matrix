@@ -29,12 +29,12 @@ public:
   UI();
   void enterFNmenu();
   //void showDeviceInfo();
-  //void showASCII(char ascii[], u32 colour, bool ignore_gamma = false);
+  //void showASCII(char ascii[], u32 colour);
   //void playAnimation(char animation[]);
-  u8 numSelector8bit(u8 currentNum, u32 colour, u32 sec_colour, bool ignore_gamma = false);
-  u8 numSelector6bit(u8 currentNum, u32 colour, u32 sec_colour, bool ignore_gamma = false);
-  u32 numSelectorRGB(u32 colour, bool ignore_gamma = false);
-  //u32 numSelectorWRGB(u32 colour, bool ignore_gamma = false);
+  u8 numSelector8bit(u8 currentNum, u32 colour, u32 sec_colour);
+  u8 numSelector6bit(u8 currentNum, u32 colour, u32 sec_colour);
+  u32 numSelectorRGB(u32 colour);
+  //u32 numSelectorWRGB(u32 colour);
   void scrollText(char ascii[], u32 colour, bool loop = false);
 
   void enterBootAnimation();
