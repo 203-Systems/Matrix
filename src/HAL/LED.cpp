@@ -29,7 +29,7 @@ void LED::init()
   }
   //FastLED.setDither(0);
   FastLED.setBrightness(brightness);
-  //FastLED.setCorrection(led_colour_correction);
+  //FastLED.setCorrection(led_color_correction);
 
   //FastLED.setTemperature(0xFFFFFFFF);
   //FastLED.setMaxRefreshRate(fps);
@@ -42,7 +42,7 @@ void LED::setBrightness(u8 b)
   //setBrightness(b);
 }
 
-// void LED::setColourCorrection(u32 c)
+// void LED::setcolorCorrection(u32 c)
 // {
 //   FastLED.setCorrection(c);
 // }
@@ -55,7 +55,7 @@ void LED::dynamicBrightness(u16 mah)
 void LED::fill(u32 WRGB, bool overlay /*= false*/)
 {
   //fill_solid(leds,NUM_TOTAL_LEDS,CRGB::Black);
-  WRGB = applyColourCorrection(WRGB);
+  WRGB = applycolorCorrection(WRGB);
   for(int i = 0; i < NUM_TOTAL_LEDS; i++)
   {
     if(!overlay_mode || overlay)
@@ -141,7 +141,7 @@ void LED::setHEX(s16 index, u32 hex, bool overlay /*= false*/)
   if(index < 0)
   return;
 
-  //hex = applyColourCorrection(hex); CRGB, fix later
+  //hex = applycolorCorrection(hex); CRGB, fix later
 
   if(!overlay_mode || overlay)
   {
@@ -156,7 +156,7 @@ void LED::setHEX(s16 index, u32 hex, bool overlay /*= false*/)
 
 void LED::setPalette(s16 index, u8 palette_selected, u8 value, bool overlay /*= false*/)
 {
-  //LED::setHEX(index, palette[pick_palette][colour], overlay);
+  //LED::setHEX(index, palette[pick_palette][color], overlay);
   // #ifdef DEBUG
 
   // CompositeSerial.print("LED Index \t");
@@ -216,7 +216,7 @@ void LED::setXYHEX(u8 xy, u32 hex, bool overlay /*= false*/)
   // CompositeSerial.print("\t");
   // CompositeSerial.println(hex, HEX);
   // #endif
-  hex = applyColourCorrection(hex);
+  hex = applycolorCorrection(hex);
 
   if(!overlay_mode || overlay)
   {
@@ -232,7 +232,7 @@ void LED::setXYHEX(u8 xy, u32 hex, bool overlay /*= false*/)
 
 void LED::setXYPalette(u8 xy, u8 palette_selected, u8 value, bool overlay /*= false*/)
 {
-  //LED::setXYHEX(xy, palette[pick_palette][colour], overlay);
+  //LED::setXYHEX(xy, palette[pick_palette][color], overlay);
 
   #ifdef DEBUG
   CompositeSerial.print("LED XY Palette\t");

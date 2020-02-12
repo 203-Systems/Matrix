@@ -15,7 +15,7 @@
 #include "../Parameter/MatrixParameter.h"
 #include "../Parameter/DeviceSelector.h"
 #include "../Core/EEPROM.h"
-#include "../Components/Colour.h"
+#include "../Components/color.h"
 
 // struct XY
 // {
@@ -51,7 +51,7 @@ void setCurrentKeyMap(u8 m);
 void setUnipadMode(bool u);
 void setFnHold(bool h);
 void setTouchThreshold(u16 t);
-void setColourCorrection(u32 c, bool temp = false);
+void setcolorCorrection(u32 c, bool temp = false);
 void setSTFU(u16 v);
 //void setTouchSensitive(u8 s);
 

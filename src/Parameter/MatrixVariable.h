@@ -21,7 +21,7 @@ extern u8 brightness;
 extern u16 max_mAh;
 extern u8 brightness_level[8];
 extern u8 fps;
-extern u32 led_colour_temperture;
+extern u32 led_color_temperture;
 extern u8 desatrate_rate;
 
 extern u16 fps_micros;
@@ -33,12 +33,12 @@ extern u8 led_gamma[256] PROGMEM;
 
 //KeyMap
 extern u8 keypad_scanrate;
-extern u32 keymap_colour[5];
+extern u32 keymap_color[5];
 extern u8 keymap [5][YSIZE][XSIZE];
 extern u8 bottom_led_map [5][NUM_BOTTOM_LEDS];
 extern u8 fn_keymap[5][2][XSIZE];
-extern u32 fn_keymap_idle_colour[5][2][XSIZE];
-extern u32 fn_keymap_active_colour[5][2][XSIZE];
+extern u32 fn_keymap_idle_color[5][2][XSIZE];
+extern u32 fn_keymap_active_color[5][2][XSIZE];
 extern u8 keymap_fn [5];
 extern float velocity_threshold;
 extern float aftertouch_threshold;
@@ -52,7 +52,7 @@ extern u8 touch_keymap[5][8];
 //Sysex
 extern u8 rotation;
 extern u8 midi_channel;
-extern bool gamma_enable; //Wont effect colour palette
+extern bool gamma_enable; //Wont effect color palette
 extern bool midi_enable;
 extern bool m2p_enable;
 extern bool powercord_enable;

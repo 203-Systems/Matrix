@@ -48,7 +48,7 @@ void setupHardware()
   LED.init();
   KeyPad.init();
   //TouchBar.init();
-  setColourCorrection(led_colour_correction, true);
+  setcolorCorrection(led_color_correction, true);
   compilePalette();
 }
 
@@ -171,7 +171,7 @@ void compilePalette()
   {
     for(u8 i = 0; i < 128; i++)
     {
-      palette[p][i] = compileColour(pre_compilled_palette[p][i]);
+      palette[p][i] = compilecolor(pre_compilled_palette[p][i]);
     }
   }
 
@@ -227,21 +227,21 @@ void setFnHold(bool h)
 //   touch_threshold = t;
 // }
 
-void setColourCorrection(u32 c, bool dont_write)
+void setcolorCorrection(u32 c, bool dont_write)
 {
   if(!dont_write)
   {
-  EEPROM_USER.write(E_COLOUR_CORRECTION_1, c >> 16);
-  EEPROM_USER.write(E_COLOUR_CORRECTION_2, c & 0xFFFF);
+  EEPROM_USER.write(E_color_CORRECTION_1, c >> 16);
+  EEPROM_USER.write(E_color_CORRECTION_2, c & 0xFFFF);
   }
-  //LED.setColourCorrection(c);
-  led_colour_correction = c;
+  //LED.setcolorCorrection(c);
+  led_color_correction = c;
   cW = (c & 0xFF000000) >> 24;
   cR = (c & 0xFF0000) >> 16;
   cG = (c & 0xFF00) >> 8;
   cB = c & 0xFF;
   #ifdef DEBUG
-  CompositeSerial.print("Set Colour Correction ");CompositeSerial.println(c);
+  CompositeSerial.print("Set color Correction ");CompositeSerial.println(c);
   #endif
 }
 

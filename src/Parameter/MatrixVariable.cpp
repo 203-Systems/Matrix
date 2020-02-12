@@ -14,7 +14,7 @@ extern u8 brightness = 128;
 extern u16 max_mAh = 1000;
 extern u8 brightness_level[8] = {16, 32, 64, 96, 128, 160, 216, 255};
 extern u8 fps = 100;
-extern u32 led_colour_temperture = 0xFFFFFFFF;
+extern u32 led_color_temperture = 0xFFFFFFFF;
 extern u8 desatrate_rate = 0; // 0~255 
 
 extern u16 fps_micros = 1000 / fps;
@@ -22,9 +22,9 @@ extern u16 fps_micros = 1000 / fps;
 extern u8 keypad_scanrate = 50;
 extern u16 keypad_scanrate_micros = 1000 / keypad_scanrate;
 
-extern CRGB pre_compilled_palette[3][128] PROGMEM = //Colour Palette
+extern CRGB pre_compilled_palette[3][128] PROGMEM = //color Palette
     {{
-         //MatrixcolourPalette (Mat1s' Palette for now)
+         //MatrixcolorPalette (Mat1s' Palette for now)
          0x00000000, //0
          0x003C0000, //1
          0x007D0000, //2
@@ -155,7 +155,7 @@ extern CRGB pre_compilled_palette[3][128] PROGMEM = //Colour Palette
          0x00FFFFFF, //127
      },
      {
-         //LaunchpadXcolourPalette (Legacy Palette)
+         //LaunchpadXcolorPalette (Legacy Palette)
          0x00000000, //0
          0x003F3F3F, //1
          0x007F7F7F, //2
@@ -316,7 +316,7 @@ extern u8 bottom_led_map[5][NUM_BOTTOM_LEDS] =
 
 //KeyPad
 
-extern u32 keymap_colour[5] = //Keymap mode colour ref in fn menu
+extern u32 keymap_color[5] = //Keymap mode color ref in fn menu
     {0x00FF00FF, 0x00FF5400, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF};
 
 extern u8 keymap[5][YSIZE][XSIZE] =
@@ -378,7 +378,7 @@ extern u8 fn_keymap[5][2][XSIZE] =              //Key session in fn menu ） 255
      {{108, 109, 110, 111, 112, 113, 114, 115}, //User Custom3
       {100, 101, 102, 103, 104, 105, 106, 107}}};
 
-extern u32 fn_keymap_idle_colour[5][2][XSIZE]{{{0x00FF00FF, 0x00FF00FF, 0x00FF00FF, 0x00FF00FF, 0x00FF00FF, 0x00FF00FF, 0x00FF00FF, 0x00FF00FF}, //Drum Rock
+extern u32 fn_keymap_idle_color[5][2][XSIZE]{{{0x00FF00FF, 0x00FF00FF, 0x00FF00FF, 0x00FF00FF, 0x00FF00FF, 0x00FF00FF, 0x00FF00FF, 0x00FF00FF}, //Drum Rock
                                                {0x00FF00FF, 0x00FF00FF, 0x00FF00FF, 0x00FF00FF, 0x00FF00FF, 0x00FF00FF, 0x00FF00FF, 0x00FF00FF}},
                                               {{0x00FF5400, 0x00FF5400, 0x00FF5400, 0x00FF5400, 0x00FF5400, 0x00FF5400, 0x00FF5400, 0x00FF5400}, //Unmapped MK2
                                                {0x00FF5400, 0x00FF5400, 0x00FF5400, 0x00FF5400, 0x00FF5400, 0x00FF5400, 0x00FF5400, 0x00FF5400}},
@@ -389,7 +389,7 @@ extern u32 fn_keymap_idle_colour[5][2][XSIZE]{{{0x00FF00FF, 0x00FF00FF, 0x00FF00
                                               {{0x00404040, 0x00404040, 0x00404040, 0x00404040, 0x00404040, 0x00404040, 0x00404040, 0x00404040}, //User custom 3
                                                {0x00404040, 0x00404040, 0x00404040, 0x00404040, 0x00404040, 0x00404040, 0x00404040, 0x00404040}}};
 
-extern u32 fn_keymap_active_colour[5][2][XSIZE]{{{0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF}, //Drum Rock
+extern u32 fn_keymap_active_color[5][2][XSIZE]{{{0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF}, //Drum Rock
                                                  {0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF}},
                                                 {{0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF}, //Unmapped MK2
                                                  {0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF, 0x00FFFFFF}},
@@ -416,7 +416,7 @@ extern u8 touch_keymap[5][8] =
 //System
 extern u8 rotation = 0;
 extern u8 midi_channel = 0;
-extern bool gamma_enable = false; //Wont effect colour palette
+extern bool gamma_enable = false; //Wont effect color palette
 extern bool midi_enable = true;
 extern bool m2p_enable = false;
 extern bool powercord_enable = false;

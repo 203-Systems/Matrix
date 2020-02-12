@@ -183,7 +183,7 @@ void MIDI::handleNoteOn(unsigned int channel, unsigned int note, unsigned int ve
 {
   MIDI::noteOn(channel,note,velocity);
   //USBMIDI::sendNoteOn(channel,note,velocity);
-  //leds[IndexInKeyMap(note)] = colour[channel][velocity];
+  //leds[IndexInKeyMap(note)] = color[channel][velocity];
 }
 
 // void MIDI::sendNoteOn(u8 channel, u8 note, u8 velocity)

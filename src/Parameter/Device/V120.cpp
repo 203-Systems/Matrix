@@ -12,7 +12,7 @@ void loadConfigV120()
   led_pin = PB7;
   powercord_pin = PA9;
 
-  led_colour_correction = 0xFFFFFF;
+  led_color_correction = 0xFFFFFF;
 
   //KeyPad
   keypad_type = 1;

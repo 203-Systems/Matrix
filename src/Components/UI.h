@@ -29,13 +29,13 @@ public:
   UI();
   void enterFNmenu();
   //void showDeviceInfo();
-  //void showASCII(char ascii[], u32 colour);
+  //void showASCII(char ascii[], u32 color);
   //void playAnimation(char animation[]);
-  u8 numSelector8bit(u8 currentNum, u32 colour, u32 sec_colour);
-  u8 numSelector6bit(u8 currentNum, u32 colour, u32 sec_colour);
-  u32 numSelectorRGB(u32 colour);
-  //u32 numSelectorWRGB(u32 colour);
-  void scrollText(char ascii[], u32 colour, bool loop = false);
+  u8 numSelector8bit(u8 currentNum, u32 color, u32 sec_color);
+  u8 numSelector6bit(u8 currentNum, u32 color, u32 sec_color);
+  u32 numSelectorRGB(u32 color);
+  //u32 numSelectorWRGB(u32 color);
+  void scrollText(char ascii[], u32 color, bool loop = false);
 
   void enterBootAnimation();
 

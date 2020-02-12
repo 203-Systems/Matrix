@@ -45,8 +45,8 @@ void loadSetting()
   bootAnimationSelector = EEPROM_USER.read(E_BOOTANIMATION);
   debug_mode = EEPROM_USER.read(E_DEBUG_ENABLE);
   current_keymap = EEPROM_USER.read(E_CURRENT_KEYMAP);
-  led_colour_correction = (EEPROM_USER.read(E_COLOUR_CORRECTION_1) << 16) + EEPROM_USER.read(E_COLOUR_CORRECTION_2);
-  led_colour_temperture = (EEPROM_USER.read(E_COLOUR_TEMPERTURE_1) << 16) + EEPROM_USER.read(E_COLOUR_TEMPERTURE_2);
+  led_color_correction = (EEPROM_USER.read(E_color_CORRECTION_1) << 16) + EEPROM_USER.read(E_color_CORRECTION_2);
+  led_color_temperture = (EEPROM_USER.read(E_color_TEMPERTURE_1) << 16) + EEPROM_USER.read(E_color_TEMPERTURE_2);
   fn_hold = EEPROM_USER.read(E_FN_HOLD);
   stfu = EEPROM_USER.read(E_STFU);
 }
@@ -92,8 +92,8 @@ void saveAllSetting()
   EEPROM_USER.write(E_BOOTANIMATION, bootAnimationSelector);
   EEPROM_USER.write(E_DEBUG_ENABLE, (u8)debug_mode);
   EEPROM_USER.write(E_CURRENT_KEYMAP, current_keymap);
-  EEPROM_USER.write(E_COLOUR_CORRECTION_1, led_colour_correction >> 8);
-  EEPROM_USER.write(E_COLOUR_CORRECTION_2, led_colour_correction & 0xFFFF);
+  EEPROM_USER.write(E_color_CORRECTION_1, led_color_correction >> 8);
+  EEPROM_USER.write(E_color_CORRECTION_2, led_color_correction & 0xFFFF);
   EEPROM_USER.write(E_FN_HOLD, fn_hold);
   EEPROM_USER.write(E_STFU, stfu);
 }
@@ -123,15 +123,15 @@ void saveAllSetting()
 //     EEPROM_USER.write(E_CUSTOM_BOTTOM_KEYMAP_1 + 128*p + i, bottom_led_map[2+p][i*2] *0x100 + bottom_led_map[2+p][i*2 + 1]);
 //     }
 //
-//     EEPROM_USER.write(E_CUSTOM_KEYMAP_1_COLOUR + 128*p, (keymap_colour[2+p] & 0xFFFF0000) >> 16);
-//     EEPROM_USER.write(E_CUSTOM_KEYMAP_1_COLOUR + 128*p + 1, keymap_colour[2+p] & 0xFFFF);
+//     EEPROM_USER.write(E_CUSTOM_KEYMAP_1_color + 128*p, (keymap_color[2+p] & 0xFFFF0000) >> 16);
+//     EEPROM_USER.write(E_CUSTOM_KEYMAP_1_color + 128*p + 1, keymap_color[2+p] & 0xFFFF);
 //
 //     for(u8 y = 0; y < 2; y++)
 //     {
 //       for(u8 x = 0; x < 8; x++)
 //       {
-//         EEPROM_USER.write(E_CUSTOM_KEYMAP_1_IDLE + 128*p + y*16 + x, (fn_keymap_idle_colour[2+p][y][x*2] & 0xFFFF0000) >> 16);
-//         EEPROM_USER.write(E_CUSTOM_KEYMAP_1_IDLE + 128*p + y*16 + x + 1, fn_keymap_idle_colour[2+p][y][x*2] & 0xFFFF);
+//         EEPROM_USER.write(E_CUSTOM_KEYMAP_1_IDLE + 128*p + y*16 + x, (fn_keymap_idle_color[2+p][y][x*2] & 0xFFFF0000) >> 16);
+//         EEPROM_USER.write(E_CUSTOM_KEYMAP_1_IDLE + 128*p + y*16 + x + 1, fn_keymap_idle_color[2+p][y][x*2] & 0xFFFF);
 //       }
 //     }
 //
@@ -139,8 +139,8 @@ void saveAllSetting()
 //     {
 //       for(u8 x = 0; x < 8; x++)
 //       {
-//         EEPROM_USER.write(E_CUSTOM_KEYMAP_1_ACTIVE + 128*p + y*16 + x, (fn_keymap_idle_colour[2+p][y][x*2] & 0xFFFF0000) >> 16);
-//         EEPROM_USER.write(E_CUSTOM_KEYMAP_1_ACTIVE + 128*p + y*16 + x + 1, fn_keymap_idle_colour[2+p][y][x*2] & 0xFFFF);
+//         EEPROM_USER.write(E_CUSTOM_KEYMAP_1_ACTIVE + 128*p + y*16 + x, (fn_keymap_idle_color[2+p][y][x*2] & 0xFFFF0000) >> 16);
+//         EEPROM_USER.write(E_CUSTOM_KEYMAP_1_ACTIVE + 128*p + y*16 + x + 1, fn_keymap_idle_color[2+p][y][x*2] & 0xFFFF);
 //       }
 //     }
 //   }

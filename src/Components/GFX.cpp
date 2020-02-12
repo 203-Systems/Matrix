@@ -8,14 +8,14 @@ GFX::GFX() // Constructor
   height = YSIZE;
 }
 
-void GFX::drawPixel(s8 x, s8 y, u32 colour)
+void GFX::drawPixel(s8 x, s8 y, u32 color)
 {
   if(x < width && y < height)
-  LED.setXYHEX(xytoxy(x, y), colour, overlay);
+  LED.setXYHEX(xytoxy(x, y), color, overlay);
   return;
 }
 
-void GFX::drawLine(s8 x0, s8 y0, s8 x1, s8 y1, u32 colour)
+void GFX::drawLine(s8 x0, s8 y0, s8 x1, s8 y1, u32 color)
 {
   bool steep = abs(y1 - y0) > abs(x1 - x0);
 
@@ -43,9 +43,9 @@ void GFX::drawLine(s8 x0, s8 y0, s8 x1, s8 y1, u32 colour)
 
   for (; x0<=x1; x0++) {
     if (steep) {
-      GFX::drawPixel(y0, x0, colour);
+      GFX::drawPixel(y0, x0, color);
     } else {
-      GFX::drawPixel(x0, y0, colour);
+      GFX::drawPixel(x0, y0, color);
     }
     err -= dy;
     if (err < 0) {
@@ -55,33 +55,33 @@ void GFX::drawLine(s8 x0, s8 y0, s8 x1, s8 y1, u32 colour)
   }
 }
 
-void GFX::drawFastVLine(s8 x, s8 y, s8 h, u32 colour)
+void GFX::drawFastVLine(s8 x, s8 y, s8 h, u32 color)
 {
-  GFX::drawLine(x, y, x, y+h-1, colour);
+  GFX::drawLine(x, y, x, y+h-1, color);
 }
 
-void GFX::drawFastHLine(s8 x, s8 y, s8 w, u32 colour)
+void GFX::drawFastHLine(s8 x, s8 y, s8 w, u32 color)
 {
-  GFX::drawLine(x, y, x+w-1, y, colour);
+  GFX::drawLine(x, y, x+w-1, y, color);
 }
-void GFX::drawRect(s8 x, s8 y, s8 w, s8 h, u32 colour)
+void GFX::drawRect(s8 x, s8 y, s8 w, s8 h, u32 color)
 {
-  GFX::drawFastHLine(x, y, w, colour);
-  GFX::drawFastHLine(x, y+h-1, w, colour);
-  GFX::drawFastVLine(x, y, h, colour);
-  GFX::drawFastVLine(x+w-1, y, h, colour);
+  GFX::drawFastHLine(x, y, w, color);
+  GFX::drawFastHLine(x, y+h-1, w, color);
+  GFX::drawFastVLine(x, y, h, color);
+  GFX::drawFastVLine(x+w-1, y, h, color);
 }
-void GFX::fillRect(s8 x, s8 y, s8 w, s8 h, u32 colour)
+void GFX::fillRect(s8 x, s8 y, s8 w, s8 h, u32 color)
 {
   for (s8 i=x; i<x+w; i++) {
-    GFX::drawFastVLine(i, y, h, colour);
+    GFX::drawFastVLine(i, y, h, color);
   }
 }
-void GFX::fillScreen(u32 colour)
+void GFX::fillScreen(u32 color)
 {
-  LED.fill(colour, overlay);
+  LED.fill(color, overlay);
 }
-void GFX::drawCircle(s8 x0, s8 y0, s8 r, u32 colour)
+void GFX::drawCircle(s8 x0, s8 y0, s8 r, u32 color)
 {
   s8 f = 1 - r;
   s8 ddF_x = 1;
@@ -89,10 +89,10 @@ void GFX::drawCircle(s8 x0, s8 y0, s8 r, u32 colour)
   s8 x = 0;
   s8 y = r;
 
-  GFX::drawPixel(x0  , y0+r, colour);
-  GFX::drawPixel(x0  , y0-r, colour);
-  GFX::drawPixel(x0+r, y0  , colour);
-  GFX::drawPixel(x0-r, y0  , colour);
+  GFX::drawPixel(x0  , y0+r, color);
+  GFX::drawPixel(x0  , y0-r, color);
+  GFX::drawPixel(x0+r, y0  , color);
+  GFX::drawPixel(x0-r, y0  , color);
 
   while (x<y) {
     if (f >= 0) {
@@ -104,18 +104,18 @@ void GFX::drawCircle(s8 x0, s8 y0, s8 r, u32 colour)
     ddF_x += 2;
     f += ddF_x;
 
-    GFX::drawPixel(x0 + x, y0 + y, colour);
-    GFX::drawPixel(x0 - x, y0 + y, colour);
-    GFX::drawPixel(x0 + x, y0 - y, colour);
-    GFX::drawPixel(x0 - x, y0 - y, colour);
-    GFX::drawPixel(x0 + y, y0 + x, colour);
-    GFX::drawPixel(x0 - y, y0 + x, colour);
-    GFX::drawPixel(x0 + y, y0 - x, colour);
-    GFX::drawPixel(x0 - y, y0 - x, colour);
+    GFX::drawPixel(x0 + x, y0 + y, color);
+    GFX::drawPixel(x0 - x, y0 + y, color);
+    GFX::drawPixel(x0 + x, y0 - y, color);
+    GFX::drawPixel(x0 - x, y0 - y, color);
+    GFX::drawPixel(x0 + y, y0 + x, color);
+    GFX::drawPixel(x0 - y, y0 + x, color);
+    GFX::drawPixel(x0 + y, y0 - x, color);
+    GFX::drawPixel(x0 - y, y0 - x, color);
   }
 }
 
-void GFX::drawCircleHelper(s8 x0, s8 y0, s8 r, u8 cornername, u32 colour)
+void GFX::drawCircleHelper(s8 x0, s8 y0, s8 r, u8 cornername, u32 color)
 {
   s8  f     = 1 - r;
   s8  ddF_x = 1;
@@ -133,32 +133,32 @@ void GFX::drawCircleHelper(s8 x0, s8 y0, s8 r, u8 cornername, u32 colour)
     ddF_x += 2;
     f     += ddF_x;
     if (cornername & 0x4) {
-      GFX::drawPixel(x0 + x, y0 + y, colour);
-      GFX::drawPixel(x0 + y, y0 + x, colour);
+      GFX::drawPixel(x0 + x, y0 + y, color);
+      GFX::drawPixel(x0 + y, y0 + x, color);
     }
     if (cornername & 0x2) {
-      GFX::drawPixel(x0 + x, y0 - y, colour);
-      GFX::drawPixel(x0 + y, y0 - x, colour);
+      GFX::drawPixel(x0 + x, y0 - y, color);
+      GFX::drawPixel(x0 + y, y0 - x, color);
     }
     if (cornername & 0x8) {
-      GFX::drawPixel(x0 - y, y0 + x, colour);
-      GFX::drawPixel(x0 - x, y0 + y, colour);
+      GFX::drawPixel(x0 - y, y0 + x, color);
+      GFX::drawPixel(x0 - x, y0 + y, color);
     }
     if (cornername & 0x1) {
-      GFX::drawPixel(x0 - y, y0 - x, colour);
-      GFX::drawPixel(x0 - x, y0 - y, colour);
+      GFX::drawPixel(x0 - y, y0 - x, color);
+      GFX::drawPixel(x0 - x, y0 - y, color);
     }
   }
 }
 
 
-void GFX::fillCircle(s8 x, s8 y, s8 r, u32 colour)
+void GFX::fillCircle(s8 x, s8 y, s8 r, u32 color)
 {
-  GFX::drawFastVLine(x, y-r, 2*r+1, colour);
-  GFX::fillCircleHelper(x, y, r, 3, 0, colour);
+  GFX::drawFastVLine(x, y-r, 2*r+1, color);
+  GFX::fillCircleHelper(x, y, r, 3, 0, color);
 }
 
-void GFX::fillCircleHelper(s8 x0, s8 y0, s8 r, u8 cornername, s16 delta, u32 colour)
+void GFX::fillCircleHelper(s8 x0, s8 y0, s8 r, u8 cornername, s16 delta, u32 color)
 {
 
   s8 f     = 1 - r;
@@ -178,25 +178,25 @@ void GFX::fillCircleHelper(s8 x0, s8 y0, s8 r, u8 cornername, s16 delta, u32 col
     f     += ddF_x;
 
     if (cornername & 0x1) {
-      GFX::drawFastVLine(x0+x, y0-y, 2*y+1+delta, colour);
-      GFX::drawFastVLine(x0+y, y0-x, 2*x+1+delta, colour);
+      GFX::drawFastVLine(x0+x, y0-y, 2*y+1+delta, color);
+      GFX::drawFastVLine(x0+y, y0-x, 2*x+1+delta, color);
     }
     if (cornername & 0x2) {
-      GFX::drawFastVLine(x0-x, y0-y, 2*y+1+delta, colour);
-      GFX::drawFastVLine(x0-y, y0-x, 2*x+1+delta, colour);
+      GFX::drawFastVLine(x0-x, y0-y, 2*y+1+delta, color);
+      GFX::drawFastVLine(x0-y, y0-x, 2*x+1+delta, color);
     }
   }
 
 }
 
-void GFX::drawTriangle(s8 x0, s8 y0, s8 x1, s8 y1, s8 x2, s8 y2, u32 colour)
+void GFX::drawTriangle(s8 x0, s8 y0, s8 x1, s8 y1, s8 x2, s8 y2, u32 color)
 {
-  GFX::drawLine(x0, y0, x1, y1, colour);
-  GFX::drawLine(x1, y1, x2, y2, colour);
-  GFX::drawLine(x2, y2, x0, y0, colour);
+  GFX::drawLine(x0, y0, x1, y1, color);
+  GFX::drawLine(x1, y1, x2, y2, color);
+  GFX::drawLine(x2, y2, x0, y0, color);
 }
 
-void GFX::fillTriangle(s8 x0, s8 y0, s8 x1, s8 y1, s8 x2, s8 y2, u32 colour)
+void GFX::fillTriangle(s8 x0, s8 y0, s8 x1, s8 y1, s8 x2, s8 y2, u32 color)
 {
   s16 a, b, y, last;
   // Sort coordinates by Y order (y2 >= y1 >= y0)
@@ -221,7 +221,7 @@ void GFX::fillTriangle(s8 x0, s8 y0, s8 x1, s8 y1, s8 x2, s8 y2, u32 colour)
     else if(x1 > b) b = x1;
     if(x2 < a)      a = x2;
     else if(x2 > b) b = x2;
-    GFX::drawFastHLine(a, y0, b-a+1, colour);
+    GFX::drawFastHLine(a, y0, b-a+1, color);
     return;
   }
 
@@ -257,30 +257,30 @@ void GFX::fillTriangle(s8 x0, s8 y0, s8 x1, s8 y1, s8 x2, s8 y2, u32 colour)
     b = x0 + (x2 - x0) * (y - y0) / (y2 - y0);
     */
     if(a > b) adagfxswap(a,b);
-    GFX::drawFastHLine(a, y, b-a+1, colour);
+    GFX::drawFastHLine(a, y, b-a+1, color);
   }
 }
 
-void GFX::drawRoundRect(s8 x, s8 y, s8 w, s8 h, s8 r, u32 colour)
+void GFX::drawRoundRect(s8 x, s8 y, s8 w, s8 h, s8 r, u32 color)
 {
   // smarter version
-  GFX::drawFastHLine(x+r  , y    , w-2*r, colour); // Top
-  GFX::drawFastHLine(x+r  , y+h-1, w-2*r, colour); // Bottom
-  GFX::drawFastVLine(x    , y+r  , h-2*r, colour); // Left
-  GFX::drawFastVLine(x+w-1, y+r  , h-2*r, colour); // Right
+  GFX::drawFastHLine(x+r  , y    , w-2*r, color); // Top
+  GFX::drawFastHLine(x+r  , y+h-1, w-2*r, color); // Bottom
+  GFX::drawFastVLine(x    , y+r  , h-2*r, color); // Left
+  GFX::drawFastVLine(x+w-1, y+r  , h-2*r, color); // Right
   // draw four corners
-  GFX::drawCircleHelper(x+r    , y+r    , r, 1, colour);
-  GFX::drawCircleHelper(x+w-r-1, y+r    , r, 2, colour);
-  GFX::drawCircleHelper(x+w-r-1, y+h-r-1, r, 4, colour);
-  GFX::drawCircleHelper(x+r    , y+h-r-1, r, 8, colour);
+  GFX::drawCircleHelper(x+r    , y+r    , r, 1, color);
+  GFX::drawCircleHelper(x+w-r-1, y+r    , r, 2, color);
+  GFX::drawCircleHelper(x+w-r-1, y+h-r-1, r, 4, color);
+  GFX::drawCircleHelper(x+r    , y+h-r-1, r, 8, color);
 }
 
-void GFX::fillRoundRect(s8 x, s8 y, s8 w, s8 h, s8 r, u32 colour)
+void GFX::fillRoundRect(s8 x, s8 y, s8 w, s8 h, s8 r, u32 color)
 {
   // smarter version
-  GFX::fillRect(x+r, y, w-2*r, h, colour);
+  GFX::fillRect(x+r, y, w-2*r, h, color);
 
   // draw four corners
-  GFX::fillCircleHelper(x+w-r-1, y+r, r, 1, h-2*r-1, colour);
-  GFX::fillCircleHelper(x+r    , y+r, r, 2, h-2*r-1, colour);
+  GFX::fillCircleHelper(x+w-r-1, y+r, r, 1, h-2*r-1, color);
+  GFX::fillCircleHelper(x+r    , y+r, r, 2, h-2*r-1, color);
 }

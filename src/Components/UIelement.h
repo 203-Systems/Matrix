@@ -15,11 +15,11 @@ class UIelement
 {
 public:
   UIelement();
-  void renderAscii(char ascii, u8 xy, u32 colour);
-  void renderHalfHeightNum(u8 num, u8 xy, u32 colour, u32 sec_colour);
-  void renderHalfHeightDigit(u8 num, u8 xy, u32 colour);
-  u8 binary8bitInput(u8 currentNum, u8 y, u32 colour);
-  u8 simple8bitInput(s16 currentNum, u8 y, u32 colour);
+  void renderAscii(char ascii, u8 xy, u32 color);
+  void renderHalfHeightNum(u8 num, u8 xy, u32 color, u32 sec_color);
+  void renderHalfHeightDigit(u8 num, u8 xy, u32 color);
+  u8 binary8bitInput(u8 currentNum, u8 y, u32 color);
+  u8 simple8bitInput(s16 currentNum, u8 y, u32 color);
 private:
 };
 

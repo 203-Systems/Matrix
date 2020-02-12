@@ -8,7 +8,7 @@ UIelement::UIelement()
 
 }
 
-void UIelement::renderAscii(char ascii, u8 xy, u32 colour) //XY is the bottom right location
+void UIelement::renderAscii(char ascii, u8 xy, u32 color) //XY is the bottom right location
 {
   u8 nx = xytox(xy);
   u8 ny = xytoy(xy);
@@ -26,26 +26,26 @@ void UIelement::renderAscii(char ascii, u8 xy, u32 colour) //XY is the bottom ri
         if(ny - y <= 0)
         {
           if(bitRead(font[ascii - 32][font[ascii - 32][0] - x], 7 - y))
-          LED.setXYHEX(xytoxy(nx - x, ny - y), colour, true);
+          LED.setXYHEX(xytoxy(nx - x, ny - y), color, true);
         }
       }
     }
   }
 }
 
-void UIelement::renderHalfHeightNum(u8 num, u8 xy, u32 colour, u32 sec_colour)
+void UIelement::renderHalfHeightNum(u8 num, u8 xy, u32 color, u32 sec_color)
 {
   //LED.fillRegionOff(0x00, 0x73, true);
   if(num > 99)
-  UIelement::renderHalfHeightDigit(num / 100, 0x13, colour);
+  UIelement::renderHalfHeightDigit(num / 100, 0x13, color);
 
   if(num > 9)
-  UIelement::renderHalfHeightDigit(num % 100 / 10 , 0x43, sec_colour);
+  UIelement::renderHalfHeightDigit(num % 100 / 10 , 0x43, sec_color);
 
-  UIelement::renderHalfHeightDigit(num % 10, 0x73, colour);
+  UIelement::renderHalfHeightDigit(num % 10, 0x73, color);
 }
 
-void UIelement::renderHalfHeightDigit(u8 num, u8 xy, u32 colour) //XY is the bottom right location
+void UIelement::renderHalfHeightDigit(u8 num, u8 xy, u32 color) //XY is the bottom right location
 {
   s8 x = (xy & 0xF0) >> 4;
   for(s8 xi = 2; xi >= 0; xi--)
@@ -58,14 +58,14 @@ void UIelement::renderHalfHeightDigit(u8 num, u8 xy, u32 colour) //XY is the bot
       if(y == -1 && y == YSIZE)
       break;
 
-      LED.setXYHEX(xytoxy(x, y), colour * bitRead(half_height_num_font[num][xi], yi), true);
+      LED.setXYHEX(xytoxy(x, y), color * bitRead(half_height_num_font[num][xi], yi), true);
       y--;
     }
     x--;
   }
 }
 
-u8 UIelement::binary8bitInput(u8 currentNum, u8 y, u32 colour)
+u8 UIelement::binary8bitInput(u8 currentNum, u8 y, u32 color)
 {
   for(int x = 0; x < 8; x++)
   {
@@ -73,17 +73,17 @@ u8 UIelement::binary8bitInput(u8 currentNum, u8 y, u32 colour)
     bitWrite(currentNum, 7 - x, !bitRead(currentNum, 7 - x));
     if(bitRead(currentNum, 7 - x))
     {
-      LED.setXYHEX(xytoxy(x, y), colour, true);
+      LED.setXYHEX(xytoxy(x, y), color, true);
     }
     else
     {
-      LED.setXYHEX(xytoxy(x, y), toBrightness(colour, LOWSTATEBRIGHTNESS), true);
+      LED.setXYHEX(xytoxy(x, y), toBrightness(color, LOWSTATEBRIGHTNESS), true);
     }
   }
   return currentNum;
 }
 
-u8 UIelement::simple8bitInput(s16 currentNum, u8 y, u32 colour)
+u8 UIelement::simple8bitInput(s16 currentNum, u8 y, u32 color)
 {
   float brightness_level[8] = {1, 0.5, 0.2, 0.1, 0.1, 0.2, 0.5, 1};
   s8 addition[8] = {-50, -20, -5, -1, 1, 5, 20, 50};
@@ -92,7 +92,7 @@ u8 UIelement::simple8bitInput(s16 currentNum, u8 y, u32 colour)
   {
     if(KeyPad.checkXY(x, y))
       currentNum += addition[x];
-  LED.setXYHEX(xytoxy(x,y), toBrightness(colour, brightness_level[x]), true);
+  LED.setXYHEX(xytoxy(x,y), toBrightness(color, brightness_level[x]), true);
   }
   if(currentNum > 255)
     currentNum = 255;

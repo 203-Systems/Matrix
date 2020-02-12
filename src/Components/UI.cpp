@@ -342,13 +342,13 @@ void UI::fnKeyAction()
           UI::scrollText("Setting Menu", 0xFFFFFFFF);
           break;
           case 0x20:
-          UI::scrollText("Key Map 1", keymap_colour[0]);
+          UI::scrollText("Key Map 1", keymap_color[0]);
           break;
           case 0x30:
-          UI::scrollText("Key Map 2", keymap_colour[1]);
+          UI::scrollText("Key Map 2", keymap_color[1]);
           break;
           case 0x40:
-          UI::scrollText("Custom Key Map (Not available yet)", keymap_colour[2]);
+          UI::scrollText("Custom Key Map (Not available yet)", keymap_color[2]);
           break;
           case 0x50:
           UI::scrollText("Unipad Mode", 0x00FFFF00);
@@ -438,11 +438,11 @@ void UI::fnRender()
   //LED.setXYHEX(0x60, 0x00FFFF00, true); //reset device
   //LED.setXYHEX(0x61, 0x0000FF66, true); //reboot
 
-  LED.setXYHEX(0x20, toBrightness(keymap_colour[0], LOWSTATEBRIGHTNESS), true); //Keymap selector 1
-  LED.setXYHEX(0x30, toBrightness(keymap_colour[1], LOWSTATEBRIGHTNESS), true); //Keymap selector 1
-  LED.setXYHEX(0x40, toBrightness(keymap_colour[2], LOWSTATEBRIGHTNESS), true); //Keymap selector 1
-  //LED.setXYHEX(0x40, toBrightness(keymap_colour[3], LOWSTATEBRIGHTNESS), true); //Keymap selector 1
-  //LED.setXYHEX(0x50, toBrightness(keymap_colour[4], LOWSTATEBRIGHTNESS), true); //Keymap selector 1
+  LED.setXYHEX(0x20, toBrightness(keymap_color[0], LOWSTATEBRIGHTNESS), true); //Keymap selector 1
+  LED.setXYHEX(0x30, toBrightness(keymap_color[1], LOWSTATEBRIGHTNESS), true); //Keymap selector 1
+  LED.setXYHEX(0x40, toBrightness(keymap_color[2], LOWSTATEBRIGHTNESS), true); //Keymap selector 1
+  //LED.setXYHEX(0x40, toBrightness(keymap_color[3], LOWSTATEBRIGHTNESS), true); //Keymap selector 1
+  //LED.setXYHEX(0x50, toBrightness(keymap_color[4], LOWSTATEBRIGHTNESS), true); //Keymap selector 1
   if(unipad_mode)
   {
     LED.setXYHEX(0x50, 0xFFFF00, true);
@@ -464,19 +464,19 @@ void UI::fnRender()
   switch(current_keymap)
   {
     case 0:
-    LED.setXYHEX(0x20, keymap_colour[0], true);
+    LED.setXYHEX(0x20, keymap_color[0], true);
     break;
     case 1:
-    LED.setXYHEX(0x30, keymap_colour[1], true);
+    LED.setXYHEX(0x30, keymap_color[1], true);
     break;
     case 2:
-    LED.setXYHEX(0x40, keymap_colour[2], true);
+    LED.setXYHEX(0x40, keymap_color[2], true);
     break;
     // case 3:
-    // LED.setXYHEX(0x40, keymap_colour[3], true);
+    // LED.setXYHEX(0x40, keymap_color[3], true);
     // break;
     // case 4:
-    // LED.setXYHEX(0x50, keymap_colour[4], true);
+    // LED.setXYHEX(0x50, keymap_color[4], true);
     // break;
   }
 
@@ -499,11 +499,11 @@ void UI::fnRender()
       {
         if(KeyPad.checkXY(x, y))
         {
-          LED.setXYHEX(xytoxy(x, y), fn_keymap_active_colour[current_keymap][y - 6][x], true);
+          LED.setXYHEX(xytoxy(x, y), fn_keymap_active_color[current_keymap][y - 6][x], true);
         }
         else
         {
-          LED.setXYHEX(xytoxy(x, y), fn_keymap_idle_colour[current_keymap][y - 6][x], true);
+          LED.setXYHEX(xytoxy(x, y), fn_keymap_idle_color[current_keymap][y - 6][x], true);
         }
       }
     }
@@ -586,17 +586,17 @@ void UI::settingKeyAction()
         UI::scrollText(char_buffer, 0x00FF30);
         break;
         case 0x67:
-        cache1 = led_colour_correction;
-        setColourCorrection(0xFFFFFF, true);
+        cache1 = led_color_correction;
+        setcolorCorrection(0xFFFFFF, true);
         cache2 = UI::numSelectorRGB(cache1);
         if(cache2 != cache1)
         {
           LED.fill(0,true);
           LED.update();
-          setColourCorrection(cache2);
+          setcolorCorrection(cache2);
           reboot();
         }
-        setColourCorrection(cache1, true);
+        setcolorCorrection(cache1, true);
         break;
         case 0x77:
         setDeviceID(UI::numSelector8bit(device_id, 0x0000FFAA, 0x00FFFFFF));
@@ -646,7 +646,7 @@ void UI::settingKeyAction()
         UI::scrollText("Device Name", 0x00FF30);
         break;
         case 0x67:
-        UI::scrollText("Colour Correction", 0xFFFFFF);
+        UI::scrollText("color Correction", 0xFFFFFF);
         break;
         case 0x77:
         UI::scrollText("Device ID", 0x00FFAA);
@@ -685,7 +685,7 @@ void UI::settingRender()
   LED.setXYHEX(0x17, 0x0000FF30, true); //Device Info
   LED.setXYHEX(0x27, 0x0000FF30, true); //Bootloader Info
   LED.setXYHEX(0x37, 0x0000FF30, true); //Device Name
-  LED.setXYHEX(0x67, 0x00FFFFFF, true); //colour Correction
+  LED.setXYHEX(0x67, 0x00FFFFFF, true); //color Correction
   LED.setXYHEX(0x77, 0x0000FFAA, true); //Device ID
   LED.setXYHEX(0x06, 0x00FF00FF, true); //Reset EEPROM
   switch(stfu)
@@ -706,7 +706,7 @@ void UI::settingRender()
 }
 
 
-u8 UI::numSelector8bit(u8 currentNum, u32 colour, u32 sec_colour)
+u8 UI::numSelector8bit(u8 currentNum, u32 color, u32 sec_color)
 {
   LED.fill(0, true);
   bool initalized = false;
@@ -719,9 +719,9 @@ u8 UI::numSelector8bit(u8 currentNum, u32 colour, u32 sec_colour)
         if(!initalized)
           initalized = true;
         LED.fill(0, true);
-        currentNum = uielement.binary8bitInput(currentNum, 7, colour);
-        currentNum = uielement.simple8bitInput(currentNum, 6, colour);
-        uielement.renderHalfHeightNum(currentNum, 0x73, colour, sec_colour);
+        currentNum = uielement.binary8bitInput(currentNum, 7, color);
+        currentNum = uielement.simple8bitInput(currentNum, 6, color);
+        uielement.renderHalfHeightNum(currentNum, 0x73, color, sec_color);
         #ifdef DEBUG
         CompositeSerial.print("numSelector\t");
         CompositeSerial.println(currentNum);
@@ -734,22 +734,22 @@ u8 UI::numSelector8bit(u8 currentNum, u32 colour, u32 sec_colour)
   return currentNum;
 }
 
-u8 UI::numSelector6bit(u8 currentNum, u32 colour, u32 sec_colour)
+u8 UI::numSelector6bit(u8 currentNum, u32 color, u32 sec_color)
 {
   return 0;
 }
 
-u32 UI::numSelectorRGB(u32 colour)
+u32 UI::numSelectorRGB(u32 color)
 {
   #ifdef DEBUG
   CompositeSerial.println("RGB Input mode");
   #endif
   bool initalized = false;
   LED.fill(0, true);
-  u8 R = (colour & 0xFF0000) >> 16;
-  u8 G = (colour & 0xFF00) >> 8;
-  u8 B = colour & 0xFF;
-  uielement.renderHalfHeightNum(R, 0x73, colour, 0xFF0000);
+  u8 R = (color & 0xFF0000) >> 16;
+  u8 G = (color & 0xFF00) >> 8;
+  u8 B = color & 0xFF;
+  uielement.renderHalfHeightNum(R, 0x73, color, 0xFF0000);
   while(!KeyPad.fn.state == PRESSED)
   {
     if(KeyPad.scan() || !initalized)
@@ -760,22 +760,22 @@ u32 UI::numSelectorRGB(u32 colour)
       {
         LED.fill(0, true);
         R = uielement.simple8bitInput(R, 5, 0xFF0000);
-        colour = (R << 16) + (colour & 0x00FFFF);
-        uielement.renderHalfHeightNum(R, 0x73, colour, 0xFF0000);
+        color = (R << 16) + (color & 0x00FFFF);
+        uielement.renderHalfHeightNum(R, 0x73, color, 0xFF0000);
       }
       else if(G != uielement.binary8bitInput(G, 6, 0x00FF00))
       {
         LED.fill(0, true);
         G = uielement.simple8bitInput(G, 6, 0x00FF00);
-        colour = (G << 8) + (colour & 0xFF00FF);
-        uielement.renderHalfHeightNum(G, 0x73, colour, 0x00FF00);
+        color = (G << 8) + (color & 0xFF00FF);
+        uielement.renderHalfHeightNum(G, 0x73, color, 0x00FF00);
       }
       else if(B != uielement.binary8bitInput(B, 7, 0x0000FF))
       {
         LED.fill(0, true);
         B = uielement.simple8bitInput(B, 7, 0x0000FF);
-        colour = B + (colour & 0xFFFF00);
-        uielement.renderHalfHeightNum(B, 0x73, colour, 0x0000FF);
+        color = B + (color & 0xFFFF00);
+        uielement.renderHalfHeightNum(B, 0x73, color, 0x0000FF);
       }
 
       uielement.simple8bitInput(R, 5, 0xFF0000);
@@ -789,15 +789,15 @@ u32 UI::numSelectorRGB(u32 colour)
       CompositeSerial.print(R);CompositeSerial.print(" ");
       CompositeSerial.print(G);CompositeSerial.print(" ");
       CompositeSerial.print(B);CompositeSerial.print(" ");
-      CompositeSerial.print(colour, HEX);CompositeSerial.println(" ");
+      CompositeSerial.print(color, HEX);CompositeSerial.println(" ");
       #endif
     }
   }
   LED.fill(0, true);
-  return colour;
+  return color;
 }
 
-// u32 UI::numSelectorWRGB(u32 colour, bool ignore_gamma /* = false */)
+// u32 UI::numSelectorWRGB(u32 color, bool ignore_gamma /* = false */)
 // {
 //
 // }
@@ -807,7 +807,7 @@ u32 UI::numSelectorRGB(u32 colour)
 //
 // }
 //
-// void UI::showASCII(char ascii[], u32 colour, bool ignore_gamma /* = false */)
+// void UI::showASCII(char ascii[], u32 color, bool ignore_gamma /* = false */)
 // {
 //
 // }
@@ -817,7 +817,7 @@ u32 UI::numSelectorRGB(u32 colour)
 //
 // }
 
-void UI::scrollText(char ascii[], u32 colour, bool loop /* = false */)
+void UI::scrollText(char ascii[], u32 color, bool loop /* = false */)
 {
 
   u8 speed = 75;
@@ -873,7 +873,7 @@ void UI::scrollText(char ascii[], u32 colour, bool loop /* = false */)
             {
               for(u8 y = 0; y < 8; y++)
               {
-                LED.setXYHEX(xytoxy(7,y), colour * bitRead(font[ascii[current_char] - 32][current_char_progress + 1], 7-y) , true);
+                LED.setXYHEX(xytoxy(7,y), color * bitRead(font[ascii[current_char] - 32][current_char_progress + 1], 7-y) , true);
               }
               LED.update();
               current_char_progress++;
