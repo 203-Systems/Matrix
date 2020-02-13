@@ -33,6 +33,7 @@ public:
   void setRGB(s16 index, u8 r, u8 g, u8 b, bool overlay = false);
   void setWRGB(s16 index, u8 w, u8 r, u8 g, u8 b, bool overlay = false);
   void setHEX(s16 index, u32 hex, bool overlay = false);
+  void setCRGB(s16 index, CRGB CRGB, bool overlay = false);
   void setPalette(s16 index, u8 palette_selected, u8 value, bool overlay = false);
 
   //XY
@@ -42,6 +43,7 @@ public:
   void setXYRGB(u8 xy, u8 w, u8 g, u8 b, bool overlay = false);
   void setXYWRGB(u8 xy, u8 w, u8 r, u8 g, u8 b, bool overlay = false);
   void setXYHEX(u8 xy, u32 WRGB, bool overlay = false);
+  void setXYCRGB(u8 xy, CRGB CRGB, bool overlay = false);
   void setXYPalette(u8 xy, u8 palette_selected, u8 value, bool overlay = false);
 
   //Processing
@@ -66,7 +68,5 @@ private:
   CRGB leds[NUM_TOTAL_LEDS];
   CRGB buffer[NUM_TOTAL_LEDS];
 };
-
-//extern LED LED;
 
 #endif

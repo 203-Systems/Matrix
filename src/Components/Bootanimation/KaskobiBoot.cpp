@@ -7,8 +7,8 @@ extern MIDI Midi;
 void UI::kaskobiWaitAnimation()
 {
   brightness_cache = brightness;
-  if(brightness > 128)
-    LED.setBrightness(128);
+  if(brightness > 96)
+    LED.setBrightness(96);
 
   if(uiTimer.tick(300))
   {

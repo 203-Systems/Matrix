@@ -106,125 +106,122 @@ void LED::fill(u32 WRGB, bool overlay /*= false*/)
 // Index
 void LED::off(s16 index, bool overlay /*= false*/)
 {
-  LED::setHEX(index, 0, overlay);
+  LED::setCRGB(index, CRGB(0, 0, 0), overlay);
 }
 
 void LED::on(s16 index, bool overlay /*= false*/)
 {
-  LED::setHEX(index, 0xFFFFFFFF, overlay);
+  LED::setCRGB(index, CRGB(255, 255, 255), overlay);
 }
 
 void LED::setW(s16 index, u8 w, bool overlay /*= false*/)
 {
-  LED::setHEX(index, w * 0x10000 + w * 0x100 + w, overlay);
+  LED::setCRGB(index, CRGB(w, w, w), overlay);
 }
 
 void LED::setRGB(s16 index, u8 r, u8 g, u8 b, bool overlay /*= false*/)
 {
-  LED::setHEX(index, r * 0x10000 + g * 0x100 + b, overlay);
+  LED::setCRGB(index, CRGB(r, g, b), overlay);
 }
 
 void LED::setWRGB(s16 index, u8 w, u8 r, u8 g, u8 b, bool overlay /*= false*/)
 {
-  LED::setHEX(index, w * 0x1000000 + r * 0x10000 + g * 0x100 + b, overlay);
+  LED::setCRGB(index, CRGB(r, g, b), overlay); //Not real WRGB yet, since CRGB doesn't support WRGB
 }
 
 void LED::setHEX(s16 index, u32 hex, bool overlay /*= false*/)
 {
+  LED::setCRGB(index, CRGB(hex), overlay);
+};
+
+void LED::setCRGB(s16 index, CRGB CRGB, bool overlay /*= false*/)
+{
   #ifdef DEBUG
-  CompositeSerial.print("LED Index \t");
+  CompositeSerial.print("LED\t");
   CompositeSerial.print(index);
   CompositeSerial.print("\t");
-  CompositeSerial.println(hex, HEX);
+  CompositeSerial.print(CRGB.r);
+  CompositeSerial.print("\t");
+  CompositeSerial.print(CRGB.g);
+  CompositeSerial.print("\t");
+  CompositeSerial.println(CRGB.b);
   #endif
 
   if(index < 0)
   return;
 
-  //hex = applycolorCorrection(hex); CRGB, fix later
+  CRGB = compilecolor(CRGB);
 
   if(!overlay_mode || overlay)
   {
-  leds[indexRotation(index)] = hex;
+  leds[indexRotation(index)] = CRGB;
   }
   else
   {
-  buffer[indexRotation(index)] = hex;
+  buffer[indexRotation(index)] = CRGB;
   }
+
   LED::changed = true;
 }
 
 void LED::setPalette(s16 index, u8 palette_selected, u8 value, bool overlay /*= false*/)
 {
-  //LED::setHEX(index, palette[pick_palette][color], overlay);
-  // #ifdef DEBUG
-
-  // CompositeSerial.print("LED Index \t");
-  // CompositeSerial.print(index);
-  // CompositeSerial.print("\t");
-  // CompositeSerial.println(hex, HEX);
-  // #endif
-
-  if(index < 0)
-  return;
-
-  if(!overlay_mode || overlay)
-  {
-  leds[indexRotation(index)] = palette[palette_selected][value];
-  }
-  else
-  {
-  buffer[indexRotation(index)] = palette[palette_selected][value];
-  }
-  
-  LED::changed = true;
+  LED::setCRGB(index, palette[palette_selected][value], overlay);
 }
 
 
 // XY
 void LED::offXY(u8 xy, bool overlay /*= false*/)
 {
-  LED::setXYHEX(xy, 0, overlay);
+  LED::setXYCRGB(xy, CRGB(0, 0, 0), overlay);
 }
 
 void LED::onXY(u8 xy, bool overlay /*= false*/)
 {
-  LED::setXYHEX(xy, 0xFFFFFFFF, overlay);
+  LED::setXYCRGB(xy, CRGB(255, 255, 255), overlay);
 }
 
 void LED::setXYW(u8 xy, u8 w, bool overlay /*= false*/)
 {
-  LED::setXYHEX(xy, w * 0x10000 + w * 0x100 + w, overlay);
+  LED::setXYCRGB(xy, CRGB(w, w, w), overlay);
 }
 
 void LED::setXYRGB(u8 xy, u8 r, u8 g, u8 b, bool overlay /*= false*/)
 {
-  LED::setXYHEX(xy, r * 0x10000 + g * 0x100 + b, overlay);
+  LED::setXYCRGB(xy, CRGB(r, g, b), overlay);
 }
 
 void LED::setXYWRGB(u8 xy, u8 w, u8 r, u8 g, u8 b, bool overlay /*= false*/)
 {
-  LED::setXYHEX(xy, w * 0x1000000 + r * 0x10000 + g * 0x100 + b, overlay);
+  LED::setXYCRGB(xy, CRGB(r, g, b), overlay); //Not real WRGB yet, since CRGB doesn't support WRGB
 }
 
 
 void LED::setXYHEX(u8 xy, u32 hex, bool overlay /*= false*/)
 {
-  // #ifdef DEBUG
-  // CompositeSerial.print("LED XY \t");
-  // CompositeSerial.print(xy, HEX);
-  // CompositeSerial.print("\t");
-  // CompositeSerial.println(hex, HEX);
-  // #endif
-  hex = applycolorCorrection(hex);
+  LED::setXYCRGB(xy, CRGB(hex), overlay);
+}
 
-  if(!overlay_mode || overlay)
+void LED::setXYCRGB(u8 xy, CRGB CRGB, bool overlay /*= false*/)
+{
+  #ifdef DEBUG
+  CompositeSerial.print("LED XY\t");
+  CompositeSerial.print(xy, HEX);
+  CompositeSerial.print("\t");
+  CompositeSerial.print(CRGB.r);
+  CompositeSerial.print("\t");
+  CompositeSerial.print(CRGB.g);
+  CompositeSerial.print("\t");
+  CompositeSerial.println(CRGB.b);
+  #endif
+
+    if(!overlay_mode || overlay)
   {
-    leds[xyToIndex(xy)] = hex;
+    leds[xyToIndex(xy)] = CRGB;
   }
   else
   {
-    buffer[xyToIndex(xy)] = hex;
+    buffer[xyToIndex(xy)] = CRGB;
   }
 
   LED::changed = true;
@@ -232,33 +229,7 @@ void LED::setXYHEX(u8 xy, u32 hex, bool overlay /*= false*/)
 
 void LED::setXYPalette(u8 xy, u8 palette_selected, u8 value, bool overlay /*= false*/)
 {
-  //LED::setXYHEX(xy, palette[pick_palette][color], overlay);
-
-  #ifdef DEBUG
-  CompositeSerial.print("LED XY Palette\t");
-  CompositeSerial.print(xy, HEX);
-  CompositeSerial.print("\t");
-  CompositeSerial.print(palette_selected);
-  CompositeSerial.print("\t");
-  CompositeSerial.print(value);
-  CompositeSerial.print("\t");
-  CompositeSerial.print(palette[palette_selected][value].r);
-  CompositeSerial.print("\t");
-  CompositeSerial.print(palette[palette_selected][value].g);
-  CompositeSerial.print("\t");
-  CompositeSerial.println(palette[palette_selected][value].b);
-  #endif
-
-  if(!overlay_mode || overlay)
-  {
-    leds[xyToIndex(xy)] = palette[palette_selected][value];
-  }
-  else
-  {
-    buffer[xyToIndex(xy)] = palette[palette_selected][value];
-  }
-
-  LED::changed = true;
+  LED::setXYCRGB(xy, palette[palette_selected][value], overlay);
 }
 
 //Processing
