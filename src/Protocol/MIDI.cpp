@@ -186,39 +186,6 @@ void MIDI::handleNoteOn(unsigned int channel, unsigned int note, unsigned int ve
   //leds[IndexInKeyMap(note)] = color[channel][velocity];
 }
 
-// void MIDI::sendNoteOn(u8 channel, u8 note, u8 velocity)
-// {
-//   // #ifdef DEBUG
-//   // CompositeSerial.print("MIDI Out On \t");
-//   // CompositeSerial.print(channel);
-//   // CompositeSerial.print("\t");
-//   // CompositeSerial.print(note);
-//   // CompositeSerial.print("\t");
-//   // CompositeSerial.println(velocity);
-//   // #endif
-
-//   MIDI：：sendNoteOn(channel, note, velocity);
-// }
-
-// void MIDI::sendNoteOff(u8 channel, u8 note, u8 velocity)
-// {
-//   // #ifdef DEBUG
-//   // CompositeSerial.print("MIDI Out Off \t");
-//   // CompositeSerial.print(channel);
-//   // CompositeSerial.print("\t");
-//   // CompositeSerial.print(note);
-//   // CompositeSerial.print("\t");
-//   // CompositeSerial.println(velocity);
-//   // #endif
-
-//   if(unipad_mode)
-//   {
-//     USBMIDI::sendNoteOn(channel, note, 0);
-//     return;
-//   }
-//   USBMIDI::sendNoteOff(channel, note, velocity);
-// }
-
 void MIDI::offScan()
 {
   if(stfu)
@@ -255,4 +222,55 @@ void MIDI::offScan()
       }
     }
   }
+}
+
+
+void MIDI::handleSysex(uint8_t *sysexBuffer, uint32 len)
+{
+  #ifdef DEBUG
+    CompositeSerial.print("Sysex - len:");
+    CompositeSerial.print(len);
+    CompositeSerial.print(" ");
+    for(int i = 0; i < len; i++)
+    {
+      CompositeSerial.print(sysexBuffer[i]);
+      CompositeSerial.print(" ");
+    }
+    CompositeSerial.println();
+  #endif
+
+  if(!memcmp(sysexBuffer, SYSEXID, 3)) //Matrix Specific
+  { 
+    #ifdef DEBUG
+    CompositeSerial.println("Sysex - Matrix Specific");
+    #endif
+    //switch(sysexBuffer[4]):
+
+  }
+  else if(sysexBuffer[0] == 0x7E) //Non Real Time Universal
+  {
+    #ifdef DEBUG
+    CompositeSerial.println("Sysex - Non Real Time Universal");
+    #endif
+    if(!memcmp(sysexBuffer+1, IDENTITY_REQUEST, 2))
+    {
+      MIDI::identityReply();
+    }
+  }
+  else if(sysexBuffer[0] == 0x7F) //Real Time Universal
+  {
+    #ifdef DEBUG
+    CompositeSerial.println("Sysex - Real Time Universal");
+    #endif
+  }
+  else
+  {
+    //Bruh, who tf sent this to me? Not my packet.
+  }
+}
+
+void MIDI::identityReply()
+{
+  u8 identity[13] = {0x7E, 0x06, 0x02, SYSEXID[0], SYSEXID[1], SYSEXID[2], PID >> 8 , PID & 0x7F, device_id & 0x7F, MAJOR_VER, MINOR_VER, PATCH_VER, BUILD_VER};
+  USBMIDI::sendSysex(identity, 13);
 }

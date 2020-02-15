@@ -23,7 +23,7 @@ extern u16 fps_micros = 1000 / fps;
 extern u8 keypad_scanrate = 200;
 extern u16 keypad_scanrate_micros = 1000 / keypad_scanrate;
 
-extern CRGB pre_compilled_palette[2][128] PROGMEM = //color Palette
+extern const CRGB pre_compilled_palette[2][128] = //color Palette
     {{
          //MatrixcolorPalette (Mat1s' Palette for now)
          0x00000000, //0
@@ -295,7 +295,7 @@ extern u8 color_desaturate_table[256] = {};
 
 extern u8 low_brightness_table[256] = {};
 
-extern u8 led_gamma[256] PROGMEM =
+extern const u8 led_gamma[256] =
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1,
      1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2,
@@ -370,7 +370,7 @@ extern u8 keymap[5][YSIZE][XSIZE] =
 
 extern u8 keymap_fn[5] = {0, 0, 0, 0, 0};
 
-extern u8 user1_keymap_optimized[64] =
+extern const u8 user1_keymap_optimized[64] =
     {0x07, 0x17, 0x27, 0x37, 0x06, 0x16, 0x26, 0x36, 0x05, 0x15, 0x25, 0x35, 0x04, 0x14, 0x24, 0x34, 0x03, 0x13, 0x23, 0x33, 0x02, 0x12, 0x22, 0x32, 0x01, 0x11, 0x21, 0x31, 0x00, 0x10, 0x20, 0x30, 0x47, 0x57, 0x67, 0x77, 0x46, 0x56, 0x66, 0x76, 0x45, 0x55, 0x65, 0x75, 0x44, 0x54, 0x64, 0x74, 0x43, 0x53, 0x63, 0x73, 0x42, 0x52, 0x62, 0x72, 0x41, 0x51, 0x61, 0x71, 0x40, 0x50, 0x60, 0x70};
 
 extern u8 fn_keymap[5][2][XSIZE] =              //Key session in fn menu ） 255 for disable
@@ -433,7 +433,7 @@ extern u8 stfu = 1;
 extern u8 report_code[10] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
 extern u8 available_report_code = 0;
 
-extern u8 font[96][6] = {
+extern const u8 font[96][6] = {
     {4, 0b00000000, 0b00000000, 0b00000000, 0b00000000},             // 32              = Space
     {1, 0b11111011},                                                 // 33                                                  = !
     {3, 0b11100000, 0b00000000, 0b11100000},                         // 34                          = "
@@ -538,7 +538,7 @@ extern u8 font[96][6] = {
     {5, 0b00111000, 0b00101000, 0b01101100, 0b00101000, 0b00010000} // 127  = DEL
 };
 
-extern u8 half_height_num_font[10][3] = {
+extern const u8 half_height_num_font[10][3] = {
     {B1111, B1001, B1111}, //0
     {B0000, B0000, B1111}, //1
     {B0000, B1011, B1101}, //2

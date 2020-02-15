@@ -27,13 +27,13 @@ extern u8 desaturate_rate;
 
 extern u16 fps_micros;
 extern u16 keypad_scanrate_micros;
-extern CRGB pre_compilled_palette[2][128] PROGMEM;
+extern const CRGB pre_compilled_palette[2][128];
 extern CRGB palette[4][128];
 
 extern u8 color_correction_table[4][256];
 extern u8 color_desaturate_table[256];
 extern u8 low_brightness_table[256];
-extern u8 led_gamma[256] PROGMEM;
+extern const u8 led_gamma[256];
 
 //KeyMap
 extern u8 keypad_scanrate;
@@ -48,7 +48,7 @@ extern float velocity_threshold;
 extern float aftertouch_threshold;
 extern u16 debounce_threshold;
 
-extern u8 user1_keymap_optimized[64];
+extern const u8 user1_keymap_optimized[64];
 
 //TouchBar
 extern u8 touch_keymap[5][8];
@@ -71,7 +71,7 @@ extern u8 cB;
 extern u8 report_code[10];
 extern u8 available_report_code;
 
-extern u8 font[96][6];
-extern u8 half_height_num_font[10][3];
+extern const u8 font[96][6];
+extern const u8 half_height_num_font[10][3];
 
 #endif

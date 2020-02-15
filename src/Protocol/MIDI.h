@@ -7,6 +7,7 @@
 #include "../Parameter/MatrixVariable.h"
 #include "../Parameter/MatrixParameter.h"
 #include "../Core/MatrixSystem.h"
+#include "../Protocol/SysExMessage.cpp"
 
 class MIDI: public USBMIDI
 {
@@ -20,6 +21,7 @@ public:
   //handle
   void handleNoteOff(unsigned int channel, unsigned int note, unsigned int velocity) override;
   void handleNoteOn(unsigned int channel, unsigned int note, unsigned int velocity) override;
+  void handleSysex(uint8_t *sysexBuffer, uint32_t len) override;
   // void handleVelocityChange(u8 channel, u8 note, u8 velocity) override;
   // void handleControlChange(u8 channel, u8 controller, u8 value) override;
   // void handleProgramChange(u8 channel, u8 program) override;
@@ -58,6 +60,9 @@ public:
   // void sendReset();
 
   void offScan();
+
+  //Sysex action
+  void identityReply();
 
 private:
   s8 offMap[128];

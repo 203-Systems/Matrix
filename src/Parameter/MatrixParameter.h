@@ -52,13 +52,15 @@ typedef volatile const int64_t vsc64;
 #define SERIALSTRING "Prototype"
 #define VID 0x0203
 #define VID2 0x0203 // for device ID USE
-#define PID 0x1000
-#define PID2 0x1000     // for device ID USE
+#define PID 0x0100
+#define PID2 0x0100     // for device ID USE
+const u8 SYSEXID[3] = {0x00, 0x02, 0x03};
+
 #define EEPROMVERSION 1 //Each EEPROM change will cause this to ++
 #define FWVERSION_STRING "0.8.0a"
 #define MAJOR_VER 0
 #define MINOR_VER 8
-#define PARCH_VER 0
+#define PATCH_VER 0
 #define BUILD_VER 1 //0 for Release, 1 for Alpha, 2 for Beta
 
 #define BOOTLOADER_VERSION *(u32 *)(0x08001E00)
