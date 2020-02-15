@@ -74,15 +74,12 @@
 
 CRGB applycolorCorrection(CRGB input)
 {
-  //u8 scale_W = (led_color_correction & 0xFF000000) >> 24;
-  u8 scale_R = (led_color_correction& 0xFF0000) >> 16;
-  u8 scale_G = (led_color_correction & 0xFF00) >> 8;
-  u8 scale_B = led_color_correction & 0xFF;
-  //pW = scale8_video(pW, scale_);
-  u8 output_R = scale8_video(input.r, scale_R);
-  u8 output_G = scale8_video(input.g, scale_G);
-  u8 output_B = scale8_video(input.b, scale_B);
-  return CRGB(output_R, output_G, output_B);
+  //color_correction_table[0][input.w], //For WRGB
+  return CRGB(
+    color_correction_table[1][input.r],
+    color_correction_table[2][input.g],
+    color_correction_table[3][input.b]
+    );
 }
 
 CRGB applyGamma(CRGB color)
@@ -94,23 +91,77 @@ CRGB applyGamma(CRGB color)
   return CRGB(new_r, new_g, new_b);
 }
 
-CRGB destarate(CRGB color, u8 desatrate_rate)
+CRGB desaturate(CRGB color)
 {
-  if(!desatrate_rate)
-    return color;
-  float f = desatrate_rate / 255;
-  u8 L = 0.299 * color.r + 0.587 * color.g + 0.144 * color.b;
-  u8 new_r = color.r + f * (L - color.r);
-  u8 new_g = color.g + f * (L - color.g);
-  u8 new_b = color.b + f * (L - color.b);
+  u8 luma = 0.299 * color.r + 0.587 * color.g + 0.144 * color.b;
+  s16 new_r = color.r + color_desaturate_table[luma - color.r];
+  s16 new_g = color.g + color_desaturate_table[luma - color.g];
+  s16 new_b = color.b + color_desaturate_table[luma - color.b];
+
+  if(new_r > 255)
+    new_r = 255;
+  if(new_g > 255)
+    new_g = 255;
+  if(new_b > 255)
+    new_b = 255;
+
+  // #ifdef DEBUG
+  // CompositeSerial.print("Destrate\t");
+  // CompositeSerial.print(d_rate);
+  // CompositeSerial.print("\t");
+  // CompositeSerial.print(luma);
+  // CompositeSerial.print("\t|\t");
+  // CompositeSerial.print(color.r);
+  // CompositeSerial.print("\t");
+  // CompositeSerial.print(color.g);
+  // CompositeSerial.print("\t");
+  // CompositeSerial.print(color.b);
+  // CompositeSerial.print("\t|\t");
+  // CompositeSerial.print(scale8_video(luma - color.r, d_rate));
+  // CompositeSerial.print("\t");
+  // CompositeSerial.print(scale8_video(luma - color.g, d_rate));
+  // CompositeSerial.print("\t");
+  // CompositeSerial.print(scale8_video(luma - color.b, d_rate));
+  // CompositeSerial.print("\t|\t");
+  // CompositeSerial.print(new_r);
+  // CompositeSerial.print("\t");
+  // CompositeSerial.print(new_g);
+  // CompositeSerial.print("\t");
+  // CompositeSerial.println(new_b);
+  // #endif
+
   return CRGB(new_r, new_g, new_b);
 }
 
-CRGB compilecolor(CRGB color, bool apply_gamma /* = false */)
+CRGB compileColor(CRGB color, bool apply_gamma /* = false */)
 {
-  color = destarate(color,desatrate_rate);
+  if(desaturated_mode)
+    color = desaturate(color);
+
   color = applycolorCorrection(color);
+
   if(apply_gamma)
     color = applyGamma(color);
+
   return color;
+}
+
+CRGB toBrightness(CRGB color, u8 brightness)
+{
+  if(brightness == LOW_STATE_BRIGHTNESS)
+    return toLowBrightness(color);
+  return CRGB(
+    scale8_video(color.r, brightness),
+    scale8_video(color.g, brightness),
+    scale8_video(color.b, brightness) 
+  );
+}
+
+CRGB toLowBrightness(CRGB color)
+{
+  return CRGB(
+    low_brightness_table[color.r],
+    low_brightness_table[color.g],
+    low_brightness_table[color.b]
+  );
 }

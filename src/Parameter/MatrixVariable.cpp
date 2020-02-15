@@ -15,14 +15,15 @@ extern u16 max_mAh = 1000;
 extern u8 brightness_level[8] = {16, 32, 64, 96, 128, 160, 216, 255};
 extern u8 fps = 100;
 extern u32 led_color_temperture = 0xFFFFFFFF;
-extern u8 desatrate_rate = 0; // 0~255 
+extern bool desaturated_mode = false;
+extern u8 desaturate_rate = 100; // 0~255
 
 extern u16 fps_micros = 1000 / fps;
 
-extern u8 keypad_scanrate = 50;
+extern u8 keypad_scanrate = 200;
 extern u16 keypad_scanrate_micros = 1000 / keypad_scanrate;
 
-extern CRGB pre_compilled_palette[3][128] PROGMEM = //color Palette
+extern CRGB pre_compilled_palette[2][128] PROGMEM = //color Palette
     {{
          //MatrixcolorPalette (Mat1s' Palette for now)
          0x00000000, //0
@@ -286,7 +287,13 @@ extern CRGB pre_compilled_palette[3][128] PROGMEM = //color Palette
          0x004F0F00  //127
      }};
 
-extern CRGB palette[6][128] = {};
+extern CRGB palette[4][128] = {};
+
+extern u8 color_correction_table[4][256] = {};
+
+extern u8 color_desaturate_table[256] = {};
+
+extern u8 low_brightness_table[256] = {};
 
 extern u8 led_gamma[256] PROGMEM =
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,

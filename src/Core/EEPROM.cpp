@@ -16,10 +16,11 @@ void variableLoad()
   if(EEPROM_USER.read(E_INIT) != 0x0203)
   {
     initEEPROM();
-    saveAllSetting();
   }
   switch(EEPROM_USER.read(E_EEPROMVERSION))
   {
+    case 0:
+      EEPROM_USER.write(E_DESATURATED_MODE, desaturated_mode);
     case EEPROMVERSION:
       loadSetting();
       //loadKeyMap();
@@ -27,7 +28,6 @@ void variableLoad()
       break;
     default:
       initEEPROM();
-      saveAllSetting();
   }
 }
 
@@ -49,6 +49,7 @@ void loadSetting()
   led_color_temperture = (EEPROM_USER.read(E_color_TEMPERTURE_1) << 16) + EEPROM_USER.read(E_color_TEMPERTURE_2);
   fn_hold = EEPROM_USER.read(E_FN_HOLD);
   stfu = EEPROM_USER.read(E_STFU);
+  desaturated_mode = EEPROM_USER.read(E_DESATURATED_MODE);
 }
 
 // void loadKeyMap()
@@ -67,13 +68,31 @@ void loadSetting()
 //   }
 // }
 
+CRGB readColorFromEEPROM(u8 palette, u8 index) 
+{
+  //w = EEPROM_PALETTE.read((palette * 256) + 2 * index) >> 4;
+  u8 r = EEPROM_PALETTE.read((palette * 256) + 2 * index) & 0xFF;
+  u8 g = EEPROM_PALETTE.read((palette * 256) + 2 * index + 1) >> 4;
+  u8 b = EEPROM_PALETTE.read((palette * 256) + 2 * index + 1) & 0xFF;
+  return CRGB(r, g, b);
+}
+
+void saveColorToEEPROM(u8 palette, u8 index, CRGB color) 
+{
+  EEPROM_PALETTE.write((palette * 256) + 2 * index, /*(color.w << 4) + */ color.r);
+  EEPROM_PALETTE.write((palette * 256) + 2 * index + 1, (color.g << 4) + color.b);
+}
+
 void initEEPROM()
+{
+  formatEEPROM();
+  saveAllSetting();
+}
+
+void formatEEPROM()
 {
   EEPROM_USER.format();
   EEPROM_PALETTE.format();
-
-  // saveKeyMap();
-  // savePalette();
 }
 
 void saveAllSetting()
@@ -96,6 +115,7 @@ void saveAllSetting()
   EEPROM_USER.write(E_color_CORRECTION_2, led_color_correction & 0xFFFF);
   EEPROM_USER.write(E_FN_HOLD, fn_hold);
   EEPROM_USER.write(E_STFU, stfu);
+  EEPROM_USER.write(E_DESATURATED_MODE, desaturated_mode);
 }
 
 // void saveKeyMap()

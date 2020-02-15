@@ -22,13 +22,17 @@ extern u16 max_mAh;
 extern u8 brightness_level[8];
 extern u8 fps;
 extern u32 led_color_temperture;
-extern u8 desatrate_rate;
+extern bool desaturated_mode;
+extern u8 desaturate_rate;
 
 extern u16 fps_micros;
 extern u16 keypad_scanrate_micros;
+extern CRGB pre_compilled_palette[2][128] PROGMEM;
+extern CRGB palette[4][128];
 
-extern CRGB pre_compilled_palette[3][128] PROGMEM;
-extern CRGB palette[6][128];
+extern u8 color_correction_table[4][256];
+extern u8 color_desaturate_table[256];
+extern u8 low_brightness_table[256];
 extern u8 led_gamma[256] PROGMEM;
 
 //KeyMap

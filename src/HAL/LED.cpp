@@ -150,7 +150,7 @@ void LED::setCRGB(s16 index, CRGB CRGB, bool overlay /*= false*/)
   if(index < 0)
   return;
 
-  CRGB = compilecolor(CRGB);
+  CRGB = compileColor(CRGB);
 
   if(!overlay_mode || overlay)
   {
@@ -164,9 +164,29 @@ void LED::setCRGB(s16 index, CRGB CRGB, bool overlay /*= false*/)
   LED::changed = true;
 }
 
-void LED::setPalette(s16 index, u8 palette_selected, u8 value, bool overlay /*= false*/)
+void LED::setPalette(s16 index, u8 palette_selected, u8 value, bool overlay /*= false*/, u8 brightness /*= 255*/)
 {
-  LED::setCRGB(index, palette[palette_selected][value], overlay);
+  CRGB color = palette[palette_selected][value];
+
+  if(brightness == LOW_STATE_BRIGHTNESS)
+  {
+    color = toLowBrightness(color);
+  }
+  else if(brightness < 255)
+  {
+    color = toBrightness(color, brightness);
+  }
+
+  if(!overlay_mode || overlay)
+  {
+    leds[indexRotation(index)] = color;
+  }
+  else
+  {
+    buffer[indexRotation(index)] = color;
+  }
+
+  LED::changed = true;
 }
 
 
@@ -215,7 +235,9 @@ void LED::setXYCRGB(u8 xy, CRGB CRGB, bool overlay /*= false*/)
   CompositeSerial.println(CRGB.b);
   #endif
 
-    if(!overlay_mode || overlay)
+  CRGB = compileColor(CRGB);
+
+  if(!overlay_mode || overlay)
   {
     leds[xyToIndex(xy)] = CRGB;
   }
@@ -227,9 +249,29 @@ void LED::setXYCRGB(u8 xy, CRGB CRGB, bool overlay /*= false*/)
   LED::changed = true;
 }
 
-void LED::setXYPalette(u8 xy, u8 palette_selected, u8 value, bool overlay /*= false*/)
+void LED::setXYPalette(u8 xy, u8 palette_selected, u8 value, bool overlay /*= false*/, u8 brightness /*= 255*/)
 {
-  LED::setXYCRGB(xy, palette[palette_selected][value], overlay);
+  CRGB color = palette[palette_selected][value];
+
+  if(brightness == LOW_STATE_BRIGHTNESS)
+  {
+    color = toLowBrightness(color);
+  }
+  else if(brightness < 255)
+  {
+    color = toBrightness(color, brightness);
+  }
+
+  if(!overlay_mode || overlay)
+  {
+    leds[xyToIndex(xy)] = color;
+  }
+  else
+  {
+    buffer[xyToIndex(xy)] = color;
+  }
+
+  LED::changed = true;
 }
 
 //Processing

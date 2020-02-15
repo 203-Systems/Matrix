@@ -77,7 +77,7 @@ u8 UIelement::binary8bitInput(u8 currentNum, u8 y, u32 color)
     }
     else
     {
-      LED.setXYHEX(xytoxy(x, y), toBrightness(color, LOWSTATEBRIGHTNESS), true);
+      LED.setXYHEX(xytoxy(x, y), toBrightness(color, LOW_STATE_BRIGHTNESS), true);
     }
   }
   return currentNum;

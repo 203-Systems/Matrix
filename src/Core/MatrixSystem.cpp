@@ -33,9 +33,6 @@ void setupUSB()
   USBComposite.setManufacturerString(MAUNFACTURERNAME);
   USBComposite.setSerialString(getDeviceIDString());
 
-  // Midi.setRXPacketSize(256);
-  // Midi.setTXPacketSize(64);
-
   Midi.registerComponent();
   CompositeSerial.registerComponent();
 
@@ -47,9 +44,7 @@ void setupHardware()
 {
   LED.init();
   KeyPad.init();
-  //TouchBar.init();
-  setcolorCorrection(led_color_correction, true);
-  compilePalette();
+  setupPalette();
 }
 
 void specialBoot()
@@ -62,7 +57,7 @@ void specialBoot()
     LED.setXYHEX(0x43,0xFF00FF, true);
     LED.setXYHEX(0x44,0xFF00FF, true);
     LED.update();
-    initEEPROM();
+    formatEEPROM();
     return;
   }
 
@@ -161,8 +156,56 @@ void enterBootloader()
 
 void resetDevice()
 {
-  initEEPROM();
+  formatEEPROM();
   reboot();
+}
+
+void setupPalette()
+{
+  compileColorScaleTable();
+  loadPalette();
+  compilePalette();
+}
+
+void loadPalette()
+{
+  memcpy(palette,pre_compilled_palette,768);
+  for(u8 p = 0; p < 1; p++)
+  {
+    for(u8 i = 0; i < 128; i++)
+    {
+      palette[p+2][i] = readColorFromEEPROM(p, i);
+    }
+  }
+}
+
+void compileColorScaleTable()
+{
+  u8 scale[4] = {
+  (led_color_correction & 0xFF000000) >> 24,
+  (led_color_correction& 0xFF0000) >> 16,
+  (led_color_correction & 0xFF00) >> 8,
+  led_color_correction & 0xFF
+  };
+
+  for(u8 c = 0; c < 4; c++)
+  {
+    for(int i = 0; i < 256; i++)
+    {
+      color_correction_table[c][i] = scale8_video(i, scale[c]);
+    }
+  }
+
+  for(int i = 0; i < 256; i++)
+  {
+    color_desaturate_table[i] = scale8_video(i, desaturate_rate);
+  }
+
+  for(int i = 0; i < 256; i++)
+  {
+    low_brightness_table[i] = scale8_video(i, LOW_STATE_BRIGHTNESS);
+  }
+
 }
 
 void compilePalette()
@@ -171,10 +214,9 @@ void compilePalette()
   {
     for(u8 i = 0; i < 128; i++)
     {
-      palette[p][i] = compilecolor(pre_compilled_palette[p][i]);
+      palette[p][i] = compileColor(palette[p][i]);
     }
   }
-
 }
 
 void setgamma(bool g)
@@ -579,18 +621,6 @@ u8 touchbarRotate(u8 id)
     case 3:
     return 7-id;
   }
-}
-
-u32 toBrightness(u32 hex, float f, bool on)
-{
-  if(on)
-  return hex;
-  u8 w = (((hex & 0xFF000000) >> 24) * f);
-  u8 r = (((hex & 0x00FF0000) >> 16) * f);
-  u8 g = (((hex & 0x0000FF00) >> 8) * f);
-  u8 b = ((hex & 0x000000FF) * f);
-
-  return w * 0x1000000 + r * 0x10000 + g * 0x100 + b;
 }
 
 void recordReportCode(u8 code)

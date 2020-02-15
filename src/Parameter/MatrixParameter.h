@@ -45,8 +45,7 @@ typedef volatile const int64_t vsc64;
 
 //DeviceInfo
 
-//#define DEBUG
-// #define DISABLE_FASTLED_PRAGMA
+#define DEBUG
 
 #define DEVICENAME "Matrix"
 #define MAUNFACTURERNAME "203 Industries"
@@ -55,12 +54,12 @@ typedef volatile const int64_t vsc64;
 #define VID2 0x0203 // for device ID USE
 #define PID 0x1000
 #define PID2 0x1000     // for device ID USE
-#define EEPROMVERSION 0 //Each EEPROM change will cause this to ++
-#define FWVERSION_STRING "0.7.9"
+#define EEPROMVERSION 1 //Each EEPROM change will cause this to ++
+#define FWVERSION_STRING "0.8.0a"
 #define MAJOR_VER 0
-#define MINOR_VER 7
-#define PARCH_VER 9
-#define BUILD_VER 0 //0 for Release, 1 for Alpha, 2 for Beta
+#define MINOR_VER 8
+#define PARCH_VER 0
+#define BUILD_VER 1 //0 for Release, 1 for Alpha, 2 for Beta
 
 #define BOOTLOADER_VERSION *(u32 *)(0x08001E00)
 #define MATRIX_MODEL *(u32 *)(0x08001E04)
@@ -77,8 +76,8 @@ typedef volatile const int64_t vsc64;
 #define NUM_LEDS 64
 #define NUM_BOTTOM_LEDS 36
 #define NUM_TOTAL_LEDS 64 //64+32
-#define NUM_POWERCORD_LEDS 120
-#define LOWSTATEBRIGHTNESS 0.4
+#define NUM_POWERCORD_LEDS 100
+#define LOW_STATE_BRIGHTNESS 100 //40%ish
 
 #define XSIZE 8 //Max 256 key support due to the m2p and libary data type limition
 #define YSIZE 8 // need tp change data type in keypad.h

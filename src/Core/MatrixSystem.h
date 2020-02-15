@@ -38,6 +38,9 @@ void setDeviceID();
 void setDeviceID(u8 id);
 void enterBootloader();
 void resetDevice();
+void setupPalette();
+void loadPalette();
+void compileColorScaleTable();
 void compilePalette();
 void updatePaletteRGB();
 void updatePaletteWRGB();
@@ -90,7 +93,6 @@ u8 xyRotation(u8 xy, u8 r);
 u8 xyReverseRotation(u8 xy);
 u8 xyReverseRotation(u8 xy, u8 r);
 u8 touchbarRotate(u8 id);
-u32 toBrightness(u32 hex, float f, bool dont_write = false);
 void recordReportCode(u8 code);
 //u16 velocityCurve(u16 input);
 

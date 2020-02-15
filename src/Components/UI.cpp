@@ -381,115 +381,115 @@ void UI::fnRender()
   LED.fill(0, true);
 
   //brightness
-  LED.setXYHEX(0x33, 0xFFFFFFFF, true);
-  LED.setXYHEX(0x34, 0xFFFFFFFF, true);
-  LED.setXYHEX(0x43, 0xFFFFFFFF, true);
-  LED.setXYHEX(0x44, 0xFFFFFFFF, true);
+  LED.setXYCRGB(0x33, 0xFFFFFFFF, true);
+  LED.setXYCRGB(0x34, 0xFFFFFFFF, true);
+  LED.setXYCRGB(0x43, 0xFFFFFFFF, true);
+  LED.setXYCRGB(0x44, 0xFFFFFFFF, true);
 
   //rotation
-  LED.setXYHEX(0x32, 0x0000FF00, true);
-  LED.setXYHEX(0x42, 0x0000FF00, true);
-  LED.setXYHEX(0x53, toBrightness(0x0000FF00, LOWSTATEBRIGHTNESS), true);
-  LED.setXYHEX(0x54, toBrightness(0x0000FF00, LOWSTATEBRIGHTNESS), true);
-  LED.setXYHEX(0x23, toBrightness(0x0000FF00, LOWSTATEBRIGHTNESS), true);
-  LED.setXYHEX(0x24, toBrightness(0x0000FF00, LOWSTATEBRIGHTNESS), true);
-  LED.setXYHEX(0x35, toBrightness(0x0000FF00, LOWSTATEBRIGHTNESS), true);
-  LED.setXYHEX(0x45, toBrightness(0x0000FF00, LOWSTATEBRIGHTNESS), true);
+  LED.setXYCRGB(0x32, 0x0000FF00, true);
+  LED.setXYCRGB(0x42, 0x0000FF00, true);
+  LED.setXYCRGB(0x53, toBrightness(0x0000FF00, LOW_STATE_BRIGHTNESS), true);
+  LED.setXYCRGB(0x54, toBrightness(0x0000FF00, LOW_STATE_BRIGHTNESS), true);
+  LED.setXYCRGB(0x23, toBrightness(0x0000FF00, LOW_STATE_BRIGHTNESS), true);
+  LED.setXYCRGB(0x24, toBrightness(0x0000FF00, LOW_STATE_BRIGHTNESS), true);
+  LED.setXYCRGB(0x35, toBrightness(0x0000FF00, LOW_STATE_BRIGHTNESS), true);
+  LED.setXYCRGB(0x45, toBrightness(0x0000FF00, LOW_STATE_BRIGHTNESS), true);
 
   //Menu
-  LED.setXYHEX(0x05, 0xFFFFFFFF, true);
+  LED.setXYCRGB(0x05, 0xFFFFFFFF, true);
 
   // //Midi enable0x
   // if(midi_enable)
   // {
-  //   LED.setXYHEX(0x00, 0x00FFAA00, true);
+  //   LED.setXYCRGB(0x00, 0x00FFAA00, true);
   // }
   // else
   // {
-  //   LED.setXYHEX(0x00, toBrightness(0x00FFFFFF, LOWSTATEBRIGHTNESS), true);
+  //   LED.setXYCRGB(0x00, toBrightness(0x00FFFFFF, LOW_STATE_BRIGHTNESS), true);
   // }
   //
   // //M2P enable
   // if(m2p_enable)
   // {
-  //   LED.setXYHEX(0x01, 0x0000FF7F, true);
+  //   LED.setXYCRGB(0x01, 0x0000FF7F, true);
   // }
   // else
   // {
-  //   LED.setXYHEX(0x01, toBrightness(0x0000FF7F, LOWSTATEBRIGHTNESS), true);
+  //   LED.setXYCRGB(0x01, toBrightness(0x0000FF7F, LOW_STATE_BRIGHTNESS), true);
   // }
   //
   // //Powercord enable
   // if(powercord_enable)
   // {
-  //   LED.setXYHEX(0x67, 0x00D400FF, true);
+  //   LED.setXYCRGB(0x67, 0x00D400FF, true);
   // }
   // else
   // {
-  //   LED.setXYHEX(0x67, toBrightness(0x00D400FF, LOWSTATEBRIGHTNESS), true);
+  //   LED.setXYCRGB(0x67, toBrightness(0x00D400FF, LOW_STATE_BRIGHTNESS), true);
   // }
 
 
   //Extra
-  // LED.setXYHEX(0x77, 0x00FFFFFF, true); //Setting
-  // LED.setXYHEX(0x07, 0x00FFFFFF, true); //AppLauncher
-  // LED.setXYHEX(0x17, 0x00FFFFFF, true); //Text Selctor
-  //LED.setXYHEX(0x65, 0x004000FF, true); //TouchBar_threshold
-  //LED.setXYHEX(0x60, 0x00FFFF00, true); //reset device
-  //LED.setXYHEX(0x61, 0x0000FF66, true); //reboot
+  // LED.setXYCRGB(0x77, 0x00FFFFFF, true); //Setting
+  // LED.setXYCRGB(0x07, 0x00FFFFFF, true); //AppLauncher
+  // LED.setXYCRGB(0x17, 0x00FFFFFF, true); //Text Selctor
+  //LED.setXYCRGB(0x65, 0x004000FF, true); //TouchBar_threshold
+  //LED.setXYCRGB(0x60, 0x00FFFF00, true); //reset device
+  //LED.setXYCRGB(0x61, 0x0000FF66, true); //reboot
 
-  LED.setXYHEX(0x20, toBrightness(keymap_color[0], LOWSTATEBRIGHTNESS), true); //Keymap selector 1
-  LED.setXYHEX(0x30, toBrightness(keymap_color[1], LOWSTATEBRIGHTNESS), true); //Keymap selector 1
-  LED.setXYHEX(0x40, toBrightness(keymap_color[2], LOWSTATEBRIGHTNESS), true); //Keymap selector 1
-  //LED.setXYHEX(0x40, toBrightness(keymap_color[3], LOWSTATEBRIGHTNESS), true); //Keymap selector 1
-  //LED.setXYHEX(0x50, toBrightness(keymap_color[4], LOWSTATEBRIGHTNESS), true); //Keymap selector 1
+  LED.setXYCRGB(0x20, toBrightness(keymap_color[0], LOW_STATE_BRIGHTNESS), true); //Keymap selector 1
+  LED.setXYCRGB(0x30, toBrightness(keymap_color[1], LOW_STATE_BRIGHTNESS), true); //Keymap selector 1
+  LED.setXYCRGB(0x40, toBrightness(keymap_color[2], LOW_STATE_BRIGHTNESS), true); //Keymap selector 1
+  //LED.setXYCRGB(0x40, toBrightness(keymap_color[3], LOW_STATE_BRIGHTNESS), true); //Keymap selector 1
+  //LED.setXYCRGB(0x50, toBrightness(keymap_color[4], LOW_STATE_BRIGHTNESS), true); //Keymap selector 1
   if(unipad_mode)
   {
-    LED.setXYHEX(0x50, 0xFFFF00, true);
+    LED.setXYCRGB(0x50, 0xFFFF00, true);
   }
   else
   {
-    LED.setXYHEX(0x50, toBrightness(0xFFFF00, LOWSTATEBRIGHTNESS), true);
+    LED.setXYCRGB(0x50, toBrightness(0xFFFF00, LOW_STATE_BRIGHTNESS), true);
   }
 
   if(fn_hold)
   {
-    LED.setXYHEX(0x75, 0xA0FF00, true);
+    LED.setXYCRGB(0x75, 0xA0FF00, true);
   }
   else
   {
-    LED.setXYHEX(0x75, toBrightness(0xA0FF00, LOWSTATEBRIGHTNESS), true);
+    LED.setXYCRGB(0x75, toBrightness(0xA0FF00, LOW_STATE_BRIGHTNESS), true);
   }
 
   switch(current_keymap)
   {
     case 0:
-    LED.setXYHEX(0x20, keymap_color[0], true);
+    LED.setXYCRGB(0x20, keymap_color[0], true);
     break;
     case 1:
-    LED.setXYHEX(0x30, keymap_color[1], true);
+    LED.setXYCRGB(0x30, keymap_color[1], true);
     break;
     case 2:
-    LED.setXYHEX(0x40, keymap_color[2], true);
+    LED.setXYCRGB(0x40, keymap_color[2], true);
     break;
     // case 3:
-    // LED.setXYHEX(0x40, keymap_color[3], true);
+    // LED.setXYCRGB(0x40, keymap_color[3], true);
     // break;
     // case 4:
-    // LED.setXYHEX(0x50, keymap_color[4], true);
+    // LED.setXYCRGB(0x50, keymap_color[4], true);
     // break;
   }
 
   if(konami_progress >= 8)
   {
-    LED.setXYHEX(0x16, 0xFF0000, true);
-    LED.setXYHEX(0x17, 0xFF0000, true);
-    LED.setXYHEX(0x26, 0xFF0000, true);
-    LED.setXYHEX(0x27, 0xFF0000, true);
-    LED.setXYHEX(0x56, 0xFF0000, true);
-    LED.setXYHEX(0x57, 0xFF0000, true);
-    LED.setXYHEX(0x66, 0xFF0000, true);
-    LED.setXYHEX(0x67, 0xFF0000, true);
+    LED.setXYCRGB(0x16, 0xFF0000, true);
+    LED.setXYCRGB(0x17, 0xFF0000, true);
+    LED.setXYCRGB(0x26, 0xFF0000, true);
+    LED.setXYCRGB(0x27, 0xFF0000, true);
+    LED.setXYCRGB(0x56, 0xFF0000, true);
+    LED.setXYCRGB(0x57, 0xFF0000, true);
+    LED.setXYCRGB(0x66, 0xFF0000, true);
+    LED.setXYCRGB(0x67, 0xFF0000, true);
   }
   else
   {
@@ -499,11 +499,11 @@ void UI::fnRender()
       {
         if(KeyPad.checkXY(x, y))
         {
-          LED.setXYHEX(xytoxy(x, y), fn_keymap_active_color[current_keymap][y - 6][x], true);
+          LED.setXYCRGB(xytoxy(x, y), fn_keymap_active_color[current_keymap][y - 6][x], true);
         }
         else
         {
-          LED.setXYHEX(xytoxy(x, y), fn_keymap_idle_color[current_keymap][y - 6][x], true);
+          LED.setXYCRGB(xytoxy(x, y), fn_keymap_idle_color[current_keymap][y - 6][x], true);
         }
       }
     }
@@ -618,10 +618,10 @@ void UI::settingKeyAction()
         break;
         case 0x06:
         LED.fill(0,true);
-        LED.setXYHEX(0x33,0xFF00FF, true);
-        LED.setXYHEX(0x34,0xFF00FF, true);
-        LED.setXYHEX(0x43,0xFF00FF, true);
-        LED.setXYHEX(0x44,0xFF00FF, true);
+        LED.setXYCRGB(0x33,0xFF00FF, true);
+        LED.setXYCRGB(0x34,0xFF00FF, true);
+        LED.setXYCRGB(0x43,0xFF00FF, true);
+        LED.setXYCRGB(0x44,0xFF00FF, true);
         LED.update();
         initEEPROM();
         delay(500);
@@ -668,6 +668,9 @@ void UI::settingKeyAction()
           break;
         }
         break;
+        case 0x01:
+        UI::scrollText("Desaturated Mode", 0x00FFAA);
+        break;
         case 0x06:
         UI::scrollText("Reset Device", 0xFF00FF);
         break;
@@ -681,26 +684,26 @@ void UI::settingKeyAction()
 
 void UI::settingRender()
 {
-  LED.setXYHEX(0x07, 0x00FF0000, true); //DFU
-  LED.setXYHEX(0x17, 0x0000FF30, true); //Device Info
-  LED.setXYHEX(0x27, 0x0000FF30, true); //Bootloader Info
-  LED.setXYHEX(0x37, 0x0000FF30, true); //Device Name
-  LED.setXYHEX(0x67, 0x00FFFFFF, true); //color Correction
-  LED.setXYHEX(0x77, 0x0000FFAA, true); //Device ID
-  LED.setXYHEX(0x06, 0x00FF00FF, true); //Reset EEPROM
+  LED.setXYCRGB(0x07, 0x00FF0000, true); //DFU
+  LED.setXYCRGB(0x17, 0x0000FF30, true); //Device Info
+  LED.setXYCRGB(0x27, 0x0000FF30, true); //Bootloader Info
+  LED.setXYCRGB(0x37, 0x0000FF30, true); //Device Name
+  LED.setXYCRGB(0x67, 0x00FFFFFF, true); //color Correction
+  LED.setXYCRGB(0x77, 0x0000FFAA, true); //Device ID
+  LED.setXYCRGB(0x06, 0x00FF00FF, true); //Reset EEPROM
   switch(stfu)
   {
     case 0:
-    LED.setXYHEX(0x00, 0x00202020, true); //STFU Off
+    LED.setXYCRGB(0x00, 0x00202020, true); //STFU Off
     break;
     case 1:
-    LED.setXYHEX(0x00, toBrightness(0xAAFF00, LOWSTATEBRIGHTNESS), true); //STFU 1
+    LED.setXYCRGB(0x00, toBrightness(0xAAFF00, LOW_STATE_BRIGHTNESS), true); //STFU 1
     break;
     case 2:
-    LED.setXYHEX(0x00, 0xAAFF00, true); //STFU 2
+    LED.setXYCRGB(0x00, 0xAAFF00, true); //STFU 2
     break;
     default:
-    LED.setXYHEX(0x00, 0xFF0000, true); //STFU ???
+    LED.setXYCRGB(0x00, 0xFF0000, true); //STFU ???
   }
   LED.update();
 }
@@ -873,7 +876,7 @@ void UI::scrollText(char ascii[], u32 color, bool loop /* = false */)
             {
               for(u8 y = 0; y < 8; y++)
               {
-                LED.setXYHEX(xytoxy(7,y), color * bitRead(font[ascii[current_char] - 32][current_char_progress + 1], 7-y) , true);
+                LED.setXYCRGB(xytoxy(7,y), color * bitRead(font[ascii[current_char] - 32][current_char_progress + 1], 7-y) , true);
               }
               LED.update();
               current_char_progress++;
@@ -912,7 +915,7 @@ void UI::enterBootAnimation()
     KeyPad.scan();
     if (uiTimer.isLonger(9900000))
     {
-      LED.setXYHEX(0x07,0xff0000); //NexusRevamped Entence point
+      LED.setXYCRGB(0x07,0xff0000); //NexusRevamped Entence point
       LED.update();
     }
     else

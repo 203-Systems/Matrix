@@ -64,8 +64,8 @@ void loadConfigV200()
   eeprom_enable = true;
   eeprom_user_adds_0 = 0x803E000;
   eeprom_user_adds_1 = 0x803E800;
-  eeprom_palette_adds_0 = 0x803D000;
-  eeprom_palette_adds_1 = 0x803D800;
+  eeprom_palette_adds_0 = 0x803C000;
+  eeprom_palette_adds_1 = 0x803C800;
   eeprom_sys_adds_0 = 0x803F000;
   eeprom_sys_adds_1 = 0x803F800;
   eeprom_pagesize = 0x800;

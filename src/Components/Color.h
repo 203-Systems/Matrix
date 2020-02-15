@@ -28,8 +28,12 @@ CRGB applycolorCorrection(CRGB input);
 
 CRGB applyGamma(CRGB color);
 
-CRGB destarate(CRGB color, u8 desatrate_rate);
+CRGB desaturate(CRGB color);
 
-CRGB compilecolor(CRGB color, bool apply_gamma = false);
+CRGB compileColor(CRGB color, bool apply_gamma = false);
+
+CRGB toBrightness(CRGB color, u8 brightness);
+
+CRGB toLowBrightness(CRGB color);
 
 #endif

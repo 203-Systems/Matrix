@@ -34,7 +34,7 @@ public:
   void setWRGB(s16 index, u8 w, u8 r, u8 g, u8 b, bool overlay = false);
   void setHEX(s16 index, u32 hex, bool overlay = false);
   void setCRGB(s16 index, CRGB CRGB, bool overlay = false);
-  void setPalette(s16 index, u8 palette_selected, u8 value, bool overlay = false);
+  void setPalette(s16 index, u8 palette_selected, u8 value, bool overlay = false, u8 brightness = 255);
 
   //XY
   void offXY(u8 xy, bool overlay = false);
@@ -44,7 +44,7 @@ public:
   void setXYWRGB(u8 xy, u8 w, u8 r, u8 g, u8 b, bool overlay = false);
   void setXYHEX(u8 xy, u32 WRGB, bool overlay = false);
   void setXYCRGB(u8 xy, CRGB CRGB, bool overlay = false);
-  void setXYPalette(u8 xy, u8 palette_selected, u8 value, bool overlay = false);
+  void setXYPalette(u8 xy, u8 palette_selected, u8 value, bool overlay = false, u8 brightness = 255);
 
   //Processing
   void update();
@@ -55,8 +55,6 @@ public:
   u32 readLED(u8 index);
   CRGB readXYCRGB(u8 xy);
   CRGB readCRGB(u8 index);
-
-  u32 toBrightness(u32 hex, float f);
 
   bool rotationCW(u8 r);
   void shift(Direction direction, u8 distance);
