@@ -36,4 +36,12 @@ CRGB toBrightness(CRGB color, u8 brightness);
 
 CRGB toLowBrightness(CRGB color);
 
+//CRGB sysexColorStruct(s8 color_type, s8 p1 = -1, s8 p2 = -1, s8 p3 = -1, s8 p4 = -1, s8 p5 = -1);
+CRGB sysexColorStruct(u8 sysexColor[]);
+
+u8 sysexColorStructOffset(u8 color_type);
+
+bool sysexColorStructGamma(u8 color_type);
+
+u32 CRGBtoHEX(CRGB color);
 #endif

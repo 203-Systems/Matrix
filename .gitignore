@@ -11,3 +11,4 @@
 .vagrant/rgloader/loader.rb
 *.mxfw
 *.bin
+.vscode/arduino.json

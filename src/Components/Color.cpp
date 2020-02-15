@@ -76,10 +76,9 @@ CRGB applycolorCorrection(CRGB input)
 {
   //color_correction_table[0][input.w], //For WRGB
   return CRGB(
-    color_correction_table[1][input.r],
-    color_correction_table[2][input.g],
-    color_correction_table[3][input.b]
-    );
+      color_correction_table[1][input.r],
+      color_correction_table[2][input.g],
+      color_correction_table[3][input.b]);
 }
 
 CRGB applyGamma(CRGB color)
@@ -98,11 +97,11 @@ CRGB desaturate(CRGB color)
   s16 new_g = color.g + color_desaturate_table[luma - color.g];
   s16 new_b = color.b + color_desaturate_table[luma - color.b];
 
-  if(new_r > 255)
+  if (new_r > 255)
     new_r = 255;
-  if(new_g > 255)
+  if (new_g > 255)
     new_g = 255;
-  if(new_b > 255)
+  if (new_b > 255)
     new_b = 255;
 
   // #ifdef DEBUG
@@ -135,12 +134,12 @@ CRGB desaturate(CRGB color)
 
 CRGB compileColor(CRGB color, bool apply_gamma /* = false */)
 {
-  if(desaturated_mode)
+  if (desaturated_mode)
     color = desaturate(color);
 
   color = applycolorCorrection(color);
 
-  if(apply_gamma)
+  if (apply_gamma)
     color = applyGamma(color);
 
   return color;
@@ -148,20 +147,90 @@ CRGB compileColor(CRGB color, bool apply_gamma /* = false */)
 
 CRGB toBrightness(CRGB color, u8 brightness)
 {
-  if(brightness == LOW_STATE_BRIGHTNESS)
+  if (brightness == LOW_STATE_BRIGHTNESS)
     return toLowBrightness(color);
   return CRGB(
-    scale8_video(color.r, brightness),
-    scale8_video(color.g, brightness),
-    scale8_video(color.b, brightness) 
-  );
+      scale8_video(color.r, brightness),
+      scale8_video(color.g, brightness),
+      scale8_video(color.b, brightness));
 }
 
 CRGB toLowBrightness(CRGB color)
 {
   return CRGB(
-    low_brightness_table[color.r],
-    low_brightness_table[color.g],
-    low_brightness_table[color.b]
-  );
+      low_brightness_table[color.r],
+      low_brightness_table[color.g],
+      low_brightness_table[color.b]);
+}
+
+CRGB sysexColorStruct(u8 sysexColor[])
+{
+  switch (sysexColor[0] & 0x0F)
+  {
+    case 0: //Off
+      return CRGB(0, 0, 0);
+    case 1: //On
+      return CRGB(255, 255, 255);
+    case 2: //Gray Scale
+    {
+      u8 l = convert_7BitTo8Bit(sysexColor[1]);
+      return CRGB(l, l, l);
+    }
+    case 3: //Palette
+      return palette[sysexColor[1]][sysexColor[2]];
+    case 4: //7Bit RGB
+      return CRGB(
+          convert_7BitTo8Bit(sysexColor[1]),
+          convert_7BitTo8Bit(sysexColor[2]),
+          convert_7BitTo8Bit(sysexColor[3]));
+    case 5: //8Bit RGB
+      remap_7bitx3(&sysexColor[1], &sysexColor[2], &sysexColor[3], &sysexColor[4]);
+      return CRGB(sysexColor[1], sysexColor[2], sysexColor[3]);
+    case 6: //7Bit WRGB    //No WRGB yet
+      return CRGB(
+          /*convert_7BitTo8Bit(sysexColor[1]),*/
+          convert_7BitTo8Bit(sysexColor[2]),
+          convert_7BitTo8Bit(sysexColor[3]),
+          convert_7BitTo8Bit(sysexColor[4]));
+    case 7: //8Bit WRGB    //No WRGB yet
+      remap_7bitx4(&sysexColor[1], &sysexColor[2], &sysexColor[3], &sysexColor[4], &sysexColor[5]);
+      return CRGB(sysexColor[2], sysexColor[3], sysexColor[4]);
+    case 8: //7Bit HSL
+    {
+        CHSV HSV(
+          convert_7BitTo8Bit(sysexColor[1]),
+          convert_7BitTo8Bit(sysexColor[2]),
+          convert_7BitTo8Bit(sysexColor[3]));
+        CRGB RGB;
+        hsv2rgb_rainbow(HSV, RGB);
+        return RGB;
+    }
+    case 9: //8Bit HSL
+    {
+      remap_7bitx3(&sysexColor[1], &sysexColor[2], &sysexColor[3], &sysexColor[4]);
+      CHSV HSV = CHSV(sysexColor[1], sysexColor[2], sysexColor[3]);
+      CRGB RGB;
+      hsv2rgb_rainbow(HSV, RGB);
+      return RGB;
+    }
+  }
+  return CRGB(0, 0, 0);
+}
+
+u8 sysexColorStructOffset(u8 color_type)
+{
+  u8 offset_table[10] = {1, 1, 2, 3, 4, 5, 5, 6, 4, 5};
+  return offset_table[color_type & 0x0F];
+}
+
+bool sysexColorStructGamma(u8 color_type)
+{
+  if (color_type & 0b0010000)
+    return true;
+  return false;
+}
+
+u32 CRGBtoHEX(CRGB color)
+{
+  return wrgbToHEX(0, color.r, color.g, color.b);  
 }

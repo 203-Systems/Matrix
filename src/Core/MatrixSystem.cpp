@@ -419,7 +419,7 @@ void setRotation(u8 r)
 }
 
 //Math
-u8 wrgbToHEX(u8 w, u8 r, u8 g, u8 b)
+u32 wrgbToHEX(u8 w, u8 r, u8 g, u8 b)
 {
   return w * 0x10000000 + r * 0x10000 + g * 0x100 + b;
 }
@@ -650,4 +650,21 @@ u8 convert_6BitTo8Bit(u8 input)
 u8 convert_7BitTo8Bit(u8 input)
 {
   return map(input, 0, 127, 0, 255);
+}
+
+void remap_7bitx3(u8 *p1, u8 *p2, u8 *p3, u8 *p4)
+{
+  *p1 = (*p1 << 1) + (*p2 >> 6);
+  *p2 = (*p2 << 2) + (*p3 >> 5);
+  *p3 = (*p3 << 3) + (*p4 >> 4);
+  return;
+}
+
+void remap_7bitx4(u8 *p1, u8 *p2, u8 *p3, u8 *p4, u8 *p5)
+{
+  *p1 = (*p1 << 1) + (*p2 >> 6);
+  *p2 = (*p2 << 2) + (*p3 >> 5);
+  *p3 = (*p3 << 3) + (*p4 >> 4);
+  *p4 = (*p4 << 4) + (*p5 >> 3);
+  return;
 }

@@ -78,7 +78,7 @@ void rotationCW(u8 r);
 void setRotation(u8 r);
 
 //Math
-u8 wrgbToHEX(u8 w, u8 r, u8 g, u8 b);
+u32 wrgbToHEX(u8 w, u8 r, u8 g, u8 b);
 u8 xyToIndex(u8 xy);
 u8 indexToXY(u8 index);
 u8 indexRotation(int index);
@@ -98,5 +98,8 @@ void recordReportCode(u8 code);
 
 u8 convert_6BitTo8Bit(u8 input);
 u8 convert_7BitTo8Bit(u8 input);
+
+void remap_7bitx3(u8 *p1, u8 *p2, u8 *p3, u8 *p4);
+void remap_7bitx4(u8 *p1, u8 *p2, u8 *p3, u8 *p4, u8 *p5);
 
 #endif

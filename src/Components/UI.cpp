@@ -820,10 +820,10 @@ u32 UI::numSelectorRGB(u32 color)
 //
 // }
 
-void UI::scrollText(char ascii[], u32 color, bool loop /* = false */)
+void UI::scrollText(char ascii[], u32 color, u8 speed  /* = 10 */, bool loop /* = false */, u8 len /* = 0 */)
 {
 
-  u8 speed = 75;
+  speed = 1000/speed;
   u8 spacing = 2;
   u8 spacing_remaining = 0;
   LED.fill(0, true);
@@ -834,10 +834,14 @@ void UI::scrollText(char ascii[], u32 color, bool loop /* = false */)
   CompositeSerial.print("Text Size: ");
   CompositeSerial.println(strlen(ascii));
   #endif
+
+  if(!len)
+    len = strlen(ascii);
+
   do
   {
     u8 current_char = 0;
-    while(current_char < strlen(ascii))
+    while(current_char < len)
     {
       // CompositeSerial.print("Print Char: ");
       // CompositeSerial.println(ascii[current_char]);
