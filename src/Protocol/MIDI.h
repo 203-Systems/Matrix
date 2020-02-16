@@ -65,6 +65,7 @@ public:
 
   //Sysex action
   void identityReply();
+  void replyDeviceName();
   void replySerialNumber();
   void scrollText(uint8_t *sysexBuffer, uint16_t len);
   void setLED(uint8_t *sysexBuffer, uint16_t len);

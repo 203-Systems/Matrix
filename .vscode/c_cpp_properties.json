@@ -3,6 +3,7 @@
         {
             "name": "Win32",
             "includePath": [
+                "C:\\Users\\caine\\Documents\\Arduino\\hardware\\Arduino_STM32\\STM32F1\\**",
                 "C:\\Users\\caine\\AppData\\Local\\Arduino15\\packages\\stm32duino\\tools\\**",
                 "C:\\Users\\caine\\AppData\\Local\\Arduino15\\packages\\stm32duino\\hardware\\STM32F1\\2018.12.3\\**"
             ],

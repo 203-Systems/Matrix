@@ -275,10 +275,11 @@ void MIDI::handleSysex(uint8_t *sysexBuffer, uint32 len)
 #endif
       switch (sysexBuffer[6])
       {
-      case 1: //Get Device Hardware Serial
-        MIDI::replySerialNumber();
+      case 1: 
+        MIDI::replyDeviceName();
         break;
-      case 2:
+      case 2: //Get Device Hardware Serial
+        MIDI::replySerialNumber();
         break;
       }
     }
@@ -337,6 +338,13 @@ void MIDI::identityReply()
   USBMIDI::sendSysex(identity, 13);
 }
 
+void MIDI::replyDeviceName()
+{
+u8 reply[2+device_name.length()];
+reply[0] = 0x12; reply[1] = 0x01;
+memcpy(&reply[2], device_name.c_str(), device_name.length());
+MIDI::sendSysexWithHeader(reply, sizeof(reply));
+}
 void MIDI::replySerialNumber()
 {
   #ifdef DEBUG
@@ -351,7 +359,7 @@ void MIDI::replySerialNumber()
   CompositeSerial.println(serial[2], HEX);
   #endif
 
-  u8 reply[16] = {0x12, 0x01};
+  u8 reply[16] = {0x12, 0x02};
   for(u8 i = 0; i < 96; i ++)
   {
     bitWrite(reply[2+i/7], i%7, bitRead(serial[i/32], i%32));
