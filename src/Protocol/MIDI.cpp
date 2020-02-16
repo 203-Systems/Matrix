@@ -244,6 +244,7 @@ void MIDI::handleSysex(uint8_t *sysexBuffer, uint32 len)
 #endif
       switch (sysexBuffer[6])
       {
+      //System
       case 0: //Enter Bootloader
         enterBootloader();
         break;
@@ -256,10 +257,19 @@ void MIDI::handleSysex(uint8_t *sysexBuffer, uint32 len)
         break;
       case 4:
         break;
+      //LED
       case 16: //LED index
       case 17: //LED XY
         MIDI::setLED(sysexBuffer, len);
         break;
+      //Graphic
+      //Config/Custom Data
+      case 63: //Set Variable 
+        break;
+      case 64: //Inject Palette 7bit
+      case 65: //Inject Palette 8bit
+        MIDI::writePalette(sysexBuffer, len);
+      break;
       }
     }
     else if (sysexBuffer[5] == 0x11)
@@ -397,4 +407,33 @@ void MIDI::setLED(uint8_t *sysexBuffer, uint16_t len)
 #endif
     }
   }
+}
+
+void MIDI::writePalette(uint8_t *sysexBuffer, uint16_t len)
+{
+  u8 palette_index = sysexBuffer[7];
+  #ifdef DEBUG
+      CompositeSerial.print("Sysex Inject Palette ");
+      CompositeSerial.print(palette_index);
+  #endif
+  if(sysexBuffer[6] == 0x40 && len == 392) //7bit
+  {
+      #ifdef DEBUG
+      CompositeSerial.println("7bit");
+      #endif
+    sysexBuffer += 8;
+    for(u8 i = 0; i < 128; i ++)
+    {
+      CRGB color = CRGB(
+        convert_7BitTo8Bit(sysexBuffer[i*3 + 0]),
+        convert_7BitTo8Bit(sysexBuffer[i*3 + 1]),
+        convert_7BitTo8Bit(sysexBuffer[i*3 + 2]));
+      saveColorToEEPROM(palette_index, i, color);
+    }
+  }
+  else if(sysexBuffer[6] == 0x41 && len == 520) //8bit
+  {
+
+  }
+  setupPalette();
 }

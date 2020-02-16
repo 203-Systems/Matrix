@@ -70,17 +70,41 @@ void loadSetting()
 
 CRGB readColorFromEEPROM(u8 palette, u8 index) 
 {
-  //w = EEPROM_PALETTE.read((palette * 256) + 2 * index) >> 4;
+  //w = EEPROM_PALETTE.read((palette * 256) + 2 * index) >> 8;
   u8 r = EEPROM_PALETTE.read((palette * 256) + 2 * index) & 0xFF;
-  u8 g = EEPROM_PALETTE.read((palette * 256) + 2 * index + 1) >> 4;
+  u8 g = EEPROM_PALETTE.read((palette * 256) + 2 * index + 1) >> 8;
   u8 b = EEPROM_PALETTE.read((palette * 256) + 2 * index + 1) & 0xFF;
+    #ifdef DEBUG
+      CompositeSerial.print("Read Palette from EEPROM ");
+      CompositeSerial.print(palette);
+      CompositeSerial.print(" ");
+      CompositeSerial.print(index);
+      CompositeSerial.print(" ");
+      CompositeSerial.print(r);
+      CompositeSerial.print(" ");
+      CompositeSerial.print(g);
+      CompositeSerial.print(" ");
+      CompositeSerial.println(b);
+  #endif
   return CRGB(r, g, b);
 }
 
 void saveColorToEEPROM(u8 palette, u8 index, CRGB color) 
 {
-  EEPROM_PALETTE.write((palette * 256) + 2 * index, /*(color.w << 4) + */ color.r);
-  EEPROM_PALETTE.write((palette * 256) + 2 * index + 1, (color.g << 4) + color.b);
+  EEPROM_PALETTE.write((palette * 256) + 2 * index, /*(color.w << 8) + */ color.r);
+  EEPROM_PALETTE.write((palette * 256) + 2 * index + 1, (color.g << 8) + color.b);
+  #ifdef DEBUG
+    CompositeSerial.print("Save Palette to EEPROM ");
+    CompositeSerial.print(palette);
+    CompositeSerial.print(" ");
+    CompositeSerial.print(index);
+    CompositeSerial.print(" ");
+    CompositeSerial.print(color.r);
+    CompositeSerial.print(" ");
+    CompositeSerial.print(color.g);
+    CompositeSerial.print(" ");
+    CompositeSerial.println(color.b);
+  #endif
 }
 
 void initEEPROM()

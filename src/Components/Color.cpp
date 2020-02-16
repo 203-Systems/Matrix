@@ -195,8 +195,8 @@ CRGB dispatchColorData(u8 color_type,u8 sysexColor[])
       return CRGB(
           /*convert_7BitTo8Bit(sysexColor[0]),*/
           convert_7BitTo8Bit(sysexColor[1]),
-          convert_7BitTo8Bit(sysexColor[3]),
-          convert_7BitTo8Bit(sysexColor[4]));
+          convert_7BitTo8Bit(sysexColor[2]),
+          convert_7BitTo8Bit(sysexColor[3]));
     case 7: //8Bit WRGB    //No WRGB yet
       remap_7bitx4(&sysexColor[0], &sysexColor[1], &sysexColor[2], &sysexColor[3], &sysexColor[4]);
       return CRGB(sysexColor[1], sysexColor[2], sysexColor[3]);

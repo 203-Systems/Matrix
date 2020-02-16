@@ -18,6 +18,7 @@ public:
   void noteOff(u8 channel, u8 note, u8 velocity);
   void sendXYon(u8 xy, u8 velocity);
   void sendXYoff(u8 xy, u8 velocity);
+  void sendSysexWithHeader(u8 sysex);
 
   //handle
   void handleNoteOff(unsigned int channel, unsigned int note, unsigned int velocity) override;
@@ -67,6 +68,7 @@ public:
   //void serialNumberReply();
   void scrollText(uint8_t *sysexBuffer, uint16_t len);
   void setLED(uint8_t *sysexBuffer, uint16_t len);
+  void writePalette(uint8_t *sysexBuffer, uint16_t len);
 
 private:
   s8 offMap[128];
