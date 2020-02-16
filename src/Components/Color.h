@@ -30,18 +30,21 @@ CRGB applyGamma(CRGB color);
 
 CRGB desaturate(CRGB color);
 
-CRGB compileColor(CRGB color, bool apply_gamma = false);
+CRGB compileColor(CRGB color, bool gamma = false);
 
 CRGB toBrightness(CRGB color, u8 brightness);
 
 CRGB toLowBrightness(CRGB color);
 
-//CRGB sysexColorStruct(s8 color_type, s8 p1 = -1, s8 p2 = -1, s8 p3 = -1, s8 p4 = -1, s8 p5 = -1);
-CRGB sysexColorStruct(u8 sysexColor[]);
+CRGB dispatchColorStruct(u8 sysexColor[]);
 
-u8 sysexColorStructOffset(u8 color_type);
+CRGB dispatchColorData(u8 color_type,u8 sysexColor[]);
 
-bool sysexColorStructGamma(u8 color_type);
+u8 dispatchColorDataOffset(u8 color_type);
+
+bool dispatchColorStructGamma(u8 color_type);
+
+bool dispatchColorStructOverlay(u8 color_type);
 
 u32 CRGBtoHEX(CRGB color);
 #endif

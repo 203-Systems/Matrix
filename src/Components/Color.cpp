@@ -132,14 +132,14 @@ CRGB desaturate(CRGB color)
   return CRGB(new_r, new_g, new_b);
 }
 
-CRGB compileColor(CRGB color, bool apply_gamma /* = false */)
+CRGB compileColor(CRGB color, bool gamma /* = false */)
 {
   if (desaturated_mode)
     color = desaturate(color);
 
   color = applycolorCorrection(color);
 
-  if (apply_gamma)
+  if (gamma)
     color = applyGamma(color);
 
   return color;
@@ -163,9 +163,14 @@ CRGB toLowBrightness(CRGB color)
       low_brightness_table[color.b]);
 }
 
-CRGB sysexColorStruct(u8 sysexColor[])
+CRGB dispatchColorStruct(u8 sysexColor[])
 {
-  switch (sysexColor[0] & 0x0F)
+  return dispatchColorData(sysexColor[0], &sysexColor[1]);
+}
+
+CRGB dispatchColorData(u8 color_type,u8 sysexColor[])
+{
+  switch (color_type & 0x0F)
   {
     case 0: //Off
       return CRGB(0, 0, 0);
@@ -173,42 +178,42 @@ CRGB sysexColorStruct(u8 sysexColor[])
       return CRGB(255, 255, 255);
     case 2: //Gray Scale
     {
-      u8 l = convert_7BitTo8Bit(sysexColor[1]);
+      u8 l = convert_7BitTo8Bit(sysexColor[0]);
       return CRGB(l, l, l);
     }
     case 3: //Palette
-      return palette[sysexColor[1]][sysexColor[2]];
+      return palette[sysexColor[0]][sysexColor[1]];
     case 4: //7Bit RGB
       return CRGB(
+          convert_7BitTo8Bit(sysexColor[0]),
           convert_7BitTo8Bit(sysexColor[1]),
-          convert_7BitTo8Bit(sysexColor[2]),
-          convert_7BitTo8Bit(sysexColor[3]));
+          convert_7BitTo8Bit(sysexColor[2]));
     case 5: //8Bit RGB
-      remap_7bitx3(&sysexColor[1], &sysexColor[2], &sysexColor[3], &sysexColor[4]);
-      return CRGB(sysexColor[1], sysexColor[2], sysexColor[3]);
+      remap_7bitx3(&sysexColor[0], &sysexColor[1], &sysexColor[2], &sysexColor[3]);
+      return CRGB(sysexColor[0], sysexColor[1], sysexColor[2]);
     case 6: //7Bit WRGB    //No WRGB yet
       return CRGB(
-          /*convert_7BitTo8Bit(sysexColor[1]),*/
-          convert_7BitTo8Bit(sysexColor[2]),
+          /*convert_7BitTo8Bit(sysexColor[0]),*/
+          convert_7BitTo8Bit(sysexColor[1]),
           convert_7BitTo8Bit(sysexColor[3]),
           convert_7BitTo8Bit(sysexColor[4]));
     case 7: //8Bit WRGB    //No WRGB yet
-      remap_7bitx4(&sysexColor[1], &sysexColor[2], &sysexColor[3], &sysexColor[4], &sysexColor[5]);
-      return CRGB(sysexColor[2], sysexColor[3], sysexColor[4]);
+      remap_7bitx4(&sysexColor[0], &sysexColor[1], &sysexColor[2], &sysexColor[3], &sysexColor[4]);
+      return CRGB(sysexColor[1], sysexColor[2], sysexColor[3]);
     case 8: //7Bit HSL
     {
         CHSV HSV(
+          convert_7BitTo8Bit(sysexColor[0]),
           convert_7BitTo8Bit(sysexColor[1]),
-          convert_7BitTo8Bit(sysexColor[2]),
-          convert_7BitTo8Bit(sysexColor[3]));
+          convert_7BitTo8Bit(sysexColor[2]));
         CRGB RGB;
         hsv2rgb_rainbow(HSV, RGB);
         return RGB;
     }
     case 9: //8Bit HSL
     {
-      remap_7bitx3(&sysexColor[1], &sysexColor[2], &sysexColor[3], &sysexColor[4]);
-      CHSV HSV = CHSV(sysexColor[1], sysexColor[2], sysexColor[3]);
+      remap_7bitx3(&sysexColor[0], &sysexColor[1], &sysexColor[2], &sysexColor[3]);
+      CHSV HSV = CHSV(sysexColor[0], sysexColor[1], sysexColor[2]);
       CRGB RGB;
       hsv2rgb_rainbow(HSV, RGB);
       return RGB;
@@ -216,16 +221,22 @@ CRGB sysexColorStruct(u8 sysexColor[])
   }
   return CRGB(0, 0, 0);
 }
-
-u8 sysexColorStructOffset(u8 color_type)
+u8 dispatchColorDataOffset(u8 color_type)
 {
-  u8 offset_table[10] = {1, 1, 2, 3, 4, 5, 5, 6, 4, 5};
+  u8 offset_table[10] = {0, 0, 1, 2, 3, 4, 4, 5, 3, 4};
   return offset_table[color_type & 0x0F];
 }
 
-bool sysexColorStructGamma(u8 color_type)
+bool dispatchColorStructGamma(u8 color_type)
 {
   if (color_type & 0b0010000)
+    return true;
+  return false;
+}
+
+bool dispatchColorStructOverlay(u8 color_type)
+{
+    if (color_type & 0b1000000)
     return true;
   return false;
 }

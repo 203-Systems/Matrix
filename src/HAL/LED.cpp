@@ -134,7 +134,7 @@ void LED::setHEX(s16 index, u32 hex, bool overlay /*= false*/)
   LED::setCRGB(index, CRGB(hex), overlay);
 };
 
-void LED::setCRGB(s16 index, CRGB CRGB, bool overlay /*= false*/)
+void LED::setCRGB(s16 index, CRGB CRGB, bool overlay /*= false*/, bool gamma /*= false*/)
 {
   #ifdef DEBUG
   CompositeSerial.print("LED\t");
@@ -150,7 +150,7 @@ void LED::setCRGB(s16 index, CRGB CRGB, bool overlay /*= false*/)
   if(index < 0)
   return;
 
-  CRGB = compileColor(CRGB);
+  CRGB = compileColor(CRGB, gamma);
 
   if(!overlay_mode || overlay)
   {
@@ -222,7 +222,7 @@ void LED::setXYHEX(u8 xy, u32 hex, bool overlay /*= false*/)
   LED::setXYCRGB(xy, CRGB(hex), overlay);
 }
 
-void LED::setXYCRGB(u8 xy, CRGB CRGB, bool overlay /*= false*/)
+void LED::setXYCRGB(u8 xy, CRGB CRGB, bool overlay /*= false*/, bool gamma /*= false*/)
 {
   #ifdef DEBUG
   CompositeSerial.print("LED XY\t");
@@ -235,7 +235,7 @@ void LED::setXYCRGB(u8 xy, CRGB CRGB, bool overlay /*= false*/)
   CompositeSerial.println(CRGB.b);
   #endif
 
-  CRGB = compileColor(CRGB);
+  CRGB = compileColor(CRGB, gamma);
 
   if(!overlay_mode || overlay)
   {

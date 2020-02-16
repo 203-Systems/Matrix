@@ -235,22 +235,38 @@ void MIDI::handleSysex(uint8_t *sysexBuffer, uint32 len)
   CompositeSerial.println();
 #endif
 
-  if (!memcmp(sysexBuffer, SYSEXID, 3)) //Matrix Specific
+  if (!memcmp(sysexBuffer, SYSEX_HEADER, 5)) //Matrix Specific
   {
-#ifdef DEBUG
-    CompositeSerial.println("Sysex - Matrix Specific");
-#endif
-    //switch(sysexBuffer[4]):
-    switch (sysexBuffer[1])
+    if (sysexBuffer[5] == 0x12)
     {
-    case 0: //Enter Bootloader
-      enterBootloader();
-    case 1:
-    case 2:
-    case 3:
-    case 4:
-      MIDI::scrollText(sysexBuffer, len);
-      break;
+#ifdef DEBUG
+      CompositeSerial.println("Sysex - Matrix Specific - Write");
+#endif
+      switch (sysexBuffer[6])
+      {
+      case 0: //Enter Bootloader
+        enterBootloader();
+        break;
+      case 1:
+        break;
+      case 2:
+        break;
+      case 3:
+        MIDI::scrollText(sysexBuffer, len);
+        break;
+      case 4:
+        break;
+      case 16: //LED index
+      case 17: //LED XY
+        MIDI::setLED(sysexBuffer, len);
+        break;
+      }
+    }
+    else if (sysexBuffer[5] == 0x11)
+    {
+#ifdef DEBUG
+      CompositeSerial.println("Sysex - Matrix Specific - Read");
+#endif
     }
   }
   else if (sysexBuffer[0] == 0x7E) //Non Real Time Universal
@@ -290,22 +306,11 @@ void MIDI::identityReply()
 void MIDI::scrollText(uint8_t *sysexBuffer, uint16_t len)
 {
   sysexBuffer += 7;
-  
+
   bool loop = sysexBuffer[0];
   u8 speed = sysexBuffer[1];
-  CRGB color = sysexColorStruct(&sysexBuffer[2]);
-  u8 offset = sysexColorStructOffset(sysexBuffer[2]);
-  #ifdef DEBUG
-  CompositeSerial.print("Sysex Text Scroll Full - len:");
-  CompositeSerial.print(len);
-  CompositeSerial.print(" ");
-  for (int i = 0; i < len; i++)
-  {
-    CompositeSerial.print(sysexBuffer[i]);
-    CompositeSerial.print(" ");
-  }
-  CompositeSerial.println();
-#endif
+  CRGB color = dispatchColorStruct(&sysexBuffer[2]);
+  u8 offset = dispatchColorDataOffset(sysexBuffer[2]) + 1;
   len = len - 5 - offset;
   sysexBuffer += (offset + 2);
 #ifdef DEBUG
@@ -323,16 +328,73 @@ void MIDI::scrollText(uint8_t *sysexBuffer, uint16_t len)
   CompositeSerial.print(offset);
   CompositeSerial.print(" ");
   CompositeSerial.println(len);
-  for(int i = 0; i < len; i++)
+  for (int i = 0; i < len; i++)
   {
     CompositeSerial.print((char)sysexBuffer[i]);
   }
   CompositeSerial.println();
+#endif
 
-//Create array
-  char ascii[len+1]; 
+  //Create array
+  char ascii[len + 1];
   memcpy(ascii, sysexBuffer, len);
   ascii[len] = 0;
-#endif
   UI.scrollText(ascii, CRGBtoHEX(color), speed, loop);
+}
+
+
+void MIDI::setLED(uint8_t *sysexBuffer, uint16_t len)
+{
+  bool xy = sysexBuffer[6] == 17;
+  u8 color_type = sysexBuffer[7];
+  bool gamma = dispatchColorStructGamma(color_type);
+  bool overlay = dispatchColorStructOverlay(color_type);
+  u8 block_size = dispatchColorDataOffset(color_type) + 2;
+  sysexBuffer += 8;
+  for (u8 i = 0; i < len - 8; i += block_size)
+  {
+
+    CRGB color = dispatchColorData(color_type, sysexBuffer + i + 2);
+    if (xy)
+    {
+      u8 xy = (sysexBuffer[i] << 4) + (sysexBuffer[i + 1] & 0x0F);
+      LED.setXYCRGB(xy, color, overlay, gamma);
+#ifdef DEBUG
+      CompositeSerial.print("Sysex LED Set XY ");
+      CompositeSerial.print(color_type);
+      CompositeSerial.print(" ");
+      CompositeSerial.print(xy);
+      CompositeSerial.print(" ");
+      CompositeSerial.print(overlay);
+      CompositeSerial.print(" ");
+      CompositeSerial.print(gamma);
+      CompositeSerial.print(" ");
+      CompositeSerial.print(color.r);
+      CompositeSerial.print(" ");
+      CompositeSerial.print(color.g);
+      CompositeSerial.print(" ");
+      CompositeSerial.println(color.b);
+#endif
+    }
+    else
+    {
+      LED.setCRGB(sysexBuffer[i + 1], color, overlay, gamma);
+#ifdef DEBUG
+      CompositeSerial.print("Sysex LED Set ");
+      CompositeSerial.print(color_type);
+      CompositeSerial.print(" ");
+      CompositeSerial.print(sysexBuffer[i + 1]);
+      CompositeSerial.print(" ");
+      CompositeSerial.print(overlay);
+      CompositeSerial.print(" ");
+      CompositeSerial.print(gamma);
+      CompositeSerial.print(" ");
+      CompositeSerial.print(color.r);
+      CompositeSerial.print(" ");
+      CompositeSerial.print(color.g);
+      CompositeSerial.print(" ");
+      CompositeSerial.println(color.b);
+#endif
+    }
+  }
 }

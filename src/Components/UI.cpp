@@ -398,6 +398,9 @@ void UI::fnRender()
 
   //Menu
   LED.setXYCRGB(0x05, 0xFFFFFFFF, true);
+  #ifdef DEBUG
+  LED.setXYCRGB(0x05, 0x00FFA500, true);
+  #endif
 
   // //Midi enable0x
   // if(midi_enable)

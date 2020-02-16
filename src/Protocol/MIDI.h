@@ -4,7 +4,6 @@
 #include <Arduino.h>
 #include <USBComposite.h>
 #include "../HAL/LED.h"
-#include "../HAL/LED.h"
 #include "../Parameter/MatrixVariable.h"
 #include "../Parameter/MatrixParameter.h"
 #include "../Core/MatrixSystem.h"
@@ -67,6 +66,7 @@ public:
   void identityReply();
   //void serialNumberReply();
   void scrollText(uint8_t *sysexBuffer, uint16_t len);
+  void setLED(uint8_t *sysexBuffer, uint16_t len);
 
 private:
   s8 offMap[128];
