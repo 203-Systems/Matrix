@@ -44,6 +44,7 @@
     E_FN_HOLD = 16,
     E_STFU = 17,
     E_DESATURATED_MODE = 18,
+    E_PRO_INPUT_MODE = 19,
 
     E_color_CORRECTION_1 = 100,
     E_color_CORRECTION_2 = 101,

@@ -8,6 +8,7 @@
 //enum Modes {Normal, Fn, Animation, Boot, Ascii, App};
 //DeviceSetting
 extern u8 device_id; //0~255 0 for off
+//extern char serial_number[25]; 
 //extern Modes mode;
 extern u8 current_keymap;
 //extern u8 appID;
@@ -15,6 +16,7 @@ extern u8 bootAnimationSelector;
 extern bool unipad_mode;
 extern bool debug_mode;
 extern bool fn_hold;
+extern bool pro_input_mode;
 
 //LED setting
 extern u8 brightness;
@@ -34,7 +36,6 @@ extern u8 color_correction_table[4][256];
 extern u8 color_desaturate_table[256];
 extern u8 low_brightness_table[256];
 extern const u8 led_gamma[256];
-
 //KeyMap
 extern u8 keypad_scanrate;
 extern u32 keymap_color[5];

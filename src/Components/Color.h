@@ -32,9 +32,9 @@ CRGB desaturate(CRGB color);
 
 CRGB compileColor(CRGB color, bool gamma = false);
 
-CRGB toBrightness(CRGB color, u8 brightness);
+CRGB toBrightness(CRGB color, u8 brightness, bool ignore = false);
 
-CRGB toLowBrightness(CRGB color);
+CRGB toLowBrightness(CRGB color, bool ignore = false);
 
 CRGB dispatchColorStruct(u8 sysexColor[]);
 

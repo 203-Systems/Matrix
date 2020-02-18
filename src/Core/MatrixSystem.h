@@ -22,6 +22,7 @@
 //   u8 x;
 //   u8 y;
 // };
+extern String test_Serial;
 
 extern Timer mainTimer;
 extern MicroTimer microTimer;
@@ -31,6 +32,8 @@ void setupHardware();
 
 void specialBoot();
 void factoryTest();
+//void loadDeviceSerialNumber();
+String getDeviceSerialString();
 
 //Sysex set
 void reboot();
@@ -54,8 +57,10 @@ void setCurrentKeyMap(u8 m);
 void setUnipadMode(bool u);
 void setFnHold(bool h);
 void setTouchThreshold(u16 t);
-void setcolorCorrection(u32 c, bool temp = false);
+void setColorCorrection(u32 c, bool temp = false);
 void setSTFU(u16 v);
+void setDesaturatedMode(bool e);
+void setProInputMode(bool e);
 //void setTouchSensitive(u8 s);
 
 //Sysex get

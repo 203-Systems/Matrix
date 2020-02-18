@@ -50,6 +50,7 @@ void loadSetting()
   fn_hold = EEPROM_USER.read(E_FN_HOLD);
   stfu = EEPROM_USER.read(E_STFU);
   desaturated_mode = EEPROM_USER.read(E_DESATURATED_MODE);
+  pro_input_mode = EEPROM_USER.read(E_PRO_INPUT_MODE);
 }
 
 // void loadKeyMap()
@@ -140,6 +141,7 @@ void saveAllSetting()
   EEPROM_USER.write(E_FN_HOLD, fn_hold);
   EEPROM_USER.write(E_STFU, stfu);
   EEPROM_USER.write(E_DESATURATED_MODE, desaturated_mode);
+  EEPROM_USER.write(E_PRO_INPUT_MODE, pro_input_mode);
 }
 
 // void saveKeyMap()

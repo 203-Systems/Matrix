@@ -248,17 +248,27 @@ void MIDI::handleSysex(uint8_t *sysexBuffer, uint32 len)
       case 0: //Enter Bootloader
         enterBootloader();
         break;
+      case 1: //Reboot Device
+        reboot();
+        break;
+      case 2: //Factory Reset Device
+        resetDevice();
+        break;
       case 3:
-        MIDI::scrollText(sysexBuffer, len);
         break;
       case 4:
         break;
       //LED
-      case 16: //LED index
-      case 17: //LED XY
+      case 32: //LED index
+      case 33: //LED XY
         MIDI::setLED(sysexBuffer, len);
         break;
+
       //Graphic
+      case 59:
+        MIDI::scrollText(sysexBuffer, len);
+        break;
+      
       //Config/Custom Data
       case 63: //Set Variable 
         break;
@@ -275,11 +285,17 @@ void MIDI::handleSysex(uint8_t *sysexBuffer, uint32 len)
 #endif
       switch (sysexBuffer[6])
       {
-      case 1: 
+      case 16: 
         MIDI::replyDeviceName();
         break;
-      case 2: //Get Device Hardware Serial
+      case 17: //Get Device Hardware Serial
         MIDI::replySerialNumber();
+        break;
+      case 18: //Device Firmware
+        MIDI::replyFirmwareVersion(sysexBuffer[7]);
+        break;
+      case 19: //Device ID
+        MIDI::replyDeviceID();
         break;
       }
     }
@@ -291,7 +307,7 @@ void MIDI::handleSysex(uint8_t *sysexBuffer, uint32 len)
 #endif
     if (!memcmp(sysexBuffer + 1, IDENTITY_REQUEST, 2))
     {
-      MIDI::identityReply();
+      MIDI::replyIdentity();
     }
   }
   else if (sysexBuffer[0] == 0x7F) //Real Time Universal
@@ -332,48 +348,113 @@ void MIDI::sendSysexWithHeader(u8 *sysex, u8 len)
   USBMIDI::sendSysex(message, 5 + len);
 }
 
-void MIDI::identityReply()
+void MIDI::replyIdentity()
 {
-  u8 identity[13] = {0x7E, 0x06, 0x02, SYSEXID[0], SYSEXID[1], SYSEXID[2], PID >> 8, PID & 0x7F, device_id & 0x7F, MAJOR_VER, MINOR_VER, PATCH_VER, BUILD_VER};
-  USBMIDI::sendSysex(identity, 13);
+  u8 identity[14] = {0x7E, 0x06, 0x02, SYSEXID[0], SYSEXID[1], SYSEXID[2], PID >> 8, PID & 0x7F, device_id >> 7, device_id & 0x7F, MAJOR_VER, MINOR_VER, PATCH_VER, BUILD_VER};
+  USBMIDI::sendSysex(identity, 14);
 }
 
 void MIDI::replyDeviceName()
 {
-u8 reply[2+device_name.length()];
-reply[0] = 0x12; reply[1] = 0x01;
-memcpy(&reply[2], device_name.c_str(), device_name.length());
-MIDI::sendSysexWithHeader(reply, sizeof(reply));
+  u8 reply[2+device_name.length()];
+  reply[0] = 0x12; reply[1] = 0x10;
+  memcpy(&reply[2], device_name.c_str(), device_name.length());
+  MIDI::sendSysexWithHeader(reply, sizeof(reply));
 }
+
 void MIDI::replySerialNumber()
 {
-  #ifdef DEBUG
-  CompositeSerial.print("Sysex Request Serial Number ");
-  #endif
 
-  u32 serial[3] = {DEVICE_SERIAL_1, DEVICE_SERIAL_2, DEVICE_SERIAL_3};
+  
+//   u32 serial[3] = {DEVICE_SERIAL_1, DEVICE_SERIAL_2, DEVICE_SERIAL_3};
 
-  #ifdef DEBUG
-  CompositeSerial.print(serial[0], HEX);
-  CompositeSerial.print(serial[1], HEX);
-  CompositeSerial.println(serial[2], HEX);
-  #endif
+//   #ifdef DEBUG
+//   CompositeSerial.print(serial[0], HEX);
+//   CompositeSerial.print(serial[1], HEX);
+//   CompositeSerial.println(serial[2], HEX);
+//   #endif
 
-  u8 reply[16] = {0x12, 0x02};
-  for(u8 i = 0; i < 96; i ++)
-  {
-    bitWrite(reply[2+i/7], i%7, bitRead(serial[i/32], i%32));
-  }
-  MIDI::sendSysexWithHeader(reply, 16);
+//   u8 reply[16] = {0x12, 0x17};
+//   for(u8 i = 0; i < 96; i ++)
+//   {
+//     bitWrite(reply[2+i/7], i%7, bitRead(serial[i/32], i%32));
+//   }
+//   MIDI::sendSysexWithHeader(reply, 16);
 
-  #ifdef DEBUG
-    for (int i = 0; i < 14; i++)
-  {
-    CompositeSerial.print(reply[2+i], HEX);
+//   #ifdef DEBUG
+//     for (int i = 0; i < 14; i++)
+//   {
+//     CompositeSerial.print(reply[2+i], HEX);
+//     CompositeSerial.print(" ");
+//   }
+//   CompositeSerial.println();
+// #endif
+    char serial_buffer[25];
+    getDeviceSerialString().toCharArray(serial_buffer,25);
+      #ifdef DEBUG
+    CompositeSerial.print("Sysex Request Serial Number ");
+    CompositeSerial.println(getDeviceSerialString().c_str());
+    CompositeSerial.println("05D6FF373238434E43107114");
+    const char* return_string = getDeviceSerialString().c_str();
+    const char* static_string = "05D6FF373238434E43107114";
+    CompositeSerial.print(return_string == static_string);
     CompositeSerial.print(" ");
+    CompositeSerial.print(strlen(return_string));
+    CompositeSerial.print(" ");
+    CompositeSerial.println(strlen(static_string));
+    
+    for(u8 i = 0; i < strlen(return_string); i++)
+    {
+      CompositeSerial.print(*(return_string + i), HEX);
+      CompositeSerial.print(" ");
+    }
+    CompositeSerial.println(" ");
+    for(u8 i = 0; i < strlen(static_string); i++)
+    {
+      CompositeSerial.print(*(static_string + i), HEX);
+      CompositeSerial.print(" ");
+    }
+    CompositeSerial.println(" ");
+
+//     for(u8 i = 0; i < sizeof(serial_buffer); i++)
+//   {
+//       CompositeSerial.print(serial_buffer[i], HEX);
+//       CompositeSerial.print(" ");
+//   }
+// CompositeSerial.println(" ");
+  #endif
+
+    u8 reply[26] = {0x12, 0x11};
+    memcpy(&reply[2], serial_buffer, 24);
+    MIDI::sendSysexWithHeader(reply, 26);
+}
+
+void MIDI::replyFirmwareVersion(u8 mode)
+{
+  if(mode == 1)
+  {
+    u8 reply[7] = {0x12, 0x12, 0x01, MAJOR_VER, MINOR_VER, PATCH_VER, BUILD_VER};
+    MIDI::sendSysexWithHeader(reply, sizeof(reply));
   }
-  CompositeSerial.println();
-#endif
+  else
+  {
+    u8 reply[3+sizeof(FWVERSION_STRING)];
+    reply[0] = 0x12; reply[1] = 0x18; reply[2] = 0x00;
+    memcpy(&reply[3], FWVERSION_STRING, sizeof(FWVERSION_STRING));
+    MIDI::sendSysexWithHeader(reply, sizeof(reply));
+    #ifdef DEBUG
+    CompositeSerial.print("Sysex Request Device Firmware Version (ASCII) len:");
+    CompositeSerial.print(sizeof(FWVERSION_STRING));
+    CompositeSerial.print(" ");
+    CompositeSerial.println(FWVERSION_STRING);
+    #endif
+  }
+}
+
+void MIDI::replyDeviceID()
+{
+    u8 reply[4] = {0x12, 0x13, device_id >> 7, device_id & 0b01111111};
+    MIDI::sendSysexWithHeader(reply, sizeof(reply));
 }
 
 void MIDI::scrollText(uint8_t *sysexBuffer, uint16_t len)

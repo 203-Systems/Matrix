@@ -64,9 +64,12 @@ public:
   void offScan();
 
   //Sysex action
-  void identityReply();
+  void replyIdentity();
   void replyDeviceName();
   void replySerialNumber();
+  void replyFirmwareVersion(u8 mode);
+  void replyDeviceID();
+
   void scrollText(uint8_t *sysexBuffer, uint16_t len);
   void setLED(uint8_t *sysexBuffer, uint16_t len);
   void writePalette(uint8_t *sysexBuffer, uint16_t len);

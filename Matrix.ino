@@ -28,10 +28,11 @@ bool flag_leftFN = false;
 
 void setup()
 {
-  setupUSB();
+  //loadDeviceSerialNumber();
   loadDeviceConfig();
   setupEEPROM();
   variableLoad();
+  setupUSB();
   setupHardware();
   specialBoot();
 
@@ -133,7 +134,7 @@ void readKey()
 //           {
 //             if(LED.readXYLED(KeyPad.list[i].xy) != testcolor[i])
 //             {
-//               LED.setXYHEX(KeyPad.list[i].xy, testcolor[i]);
+//               LED.setXYCRGB(KeyPad.list[i].xy, testcolor[i]);
 //             }
 //             else
 //             {

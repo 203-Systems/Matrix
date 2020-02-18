@@ -11,7 +11,7 @@ GFX::GFX() // Constructor
 void GFX::drawPixel(s8 x, s8 y, u32 color)
 {
   if(x < width && y < height)
-  LED.setXYHEX(xytoxy(x, y), color, overlay);
+  LED.setXYCRGB(xytoxy(x, y), color, overlay);
   return;
 }
 
@@ -259,28 +259,4 @@ void GFX::fillTriangle(s8 x0, s8 y0, s8 x1, s8 y1, s8 x2, s8 y2, u32 color)
     if(a > b) adagfxswap(a,b);
     GFX::drawFastHLine(a, y, b-a+1, color);
   }
-}
-
-void GFX::drawRoundRect(s8 x, s8 y, s8 w, s8 h, s8 r, u32 color)
-{
-  // smarter version
-  GFX::drawFastHLine(x+r  , y    , w-2*r, color); // Top
-  GFX::drawFastHLine(x+r  , y+h-1, w-2*r, color); // Bottom
-  GFX::drawFastVLine(x    , y+r  , h-2*r, color); // Left
-  GFX::drawFastVLine(x+w-1, y+r  , h-2*r, color); // Right
-  // draw four corners
-  GFX::drawCircleHelper(x+r    , y+r    , r, 1, color);
-  GFX::drawCircleHelper(x+w-r-1, y+r    , r, 2, color);
-  GFX::drawCircleHelper(x+w-r-1, y+h-r-1, r, 4, color);
-  GFX::drawCircleHelper(x+r    , y+h-r-1, r, 8, color);
-}
-
-void GFX::fillRoundRect(s8 x, s8 y, s8 w, s8 h, s8 r, u32 color)
-{
-  // smarter version
-  GFX::fillRect(x+r, y, w-2*r, h, color);
-
-  // draw four corners
-  GFX::fillCircleHelper(x+w-r-1, y+r, r, 1, h-2*r-1, color);
-  GFX::fillCircleHelper(x+r    , y+r, r, 2, h-2*r-1, color);
 }

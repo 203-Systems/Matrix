@@ -25,8 +25,6 @@ public:
     s16 delta, u32 color);
   void drawTriangle(s8 x0, s8 y0, s8 x1, s8 y1, s8 x2, s8 y2, u32 color);
   void fillTriangle(s8 x0, s8 y0, s8 x1, s8 y1, s8 x2, s8 y2, u32 color);
-  void drawRoundRect(s8 x, s8 y, s8 w, s8 h, s8 r, u32 color);
-  void fillRoundRect(s8 x, s8 y, s8 w, s8 h, s8 r, u32 color);
 protected:
   u8 width;
   u8 height;

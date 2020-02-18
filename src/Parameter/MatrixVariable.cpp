@@ -9,6 +9,7 @@ extern u8 bootAnimationSelector = 1; // 0 for off, 1 for kaskobi
 extern bool unipad_mode = false;
 extern bool debug_mode = false;
 extern bool fn_hold = false;
+extern bool pro_input_mode = false;
 //LED setting
 extern u8 brightness = 128;
 extern u16 max_mAh = 1000;
@@ -16,7 +17,7 @@ extern u8 brightness_level[8] = {16, 32, 64, 96, 128, 160, 216, 255};
 extern u8 fps = 100;
 extern u32 led_color_temperture = 0xFFFFFFFF;
 extern bool desaturated_mode = false;
-extern u8 desaturate_rate = 100; // 0~255
+extern u8 desaturate_rate = 80; // 0~255
 
 extern u16 fps_micros = 1000 / fps;
 

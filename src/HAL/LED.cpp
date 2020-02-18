@@ -129,10 +129,10 @@ void LED::setWRGB(s16 index, u8 w, u8 r, u8 g, u8 b, bool overlay /*= false*/)
   LED::setCRGB(index, CRGB(r, g, b), overlay); //Not real WRGB yet, since CRGB doesn't support WRGB
 }
 
-void LED::setHEX(s16 index, u32 hex, bool overlay /*= false*/)
-{
-  LED::setCRGB(index, CRGB(hex), overlay);
-};
+// void LED::setHEX(s16 index, u32 hex, bool overlay /*= false*/)
+// {
+//   LED::setCRGB(index, CRGB(hex), overlay);
+// };
 
 void LED::setCRGB(s16 index, CRGB CRGB, bool overlay /*= false*/, bool gamma /*= false*/)
 {
@@ -217,10 +217,10 @@ void LED::setXYWRGB(u8 xy, u8 w, u8 r, u8 g, u8 b, bool overlay /*= false*/)
 }
 
 
-void LED::setXYHEX(u8 xy, u32 hex, bool overlay /*= false*/)
-{
-  LED::setXYCRGB(xy, CRGB(hex), overlay);
-}
+// void LED::setXYHEX(u8 xy, u32 hex, bool overlay /*= false*/)
+// {
+//   LED::setXYCRGB(xy, CRGB(hex), overlay);
+// }
 
 void LED::setXYCRGB(u8 xy, CRGB CRGB, bool overlay /*= false*/, bool gamma /*= false*/)
 {

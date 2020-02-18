@@ -145,8 +145,10 @@ CRGB compileColor(CRGB color, bool gamma /* = false */)
   return color;
 }
 
-CRGB toBrightness(CRGB color, u8 brightness)
+CRGB toBrightness(CRGB color, u8 brightness, bool ignore)
 {
+  if(ignore)
+    return color;
   if (brightness == LOW_STATE_BRIGHTNESS)
     return toLowBrightness(color);
   return CRGB(
@@ -155,8 +157,10 @@ CRGB toBrightness(CRGB color, u8 brightness)
       scale8_video(color.b, brightness));
 }
 
-CRGB toLowBrightness(CRGB color)
+CRGB toLowBrightness(CRGB color, bool ignore)
 {
+  if(ignore)
+    return color;
   return CRGB(
       low_brightness_table[color.r],
       low_brightness_table[color.g],

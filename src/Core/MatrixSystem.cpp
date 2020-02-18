@@ -14,12 +14,16 @@ u8 cR = 255;
 u8 cG = 255;
 u8 cB = 255;
 
+String device_name_with_ID;
+String serial_number;
+
 void setupUSB()
 {
   USBComposite.clear();
   if(device_id != 0)
   {
-    USBComposite.setProductString((DEVICENAME + String(' ') + String(device_id)).c_str());
+    device_name_with_ID = (DEVICENAME + String(' ') + String(device_id));
+    USBComposite.setProductString(device_name_with_ID.c_str());
     USBComposite.setVendorId(VID2);
     USBComposite.setProductId(PID2+device_id);
   }
@@ -31,7 +35,9 @@ void setupUSB()
   }
 
   USBComposite.setManufacturerString(MAUNFACTURERNAME);
-  USBComposite.setSerialString(getDeviceIDString());
+  //USBComposite.setSerialString(getDeviceSerialString().c_str());
+  serial_number = getDeviceSerialString();
+  USBComposite.setSerialString(serial_number.c_str());
 
   Midi.registerComponent();
   CompositeSerial.registerComponent();
@@ -52,10 +58,10 @@ void specialBoot()
   KeyPad.scan();
   if(KeyPad.checkXY(0, 5, true) && KeyPad.checkXY(0, 6, true) && KeyPad.checkXY(0, 7, true))
   {
-    LED.setXYHEX(0x33,0xFF00FF, true);
-    LED.setXYHEX(0x34,0xFF00FF, true);
-    LED.setXYHEX(0x43,0xFF00FF, true);
-    LED.setXYHEX(0x44,0xFF00FF, true);
+    LED.setXYCRGB(0x33,0xFF00FF, true);
+    LED.setXYCRGB(0x34,0xFF00FF, true);
+    LED.setXYCRGB(0x43,0xFF00FF, true);
+    LED.setXYCRGB(0x44,0xFF00FF, true);
     LED.update();
     formatEEPROM();
     return;
@@ -104,7 +110,7 @@ void factoryTest()
             }
             else
             {
-              LED.setXYHEX(KeyPad.changelist[i], 0xFFFFFF, true);
+              LED.setXYCRGB(KeyPad.changelist[i], 0xFFFFFF, true);
             }
           }
         }
@@ -112,6 +118,40 @@ void factoryTest()
       }
     }
   }
+}
+
+// void loadDeviceSerialNumber()
+// {
+//   u32 serial_num[3] = {DEVICE_SERIAL_1, DEVICE_SERIAL_2, DEVICE_SERIAL_3};
+//   char char_table[16] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+//   u8 c = 0;
+//   for(u8 i = 0; i < 3; i ++)
+//   {
+//     u32 current_byte = 0xF0000000;
+//     for(s8 b = 7; b >= 0; b--)
+//     {
+//       serial_number[c] = char_table[(serial_num[i] & current_byte) >> 4*b]; 
+//       current_byte = current_byte >> 4;
+//       c++;
+//     }
+//   }
+// }
+
+String getDeviceSerialString()
+{
+  String serial;
+  u32 serial_num[3] = {DEVICE_SERIAL_1, DEVICE_SERIAL_2, DEVICE_SERIAL_3};
+  char char_table[16] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+  for(u8 i = 0; i < 3; i ++)
+  {
+    u32 current_byte = 0xF0000000;
+    for(s8 b = 7; b >= 0; b--)
+    {
+      serial += char_table[(serial_num[i] & current_byte) >> 4*b]; 
+      current_byte = current_byte >> 4;
+    }
+  }
+  return serial;
 }
 
 //Sysex set
@@ -136,16 +176,16 @@ void setDeviceID(u8 id)
 void enterBootloader()
 {
   LED.fill(0,true);
-  LED.setXYHEX(0x32,0xFF0000, true);
-  LED.setXYHEX(0x42,0xFF0000, true);
-  LED.setXYHEX(0x23,0xFF0000, true);
-  LED.setXYHEX(0x33,0xFF0000, true);
-  LED.setXYHEX(0x43,0xFF0000, true);
-  LED.setXYHEX(0x53,0xFF0000, true);
-  LED.setXYHEX(0x34,0xFF0000, true);
-  LED.setXYHEX(0x44,0xFF0000, true);
-  LED.setXYHEX(0x35,0xFF0000, true);
-  LED.setXYHEX(0x45,0xFF0000, true);
+  LED.setXYCRGB(0x32,0xFF0000, true);
+  LED.setXYCRGB(0x42,0xFF0000, true);
+  LED.setXYCRGB(0x23,0xFF0000, true);
+  LED.setXYCRGB(0x33,0xFF0000, true);
+  LED.setXYCRGB(0x43,0xFF0000, true);
+  LED.setXYCRGB(0x53,0xFF0000, true);
+  LED.setXYCRGB(0x34,0xFF0000, true);
+  LED.setXYCRGB(0x44,0xFF0000, true);
+  LED.setXYCRGB(0x35,0xFF0000, true);
+  LED.setXYCRGB(0x45,0xFF0000, true);
   LED.update();
   bkp_init();
   bkp_enable_writes();
@@ -269,19 +309,20 @@ void setFnHold(bool h)
 //   touch_threshold = t;
 // }
 
-void setcolorCorrection(u32 c, bool dont_write)
+void setColorCorrection(u32 c, bool dont_write)
 {
   if(!dont_write)
   {
   EEPROM_USER.write(E_color_CORRECTION_1, c >> 16);
   EEPROM_USER.write(E_color_CORRECTION_2, c & 0xFFFF);
   }
-  //LED.setcolorCorrection(c);
+  //LED.setColorCorrection(c);
   led_color_correction = c;
-  cW = (c & 0xFF000000) >> 24;
-  cR = (c & 0xFF0000) >> 16;
-  cG = (c & 0xFF00) >> 8;
-  cB = c & 0xFF;
+  // cW = (c & 0xFF000000) >> 24;
+  // cR = (c & 0xFF0000) >> 16;
+  // cG = (c & 0xFF00) >> 8;
+  // cB = c & 0xFF;
+  setupPalette();
   #ifdef DEBUG
   CompositeSerial.print("Set color Correction ");CompositeSerial.println(c);
   #endif
@@ -292,6 +333,20 @@ void setSTFU(u16 v)
   stfu = v;
   EEPROM_USER.write(E_STFU, v);
 }
+
+void setDesaturatedMode(bool e)
+{
+  desaturated_mode = e;
+  EEPROM_USER.write(E_DESATURATED_MODE, e);
+  setupPalette();
+}
+void setProInputMode(bool e)
+{
+  pro_input_mode = e;
+  EEPROM_USER.write(E_PRO_INPUT_MODE, e);
+}
+
+
 //Sysex get
 // void getDeviceInfo()
 // {

@@ -13,3 +13,4 @@
 *.bin
 .vscode/arduino.json
 .vscode/arduino.json
+*.json

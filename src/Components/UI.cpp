@@ -11,7 +11,6 @@ u8 next_code = 0;
 
 UI::UI()
 {
-
 }
 
 void UI::enterFNmenu()
@@ -19,14 +18,14 @@ void UI::enterFNmenu()
   next_code = 0;
   konami_progress = 0;
 
-  #ifdef DEBUG
+#ifdef DEBUG
   CompositeSerial.println("Enter FN");
-  // CompositeSerial.println(BOOTLOADER_VERSION);
-  // CompositeSerial.println(MATRIX_MODEL, HEX);
-  // CompositeSerial.println(MATRIX_VERSION);
-  // CompositeSerial.println(MATRIX_BATCH);
-  // CompositeSerial.println(device_config);
-  #endif
+// CompositeSerial.println(BOOTLOADER_VERSION);
+// CompositeSerial.println(MATRIX_MODEL, HEX);
+// CompositeSerial.println(MATRIX_VERSION);
+// CompositeSerial.println(MATRIX_BATCH);
+// CompositeSerial.println(device_config);
+#endif
 
   LED.enableOverlayMode();
   hadAction = false;
@@ -35,29 +34,29 @@ void UI::enterFNmenu()
 
 void UI::fnMenu()
 {
-  #ifdef DEBUG
+#ifdef DEBUG
   CompositeSerial.println("FN");
-  #endif
+#endif
   UI::fnRender();
-  while(1)
+  while (1)
   {
     Midi.poll();
 
-    if(uiTimer.tick(1000/fps))
+    if (uiTimer.tick(1000 / fps))
     {
       //
 
-      if(KeyPad.scan())
+      if (KeyPad.scan())
       {
-        #ifdef DEBUG
+#ifdef DEBUG
         CompositeSerial.println("FnMenuKeyScaned");
-        #endif
-        if(KeyPad.fn.state == PRESSED)
+#endif
+        if (KeyPad.fn.state == PRESSED)
         {
           UI::exitFNmenu();
           return;
         }
-          else if(KeyPad.fn.state == RELEASED && !fn_hold && (KeyPad.fn.hold || hadAction )) //if fn off and longer then threshold, will count as hold, release to back to main menu
+        else if (KeyPad.fn.state == RELEASED && !fn_hold && (KeyPad.fn.hold || hadAction)) //if fn off and longer then threshold, will count as hold, release to back to main menu
         {
           UI::exitFNmenu();
           return;
@@ -81,9 +80,9 @@ void UI::fnMenu()
 
 void UI::exitFNmenu()
 {
-  #ifdef DEBUG
+#ifdef DEBUG
   CompositeSerial.println("Exit FN");
-  #endif
+#endif
   LED.disableOverlayMode();
 }
 
@@ -93,23 +92,23 @@ void UI::fnKeyAction()
   bool flag_rotated = false;
   bool konami = false;
 
-  for(int i = 0; i < MULTIPRESS; i++)
+  for (int i = 0; i < MULTIPRESS; i++)
   {
-    if(KeyPad.changelist[i] == 0xFFFF)
-    break;
+    if (KeyPad.changelist[i] == 0xFFFF)
+      break;
 
     u8 x = xytox(KeyPad.changelist[i]);
     u8 y = xytoy(KeyPad.changelist[i]);
 
     //hadAction = true;
 
-    if(y > 5)
+    if (y > 5)
     {
-      if(KeyPad.getKey(KeyPad.changelist[i]).state == PRESSED)
+      if (KeyPad.getKey(KeyPad.changelist[i]).state == PRESSED)
       {
         Midi.sendNoteOn(0, fn_keymap[current_keymap][y - 6][x], KeyPad.getKey(KeyPad.changelist[i]).velocity * 127);
       }
-      else if(KeyPad.getKey(KeyPad.changelist[i]).state == RELEASED)
+      else if (KeyPad.getKey(KeyPad.changelist[i]).state == RELEASED)
       {
         Midi.sendNoteOff(0, fn_keymap[current_keymap][y - 6][x], 0);
       }
@@ -117,12 +116,12 @@ void UI::fnKeyAction()
     else
     {
 
-      #ifdef DEBUG
+#ifdef DEBUG
       CompositeSerial.print("FN Key Action ");
       CompositeSerial.print(KeyPad.changelist[i]);
-      #endif
+#endif
 
-      if(KeyPad.getKey(KeyPad.changelist[i]).state == RELEASED)
+      if (KeyPad.getKey(KeyPad.changelist[i]).state == RELEASED)
       {
         //   konami = true; //So off don't reset it.
         // }
@@ -140,69 +139,69 @@ void UI::fnKeyAction()
         //     break;
         //   }
 
-        switch(KeyPad.changelist[i])
+        switch (KeyPad.changelist[i])
         {
-          //Brightness
-          case 0x33:
-          case 0x34:
-          case 0x43:
-          case 0x44:
-          if(!KeyPad.fn.velocity || KeyPad.fn.hold)
+        //Brightness
+        case 0x33:
+        case 0x34:
+        case 0x43:
+        case 0x44:
+          if (!KeyPad.fn.velocity || KeyPad.fn.hold)
           {
             nextBrightnessState();
-            #ifdef DEBUG
+#ifdef DEBUG
             CompositeSerial.print("Brightness ");
             CompositeSerial.println(brightness);
-            #endif
+#endif
           }
           break;
 
-          //rotation
-          case 0x32:
-          case 0x42:
+        //rotation
+        case 0x32:
+        case 0x42:
           LED.fill(0); //Clean Canvas
-          if(konami_progress < 2)
+          if (konami_progress < 2)
           {
             konami_progress++;
             konami = true;
           }
           break;
-          case 0x53:
-          case 0x54:
-          if(konami_progress == 5 || konami_progress == 7)
+        case 0x53:
+        case 0x54:
+          if (konami_progress == 5 || konami_progress == 7)
           {
             konami_progress++;
             konami = true;
           }
-          else if(!flag_rotated)
+          else if (!flag_rotated)
           {
             LED.fill(0, true);
             rotationCW(1); //90
             flag_rotated = true;
           }
           break;
-          case 0x35:
-          case 0x45:
-          if(konami_progress == 2 || konami_progress == 3)
+        case 0x35:
+        case 0x45:
+          if (konami_progress == 2 || konami_progress == 3)
           {
             konami_progress++;
             konami = true;
           }
-          else if(!flag_rotated)
+          else if (!flag_rotated)
           {
             LED.fill(0, true);
             rotationCW(2); //190
             flag_rotated = true;
           }
           break;
-          case 0x23:
-          case 0x24:
-          if(konami_progress == 4 || konami_progress == 6)
+        case 0x23:
+        case 0x24:
+          if (konami_progress == 4 || konami_progress == 6)
           {
             konami_progress++;
             konami = true;
           }
-          else if(!flag_rotated)
+          else if (!flag_rotated)
           {
             LED.fill(0, true);
             rotationCW(3); //270
@@ -210,16 +209,16 @@ void UI::fnKeyAction()
           }
           break;
 
-          case 0x05:
+        case 0x05:
           UI::enterSettingMenu();
 
-          case 0x20:
+        case 0x20:
           setCurrentKeyMap(0);
           break;
-          case 0x30:
+        case 0x30:
           setCurrentKeyMap(1);
           break;
-          case 0x40:
+        case 0x40:
           setCurrentKeyMap(2);
           break;
           // case 0x40:
@@ -229,10 +228,10 @@ void UI::fnKeyAction()
           // setCurrentKeyMap(4);
           // break;
 
-          case 0x50:
+        case 0x50:
           setUnipadMode(!unipad_mode);
-          if(unipad_mode)
-          setCurrentKeyMap(1);
+          if (unipad_mode)
+            setCurrentKeyMap(1);
           break;
 
           // //midi_enable
@@ -252,29 +251,29 @@ void UI::fnKeyAction()
           // reset();
           // break;
 
-          case 0x75:
+        case 0x75:
           setFnHold(!fn_hold);
           break;
         }
 
-        if(konami_progress >= 8)
+        if (konami_progress >= 8)
         {
-          switch(KeyPad.changelist[i])
+          switch (KeyPad.changelist[i])
           {
-            case 0x16:
-            case 0x17:
-            case 0x26:
-            case 0x27:
-            if(konami_progress == 9)
+          case 0x16:
+          case 0x17:
+          case 0x26:
+          case 0x27:
+            if (konami_progress == 9)
             {
               konami_progress = 0; //Tetris Entence Point
             }
             break;
-            case 0x56:
-            case 0x57:
-            case 0x66:
-            case 0x67:
-            if(konami_progress == 8)
+          case 0x56:
+          case 0x57:
+          case 0x66:
+          case 0x67:
+            if (konami_progress == 8)
             {
               konami_progress++;
               konami = true;
@@ -284,9 +283,8 @@ void UI::fnKeyAction()
         }
         else
         {
-          switch(KeyPad.changelist[i])
+          switch (KeyPad.changelist[i])
           {
-
 
             // case 0x65:
             // setTouchThreshold(UI::numSelector8bit(touch_threshold, 0x004000AA, 0x00FFFFFF, true));
@@ -294,7 +292,6 @@ void UI::fnKeyAction()
             // break;
           }
         }
-
 
         // case 0x61: //RESET
         // LED.fill(0, true);
@@ -311,66 +308,67 @@ void UI::fnKeyAction()
         // next_code ++;
         // break;
       }
-      else if(KeyPad.getKey(KeyPad.changelist[i]).state == ACTIVED && KeyPad.getKey(KeyPad.changelist[i]).hold)
+      else if (KeyPad.getKey(KeyPad.changelist[i]).state == ACTIVED && KeyPad.getKey(KeyPad.changelist[i]).hold)
       {
-        switch(KeyPad.changelist[i])
+        konami = true;
+        switch (KeyPad.changelist[i])
         {
-          //Brightness
-          case 0x33:
-          case 0x34:
-          case 0x43:
-          case 0x44:
+        //Brightness
+        case 0x33:
+        case 0x34:
+        case 0x43:
+        case 0x44:
           UI::scrollText("Brightness Setting", 0xFFFFFF);
           break;
 
-          //rotation
-          case 0x32:
-          case 0x42:
+        //rotation
+        case 0x32:
+        case 0x42:
           UI::scrollText("Clean Canvas", 0x0000FF00);
           break;
 
-          case 0x53:
-          case 0x54:
-          case 0x35:
-          case 0x45:
-          case 0x23:
-          case 0x24:
+        case 0x53:
+        case 0x54:
+        case 0x35:
+        case 0x45:
+        case 0x23:
+        case 0x24:
           UI::scrollText("Rotate to this side up", 0x0000FF00);
           break;
 
-          case 0x05:
+        case 0x05:
           UI::scrollText("Setting Menu", 0xFFFFFFFF);
           break;
-          case 0x20:
+        case 0x20:
           UI::scrollText("Key Map 1", keymap_color[0]);
           break;
-          case 0x30:
+        case 0x30:
           UI::scrollText("Key Map 2", keymap_color[1]);
           break;
-          case 0x40:
+        case 0x40:
           UI::scrollText("Custom Key Map (Not available yet)", keymap_color[2]);
           break;
-          case 0x50:
+        case 0x50:
           UI::scrollText("Unipad Mode", 0x00FFFF00);
           break;
-          case 0x75:
+        case 0x75:
           UI::scrollText("Action Menu Hold Mode", 0x00A0FF00);
           break;
-          default:
+        default:
           UI::scrollText("Action Menu", 0x0000FFAA);
           break;
         }
       }
     }
-    if(konami == false)
+    if (konami == false)
     {
       konami_progress = 0;
     }
   }
-  #ifdef DEBUG
+#ifdef DEBUG
   CompositeSerial.print("Konami: ");
   CompositeSerial.println(konami_progress);
-  #endif
+#endif
 }
 
 void UI::fnRender()
@@ -389,101 +387,40 @@ void UI::fnRender()
   //rotation
   LED.setXYCRGB(0x32, 0x0000FF00, true);
   LED.setXYCRGB(0x42, 0x0000FF00, true);
-  LED.setXYCRGB(0x53, toBrightness(0x0000FF00, LOW_STATE_BRIGHTNESS), true);
-  LED.setXYCRGB(0x54, toBrightness(0x0000FF00, LOW_STATE_BRIGHTNESS), true);
-  LED.setXYCRGB(0x23, toBrightness(0x0000FF00, LOW_STATE_BRIGHTNESS), true);
-  LED.setXYCRGB(0x24, toBrightness(0x0000FF00, LOW_STATE_BRIGHTNESS), true);
-  LED.setXYCRGB(0x35, toBrightness(0x0000FF00, LOW_STATE_BRIGHTNESS), true);
-  LED.setXYCRGB(0x45, toBrightness(0x0000FF00, LOW_STATE_BRIGHTNESS), true);
+  LED.setXYCRGB(0x53, toLowBrightness(0x0000FF00), true);
+  LED.setXYCRGB(0x54, toLowBrightness(0x0000FF00), true);
+  LED.setXYCRGB(0x23, toLowBrightness(0x0000FF00), true);
+  LED.setXYCRGB(0x24, toLowBrightness(0x0000FF00), true);
+  LED.setXYCRGB(0x35, toLowBrightness(0x0000FF00), true);
+  LED.setXYCRGB(0x45, toLowBrightness(0x0000FF00), true);
 
   //Menu
   LED.setXYCRGB(0x05, 0xFFFFFFFF, true);
-  #ifdef DEBUG
+#ifdef DEBUG
   LED.setXYCRGB(0x05, 0x00FFA500, true);
-  #endif
+#endif
 
-  // //Midi enable0x
-  // if(midi_enable)
-  // {
-  //   LED.setXYCRGB(0x00, 0x00FFAA00, true);
-  // }
-  // else
-  // {
-  //   LED.setXYCRGB(0x00, toBrightness(0x00FFFFFF, LOW_STATE_BRIGHTNESS), true);
-  // }
-  //
-  // //M2P enable
-  // if(m2p_enable)
-  // {
-  //   LED.setXYCRGB(0x01, 0x0000FF7F, true);
-  // }
-  // else
-  // {
-  //   LED.setXYCRGB(0x01, toBrightness(0x0000FF7F, LOW_STATE_BRIGHTNESS), true);
-  // }
-  //
-  // //Powercord enable
-  // if(powercord_enable)
-  // {
-  //   LED.setXYCRGB(0x67, 0x00D400FF, true);
-  // }
-  // else
-  // {
-  //   LED.setXYCRGB(0x67, toBrightness(0x00D400FF, LOW_STATE_BRIGHTNESS), true);
-  // }
+  LED.setXYCRGB(0x20, toLowBrightness(keymap_color[0]), true); //Keymap selector 1
+  LED.setXYCRGB(0x30, toLowBrightness(keymap_color[1]), true); //Keymap selector 1
+  LED.setXYCRGB(0x40, toLowBrightness(keymap_color[2]), true); //Keymap selector 1
+  LED.setXYCRGB(0x50, toLowBrightness(0xFFFF00, unipad_mode), true);
 
+  LED.setXYCRGB(0x75, toLowBrightness(0xA0FF00, fn_hold), true);
 
-  //Extra
-  // LED.setXYCRGB(0x77, 0x00FFFFFF, true); //Setting
-  // LED.setXYCRGB(0x07, 0x00FFFFFF, true); //AppLauncher
-  // LED.setXYCRGB(0x17, 0x00FFFFFF, true); //Text Selctor
-  //LED.setXYCRGB(0x65, 0x004000FF, true); //TouchBar_threshold
-  //LED.setXYCRGB(0x60, 0x00FFFF00, true); //reset device
-  //LED.setXYCRGB(0x61, 0x0000FF66, true); //reboot
-
-  LED.setXYCRGB(0x20, toBrightness(keymap_color[0], LOW_STATE_BRIGHTNESS), true); //Keymap selector 1
-  LED.setXYCRGB(0x30, toBrightness(keymap_color[1], LOW_STATE_BRIGHTNESS), true); //Keymap selector 1
-  LED.setXYCRGB(0x40, toBrightness(keymap_color[2], LOW_STATE_BRIGHTNESS), true); //Keymap selector 1
-  //LED.setXYCRGB(0x40, toBrightness(keymap_color[3], LOW_STATE_BRIGHTNESS), true); //Keymap selector 1
-  //LED.setXYCRGB(0x50, toBrightness(keymap_color[4], LOW_STATE_BRIGHTNESS), true); //Keymap selector 1
-  if(unipad_mode)
+  switch (current_keymap)
   {
-    LED.setXYCRGB(0x50, 0xFFFF00, true);
-  }
-  else
-  {
-    LED.setXYCRGB(0x50, toBrightness(0xFFFF00, LOW_STATE_BRIGHTNESS), true);
-  }
-
-  if(fn_hold)
-  {
-    LED.setXYCRGB(0x75, 0xA0FF00, true);
-  }
-  else
-  {
-    LED.setXYCRGB(0x75, toBrightness(0xA0FF00, LOW_STATE_BRIGHTNESS), true);
-  }
-
-  switch(current_keymap)
-  {
-    case 0:
+  case 0:
     LED.setXYCRGB(0x20, keymap_color[0], true);
     break;
-    case 1:
+  case 1:
     LED.setXYCRGB(0x30, keymap_color[1], true);
     break;
-    case 2:
+  case 2:
     LED.setXYCRGB(0x40, keymap_color[2], true);
     break;
-    // case 3:
-    // LED.setXYCRGB(0x40, keymap_color[3], true);
-    // break;
-    // case 4:
-    // LED.setXYCRGB(0x50, keymap_color[4], true);
-    // break;
   }
 
-  if(konami_progress >= 8)
+  if (konami_progress >= 8)
   {
     LED.setXYCRGB(0x16, 0xFF0000, true);
     LED.setXYCRGB(0x17, 0xFF0000, true);
@@ -496,11 +433,11 @@ void UI::fnRender()
   }
   else
   {
-    for(u8 y = 6; y < 8; y++)
+    for (u8 y = 6; y < 8; y++)
     {
-      for(u8 x = 0; x < 8; x++)
+      for (u8 x = 0; x < 8; x++)
       {
-        if(KeyPad.checkXY(x, y))
+        if (KeyPad.checkXY(x, y))
         {
           LED.setXYCRGB(xytoxy(x, y), fn_keymap_active_color[current_keymap][y - 6][x], true);
         }
@@ -511,9 +448,9 @@ void UI::fnRender()
       }
     }
   }
-  // #ifdef DEBUG
-  // CompositeSerial.println("End Render");
-  // #endif
+#ifdef DEBUG
+  CompositeSerial.println("End Fn Render");
+#endif
 
   LED.update();
 }
@@ -528,15 +465,15 @@ void UI::enterSettingMenu()
 void UI::settingMenu()
 {
   UI::settingRender();
-  while(1)
+  while (1)
   {
     Midi.poll();
 
-    if(uiTimer.tick(1000/fps))
+    if (uiTimer.tick(1000 / fps))
     {
-      if(KeyPad.scan())
+      if (KeyPad.scan())
       {
-        if(KeyPad.fn.state == PRESSED)
+        if (KeyPad.fn.state == PRESSED)
         {
           UI::exitSettingMenu();
           return;
@@ -552,132 +489,156 @@ void UI::exitSettingMenu()
 {
 }
 
-
 void UI::settingKeyAction()
 {
-  for(int i = 0; i < MULTIPRESS; i++)
+  for (int i = 0; i < MULTIPRESS; i++)
   {
-    if(KeyPad.changelist[i] == 0xFFFF)
-    return;
+    if (KeyPad.changelist[i] == 0xFFFF)
+      return;
 
     u8 x = xytox(KeyPad.changelist[i]);
     u8 y = xytoy(KeyPad.changelist[i]);
 
-    String fw_str = "Matrix OS V" + String(FWVERSION_STRING);
-    String bl_str = "Matrix Bootloader V" + String(BOOTLOADER_VERSION);
     char char_buffer[64];
-    u32 cache1;
-    u32 cache2;
 
-    if(KeyPad.getKey(KeyPad.changelist[i]).state == RELEASED)
+    if (KeyPad.getKey(KeyPad.changelist[i]).state == RELEASED)
     {
-      switch(KeyPad.changelist[i])
+      switch (KeyPad.changelist[i])
       {
-        case 0x07: //DFU
-        enterBootloader();
-        break;
-        case 0x17:
-        fw_str.toCharArray(char_buffer,64);
-        UI::scrollText(char_buffer, 0x00FF30);
-        break;
-        case 0x27:
-        bl_str.toCharArray(char_buffer,64);
-        UI::scrollText(char_buffer, 0x00FF30);
-        break;
-        case 0x37:
-        device_name.toCharArray(char_buffer,64);
-        UI::scrollText(char_buffer, 0x00FF30);
-        break;
-        case 0x67:
-        cache1 = led_color_correction;
-        setcolorCorrection(0xFFFFFF, true);
-        cache2 = UI::numSelectorRGB(cache1);
-        if(cache2 != cache1)
+      case 0x00:
+        switch (stfu)
         {
-          LED.fill(0,true);
-          LED.update();
-          setcolorCorrection(cache2);
-          reboot();
-        }
-        setcolorCorrection(cache1, true);
-        break;
-        case 0x77:
-        setDeviceID(UI::numSelector8bit(device_id, 0x0000FFAA, 0x00FFFFFF));
-        break;
-        case 0x00:
-        switch(stfu)
-        {
-          case 0:
+        case 0:
           setSTFU(1);
           break;
-          case 1:
+        case 1:
           setSTFU(2);
           break;
-          case 2:
-          default:
+        case 2:
+        default:
           setSTFU(0);
           break;
         }
         break;
-        case 0x06:
-        LED.fill(0,true);
-        LED.setXYCRGB(0x33,0xFF00FF, true);
-        LED.setXYCRGB(0x34,0xFF00FF, true);
-        LED.setXYCRGB(0x43,0xFF00FF, true);
-        LED.setXYCRGB(0x44,0xFF00FF, true);
+      case 0x10:
+        setDesaturatedMode(!desaturated_mode);
+        break;
+      case 0x20:
+        setProInputMode(!pro_input_mode);
+        break;
+      case 0x06:
+        LED.fill(0, true);
+        LED.setXYCRGB(0x33, 0xFF00FF, true);
+        LED.setXYCRGB(0x34, 0xFF00FF, true);
+        LED.setXYCRGB(0x43, 0xFF00FF, true);
+        LED.setXYCRGB(0x44, 0xFF00FF, true);
         LED.update();
         initEEPROM();
         delay(500);
         reboot();
         break;
+      case 0x07: //DFU
+        enterBootloader();
+        break;
+      case 0x17:
+      {
+        String fw_str = "Matrix OS V" + String(FWVERSION_STRING);
+        fw_str.toCharArray(char_buffer, 64);
+        UI::scrollText(char_buffer, 0x00FF30);
+        break;
+      }
+      case 0x27:
+      {
+        String bl_str = "Matrix Bootloader V" + String(BOOTLOADER_VERSION);
+        bl_str.toCharArray(char_buffer, 64);
+        UI::scrollText(char_buffer, 0x00FF30);
+        break;
+      }
+      case 0x37:
+      {
+        device_name.toCharArray(char_buffer, 64);
+        UI::scrollText(char_buffer, 0x00FF30);
+        break;
+      }
+      case 0x67:
+      {
+        u32 origonal_color_correction = led_color_correction;
+        bool origonal_desaturated_mode = desaturated_mode;
+        desaturated_mode = false; //use setDesaturatedMode() will cause setupPalette() to be called, it will be called in setColorCorrection()
+        setColorCorrection(0xFFFFFF, true);
+        
+
+        u32 new_color_correction = UI::numSelectorRGB(origonal_color_correction);
+        
+        if (new_color_correction != origonal_color_correction)
+        {
+          LED.fill(0, true);
+          LED.update();
+          desaturated_mode = origonal_desaturated_mode;
+          setColorCorrection(new_color_correction);
+        }
+        else
+        {
+          desaturated_mode = origonal_desaturated_mode;
+          setColorCorrection(origonal_color_correction, true);
+        }
+        break;
+      }
+      case 0x77:
+        setDeviceID(UI::numSelector8bit(device_id, 0x0000FFAA, 0x00FFFFFF));
+        break;
       }
     }
-    else if(KeyPad.getKey(KeyPad.changelist[i]).state == ACTIVED && KeyPad.getKey(KeyPad.changelist[i]).hold)
+    else if (KeyPad.getKey(KeyPad.changelist[i]).state == ACTIVED && KeyPad.getKey(KeyPad.changelist[i]).hold)
     {
-      switch(KeyPad.changelist[i])
+      switch (KeyPad.changelist[i])
       {
-        case 0x07: //DFU
-        UI::scrollText("Enter DFU Mode", 0xFF0000);
-        break;
-        case 0x17:
-        UI::scrollText("Device Firmware Version", 0x00FF30);
-        break;
-        case 0x27:
-        UI::scrollText("Device Bootloader Version", 0x00FF30);
-        break;
-        case 0x37:
-        UI::scrollText("Device Name", 0x00FF30);
-        break;
-        case 0x67:
-        UI::scrollText("color Correction", 0xFFFFFF);
-        break;
-        case 0x77:
-        UI::scrollText("Device ID", 0x00FFAA);
-        break;
-        case 0x00:
-        switch(stfu)
+      case 0x00:
+        switch (stfu)
         {
-          case 0:
+        case 0:
           UI::scrollText("Flicker Optimization Off", 0xA0A0A0);
           break;
-          case 1:
+        case 1:
           UI::scrollText("Flicker Optimization Level 1", 0xAAFF00);
           break;
-          case 2:
+        case 2:
           UI::scrollText("Flicker Optimization Level 2", 0xAAFF00);
           break;
-          defalut:
+        defalut:
           UI::scrollText("Flicker Optimization Level ???", 0xFF0000);
           break;
         }
         break;
-        case 0x01:
-        UI::scrollText("Desaturated Mode", 0x00FFAA);
+
+      case 0x10:
+        UI::scrollText("Desaturated Mode", 0x33FFBD);
         break;
-        case 0x06:
-        UI::scrollText("Reset Device", 0xFF00FF);
+      case 0x20:
+        UI::scrollText("Pro Input Mode", 0x00FF00);
         break;
-        default:
+      case 0x06:
+        UI::scrollText("Factory Reset Device", 0xFF00FF);
+        break;
+      case 0x07: //DFU
+        UI::scrollText("Enter DFU Mode", 0xFF0000);
+        break;
+      case 0x17:
+        UI::scrollText("Device Firmware Version", 0x00FF30);
+        break;
+      case 0x27:
+        UI::scrollText("Device Bootloader Version", 0x00FF30);
+        break;
+      case 0x37:
+        UI::scrollText("Device Name", 0x00FF30);
+        break;
+      case 0x67:
+        UI::scrollText("color Correction", 0xFFFFFF);
+        break;
+      case 0x77:
+        UI::scrollText("Device ID", 0x00FFAA);
+        break;
+      default:
         UI::scrollText("Setting Menu", 0x00FFFFFF);
         break;
       }
@@ -687,51 +648,65 @@ void UI::settingKeyAction()
 
 void UI::settingRender()
 {
-  LED.setXYCRGB(0x07, 0x00FF0000, true); //DFU
-  LED.setXYCRGB(0x17, 0x0000FF30, true); //Device Info
+  switch (stfu)
+  {
+  case 0:
+    LED.setXYCRGB(0x00, 0x00202020, true); //STFU Off
+    break;
+  case 1:
+    LED.setXYCRGB(0x00, toLowBrightness(0x00AAFF00), true); //STFU 1
+    break;
+  case 2:
+    LED.setXYCRGB(0x00, 0x00AAFF00, true); //STFU 2
+    break;
+  default:
+    LED.setXYCRGB(0x00, 0x00FF0000, true); //STFU ???
+  }
+  LED.setXYCRGB(0x10, 0x0033FFBD, true);                            //Desaturated Mode
+  LED.setXYCRGB(0x20, toLowBrightness(0x0000FF00, pro_input_mode), true); //Pro Input Mode
+  LED.setXYCRGB(0x06, 0x00FF00FF, true);                                  //Reset EEPROM
+  LED.setXYCRGB(0x07, 0x00FF0000, true);                                  //DFU
+  if (BUILD_VER == 0)
+  {
+    LED.setXYCRGB(0x17, 0x0000FF30, true); //OS Version
+  }
+  else
+  {
+    LED.setXYCRGB(0x17, 0x00FFA500, true); //OS Version color change with Beta version is installed
+  }
   LED.setXYCRGB(0x27, 0x0000FF30, true); //Bootloader Info
   LED.setXYCRGB(0x37, 0x0000FF30, true); //Device Name
   LED.setXYCRGB(0x67, 0x00FFFFFF, true); //color Correction
   LED.setXYCRGB(0x77, 0x0000FFAA, true); //Device ID
-  LED.setXYCRGB(0x06, 0x00FF00FF, true); //Reset EEPROM
-  switch(stfu)
-  {
-    case 0:
-    LED.setXYCRGB(0x00, 0x00202020, true); //STFU Off
-    break;
-    case 1:
-    LED.setXYCRGB(0x00, toBrightness(0xAAFF00, LOW_STATE_BRIGHTNESS), true); //STFU 1
-    break;
-    case 2:
-    LED.setXYCRGB(0x00, 0xAAFF00, true); //STFU 2
-    break;
-    default:
-    LED.setXYCRGB(0x00, 0xFF0000, true); //STFU ???
-  }
   LED.update();
 }
-
 
 u8 UI::numSelector8bit(u8 currentNum, u32 color, u32 sec_color)
 {
   LED.fill(0, true);
   bool initalized = false;
-  while(!KeyPad.fn.state == PRESSED)
+  while (!KeyPad.fn.state == PRESSED)
   {
-    if(uiTimer.tick(1000/fps))
+    if (uiTimer.tick(1000 / fps))
     {
-      if(KeyPad.scan() || !initalized)
+      if (KeyPad.scan() || !initalized)
       {
-        if(!initalized)
+        if (!initalized)
           initalized = true;
         LED.fill(0, true);
-        currentNum = uielement.binary8bitInput(currentNum, 7, color);
-        currentNum = uielement.simple8bitInput(currentNum, 6, color);
+        if (pro_input_mode)
+        {
+          currentNum = uielement.binary8bitInput(currentNum, 7, color);
+        }
+        else
+        {
+          currentNum = uielement.simple8bitInput(currentNum, 7, color);
+        }
         uielement.renderHalfHeightNum(currentNum, 0x73, color, sec_color);
-        #ifdef DEBUG
+#ifdef DEBUG
         CompositeSerial.print("numSelector\t");
         CompositeSerial.println(currentNum);
-        #endif
+#endif
         LED.update();
       }
     }
@@ -747,56 +722,69 @@ u8 UI::numSelector6bit(u8 currentNum, u32 color, u32 sec_color)
 
 u32 UI::numSelectorRGB(u32 color)
 {
-  #ifdef DEBUG
+#ifdef DEBUG
   CompositeSerial.println("RGB Input mode");
-  #endif
+#endif
   bool initalized = false;
   LED.fill(0, true);
   u8 R = (color & 0xFF0000) >> 16;
   u8 G = (color & 0xFF00) >> 8;
   u8 B = color & 0xFF;
   uielement.renderHalfHeightNum(R, 0x73, color, 0xFF0000);
-  while(!KeyPad.fn.state == PRESSED)
+  while (!KeyPad.fn.state == PRESSED)
   {
-    if(KeyPad.scan() || !initalized)
+    if (KeyPad.scan() || !initalized)
     {
-      if(!initalized)
+      if (!initalized)
         initalized = true;
-      if(R != uielement.simple8bitInput(R, 5, 0xFF0000))
+      if (R != uielement.simple8bitInput(R, 5, 0xFF0000))
       {
         LED.fill(0, true);
         R = uielement.simple8bitInput(R, 5, 0xFF0000);
         color = (R << 16) + (color & 0x00FFFF);
         uielement.renderHalfHeightNum(R, 0x73, color, 0xFF0000);
       }
-      else if(G != uielement.binary8bitInput(G, 6, 0x00FF00))
+      else if (G != uielement.binary8bitInput(G, 6, 0x00FF00))
       {
         LED.fill(0, true);
         G = uielement.simple8bitInput(G, 6, 0x00FF00);
         color = (G << 8) + (color & 0xFF00FF);
         uielement.renderHalfHeightNum(G, 0x73, color, 0x00FF00);
       }
-      else if(B != uielement.binary8bitInput(B, 7, 0x0000FF))
+      else if (B != uielement.binary8bitInput(B, 7, 0x0000FF))
       {
         LED.fill(0, true);
         B = uielement.simple8bitInput(B, 7, 0x0000FF);
         color = B + (color & 0xFFFF00);
         uielement.renderHalfHeightNum(B, 0x73, color, 0x0000FF);
       }
-
-      uielement.simple8bitInput(R, 5, 0xFF0000);
-      uielement.simple8bitInput(G, 6, 0x00FF00);
-      uielement.simple8bitInput(B, 7, 0x0000FF);
+      if (pro_input_mode)
+      {
+        uielement.binary8bitInput(R, 5, 0xFF0000);
+        uielement.binary8bitInput(G, 6, 0x00FF00);
+        uielement.binary8bitInput(B, 7, 0x0000FF);
+      }
+      else
+      {
+        uielement.simple8bitInput(R, 5, 0xFF0000);
+        uielement.simple8bitInput(G, 6, 0x00FF00);
+        uielement.simple8bitInput(B, 7, 0x0000FF);
+      }
 
       LED.update();
 
-      #ifdef DEBUG
-      CompositeSerial.print("RGB Update");CompositeSerial.print(" ");
-      CompositeSerial.print(R);CompositeSerial.print(" ");
-      CompositeSerial.print(G);CompositeSerial.print(" ");
-      CompositeSerial.print(B);CompositeSerial.print(" ");
-      CompositeSerial.print(color, HEX);CompositeSerial.println(" ");
-      #endif
+#ifdef DEBUG
+      CompositeSerial.print("RGB Update");
+      CompositeSerial.print(" ");
+      CompositeSerial.print(R);
+      CompositeSerial.print(" ");
+      CompositeSerial.print(G);
+      CompositeSerial.print(" ");
+      CompositeSerial.print(B);
+      CompositeSerial.print(" ");
+      CompositeSerial.print(color, HEX);
+      CompositeSerial.println(" ");
+#endif
     }
   }
   LED.fill(0, true);
@@ -823,35 +811,35 @@ u32 UI::numSelectorRGB(u32 color)
 //
 // }
 
-void UI::scrollText(char ascii[], u32 color, u8 speed  /* = 10 */, bool loop /* = false */, u8 len /* = 0 */)
+void UI::scrollText(char ascii[], u32 color, u8 speed /* = 10 */, bool loop /* = false */, u8 len /* = 0 */)
 {
 
-  speed = 1000/speed;
+  speed = 1000 / speed;
   u8 spacing = 2;
   u8 spacing_remaining = 0;
   LED.fill(0, true);
   LED.update();
-  #ifdef DEBUG
+#ifdef DEBUG
   CompositeSerial.print("Text scroll: ");
   CompositeSerial.println(ascii);
   CompositeSerial.print("Text Size: ");
   CompositeSerial.println(strlen(ascii));
-  #endif
+#endif
 
-  if(!len)
+  if (!len)
     len = strlen(ascii);
 
   do
   {
     u8 current_char = 0;
-    while(current_char < len)
+    while (current_char < len)
     {
       // CompositeSerial.print("Print Char: ");
       // CompositeSerial.println(ascii[current_char]);
       u8 current_char_progress = 0;
-      if(ascii[current_char] < 128)
+      if (ascii[current_char] < 128)
       {
-        if(ascii[current_char] < 32)
+        if (ascii[current_char] < 32)
         {
           speed = ascii[current_char] * 10 + 10;
           // CompositeSerial.print("Speed changed: ");
@@ -860,13 +848,13 @@ void UI::scrollText(char ascii[], u32 color, u8 speed  /* = 10 */, bool loop /* 
         }
         else
         {
-          while(current_char_progress < font[ascii[current_char] - 32][0])
+          while (current_char_progress < font[ascii[current_char] - 32][0])
           {
-            while(!uiTimer.tick(speed))
+            while (!uiTimer.tick(speed))
             {
-              if(KeyPad.scan())
+              if (KeyPad.scan())
               {
-                if(KeyPad.fn.state == PRESSED)
+                if (KeyPad.fn.state == PRESSED)
                 {
                   LED.fill(0, true);
                   return;
@@ -874,16 +862,16 @@ void UI::scrollText(char ascii[], u32 color, u8 speed  /* = 10 */, bool loop /* 
               }
             }
             LED.shift(left, 1);
-            if(spacing_remaining)
+            if (spacing_remaining)
             {
-              spacing_remaining --;
+              spacing_remaining--;
               LED.update();
             }
             else
             {
-              for(u8 y = 0; y < 8; y++)
+              for (u8 y = 0; y < 8; y++)
               {
-                LED.setXYCRGB(xytoxy(7,y), color * bitRead(font[ascii[current_char] - 32][current_char_progress + 1], 7-y) , true);
+                LED.setXYCRGB(xytoxy(7, y), color * bitRead(font[ascii[current_char] - 32][current_char_progress + 1], 7 - y), true);
               }
               LED.update();
               current_char_progress++;
@@ -891,16 +879,16 @@ void UI::scrollText(char ascii[], u32 color, u8 speed  /* = 10 */, bool loop /* 
           }
         }
       }
-      current_char ++;
+      current_char++;
       spacing_remaining = spacing;
     }
-    for(u8 c = 0; c < 8; c++)
+    for (u8 c = 0; c < 8; c++)
     {
-      while(!uiTimer.tick(speed))
+      while (!uiTimer.tick(speed))
       {
-        if(KeyPad.scan())
+        if (KeyPad.scan())
         {
-          if(KeyPad.fn.state == PRESSED)
+          if (KeyPad.fn.state == PRESSED)
           {
             LED.fill(0, true);
             return;
@@ -910,43 +898,43 @@ void UI::scrollText(char ascii[], u32 color, u8 speed  /* = 10 */, bool loop /* 
       LED.shift(left, 1);
       LED.update();
     }
-  }while(loop);
+  } while (loop);
   LED.fill(0, true);
 }
 
 void UI::enterBootAnimation()
 {
   uiTimer.recordCurrent();
-  while(!USBComposite.isReady() && !KeyPad.fn.hold)
+  while (!USBComposite.isReady() && !KeyPad.fn.hold)
   {
     KeyPad.scan();
     if (uiTimer.isLonger(9900000))
     {
-      LED.setXYCRGB(0x07,0xff0000); //NexusRevamped Entence point
+      LED.setXYCRGB(0x07, 0xff0000); //NexusRevamped Entence point
       LED.update();
     }
     else
     {
-      switch(bootAnimationSelector)
+      switch (bootAnimationSelector)
       {
-        case 0:
+      case 0:
         break;
 
-        case 1:
+      case 1:
         UI::kaskobiWaitAnimation();
         break;
       }
     }
   }
 
-  if(!KeyPad.fn.velocity)
+  if (!KeyPad.fn.velocity)
   {
-    switch(bootAnimationSelector)
+    switch (bootAnimationSelector)
     {
-      case 0:
+    case 0:
       break;
 
-      case 1:
+    case 1:
       UI::kaskobiBootAnimation();
       break;
     }
