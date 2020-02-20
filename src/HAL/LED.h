@@ -59,8 +59,9 @@ public:
   bool rotationCW(u8 r);
   void shift(Direction direction, u8 distance);
 
-  bool changed = false;
+  bool getOverlayMode();
 
+  bool changed = false;
 private:
   bool overlay_mode = false;
   CRGB leds[NUM_TOTAL_LEDS];

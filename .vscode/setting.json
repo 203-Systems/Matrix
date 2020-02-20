@@ -6,5 +6,5 @@
     "arduino.enableUSBDetection": true,
     "arduino.disableTestingOpen": false,
     "arduino.skipHeaderProvider": false,
-    "arduino.defaultBaudRate": 115200
+    "arduino.defaultBaudRate": 115200   
 }

@@ -62,8 +62,8 @@ void UI::fnMenu()
           return;
         }
         UI::fnKeyAction();
-        UI::fnRender();
       }
+      UI::fnRender();
       // CompositeSerial.print("FN Status: ");
       // CompositeSerial.print(KeyPad.fn.state);
       // CompositeSerial.print(" ");
@@ -479,8 +479,8 @@ void UI::settingMenu()
           return;
         }
         UI::settingKeyAction();
-        UI::settingRender();
       }
+      UI::settingRender();
     }
   }
 }
@@ -527,15 +527,7 @@ void UI::settingKeyAction()
         setProInputMode(!pro_input_mode);
         break;
       case 0x06:
-        LED.fill(0, true);
-        LED.setXYCRGB(0x33, 0xFF00FF, true);
-        LED.setXYCRGB(0x34, 0xFF00FF, true);
-        LED.setXYCRGB(0x43, 0xFF00FF, true);
-        LED.setXYCRGB(0x44, 0xFF00FF, true);
-        LED.update();
-        initEEPROM();
-        delay(500);
-        reboot();
+        UI::clearEEPROM();
         break;
       case 0x07: //DFU
         enterBootloader();
@@ -566,10 +558,9 @@ void UI::settingKeyAction()
         bool origonal_desaturated_mode = desaturated_mode;
         desaturated_mode = false; //use setDesaturatedMode() will cause setupPalette() to be called, it will be called in setColorCorrection()
         setColorCorrection(0xFFFFFF, true);
-        
 
         u32 new_color_correction = UI::numSelectorRGB(origonal_color_correction);
-        
+
         if (new_color_correction != origonal_color_correction)
         {
           LED.fill(0, true);
@@ -618,7 +609,7 @@ void UI::settingKeyAction()
         UI::scrollText("Pro Input Mode", 0x00FF00);
         break;
       case 0x06:
-        UI::scrollText("Factory Reset Device", 0xFF00FF);
+        UI::scrollText("Clear Device Config", 0xFF00FF);
         break;
       case 0x07: //DFU
         UI::scrollText("Enter DFU Mode", 0xFF0000);
@@ -662,7 +653,7 @@ void UI::settingRender()
   default:
     LED.setXYCRGB(0x00, 0x00FF0000, true); //STFU ???
   }
-  LED.setXYCRGB(0x10, 0x0033FFBD, true);                            //Desaturated Mode
+  LED.setXYCRGB(0x10, 0x0033FFBD, true);                                  //Desaturated Mode
   LED.setXYCRGB(0x20, toLowBrightness(0x0000FF00, pro_input_mode), true); //Pro Input Mode
   LED.setXYCRGB(0x06, 0x00FF00FF, true);                                  //Reset EEPROM
   LED.setXYCRGB(0x07, 0x00FF0000, true);                                  //DFU
@@ -811,7 +802,7 @@ u32 UI::numSelectorRGB(u32 color)
 //
 // }
 
-void UI::scrollText(char ascii[], u32 color, u8 speed /* = 10 */, bool loop /* = false */, u8 len /* = 0 */)
+void UI::scrollText(char ascii[], CRGB color, u8 speed /* = 10 */, bool loop /* = false */, u8 len /* = 0 */)
 {
 
   speed = 1000 / speed;
@@ -871,7 +862,8 @@ void UI::scrollText(char ascii[], u32 color, u8 speed /* = 10 */, bool loop /* =
             {
               for (u8 y = 0; y < 8; y++)
               {
-                LED.setXYCRGB(xytoxy(7, y), color * bitRead(font[ascii[current_char] - 32][current_char_progress + 1], 7 - y), true);
+                if (bitRead(font[ascii[current_char] - 32][current_char_progress + 1], 7 - y))
+                  LED.setXYCRGB(xytoxy(7, y), color, true);
               }
               LED.update();
               current_char_progress++;
@@ -942,4 +934,133 @@ void UI::enterBootAnimation()
 
   LED.fill(0x000000);
   LED.update();
+}
+
+void UI::clearEEPROM()
+{
+  LED.fill(0, true);
+
+  CRGB color = 0x00FF00FF;
+  //C
+  LED.setXYCRGB(0x00, color, true);
+  LED.setXYCRGB(0x10, color, true);
+  LED.setXYCRGB(0x20, color, true);
+  LED.setXYCRGB(0x01, color, true);
+  LED.setXYCRGB(0x02, color, true);
+  LED.setXYCRGB(0x03, color, true);
+  LED.setXYCRGB(0x13, color, true);
+  LED.setXYCRGB(0x23, color, true);
+
+  //L
+  LED.onXY(0x30, true);
+  LED.onXY(0x31, true);
+  LED.onXY(0x32, true);
+  LED.onXY(0x33, true);
+  LED.onXY(0x43, true);
+  //R
+  LED.setXYCRGB(0x50, color, true);
+  LED.setXYCRGB(0x60, color, true);
+  LED.setXYCRGB(0x70, color, true);
+  LED.setXYCRGB(0x51, color, true);
+  LED.setXYCRGB(0x71, color, true);
+  LED.setXYCRGB(0x52, color, true);
+  LED.setXYCRGB(0x62, color, true);
+  LED.setXYCRGB(0x53, color, true);
+  LED.setXYCRGB(0x73, color, true);
+
+  //No Button
+  LED.setXYCRGB(0x15, 0xFF0000, true);
+  LED.setXYCRGB(0x16, 0xFF0000, true);
+  LED.setXYCRGB(0x25, 0xFF0000, true);
+  LED.setXYCRGB(0x26, 0xFF0000, true);
+
+  //Yes Button
+  LED.setXYCRGB(0x55, 0x00FF00, true);
+  LED.setXYCRGB(0x56, 0x00FF00, true);
+  LED.setXYCRGB(0x65, 0x00FF00, true);
+  LED.setXYCRGB(0x66, 0x00FF00, true);
+
+  LED.update();
+
+  while (!KeyPad.fn.velocity)
+  {
+    if (KeyPad.scan())
+    {
+      for (int i = 0; i < MULTIPRESS; i++)
+      {
+        if (KeyPad.changelist[i] == 0xFFFF)
+          break;
+        if (KeyPad.getKey(KeyPad.changelist[i]).state == RELEASED)
+        {
+          switch (KeyPad.changelist[i])
+          {
+          case 0x15:
+          case 0x16:
+          case 0x25:
+          case 0x26:
+            return;
+          case 0x55:
+          case 0x56:
+          case 0x65:
+          case 0x66:
+            initEEPROM();
+            delay(500);
+            reboot();
+          }
+        }
+        else if (KeyPad.getKey(KeyPad.changelist[i]).state == ACTIVED && KeyPad.getKey(KeyPad.changelist[i]).hold)
+        {
+          switch (KeyPad.changelist[i])
+          {
+          case 0x15:
+          case 0x16:
+          case 0x25:
+          case 0x26:
+            UI::scrollText("Cancel", 0xFF0000);
+            break;
+          case 0x55:
+          case 0x56:
+          case 0x65:
+          case 0x66:
+            UI::scrollText("Yes", 0x00FF00);
+            break;
+          default:
+            UI::scrollText("Clear Device Config?", color);
+            break;
+          }
+        }
+      }
+    }
+  }
+  LED.fill(0, true);
+  return;
+}
+
+void UI::standbyMode()
+{
+  bool overlay = LED.getOverlayMode();
+  if(!overlay)
+    LED.enableOverlayMode();
+  LED.fill(0, true);
+  LED.update();
+  bool keyReleased = false;
+  while (!Midi.available() && !keyReleased)
+  {
+    if (KeyPad.scan())
+    {
+      for (int i = 0; i < MULTIPRESS; i++)
+      {
+        if (KeyPad.changelist[i] == 0xFFFF)
+          break;
+        if (KeyPad.getKey(KeyPad.changelist[i]).state == RELEASED)
+        {
+          keyReleased = true;
+        }
+      }
+    }
+  }
+  if(!overlay)
+    LED.disableOverlayMode();
+  LED.update();
+  return;
 }

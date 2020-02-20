@@ -174,56 +174,94 @@ CRGB dispatchColorStruct(u8 sysexColor[])
 
 CRGB dispatchColorData(u8 color_type,u8 sysexColor[])
 {
+  #ifdef DEBUG
+      String color_types[10] = 
+  {
+    "Off",
+    "On",
+    "GrayScale",
+    "Palette",
+    "7bit RGB",
+    "8bit RGB",
+    "7bit WRGB",
+    "8bit WRGB",
+    "7bit HSL",
+    "8bit HSL"
+  };
+  CompositeSerial.print("Dispatch Color Data ");
+  CompositeSerial.print(color_types[color_type]);
+  for(u8 i = 0; i < dispatchColorDataOffset(color_type); i++) 
+  {
+    CompositeSerial.print(sysexColor[i]);
+    CompositeSerial.print(" ");
+  }
+  CompositeSerial.println(" ");
+  #endif
+  CRGB color = CRGB(0, 0, 0);
   switch (color_type & 0x0F)
   {
     case 0: //Off
-      return CRGB(0, 0, 0);
+      break;
     case 1: //On
-      return CRGB(255, 255, 255);
+      color = CRGB(255, 255, 255);
+      break;
     case 2: //Gray Scale
     {
       u8 l = convert_7BitTo8Bit(sysexColor[0]);
-      return CRGB(l, l, l);
+      color = CRGB(l, l, l);
+      break;
     }
     case 3: //Palette
-      return palette[sysexColor[0]][sysexColor[1]];
+      color = palette[sysexColor[0]][sysexColor[1]];
+      break;
     case 4: //7Bit RGB
-      return CRGB(
+      color = CRGB(
           convert_7BitTo8Bit(sysexColor[0]),
           convert_7BitTo8Bit(sysexColor[1]),
           convert_7BitTo8Bit(sysexColor[2]));
+      break;
     case 5: //8Bit RGB
       remap_7bitx3(&sysexColor[0], &sysexColor[1], &sysexColor[2], &sysexColor[3]);
-      return CRGB(sysexColor[0], sysexColor[1], sysexColor[2]);
+      color = CRGB(sysexColor[0], sysexColor[1], sysexColor[2]);
+      break;
     case 6: //7Bit WRGB    //No WRGB yet
-      return CRGB(
+      color = CRGB(
           /*convert_7BitTo8Bit(sysexColor[0]),*/
           convert_7BitTo8Bit(sysexColor[1]),
           convert_7BitTo8Bit(sysexColor[2]),
           convert_7BitTo8Bit(sysexColor[3]));
+      break;
     case 7: //8Bit WRGB    //No WRGB yet
       remap_7bitx4(&sysexColor[0], &sysexColor[1], &sysexColor[2], &sysexColor[3], &sysexColor[4]);
-      return CRGB(sysexColor[1], sysexColor[2], sysexColor[3]);
+      color = CRGB(sysexColor[1], sysexColor[2], sysexColor[3]);
+      break;
     case 8: //7Bit HSL
     {
         CHSV HSV(
           convert_7BitTo8Bit(sysexColor[0]),
           convert_7BitTo8Bit(sysexColor[1]),
           convert_7BitTo8Bit(sysexColor[2]));
-        CRGB RGB;
-        hsv2rgb_rainbow(HSV, RGB);
-        return RGB;
+        hsv2rgb_rainbow(HSV, color);
+        break;
     }
     case 9: //8Bit HSL
     {
       remap_7bitx3(&sysexColor[0], &sysexColor[1], &sysexColor[2], &sysexColor[3]);
       CHSV HSV = CHSV(sysexColor[0], sysexColor[1], sysexColor[2]);
-      CRGB RGB;
-      hsv2rgb_rainbow(HSV, RGB);
-      return RGB;
+      hsv2rgb_rainbow(HSV, color);
+      break;
     }
   }
-  return CRGB(0, 0, 0);
+  #ifdef DEBUG
+    CompositeSerial.print("RGB Result: ");
+    CompositeSerial.print(" ");
+    CompositeSerial.print(color.r);
+    CompositeSerial.print(" ");
+    CompositeSerial.print(color.g);
+    CompositeSerial.print(" ");
+    CompositeSerial.println(color.b);
+  #endif
+  return color;
 }
 u8 dispatchColorDataOffset(u8 color_type)
 {

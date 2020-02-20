@@ -28,19 +28,17 @@ class UI
 public:
   UI();
   void enterFNmenu();
-  //void showDeviceInfo();
-  //void showASCII(char ascii[], u32 color);
-  //void playAnimation(char animation[]);
+
+  void enterBootAnimation();
+  
   u8 numSelector8bit(u8 currentNum, u32 color, u32 sec_color);
   u8 numSelector6bit(u8 currentNum, u32 color, u32 sec_color);
   u32 numSelectorRGB(u32 color);
   //u32 numSelectorWRGB(u32 color);
-  void scrollText(char ascii[], u32 color, u8 speed = 10, bool loop = false, u8 length = 0);
+  void scrollText(char ascii[], CRGB color, u8 speed = 10, bool loop = false, u8 length = 0);
+  void clearEEPROM();
+  void standbyMode();
 
-  void enterBootAnimation();
-
-  void kaskobiWaitAnimation();
-  void kaskobiBootAnimation();
 private:
   void fnMenu();
   void exitFNmenu();
@@ -52,6 +50,9 @@ private:
   void exitSettingMenu();
   void settingKeyAction();
   void settingRender();
+
+  void kaskobiWaitAnimation();
+  void kaskobiBootAnimation();
 
   Timer uiTimer;
   MicroTimer uiMicroTimer;

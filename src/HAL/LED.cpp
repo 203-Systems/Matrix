@@ -479,3 +479,8 @@ void LED::shift(Direction direction, u8 distance)
     }
   }
 }
+
+bool LED::getOverlayMode()
+{
+  return overlay_mode;
+}

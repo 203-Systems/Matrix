@@ -50,15 +50,11 @@ public:
   u16 checkXY(u8 xy, bool no_rotation = false);
   KeyInfo getKey(u8 x, u8 y);
   KeyInfo getKey(u8 xy);
-  //u32 FNholded = 0;
   KeyInfo fn;
   u16 changelist[MULTIPRESS];
   KeyInfo keypadState[XSIZE][YSIZE];
-  // bool fn;
-  // bool fnChanged;
-  // u8 timesFNpressed = 0;
-  // Timer fnTimer;
-  //Key fn;
+  void cleanList();
+  bool addtoList(u16 id);
 private:
   void initType1();
   bool scanType1();
@@ -68,8 +64,6 @@ private:
   // bool scanType3();
   bool scanFN();
   KeyInfo updateKey(KeyInfo currentKey, float input);
-  void cleanList();
-  bool addtoList(u16 id);
 
   //Key keypadStats [XSIZE];
   u8 listUsed = 0;
