@@ -1059,6 +1059,7 @@ void UI::standbyMode()
       }
     }
   }
+  LED.fill(0, true);
   if(!overlay)
     LED.disableOverlayMode();
   LED.update();
