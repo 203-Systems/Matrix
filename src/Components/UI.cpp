@@ -541,7 +541,8 @@ void UI::settingKeyAction()
       }
       case 0x27:
       {
-        String bl_str = "Matrix Bootloader V" + String(BOOTLOADER_VERSION);
+        u32 bl_ver = BOOTLOADER_VERSION;
+        String bl_str = "Matrix Bootloader V" + (String)(bl_ver/100) + '.' + (String)((bl_ver/10)%10) + '.' + (String)(bl_ver%10);
         bl_str.toCharArray(char_buffer, 64);
         UI::scrollText(char_buffer, 0x00FF30);
         break;

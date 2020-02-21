@@ -92,7 +92,7 @@ CRGB applyGamma(CRGB color)
 
 CRGB desaturate(CRGB color)
 {
-  u8 luma = 0.299 * color.r + 0.587 * color.g + 0.144 * color.b;
+  u8 luma = 0.299 * color.r + 0.587 * color.g + 0.114 * color.b;
   s16 new_r = color.r + color_desaturate_table[luma - color.r];
   s16 new_g = color.g + color_desaturate_table[luma - color.g];
   s16 new_b = color.b + color_desaturate_table[luma - color.b];

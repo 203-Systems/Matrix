@@ -166,7 +166,7 @@ void LED::setCRGB(s16 index, CRGB CRGB, bool overlay /*= false*/, bool gamma /*=
 
 void LED::setPalette(s16 index, u8 palette_selected, u8 value, bool overlay /*= false*/, u8 brightness /*= 255*/)
 {
-  CRGB color = palette[palette_selected][value];
+  CRGB color = palette[palette_selected%4][value];
 
   if(brightness == LOW_STATE_BRIGHTNESS)
   {
@@ -251,7 +251,7 @@ void LED::setXYCRGB(u8 xy, CRGB CRGB, bool overlay /*= false*/, bool gamma /*= f
 
 void LED::setXYPalette(u8 xy, u8 palette_selected, u8 value, bool overlay /*= false*/, u8 brightness /*= 255*/)
 {
-  CRGB color = palette[palette_selected][value];
+  CRGB color = palette[palette_selected%4][value];
 
   if(brightness == LOW_STATE_BRIGHTNESS)
   {

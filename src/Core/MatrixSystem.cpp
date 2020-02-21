@@ -201,7 +201,7 @@ void setupPalette()
 void loadPalette()
 {
   memcpy(palette,pre_compilled_palette,768);
-  for(u8 p = 0; p < 1; p++)
+  for(u8 p = 0; p < 2; p++)
   {
     for(u8 i = 0; i < 128; i++)
     {

@@ -7,7 +7,6 @@ void loadConfigV150()
 
   device_name = "Matrix Prototype V1.5";
 
-
   //LED
   led_pin = PC7;
   powercord_pin = PA8;

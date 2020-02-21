@@ -8,7 +8,7 @@
 
 extern u8 device_config = 0;
 
-extern String device_name = "Matrix";
+extern String device_name = "Unknown Matrix";
 
 extern u8 led_pin = 0;
 extern u8 powercord_pin = 0;
