@@ -56,7 +56,7 @@ void setupHardware()
 void specialBoot()
 {
   KeyPad.scan();
-  if(KeyPad.checkXY(0, 5, true) && KeyPad.checkXY(0, 6, true) && KeyPad.checkXY(0, 7, true))
+  if(KeyPad.checkXY(0, 5, true) && KeyPad.checkXY(1, 6, true) && KeyPad.checkXY(0, 7, true))
   {
     LED.setXYCRGB(0x33,0xFF00FF, true);
     LED.setXYCRGB(0x34,0xFF00FF, true);
@@ -73,7 +73,7 @@ void specialBoot()
     return;
   }
 
-  if(KeyPad.checkXY(7, 0, true) && KeyPad.checkXY(7, 1, true))
+  if(KeyPad.checkXY(6, 6, true) && KeyPad.checkXY(7, 7, true))
   {
     setBrightness(16);
     return;
@@ -100,18 +100,9 @@ void factoryTest()
       {
         for(int i = 0; i < MULTIPRESS; i++)
         {
-          u8 x = xytox(KeyPad.changelist[i]);
-          u8 y = xytoy(KeyPad.changelist[i]);
           if(KeyPad.getKey(KeyPad.changelist[i]).state == PRESSED)
           {
-            if(LED.readLED(KeyPad.changelist[i]))
-            {
-              LED.offXY(KeyPad.changelist[i], true);
-            }
-            else
-            {
-              LED.setXYCRGB(KeyPad.changelist[i], 0xFFFFFF, true);
-            }
+            LED.setXYCRGB(KeyPad.changelist[i], 0xFFFFFF, true);
           }
         }
         LED.update();
