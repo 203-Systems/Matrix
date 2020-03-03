@@ -999,6 +999,7 @@ void UI::clearEEPROM()
           case 0x16:
           case 0x25:
           case 0x26:
+            LED.fill(0, true);
             return;
           case 0x55:
           case 0x56:
@@ -1060,7 +1061,6 @@ void UI::standbyMode()
       }
     }
   }
-  LED.fill(0, true);
   if(!overlay)
     LED.disableOverlayMode();
   LED.update();

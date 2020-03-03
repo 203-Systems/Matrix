@@ -165,7 +165,14 @@ void MIDI::sendXYoff(u8 xy, u8 velocity)
   CompositeSerial.println(velocity);
 #endif
 
-  USBMIDI::sendNoteOff(midi_channel, keymap[current_keymap][y][x], 0);
+  if(unipad_mode)
+  {
+    USBMIDI::sendNoteOn(midi_channel, keymap[current_keymap][y][x], 0);
+  }
+  else
+  {
+    USBMIDI::sendNoteOff(midi_channel, keymap[current_keymap][y][x], 0);
+  }
 }
 
 void MIDI::handleNoteOff(unsigned int channel, unsigned int note, unsigned int velocity)
