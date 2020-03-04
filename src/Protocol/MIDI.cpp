@@ -417,7 +417,7 @@ void MIDI::replyFirmwareVersion(u8 mode)
   {
     u8 reply[3 + sizeof(FWVERSION_STRING) - 1];
     reply[0] = 0x12;
-    reply[1] = 0x18;
+    reply[1] = 0x12;
     reply[2] = 0x00;
     memcpy(&reply[3], FWVERSION_STRING, sizeof(FWVERSION_STRING) - 1);
     MIDI::sendSysexWithHeader(reply, sizeof(reply));

@@ -57,11 +57,11 @@ typedef volatile const int64_t vsc64;
 const u8 SYSEXID[3] = {0x00, 0x02, 0x03};
 
 #define EEPROMVERSION 1 //Each EEPROM change will cause this to ++
-#define FWVERSION_STRING "0.8.0 b2"
+#define FWVERSION_STRING "0.8.0 b4"
 #define MAJOR_VER 0
 #define MINOR_VER 8
 #define PATCH_VER 0
-#define BUILD_VER 2 //0 for Release, any other number will repensent beta ver
+#define BUILD_VER 4 //0 for Release, any other number will repensent beta ver
 
 #define BOOTLOADER_VERSION *(u32 *)(0x08001E00)
 #define MATRIX_MODEL *(u32 *)(0x08001E04)
