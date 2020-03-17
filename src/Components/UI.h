@@ -28,19 +28,17 @@ class UI
 public:
   UI();
   void enterFNmenu();
-  //void showDeviceInfo();
-  //void showASCII(char ascii[], u32 colour, bool ignore_gamma = false);
-  //void playAnimation(char animation[]);
-  u8 numSelector8bit(u8 currentNum, u32 colour, u32 sec_colour, bool ignore_gamma = false);
-  u8 numSelector6bit(u8 currentNum, u32 colour, u32 sec_colour, bool ignore_gamma = false);
-  u32 numSelectorRGB(u32 colour, bool ignore_gamma = false);
-  //u32 numSelectorWRGB(u32 colour, bool ignore_gamma = false);
-  void scrollText(char ascii[], u32 colour, bool loop = false);
 
   void enterBootAnimation();
+  
+  u8 numSelector8bit(u8 currentNum, u32 color, u32 sec_color);
+  u8 numSelector6bit(u8 currentNum, u32 color, u32 sec_color);
+  u32 numSelectorRGB(u32 color);
+  //u32 numSelectorWRGB(u32 color);
+  void scrollText(char ascii[], CRGB color, u8 speed = 10, bool loop = false, u8 length = 0);
+  void clearEEPROM();
+  void standbyMode();
 
-  void kaskobiWaitAnimation();
-  void kaskobiBootAnimation();
 private:
   void fnMenu();
   void exitFNmenu();
@@ -53,9 +51,13 @@ private:
   void settingKeyAction();
   void settingRender();
 
+  void kaskobiWaitAnimation();
+  void kaskobiBootAnimation();
+
   Timer uiTimer;
   bool hadAction = false;
   u8 brightness_cache;
+  u16 onPause = 0;
   u8 konami_progress = 0;
 };
 

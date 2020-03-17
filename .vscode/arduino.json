@@ -1,0 +1,7 @@
+{
+    "board": "Arduino_STM32:STM32F1:matrixRET6",
+    "output": "../MatrixBuild",
+    "configuration": "device_variant=STM32F103RE,upload_method=DFUUploadMethod,cpu_speed=speed_72mhz,opt=o3std",
+    "sketch": "Matrix.ino",
+    "port": "COM13"
+}

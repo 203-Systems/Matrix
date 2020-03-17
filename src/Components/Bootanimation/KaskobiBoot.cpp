@@ -7,18 +7,36 @@ extern MIDI Midi;
 void UI::kaskobiWaitAnimation()
 {
   brightness_cache = brightness;
-  if(brightness > 160)
-  LED.setBrightness(160);
+  if(brightness > 96)
+    LED.setBrightness(96);
 
-  if(uiTimer.tick(400))
+  if(uiTimer.tick(300))
   {
-    if(LED.readXYLED(0x07))
+    if(onPause)
     {
+      onPause --;
+    }
+    else if(LED.readXYLED(0x07))
+    {
+      for (u8 i = 64; i > 0; i--)
+      {
+        LED.setXYW(0x07, led_gamma[(i*4)-1], true);
+        LED.update();
+        delay(10);
+      }
       LED.offXY(0x07, true);
+      LED.update();
+      onPause = 2;
     }
     else
     {
-      LED.onXY(0x07, true);
+      for (u8 i = 1; i <= 64; i++)
+      {
+        LED.setXYW(0x07, led_gamma[(i*4)-1], true);
+        LED.update();
+        delay(10);
+      }
+    onPause = 2;
     }
     LED.update();
   }

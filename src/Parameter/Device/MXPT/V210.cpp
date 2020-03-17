@@ -1,6 +1,6 @@
-#include "../DeviceSelector.h"
+#include "../../DeviceSelector.h"
 
-void loadConfigV210()
+void loadConfigMXPTV210()
 {
 
   device_config = 210;
@@ -22,7 +22,7 @@ void loadConfigV210()
     keyPins[i] = type2keyPins[i];
   }
 
-  velocity_sensitivity = 12;
+  velocity_sensitivity = 1;
 
   fn_pin = PA0;
   fn_press_state = LOW;
@@ -64,11 +64,11 @@ void loadConfigV210()
   eeprom_enable = true;
   eeprom_user_adds_0 = 0x803E000;
   eeprom_user_adds_1 = 0x803E800;
-  eeprom_palette_adds_0 = 0x803D000;
-  eeprom_palette_adds_1 = 0x803D800;
+  eeprom_palette_adds_0 = 0x803C000;
+  eeprom_palette_adds_1 = 0x803C800;
   eeprom_sys_adds_0 = 0x803F000;
   eeprom_sys_adds_1 = 0x803F800;
   eeprom_pagesize = 0x800;
 
-  touch_type = 1; //TTP229
+  touch_type = 0; //TTP229-BSF but design used LSF so it won't work, disabled here
 }

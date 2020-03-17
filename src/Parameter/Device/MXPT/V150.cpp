@@ -1,18 +1,17 @@
-#include "../DeviceSelector.h"
+#include "../../DeviceSelector.h"
 
-void loadConfigV120()
+void loadConfigMXPTV150()
 {
 
-  device_config = 120;
+  device_config = 150;
 
-  device_name = "Matrix Prototype V1.2";
-
+  device_name = "Matrix Prototype V1.5";
 
   //LED
-  led_pin = PB7;
-  powercord_pin = PA9;
+  led_pin = PC7;
+  powercord_pin = PA8;
 
-  led_color_correction = 0xFFFFFF;
+  led_color_correction = 0xC0FFD8;
 
   //KeyPad
   keypad_type = 1;
@@ -22,7 +21,7 @@ void loadConfigV120()
   keyPins[3] = PB14;
   keyPins[4] = PB15;
 
-  fn_pin = PA0;
+  fn_pin = PB7;
   fn_press_state = HIGH;
 
   //analog(TouchBar)
@@ -76,8 +75,8 @@ void loadConfigV120()
   eeprom_enable = true;
   eeprom_user_adds_0 = 0x803E000;
   eeprom_user_adds_1 = 0x803E800;
-  eeprom_palette_adds_0 = 0x803D000;
-  eeprom_palette_adds_1 = 0x803D800;
+  eeprom_palette_adds_0 = 0x803C000;
+  eeprom_palette_adds_1 = 0x803C800;
   eeprom_sys_adds_0 = 0x803F000;
   eeprom_sys_adds_1 = 0x803F800;
   eeprom_pagesize = 0x800;

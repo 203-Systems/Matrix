@@ -91,10 +91,11 @@ extern u32 eeprom_pagesize;
 extern u8 touch_type;
 
 void loadDeviceConfig();
-//void loadConfigV110();
-void loadConfigV120();
-void loadConfigV150();
-//void loadConfigV200();
-void loadConfigV210();
+//MXPT
+void loadConfigMXPTV120();
+void loadConfigMXPTV150();
+void loadConfigMXPTV210();
+//MXPP
+void loadConfigMXPP1();
 
 #endif

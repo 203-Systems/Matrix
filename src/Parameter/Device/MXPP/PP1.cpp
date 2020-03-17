@@ -1,43 +1,32 @@
-#include "../DeviceSelector.h"
+#include "../../DeviceSelector.h"
 
-void loadConfigV150()
+void loadConfigMXPP1()
 {
 
-  device_config = 150;
-
-  device_name = "Matrix Prototype V1.5";
-
+  device_config = 1;
+  device_name = "Matrix Preproduction 1";
 
   //LED
   led_pin = PC7;
   powercord_pin = PA8;
+  powercord_detection = PC9;
 
   led_color_correction = 0xC0FFD8;
 
   //KeyPad
-  keypad_type = 1;
-  keyPins[0] = PB12;
-  keyPins[1] = PB13;
-  keyPins[2] = PC6;
-  keyPins[3] = PB14;
-  keyPins[4] = PB15;
+  keypad_type = 2;
+  u8 type2keyPins[16] = {PB15, PB14, PB13, PB12, PC6, PC15, PC14, PC13, //X (SOURCE)
+                 PB1, PB0, PA2, PA1, PC3, PA3, PC5, PC4}; // Y (RECIVE)
+  for(u8 i = 0; i < 16; i ++)
+  {
+    keyPins[i] = type2keyPins[i];
+  }
 
-  fn_pin = PB7;
+  velocity_sensitivity = 1;
+
+  fn_pin = PA0;
   fn_press_state = HIGH;
 
-  //analog(TouchBar)
-  analog0 = PA3;
-  analog1 = PA4;
-  analog2 = PA5;
-  analog3 = PA6;
-  analog4 = PA7;
-  analog5 = PC4;
-  analog6 = PC5;
-  analog7 = PB0;
-  analog8 = PB1;
-  analog9 = PA0;
-  analog10 = PA1;
-  analog11 = PA2;
   //I2C
   i2c_scl = PB8;
   i2c_sda = PB9;
@@ -47,17 +36,16 @@ void loadConfigV150()
   spi_mosi= PB5;
   spi_cs1 = PA15;
   spi_cs2 = PB6;
-  //Serial1 (USB-C)
+  //Serial1 Matrix Mod
   tx1 = PA9;
   rx1 = PA10;
-  //Serial3 (Matrix Mod)
-  tx3 = PB10;
-  rx3 = PB11;
-  //Serial2/4/5 (m2p futureproof)
+  //Serial2~5
   tx2 = PA2;
   rx2 = PA3;
   tx4 = PB4;
   rx4 = PC10;
+  tx3 = PB10;
+  rx3 = PB11;
   tx5 = PC11;
   rx5 = PC12;
 
@@ -76,9 +64,11 @@ void loadConfigV150()
   eeprom_enable = true;
   eeprom_user_adds_0 = 0x803E000;
   eeprom_user_adds_1 = 0x803E800;
-  eeprom_palette_adds_0 = 0x803D000;
-  eeprom_palette_adds_1 = 0x803D800;
+  eeprom_palette_adds_0 = 0x803C000;
+  eeprom_palette_adds_1 = 0x803C800;
   eeprom_sys_adds_0 = 0x803F000;
   eeprom_sys_adds_1 = 0x803F800;
   eeprom_pagesize = 0x800;
+
+  touch_type = 1; //TTP229-BSF
 }

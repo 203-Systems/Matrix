@@ -4,9 +4,7 @@
 #include <Arduino.h>
 #include <EEPROM.h>
 #include <libmaple/bkp.h>
-#include <libmaple/nvic.h>
 #include <USBComposite.h>
-#include <USBMIDI.h>
 #include <FastLED.h>
 #include "../HAL/Keypad.h"
 #include "../HAL/LED.h"
@@ -16,12 +14,15 @@
 #include "../Parameter/MatrixParameter.h"
 #include "../Parameter/DeviceSelector.h"
 #include "../Core/EEPROM.h"
+#include "../Components/color.h"
 
 // struct XY
 // {
 //   u8 x;
 //   u8 y;
 // };
+extern String test_Serial;
+
 extern Timer mainTimer;
 extern MicroTimer microTimer;
 
@@ -30,6 +31,8 @@ void setupHardware();
 
 void specialBoot();
 void factoryTest();
+//void loadDeviceSerialNumber();
+String getDeviceSerialString();
 
 //Sysex set
 void reset();
@@ -37,9 +40,10 @@ void setDeviceID();
 void setDeviceID(u8 id);
 void enterBootloader();
 void resetDevice();
-void formatEEPROM();
-void applyColourCorrectionToPalette();
-u32 applyColourCorrection(u32 input);
+void setupPalette();
+void loadPalette();
+void compileColorScaleTable();
+void compilePalette();
 void updatePaletteRGB();
 void updatePaletteWRGB();
 void resetPalette();
@@ -52,7 +56,10 @@ void setCurrentKeyMap(u8 m);
 void setUnipadMode(bool u);
 void setFnHold(bool h);
 void setTouchThreshold(u16 t);
-void setLedCorrection(u32 c);
+void setColorCorrection(u32 c, bool temp = false);
+void setSTFU(u16 v);
+void setDesaturatedMode(bool e);
+void setProInputMode(bool e);
 //void setTouchSensitive(u8 s);
 
 //Sysex get
@@ -75,7 +82,7 @@ void rotationCW(u8 r);
 void setRotation(u8 r);
 
 //Math
-u8 wrgbToHEX(u8 w, u8 r, u8 g, u8 b);
+u32 wrgbToHEX(u8 w, u8 r, u8 g, u8 b);
 u8 xyToIndex(u8 xy);
 u8 indexToXY(u8 index);
 u8 indexRotation(int index);
@@ -90,11 +97,13 @@ u8 xyRotation(u8 xy, u8 r);
 u8 xyReverseRotation(u8 xy);
 u8 xyReverseRotation(u8 xy, u8 r);
 u8 touchbarRotate(u8 id);
-u32 toBrightness(u32 hex, float f, bool on = false);
 void recordReportCode(u8 code);
 //u16 velocityCurve(u16 input);
 
 u8 convert_6BitTo8Bit(u8 input);
 u8 convert_7BitTo8Bit(u8 input);
+
+void remap_7bitx3(u8 *p1, u8 *p2, u8 *p3, u8 *p4);
+void remap_7bitx4(u8 *p1, u8 *p2, u8 *p3, u8 *p4, u8 *p5);
 
 #endif

@@ -160,6 +160,14 @@ bool KeyPad::scanType2()
       if(keypadState[x][y].changed)
       {
         changed = true;
+        #ifdef DEBUG
+        CompositeSerial.print("Key Action ");
+        CompositeSerial.print(xytoxy(x,y), HEX);
+        CompositeSerial.print(" ");
+        CompositeSerial.print(keypadState[x][y].state);
+        CompositeSerial.print(" ");
+        CompositeSerial.println(keypadState[x][y].velocity);
+        #endif
         if(!KeyPad::addtoList(xytoxy(x,y)))
         return changed;
       }
@@ -397,16 +405,16 @@ KeyInfo KeyPad::getKey(u8 xy)
 //   switch (rotation)
 //   {
 //     case 1: //90
-//     Midi.sentNoteOn(MIDIChannel, keymap[x][YSIZE - y - 1], 127);
+//     Midi.sendNoteOn(MIDIChannel, keymap[x][YSIZE - y - 1], 127);
 //     break;
 //     case 2: //180
-//     Midi.sentNoteOn(MIDIChannel, keymap[YSIZE - y - 1][XSIZE - x - 1], 127);
+//     Midi.sendNoteOn(MIDIChannel, keymap[YSIZE - y - 1][XSIZE - x - 1], 127);
 //     break;
 //     case 3: //270
-//     Midi.sentNoteOn(MIDIChannel, keymap[XSIZE - x - 1][y], 127);
+//     Midi.sendNoteOn(MIDIChannel, keymap[XSIZE - x - 1][y], 127);
 //     break;
 //     default: //0
-//     Midi.sentNoteOn(MIDIChannel, keymap[y][x], 127);
+//     Midi.sendNoteOn(MIDIChannel, keymap[y][x], 127);
 //   }
 // }
 //
@@ -417,15 +425,15 @@ KeyInfo KeyPad::getKey(u8 xy)
 //   switch (rotation)
 //   {
 //     case 1: //90
-//     Midi.sentNoteOff(MIDIChannel, keymap[x][YSIZE - y - 1], 0);
+//     Midi.sendNoteOff(MIDIChannel, keymap[x][YSIZE - y - 1], 0);
 //     break;
 //     case 2: //180
-//     Midi.sentNoteOff(MIDIChannel, keymap[YSIZE - y - 1][XSIZE - x - 1], 0);
+//     Midi.sendNoteOff(MIDIChannel, keymap[YSIZE - y - 1][XSIZE - x - 1], 0);
 //     break;
 //     case 3: //270
-//     Midi.sentNoteOff(MIDIChannel, keymap[XSIZE - x - 1][y], 0);
+//     Midi.sendNoteOff(MIDIChannel, keymap[XSIZE - x - 1][y], 0);
 //     break;
 //     default: //0
-//     Midi.sentNoteOff(MIDIChannel, keymap[y][x], 0);
+//     Midi.sendNoteOff(MIDIChannel, keymap[y][x], 0);
 //   }
 // }
