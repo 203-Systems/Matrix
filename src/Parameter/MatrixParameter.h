@@ -72,8 +72,6 @@ const u8 SYSEXID[3] = {0x00, 0x02, 0x03};
 #define DEVICE_SERIAL_2 *(u32 *)(0x1FFFF7E8 + 0x04)
 #define DEVICE_SERIAL_3 *(u32 *)(0x1FFFF7E8 + 0x08)
 
-#define MXPT 0x4D585054
-
 //LED
 #define NUM_LEDS 64
 #define NUM_BOTTOM_LEDS 36

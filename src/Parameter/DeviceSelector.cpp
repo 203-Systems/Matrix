@@ -6,6 +6,9 @@
 #include <USBComposite.h>
 #endif
 
+#define MXPT 0x4D585054 
+#define MXPP 0x4D585050
+
 extern u8 device_config = 0;
 
 extern String device_name = "Unknown Matrix";
@@ -19,7 +22,7 @@ extern u32 led_color_correction = 0xFFFFFFFF;
 //KeyPad
 extern u8 keypad_type = 1;
 extern u8 keyPins[16] = {0};
-extern u8 velocity_sensitivity = 1;  //for velocity sensitivy bit 1 for no velocity (binary) 8 for 8 bit(0~255)
+extern u8 velocity_sensitivity = 1;  //for velocity sensitivy, bit 1 for no velocity (binary) 8 for 8 bit(0~255)
 
 extern u8 fn_pin = 0;
 extern bool fn_press_state = HIGH;
@@ -85,45 +88,43 @@ extern u8 touch_type = 0;
 
 void loadDeviceConfig()
 {
-  #ifdef V120
-  loadConfigV120();
-  #endif
-
-  #ifdef V150
-  loadConfigV150();
-  #endif
-
   switch(MATRIX_MODEL)
   {
-    case MXPT: //MXPT
+    case 0x4D585054: //MXPT
 
-                          switch(MATRIX_VERSION)
-                          {
-                            // case 110:
-                            // loadConfigV110();
-                            // break;
+      switch(MATRIX_VERSION)
+      {
+        case 120:
+        #ifdef DEBUG
+        CompositeSerial.print("Device: Matrix Prototype V1.2");
+        #endif
+        loadConfigMXPTV120();
+        break;
 
-                            case 120:
-                            #ifdef DEBUG
-                            CompositeSerial.print("Device: Matrix Prototype V1.2");
-                            #endif
-                            loadConfigV120();
-                            break;
+        case 150:
+        #ifdef DEBUG
+        CompositeSerial.print("Device: Matrix Prototype V1.5");
+        #endif
+        loadConfigMXPTV150();
+        break;
 
-                            case 150:
-                            #ifdef DEBUG
-                            CompositeSerial.print("Device: Matrix Prototype V1.5");
-                            #endif
-                            loadConfigV150();
-                            break;
-
-                            case 210:
-                            #ifdef DEBUG
-                            CompositeSerial.print("Device: Matrix Prototype V2.1");
-                            #endif
-                            loadConfigV210();
-                            break;
-                          }
+        case 210:
+        #ifdef DEBUG
+        CompositeSerial.print("Device: Matrix Prototype V2.1");
+        #endif
+        loadConfigMXPTV210();
+        break;
+      }
     break;
+    case MXPP:
+      switch(MATRIX_VERSION)
+      {
+        case 1:
+          #ifdef DEBUG
+          CompositeSerial.print("Device: Matrix Prototype V2.1");
+          #endif
+          loadConfigMXPP1();
+        break;
+      }
   }
 }
