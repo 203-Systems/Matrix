@@ -44,8 +44,6 @@ void UI::fnMenu()
 
     if (uiTimer.tick(1000 / fps))
     {
-      //
-
       if (KeyPad.scan())
       {
 #ifdef DEBUG
@@ -104,6 +102,39 @@ void UI::fnKeyAction()
 
     if (y > 5)
     {
+      if (konami_progress >= 8)
+      {
+        if (KeyPad.getKey(KeyPad.changelist[i]).state == RELEASED)
+        {
+          switch (KeyPad.changelist[i])
+          {
+          case 0x16:
+          case 0x17:
+          case 0x26:
+          case 0x27:
+            if (konami_progress == 9)
+            {
+              konami_progress = 0; //Easter egg Entence Point
+              UI::scrollText("Hello there", 0x00FFFF);
+            }
+            break;
+          case 0x56:
+          case 0x57:
+          case 0x66:
+          case 0x67:
+            if (konami_progress == 8)
+            {
+              konami_progress++;
+              konami = true;
+            }
+            break;
+          }
+        }
+        else
+        {
+          konami = true;
+        }
+      }
       if (KeyPad.getKey(KeyPad.changelist[i]).state == PRESSED)
       {
         Midi.sendNoteOn(0, fn_keymap[current_keymap][y - 6][x], KeyPad.getKey(KeyPad.changelist[i]).velocity * 127);
@@ -115,15 +146,12 @@ void UI::fnKeyAction()
     }
     else
     {
-
 #ifdef DEBUG
       CompositeSerial.print("FN Key Action ");
       CompositeSerial.print(KeyPad.changelist[i]);
 #endif
-
       if (KeyPad.getKey(KeyPad.changelist[i]).state == RELEASED)
       {
-        //   konami = true; //So off don't reset it.
         // }
         //
         // if(KeyPad.getKey(KeyPad.changelist[i]).state == PRESSED)
@@ -256,43 +284,6 @@ void UI::fnKeyAction()
           break;
         }
 
-        if (konami_progress >= 8)
-        {
-          switch (KeyPad.changelist[i])
-          {
-          case 0x16:
-          case 0x17:
-          case 0x26:
-          case 0x27:
-            if (konami_progress == 9)
-            {
-              konami_progress = 0; //Tetris Entence Point
-            }
-            break;
-          case 0x56:
-          case 0x57:
-          case 0x66:
-          case 0x67:
-            if (konami_progress == 8)
-            {
-              konami_progress++;
-              konami = true;
-            }
-            break;
-          }
-        }
-        else
-        {
-          switch (KeyPad.changelist[i])
-          {
-
-            // case 0x65:
-            // setTouchThreshold(UI::numSelector8bit(touch_threshold, 0x004000AA, 0x00FFFFFF, true));
-            // resetTouchBar();
-            // break;
-          }
-        }
-
         // case 0x61: //RESET
         // LED.fill(0, true);
         // LED.update();
@@ -310,7 +301,6 @@ void UI::fnKeyAction()
       }
       else if (KeyPad.getKey(KeyPad.changelist[i]).state == ACTIVED && KeyPad.getKey(KeyPad.changelist[i]).hold)
       {
-        konami = true;
         switch (KeyPad.changelist[i])
         {
         //Brightness
@@ -358,6 +348,10 @@ void UI::fnKeyAction()
           UI::scrollText("Action Menu", 0x0000FFAA);
           break;
         }
+      }
+      else if (KeyPad.getKey(KeyPad.changelist[i]).state == PRESSED)
+      {
+        konami = true; //So on don't reset it.
       }
     }
     if (konami == false)
@@ -542,7 +536,7 @@ void UI::settingKeyAction()
       case 0x27:
       {
         u32 bl_ver = BOOTLOADER_VERSION;
-        String bl_str = "Matrix Bootloader V" + (String)(bl_ver/100) + '.' + (String)((bl_ver/10)%10) + '.' + (String)(bl_ver%10);
+        String bl_str = "Matrix Bootloader V" + (String)(bl_ver / 100) + '.' + (String)((bl_ver / 10) % 10) + '.' + (String)(bl_ver % 10);
         bl_str.toCharArray(char_buffer, 64);
         UI::scrollText(char_buffer, 0x00FF30);
         break;
@@ -1005,7 +999,7 @@ void UI::clearEEPROM()
           case 0x56:
           case 0x65:
           case 0x66:
-            initEEPROM();
+            formatEEPROM();
             delay(500);
             reboot();
           }
@@ -1041,7 +1035,7 @@ void UI::clearEEPROM()
 void UI::standbyMode()
 {
   bool overlay = LED.getOverlayMode();
-  if(!overlay)
+  if (!overlay)
     LED.enableOverlayMode();
   LED.fill(0, true);
   LED.update();
@@ -1061,7 +1055,7 @@ void UI::standbyMode()
       }
     }
   }
-  if(!overlay)
+  if (!overlay)
     LED.disableOverlayMode();
   LED.update();
   return;

@@ -34,6 +34,7 @@ void setup()
   variableLoad();
   setupUSB();
   setupHardware();
+  setupPalette();
   specialBoot();
 
   UI.enterBootAnimation();
@@ -51,17 +52,17 @@ void readKey()
     {
       if (KeyPad.fn.hold && !flag_leftFN)
       {
-        Midi.sendNoteOff(0, keymap_fn[current_keymap]);
+        Midi.sendNoteOff(0, keymap_fn[current_keymap], 0);
         UI.enterFNmenu();
         flag_leftFN = true; //Prevent back to FN
       }
       else if (KeyPad.fn.state == PRESSED)
       {
-        Midi.sendNoteOn(0, keymap_fn[current_keymap]);
+        Midi.sendNoteOn(0, keymap_fn[current_keymap], 127);
       }
       else if (KeyPad.fn.state == RELEASED)
       {
-        Midi.sendNoteOff(0, keymap_fn[current_keymap]);
+        Midi.sendNoteOff(0, keymap_fn[current_keymap], 0);
         flag_leftFN = false;
       }
     }

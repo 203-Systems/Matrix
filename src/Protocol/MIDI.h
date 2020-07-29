@@ -7,7 +7,6 @@
 #include "../Parameter/MatrixVariable.h"
 #include "../Parameter/MatrixParameter.h"
 #include "../Core/MatrixSystem.h"
-#include "../Protocol/SysExMessage.cpp"
 #include "../Components/UI.h"
 
 class MIDI: public USBMIDI
@@ -23,7 +22,8 @@ public:
   //handle
   void handleNoteOff(unsigned int channel, unsigned int note, unsigned int velocity) override;
   void handleNoteOn(unsigned int channel, unsigned int note, unsigned int velocity) override;
-  void handleSysex(uint8_t *sysexBuffer, uint32_t len) override;
+  void handleSysExData(unsigned char data) override;
+  void handleSysExEnd(void) override;
   // void handleVelocityChange(u8 channel, u8 note, u8 velocity) override;
   // void handleControlChange(u8 channel, u8 controller, u8 value) override;
   // void handleProgramChange(u8 channel, u8 program) override;
@@ -61,6 +61,8 @@ public:
   // void sendActiveSense();
   // void sendReset();
 
+  void handleSysEx();
+
   void offScan();
 
   //Sysex action
@@ -70,12 +72,15 @@ public:
   void replyFirmwareVersion(u8 mode);
   void replyDeviceID();
 
-  void scrollText(uint8_t *sysexBuffer, uint16_t len);
-  void setLED(uint8_t *sysexBuffer, uint16_t len);
-  void writePalette(uint8_t *sysexBuffer, uint16_t len);
+  void scrollText(u8 *sysexBuffer, uint16_t len);
+  void setLED(u8 *sysexBuffer, uint16_t len);
+  void fillLED(u8 *sysexBuffer, uint16_t len);
+  void writePalette(u8 *sysexBuffer, uint16_t len);
 
 private:
   s8 offMap[128];
+  u8 sysexBuffer[1024];
+  u16 sysexLength;
 };
 
 #endif

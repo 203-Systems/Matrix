@@ -7,7 +7,7 @@
 #endif
 
 #define MXPT 0x4D585054 
-#define MXPP 0x4D585050
+#define MXFE 0x4D584645
 
 extern u8 device_config = 0;
 
@@ -90,7 +90,7 @@ void loadDeviceConfig()
 {
   switch(MATRIX_MODEL)
   {
-    case 0x4D585054: //MXPT
+    case MXPT:
 
       switch(MATRIX_VERSION)
       {
@@ -116,14 +116,14 @@ void loadDeviceConfig()
         break;
       }
     break;
-    case MXPP:
+    case MXFE:
       switch(MATRIX_VERSION)
       {
         case 1:
           #ifdef DEBUG
-          CompositeSerial.print("Device: Matrix Prototype V2.1");
+          CompositeSerial.print("Device: Matrix Founder Edition 1");
           #endif
-          loadConfigMXPP1();
+          loadConfigMXFE1();
         break;
       }
   }

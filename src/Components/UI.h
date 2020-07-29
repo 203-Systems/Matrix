@@ -27,7 +27,7 @@ class UI
 {
 public:
   UI();
-  void enterFNmenu();
+  void enterFNmenu(); 
 
   void enterBootAnimation();
   
@@ -35,6 +35,7 @@ public:
   u8 numSelector6bit(u8 currentNum, u32 color, u32 sec_color);
   u32 numSelectorRGB(u32 color);
   //u32 numSelectorWRGB(u32 color);
+  
   void scrollText(char ascii[], CRGB color, u8 speed = 10, bool loop = false, u8 length = 0);
   void clearEEPROM();
   void standbyMode();

@@ -49,7 +49,7 @@ typedef volatile const int64_t vsc64;
 
 #define DEVICENAME "Matrix"
 #define MAUNFACTURERNAME "203 Electronic"
-#define SERIALSTRING "Prototype"
+#define SERIALSTRING "Matr1x"
 #define VID 0x0203
 #define VID2 0x0203 // for device ID USE
 #define PID 0x0100
@@ -57,11 +57,11 @@ typedef volatile const int64_t vsc64;
 const u8 SYSEXID[3] = {0x00, 0x02, 0x03};
 
 #define EEPROMVERSION 1 //Each EEPROM change will cause this to ++
-#define FWVERSION_STRING "0.8.0 b4"
+#define FWVERSION_STRING "0.8.0 b5"
 #define MAJOR_VER 0
 #define MINOR_VER 8
 #define PATCH_VER 0
-#define BUILD_VER 4 //0 for Release, any other number will repensent beta ver
+#define BUILD_VER 5 //0 for Release, any other number will repensent beta ver
 
 #define BOOTLOADER_VERSION *(u32 *)(0x08001E00)
 #define MATRIX_MODEL *(u32 *)(0x08001E04)
@@ -86,5 +86,9 @@ const u8 SYSEXID[3] = {0x00, 0x02, 0x03};
 #define MULTIPRESS 10 //Key Pre-ss Process At Once
 #define HOLD_THRESHOLD 400
 #define MULTITAP_THRESHOLD 150
+
+//SysEx
+const u8 SYSEX_HEADER[5] = {SYSEXID[0], SYSEXID[1], SYSEXID[2], PID >> 8, PID & 0x7F};
+const u8 IDENTITY_REQUEST[2] = {0x06, 0x01};
 
 #endif

@@ -17,7 +17,7 @@ LED::LED()
 
 void LED::init()
 {
-  switch(led_pin)
+  switch(led_pin) 
   {
     case PB7:
     FastLED.addLeds<NEOPIXEL, PB7>(leds, NUM_TOTAL_LEDS);
@@ -52,23 +52,27 @@ void LED::dynamicBrightness(u16 mah)
   FastLED.setMaxPowerInVoltsAndMilliamps(5,mah);
 }
 
-void LED::fill(u32 WRGB, bool overlay /*= false*/)
+void LED::fill(u32 WRGB, bool overlay /*= false*/, bool gamma /*= false*/)
 {
-  //fill_solid(leds,NUM_TOTAL_LEDS,CRGB::Black);
-  WRGB = applycolorCorrection(WRGB);
+  CRGB CRGB = WRGB;
+  return LED::fill(CRGB, overlay, gamma);
+}
+
+void LED::fill(CRGB CRGB, bool overlay /*= false*/, bool gamma /*= false*/)
+{
+  CRGB = compileColor(CRGB, gamma);
   for(int i = 0; i < NUM_TOTAL_LEDS; i++)
   {
     if(!overlay_mode || overlay)
     {
-      leds[i] = WRGB;
+      leds[i] = CRGB;
     }
     else
     {
-      buffer[i] = WRGB;
+      buffer[i] = CRGB;
     }
   }
   LED::changed = true;
-  //FastLED.show();
 }
 
 // void LED::setLED(INDEXMODE indexmode, LEDMODE ledmode, u8 xy = 0, u32 p1 = 0, u8 p2 = 0, u8 p3 = 0, u8 p4 = 0)

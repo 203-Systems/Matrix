@@ -95,7 +95,7 @@ void loadDeviceConfig();
 void loadConfigMXPTV120();
 void loadConfigMXPTV150();
 void loadConfigMXPTV210();
-//MXPP
-void loadConfigMXPP1();
+//MXFE
+void loadConfigMXFE1();
 
 #endif
