@@ -429,12 +429,7 @@ extern bool midi_enable = true;
 extern bool m2p_enable = false;
 extern bool powercord_enable = false;
 extern bool midi_return = false;
-extern u8 stfu = 2;
-
-extern u8 cW = 255;
-extern u8 cR = 255;
-extern u8 cG = 255;
-extern u8 cB = 255;
+extern u8 stfu = 1;
 
 extern u8 report_code[10] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
 extern u8 available_report_code = 0;

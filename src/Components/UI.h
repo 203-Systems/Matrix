@@ -56,6 +56,7 @@ private:
   void kaskobiBootAnimation();
 
   Timer uiTimer;
+  MicroTimer uiMicroTimer;
   bool hadAction = false;
   u8 brightness_cache;
   u16 onPause = 0;

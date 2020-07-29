@@ -8,7 +8,7 @@
 //enum Modes {Normal, Fn, Animation, Boot, Ascii, App};
 //DeviceSetting
 extern u8 device_id; //0~255 0 for off
-//extern char serial_number[25];
+//extern char serial_number[25]; 
 //extern Modes mode;
 extern u8 current_keymap;
 //extern u8 appID;

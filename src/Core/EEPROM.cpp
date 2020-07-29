@@ -67,6 +67,11 @@ void loadSetting()
   pro_input_mode = EEPROM_USER.read(E_PRO_INPUT_MODE);
 }
 
+// void loadKeyMap()
+// {
+//
+// }
+
 void loadPalette()
 {
   memcpy(palette,pre_compilled_palette,768);
@@ -79,18 +84,7 @@ void loadPalette()
   }
 }
 
-void loadPalette()
-{
-  for(u8 p = 0; p < 2; p++)
-  {
-    for(u8 i = 0; i <128; i++)
-    {
-       palette[p+2][i] = EEPROM_PALETTE.read(i * 2 + 256 * p) * 0x10000 + EEPROM_PALETTE.read(i * 2 + 256 * p + 1);
-    }
-  }
-}
-
-CRGB readColorFromEEPROM(u8 palette, u8 index)
+CRGB readColorFromEEPROM(u8 palette, u8 index) 
 {
   //w = EEPROM_PALETTE.read((palette * 256) + 2 * index) >> 8;
   u8 r = EEPROM_PALETTE.read((palette * 256) + 2 * index) & 0xFF;
@@ -111,7 +105,7 @@ CRGB readColorFromEEPROM(u8 palette, u8 index)
   return CRGB(r, g, b);
 }
 
-void saveColorToEEPROM(u8 palette, u8 index, CRGB color)
+void saveColorToEEPROM(u8 palette, u8 index, CRGB color) 
 {
   EEPROM_PALETTE.write((palette * 256) + 2 * index, /*(color.w << 8) + */ color.r);
   EEPROM_PALETTE.write((palette * 256) + 2 * index + 1, (color.g << 8) + color.b);

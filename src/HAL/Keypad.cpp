@@ -1,8 +1,6 @@
 #include "KeyPad.h"
 #include <USBComposite.h>
 
-#define DEBUG
-
 #ifdef DEBUG
 #include <USBComposite.h>
 #endif

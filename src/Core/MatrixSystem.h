@@ -35,7 +35,7 @@ void factoryTest();
 String getDeviceSerialString();
 
 //Sysex set
-void reset();
+void reboot();
 void setDeviceID();
 void setDeviceID(u8 id);
 void enterBootloader();

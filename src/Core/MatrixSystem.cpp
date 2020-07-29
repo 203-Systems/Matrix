@@ -120,7 +120,7 @@ void factoryTest()
 //     u32 current_byte = 0xF0000000;
 //     for(s8 b = 7; b >= 0; b--)
 //     {
-//       serial_number[c] = char_table[(serial_num[i] & current_byte) >> 4*b];
+//       serial_number[c] = char_table[(serial_num[i] & current_byte) >> 4*b]; 
 //       current_byte = current_byte >> 4;
 //       c++;
 //     }
@@ -137,7 +137,7 @@ String getDeviceSerialString()
     u32 current_byte = 0xF0000000;
     for(s8 b = 7; b >= 0; b--)
     {
-      serial += char_table[(serial_num[i] & current_byte) >> 4*b];
+      serial += char_table[(serial_num[i] & current_byte) >> 4*b]; 
       current_byte = current_byte >> 4;
     }
   }
@@ -145,7 +145,7 @@ String getDeviceSerialString()
 }
 
 //Sysex set
-void reset()
+void reboot()
 {
   nvic_sys_reset();
 }
@@ -181,13 +181,13 @@ void enterBootloader()
   bkp_enable_writes();
   bkp_write(10, 0x424C);
   bkp_disable_writes();
-  reset();
+  nvic_sys_reset();
 }
 
 void resetDevice()
 {
   formatEEPROM();
-  reset();
+  reboot();
 }
 
 void setupPalette()

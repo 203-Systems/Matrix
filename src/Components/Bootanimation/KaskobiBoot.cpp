@@ -38,7 +38,7 @@ void UI::kaskobiWaitAnimation()
       }
     onPause = 2;
     }
-    LED.update();
+    uiTimer.recordCurrent();
   }
 }
 
@@ -46,14 +46,11 @@ void UI::kaskobiBootAnimation() //8x8 only
 {
   LED.fill(0);
   LED.enableOverlayMode();
-  //StageOne
-  u16 delay = 60;
+  u16 delay = 8000;
   for(s8 y = 7; y >= 0; y--)
   {
     for(u8 x = 0; x < 8; x++)
     {
-      while(!uiTimer.isLonger(delay))
-      {
         // if(Midi.available())
         // {
         //   LED.disableOverlayMode();
@@ -67,12 +64,14 @@ void UI::kaskobiBootAnimation() //8x8 only
           LED.disableOverlayMode();
           return;
         }
-      }
-      uiTimer.recordCurrent();
-      LED.onXY(xytoxy(x, y), true);
+      for(u8 i = 1; i < 4; i++)
+      {
+      LED.setXYW(xytoxy(x, y), (i*64)-1, true);
       LED.update();
+      delayMicroseconds(delay);
+      }
     }
-    delay *= 0.8;
+    delay = delay * 0.5;
   }
 
   // uiTimer.recordCurrent();
@@ -98,8 +97,7 @@ void UI::kaskobiBootAnimation() //8x8 only
   {
     shuffle[i] = i;
   }
-  //randomSeed(analogRead(PC3) * analogRead(PC4) * analogRead(PC5));
-  randomSeed(micros());
+  randomSeed(analogRead(PC3) * micros());
 
   for (u16 i = 0; i < 500; i++)
   {
@@ -110,7 +108,7 @@ void UI::kaskobiBootAnimation() //8x8 only
     shuffle[r2] = t;
   }
 
-  for(int i = 0; i <NUM_LEDS+15; i++)
+  for(int i = 0; i <NUM_LEDS+10; i++)
   {
 
     while(!uiTimer.isLonger(delay))
@@ -131,15 +129,15 @@ void UI::kaskobiBootAnimation() //8x8 only
     }
     uiTimer.recordCurrent();
     if(i < NUM_LEDS)
-    LED.setPalette(shuffle[i], 0, 44, true);
+    LED.setPalette(shuffle[i], 1, 13, true);
     if(i > 0 && i < NUM_LEDS + 2)
-    LED.setPalette(shuffle[i-2], 0, 28, true);
+    LED.setPalette(shuffle[i-2], 1, 9, true);
     if(i > 1 && i < NUM_LEDS + 4)
-    LED.setPalette(shuffle[i-4], 0, 12, true);
+    LED.setPalette(shuffle[i-4], 1, 5, true);
     if(i > 2 && i < NUM_LEDS + 6)
-    LED.setPalette(shuffle[i-6], 0, 116, true);
+    LED.setPalette(shuffle[i-6], 1, 57, true);
     if(i > 3 && i < NUM_LEDS + 8)
-    LED.setPalette(shuffle[i-8], 0, 102, true);
+    LED.setPalette(shuffle[i-8], 1, 49, true);
     if(i > 4 && i < NUM_LEDS + 10)
     LED.off(shuffle[i-10], true);
 
