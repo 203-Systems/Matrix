@@ -13,18 +13,32 @@ void setupEEPROM()
 
 void variableLoad()
 {
+  if(EEPROM_USER.read(E_INIT) == 0x00CB)
+  {
+    saveAllSetting();
+    return;
+  }
+
   if(EEPROM_USER.read(E_INIT) != 0x0203)
   {
     initEEPROM();
+    return;
   }
+
+  if(EEPROM_USER.read(E_EEPROMVERSION) > EEPROMVERSION)
+  {
+    initEEPROM();
+    return;
+  }
+
   switch(EEPROM_USER.read(E_EEPROMVERSION))
   {
-    case 0:
+    case 0: //0 > 1
       EEPROM_USER.write(E_DESATURATED_MODE, desaturated_mode);
     case EEPROMVERSION:
       loadSetting();
+      loadPalette();
       //loadKeyMap();
-      //loadPalette();
       break;
     default:
       initEEPROM();
@@ -53,9 +67,16 @@ void loadSetting()
   pro_input_mode = EEPROM_USER.read(E_PRO_INPUT_MODE);
 }
 
-void loadKeyMap()
+void loadPalette()
 {
-
+  memcpy(palette,pre_compilled_palette,768);
+  for(u8 p = 0; p < 2; p++)
+  {
+    for(u8 i = 0; i < 128; i++)
+    {
+      palette[p+2][i] = readColorFromEEPROM(p, i);
+    }
+  }
 }
 
 void loadPalette()
@@ -118,6 +139,7 @@ void formatEEPROM()
 {
   EEPROM_USER.format();
   EEPROM_PALETTE.format();
+  EEPROM_USER.write(E_INIT, 0x00CB);
 }
 
 void saveAllSetting()

@@ -1,10 +1,10 @@
 #include "../../DeviceSelector.h"
 
-void loadConfigMXPP1()
+void loadConfigMXFE1()
 {
 
   device_config = 1;
-  device_name = "Matrix Preproduction 1";
+  device_name = "Matrix Founder Edition 1";
 
   //LED
   led_pin = PC7;
@@ -22,6 +22,7 @@ void loadConfigMXPP1()
     keyPins[i] = type2keyPins[i];
   }
 
+  //Velocity sensitivty bit depth
   velocity_sensitivity = 1;
 
   fn_pin = PA0;
@@ -49,7 +50,7 @@ void loadConfigMXPP1()
   tx5 = PC11;
   rx5 = PC12;
 
-  //SerialAvailabble
+  //SerialAvailable
   usbmidi_available = true;
   usbcdc_available = true;
   serial1_available = true;
@@ -70,5 +71,6 @@ void loadConfigMXPP1()
   eeprom_sys_adds_1 = 0x803F800;
   eeprom_pagesize = 0x800;
 
+  //Touch Bar
   touch_type = 1; //TTP229-BSF
 }

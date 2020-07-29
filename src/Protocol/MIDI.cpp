@@ -228,13 +228,28 @@ void MIDI::offScan()
   }
 }
 
-void MIDI::handleSysex(uint8_t *sysexBuffer, uint32 len)
+void MIDI::handleSysExData(unsigned char data)
+{
+  if(data != 0xF0 && data != 0xF7) //Ignore header && ending
+  {
+    sysexBuffer[sysexLength] = data;
+    sysexLength ++;
+  }
+}
+
+void MIDI::handleSysExEnd(void)
+{
+  MIDI::handleSysEx();
+  sysexLength = 0;
+}
+
+void MIDI::handleSysEx()
 {
 #ifdef DEBUG
   CompositeSerial.print("Sysex - len:");
-  CompositeSerial.print(len);
+  CompositeSerial.print(sysexLength);
   CompositeSerial.print(" ");
-  for (int i = 0; i < len; i++)
+  for (int i = 0; i < sysexLength; i++)
   {
     CompositeSerial.print(sysexBuffer[i]);
     CompositeSerial.print(" ");
@@ -267,20 +282,24 @@ void MIDI::handleSysex(uint8_t *sysexBuffer, uint32 len)
       case 4:
         break;
       //LED
-      case 32: //LED index
+      case 32: //LED Index
       case 33: //LED XY
-        MIDI::setLED(sysexBuffer, len);
+        MIDI::setLED(sysexBuffer, sysexLength);
+        break;
+      case 34: //LED Area Fill
+        MIDI::fillLED(sysexBuffer, sysexLength);
         break;
 
       //Graphic
       case 59:
-        MIDI::scrollText(sysexBuffer, len);
+        MIDI::scrollText(sysexBuffer, sysexLength);
         break;
 
       //Config/Custom Data
-      case 64: //Set Variable
+      //case 64: //Set Variable
       case 65: //Inject Palette 7bit
-        MIDI::writePalette(sysexBuffer, len);
+      case 66: //Inject Palette 8bit
+        MIDI::writePalette(sysexBuffer, sysexLength);
         break;
       }
     }
@@ -298,7 +317,7 @@ void MIDI::handleSysex(uint8_t *sysexBuffer, uint32 len)
         MIDI::replySerialNumber();
         break;
       case 18: //Device Firmware
-        MIDI::replyFirmwareVersion(len != 6 && sysexBuffer[7] == 1);
+        MIDI::replyFirmwareVersion(sysexLength != 6 && sysexBuffer[7] == 1);
         break;
       case 19: //Device ID
         MIDI::replyDeviceID();
@@ -324,7 +343,7 @@ void MIDI::handleSysex(uint8_t *sysexBuffer, uint32 len)
   }
   else
   {
-    //Bruh, who tf sent this to me? Not my packet.
+    //Not my packet
   }
 }
 
@@ -351,13 +370,16 @@ void MIDI::sendSysexWithHeader(u8 *sysex, u8 len)
   CompositeSerial.println();
 #endif
 
-  USBMIDI::sendSysex(message, 5 + len);
+  USBMIDI::sendSysexPayload(message, 5 + len);
 }
 
 void MIDI::replyIdentity()
 {
+  #ifdef DEBUG
+  CompositeSerial.print("Sysex device inquire");
+  #endif
   u8 identity[14] = {0x7E, 0x06, 0x02, SYSEXID[0], SYSEXID[1], SYSEXID[2], PID >> 8, PID & 0x7F, device_id >> 7, device_id & 0x7F, MAJOR_VER, MINOR_VER, PATCH_VER, BUILD_VER};
-  USBMIDI::sendSysex(identity, 14);
+  USBMIDI::sendSysexPayload(identity, 14);
 }
 
 void MIDI::replyDeviceName()
@@ -371,29 +393,6 @@ void MIDI::replyDeviceName()
 
 void MIDI::replySerialNumber()
 {
-  //   u32 serial[3] = {DEVICE_SERIAL_1, DEVICE_SERIAL_2, DEVICE_SERIAL_3};
-
-  //   #ifdef DEBUG
-  //   CompositeSerial.print(serial[0], HEX);
-  //   CompositeSerial.print(serial[1], HEX);
-  //   CompositeSerial.println(serial[2], HEX);
-  //   #endif
-
-  //   u8 reply[16] = {0x12, 0x17};
-  //   for(u8 i = 0; i < 96; i ++)
-  //   {
-  //     bitWrite(reply[2+i/7], i%7, bitRead(serial[i/32], i%32));
-  //   }
-  //   MIDI::sendSysexWithHeader(reply, 16);
-
-  //   #ifdef DEBUG
-  //     for (int i = 0; i < 14; i++)
-  //   {
-  //     CompositeSerial.print(reply[2+i], HEX);
-  //     CompositeSerial.print(" ");
-  //   }
-  //   CompositeSerial.println();
-  // #endif
   u8 reply[26] = {0x12, 0x11};
   char serial_buffer[25];
   getDeviceSerialString().toCharArray(serial_buffer, 25);
@@ -480,19 +479,15 @@ void MIDI::setLED(uint8_t *sysexBuffer, uint16_t len)
   bool xy_mode = sysexBuffer[6] == 33;
   u8 led_class;
 
-  if(!xy_mode)
-  {
-    led_class = sysexBuffer[7]; //Ignore for now, since <LED Class> Isn't implented yet
-    sysexBuffer ++;
-  }
+  led_class = sysexBuffer[7]; //Ignore for now, since <LED Class> Isn't implented yet
 
-  u8 color_type = sysexBuffer[7];
+  u8 color_type = sysexBuffer[8];
   bool gamma = dispatchColorStructGamma(color_type);
   bool overlay = dispatchColorStructOverlay(color_type);
   u8 block_size = dispatchColorDataOffset(color_type) + 1 + xy_mode;
-  sysexBuffer += 8;
+  sysexBuffer += 9;
 
-  for(u8 i = 0; i < len - 8 - !xy_mode; i += block_size)
+  for(u8 i = 0; i < len - 9; i += block_size)
   {
 
     CRGB color = dispatchColorData(color_type, sysexBuffer + i + 1 + xy_mode);
@@ -504,7 +499,7 @@ void MIDI::setLED(uint8_t *sysexBuffer, uint16_t len)
       CompositeSerial.print("Sysex LED Set XY ");
       CompositeSerial.print(color_type);
       CompositeSerial.print(" ");
-      CompositeSerial.print(xy);
+      CompositeSerial.print(xy , HEX);
       CompositeSerial.print(" ");
       CompositeSerial.print(overlay);
       CompositeSerial.print(" ");
@@ -547,14 +542,34 @@ void MIDI::setLED(uint8_t *sysexBuffer, uint16_t len)
   }
 }
 
+void MIDI::fillLED(uint8_t *sysexBuffer, uint16_t len)
+{
+  u8 led_class;
+  led_class = sysexBuffer[7]; //Ignore for now, since <LED Class> Isn't implented yet
+  if(sysexLength == 8)
+  {
+    LED.fill(0, false);
+    //LED.fill(0, true); //Since there's some ambiguity, I think only make the base layer clear is more reasonable. If fill wipe is needed, specific the <Color Struct>
+  }
+  else
+  {
+    u8 color_type = sysexBuffer[8];
+    bool gamma = dispatchColorStructGamma(color_type);
+    bool overlay = dispatchColorStructOverlay(color_type);
+    CRGB color = dispatchColorData(color_type, sysexBuffer + 9);
+    LED.fill(color, overlay, gamma);
+  }
+}
 void MIDI::writePalette(uint8_t *sysexBuffer, uint16_t len)
 {
   u8 palette_index = sysexBuffer[7];
 #ifdef DEBUG
   CompositeSerial.print("Sysex Inject Palette ");
-  CompositeSerial.print(palette_index);
+  CompositeSerial.println(palette_index);
+  CompositeSerial.print("length: ");
+  CompositeSerial.println(len);
 #endif
-  if (sysexBuffer[6] == 0x40 && len == 392) //7bit
+  if (sysexBuffer[6] == 0x41 && len == 392) //7bit
   {
 #ifdef DEBUG
     CompositeSerial.println("7bit");
@@ -567,10 +582,18 @@ void MIDI::writePalette(uint8_t *sysexBuffer, uint16_t len)
           convert_7BitTo8Bit(sysexBuffer[i * 3 + 1]),
           convert_7BitTo8Bit(sysexBuffer[i * 3 + 2]));
       saveColorToEEPROM(palette_index, i, color);
+      palette[palette_index + 2][i] = color;
     }
+    setupPalette();
   }
-  else if (sysexBuffer[6] == 0x41 && len == 520) //8bit
+  else if (sysexBuffer[6] == 0x42 && len == 520) //8bit
   {
   }
-  setupPalette();
+  else
+  {
+#ifdef DEBUG
+  CompositeSerial.println("Sysex Palette Inject Failed");
+  CompositeSerial.println(len);
+#endif
+  }
 }

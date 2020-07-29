@@ -22,7 +22,8 @@ public:
   void setBrightness(u8 b);
   // void setcolorCorrection(u32 c);
   void dynamicBrightness(u16 mah);
-  void fill(u32 WRGB, bool overlay = false);
+  void fill(u32 WRGB, bool overlay = false, bool gamma = false);
+  void fill(CRGB CRGB, bool overlay = false, bool gamma = false);
 
   // void setLED(INDEXMoDE indexmode, LEDMoDE ledmode, u8 x1, u8 y1, u32 p1, u8 p2, u8 p3, u8 p4);
 

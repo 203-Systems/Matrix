@@ -50,7 +50,6 @@ void setupHardware()
 {
   LED.init();
   KeyPad.init();
-  setupPalette();
 }
 
 void specialBoot()
@@ -194,21 +193,10 @@ void resetDevice()
 void setupPalette()
 {
   compileColorScaleTable();
-  loadPalette();
   compilePalette();
 }
 
-void loadPalette()
-{
-  memcpy(palette,pre_compilled_palette,768);
-  for(u8 p = 0; p < 2; p++)
-  {
-    for(u8 i = 0; i < 128; i++)
-    {
-      palette[p+2][i] = readColorFromEEPROM(p, i);
-    }
-  }
-}
+
 
 void compileColorScaleTable()
 {
