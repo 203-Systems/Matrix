@@ -51,7 +51,7 @@ We provided design file for every single Matrix components and they will also av
 Current planned MSRP is 99$/99€
 
 ## When will it be commercially available?
-ETA July 2020. Pre production will begin in April 2020.
+ETA 2021. Pre production will begin in Oct 2020.
   
 ## Open Source Hardware Design Files
 [Matrix-Hardware](https://github.com/203Electronics/Matrix-Hardware)
@@ -120,7 +120,7 @@ Matrix的每一个零件都可以单独购买 可以放心的折腾
 预期580左右
 
 ## 什么时候开售？
-预计2020年7月，4月将进行一批试产
+预计2021，2020年10月将进行一批试产
   
 ## 开源硬件设计文件
 [Matrix-Hardware](https://github.com/203Electronics/Matrix-Hardware)
