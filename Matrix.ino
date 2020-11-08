@@ -49,49 +49,52 @@ void setup()
 
 void readKey()
 {
-  // if (KeyPad.scan())
-  // {
-  //   if (fn_hold)
-  //   {
-  //     if (KeyPad.fn.hold && !flag_leftFN)
-  //     {
-  //       Midi.sendNoteOff(0, keymap_fn[current_keymap], 0);
-  //       UI.enterFNmenu();
-  //       flag_leftFN = true; //Prevent back to FN
-  //     }
-  //     else if (KeyPad.fn.state == PRESSED)
-  //     {
-  //       Midi.sendNoteOn(0, keymap_fn[current_keymap], 127);
-  //     }
-  //     else if (KeyPad.fn.state == RELEASED)
-  //     {
-  //       Midi.sendNoteOff(0, keymap_fn[current_keymap], 0);
-  //       flag_leftFN = false;
-  //     }
-  //   }
-  //   else
-  //   {
-  //     if (KeyPad.fn.state == PRESSED)
-  //       UI.enterFNmenu();
-  //   }
+  if (KeyPad.scan())
+  {
+    if (fn_hold)
+    {
+      if (KeyPad.fn.hold && !flag_leftFN)
+      {
+        Midi.sendNoteOff(0, keymap_fn[current_keymap], 0);
+        UI.enterFNmenu();
+        flag_leftFN = true; //Prevent back to FN
+      }
+      else if (KeyPad.fn.state == PRESSED)
+      {
+        Midi.sendNoteOn(0, keymap_fn[current_keymap], 127);
+      }
+      else if (KeyPad.fn.state == RELEASED)
+      {
+        Midi.sendNoteOff(0, keymap_fn[current_keymap], 0);
+        flag_leftFN = false;
+      }
+    }
+    else
+    {
+      if (KeyPad.fn.state == PRESSED)
+        UI.enterFNmenu();
+    }
 
-  //   for (u8 i = 0; i < MULTIPRESS; i++)
-  //   {
-  //     if (KeyPad.changelist[i] == 0xFFFF)
-  //       break;
-  //     u8 x = xytox(KeyPad.changelist[i]);
-  //     u8 y = xytoy(KeyPad.changelist[i]);
-  //     if (KeyPad.getKey(KeyPad.changelist[i]).state == PRESSED)
-  //     {
-  //       Midi.sendXYon(KeyPad.changelist[i], KeyPad.getKey(KeyPad.changelist[i]).velocity * 127);
-  //     }
-  //     else if (KeyPad.getKey(KeyPad.changelist[i]).state == RELEASED)
-  //     {
-  //       Midi.sendXYoff(KeyPad.changelist[i], 0);
-  //     }
-  //   }
-  // }
-  if (Touch.scan())
+    for (u8 i = 0; i < MULTIPRESS; i++)
+    {
+      if (KeyPad.changelist[i] == 0xFFFF)
+        break;
+      u8 x = xytox(KeyPad.changelist[i]);
+      u8 y = xytoy(KeyPad.changelist[i]);
+      if (KeyPad.getKey(KeyPad.changelist[i]).state == PRESSED)
+      {
+        Midi.sendXYon(KeyPad.changelist[i], KeyPad.getKey(KeyPad.changelist[i]).velocity * 127);
+      }
+      else if (KeyPad.getKey(KeyPad.changelist[i]).state == RELEASED)
+      {
+        Midi.sendXYoff(KeyPad.changelist[i], 0);
+      }
+    }
+  }
+}
+void readTouch()
+{
+if (Touch.scan())
   {
     switch(touch_mode)
     {
@@ -121,65 +124,6 @@ void readKey()
     }
   }
 }
-// void readTouch()
-// {
-//   if(TouchBar.scan())
-//   {
-//     for(u8 x = 0; x < 8; x++)
-//     {
-//       switch(TouchBar.changelist[x].kstate)
-//       {
-//         case IDLE:
-//         return;
-//
-//         case PRESSED:
-//         Midi.sendNoteOn(0, touch_keymap[current_keymap][x], 127);
-//         break;
-//
-//         case RELEASED:
-//         Midi.sendNoteOff(0, touch_keymap[current_keymap][x], 0);
-//         break;
-//       }
-//     }
-//   }
-// }
-
-// void factoryTest()
-// {
-//   u32 testcolor[] = {0xFFFFFF, 0xFF0000, 0x00FF00, 0x0000FF, 0xFFFF00, 0x00FFFF};
-//
-//   for(int i = 0; i < 6; i ++)
-//   {
-//     LED.fill(testcolor[i]);
-//     LED.update();
-//     while(!KeyPad.scan()){}
-//
-//     while(KeyPad.fnChanged && KeyPad.fn)
-//     {
-//       if (mainTimer.tick(1000/fps))
-//       {
-//         KeyPad.scan();
-//         for(int i = 0; i < MULTIPRESS; i++)
-//         {
-//           if(KeyPad.list[i].velocity > 128)
-//           break;
-//           if(KeyPad.list[i].velocity > 0)
-//           {
-//             if(LED.readXYLED(KeyPad.list[i].xy) != testcolor[i])
-//             {
-//               LED.setXYCRGB(KeyPad.list[i].xy, testcolor[i]);
-//             }
-//             else
-//             {
-//               LED.offXY(KeyPad.list[i].xy);
-//             }
-//           }
-//         }
-//         LED.update();
-//       }
-//     }
-//   }
-// }
 
 void loop()
 {
@@ -194,21 +138,13 @@ void loop()
   if (keypadTimer.tick(keypad_scanrate_micros))
   {
     readKey();
-    //readTouch();
+    readTouch();
   }
 
   if (ledTimer.tick(fps_micros))
   {
-    // readKey();
     LED.update();
     LED.changed = false;
     Midi.offScan();
-    // #ifdef DEBUG
-    // microTimer.recordCurrent();
-    // #endif
-    //LED.update();
-    // #ifdef DEBUG
-    // CompositeSerial.println(microTimer.sinceLastTick());
-    // #endif
   }
 }

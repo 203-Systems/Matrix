@@ -409,7 +409,7 @@ extern u32 fn_keymap_active_color[5][2][XSIZE]{{{0x00FFFFFF, 0x00FFFFFF, 0x00FFF
 
 extern float velocity_threshold = 0;
 extern float aftertouch_threshold = 0;
-extern u16 debounce_threshold = 0;
+extern u16 debounce_threshold = 24;
 
 //TouchBar
 extern u8 touch_mode = 0;
