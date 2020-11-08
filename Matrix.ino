@@ -11,6 +11,7 @@ Copyright © 203 Industries 2016–2020. All rights reserved.
 #include "src/Core/MatrixSystem.h"
 #include "src/Core/MatrixSystem.h"
 #include "src/HAL/KeyPad.h"
+#include "src/HAL/Touch.h"
 #include "src/HAL/LED.h"
 #include "src/HAL/Timer.h"
 #include "src/Protocol/MIDI.h"
@@ -20,7 +21,9 @@ UI UI;
 MIDI Midi;
 LED LED;
 KeyPad KeyPad;
-Timer mainTimer;
+Touch Touch;
+Timer keypadTimer;
+Timer ledTimer;
 MicroTimer microTimer;
 USBCompositeSerial CompositeSerial;
 
@@ -46,46 +49,75 @@ void setup()
 
 void readKey()
 {
-  if (KeyPad.scan())
-  {
-    if (fn_hold)
-    {
-      if (KeyPad.fn.hold && !flag_leftFN)
-      {
-        Midi.sendNoteOff(0, keymap_fn[current_keymap], 0);
-        UI.enterFNmenu();
-        flag_leftFN = true; //Prevent back to FN
-      }
-      else if (KeyPad.fn.state == PRESSED)
-      {
-        Midi.sendNoteOn(0, keymap_fn[current_keymap], 127);
-      }
-      else if (KeyPad.fn.state == RELEASED)
-      {
-        Midi.sendNoteOff(0, keymap_fn[current_keymap], 0);
-        flag_leftFN = false;
-      }
-    }
-    else
-    {
-      if (KeyPad.fn.state == PRESSED)
-        UI.enterFNmenu();
-    }
+  // if (KeyPad.scan())
+  // {
+  //   if (fn_hold)
+  //   {
+  //     if (KeyPad.fn.hold && !flag_leftFN)
+  //     {
+  //       Midi.sendNoteOff(0, keymap_fn[current_keymap], 0);
+  //       UI.enterFNmenu();
+  //       flag_leftFN = true; //Prevent back to FN
+  //     }
+  //     else if (KeyPad.fn.state == PRESSED)
+  //     {
+  //       Midi.sendNoteOn(0, keymap_fn[current_keymap], 127);
+  //     }
+  //     else if (KeyPad.fn.state == RELEASED)
+  //     {
+  //       Midi.sendNoteOff(0, keymap_fn[current_keymap], 0);
+  //       flag_leftFN = false;
+  //     }
+  //   }
+  //   else
+  //   {
+  //     if (KeyPad.fn.state == PRESSED)
+  //       UI.enterFNmenu();
+  //   }
 
-    for (int i = 0; i < MULTIPRESS; i++)
+  //   for (u8 i = 0; i < MULTIPRESS; i++)
+  //   {
+  //     if (KeyPad.changelist[i] == 0xFFFF)
+  //       break;
+  //     u8 x = xytox(KeyPad.changelist[i]);
+  //     u8 y = xytoy(KeyPad.changelist[i]);
+  //     if (KeyPad.getKey(KeyPad.changelist[i]).state == PRESSED)
+  //     {
+  //       Midi.sendXYon(KeyPad.changelist[i], KeyPad.getKey(KeyPad.changelist[i]).velocity * 127);
+  //     }
+  //     else if (KeyPad.getKey(KeyPad.changelist[i]).state == RELEASED)
+  //     {
+  //       Midi.sendXYoff(KeyPad.changelist[i], 0);
+  //     }
+  //   }
+  // }
+  if (Touch.scan())
+  {
+    switch(touch_mode)
     {
-      if (KeyPad.changelist[i] == 0xFFFF)
-        return;
-      u8 x = xytox(KeyPad.changelist[i]);
-      u8 y = xytoy(KeyPad.changelist[i]);
-      if (KeyPad.getKey(KeyPad.changelist[i]).state == PRESSED)
-      {
-        Midi.sendXYon(KeyPad.changelist[i], KeyPad.getKey(KeyPad.changelist[i]).velocity * 127);
-      }
-      else if (KeyPad.getKey(KeyPad.changelist[i]).state == RELEASED)
-      {
-        Midi.sendXYoff(KeyPad.changelist[i], 0);
-      }
+      case 0:
+        for (u8 i = 0; i < 8; i++)
+        {
+          if (Touch.changelist[i] == 0xFFFF)
+            break;
+          if (Touch.getKey(Touch.changelist[i]).state == PRESSED)
+          {
+            Midi.sendNoteOn(0, touch_keymap[current_keymap][Touch.changelist[i]], Touch.getKey(Touch.changelist[i]).velocity * 127);
+          }
+          else if (Touch.getKey(Touch.changelist[i]).state == RELEASED)
+          {
+            Midi.sendNoteOff(0, touch_keymap[current_keymap][Touch.changelist[i]], 0);
+          }
+        }
+        break;
+      case 1:
+        float value = Touch.calculatePercentage();
+        if (value >= 0)
+        {
+          Midi.sendControlChange(0, 0, value * 127);
+          // Midi.sendXYon((u8)(value * 7.99), 127);
+        }
+        break;
     }
   }
 }
@@ -159,15 +191,15 @@ void loop()
   //   LED.changed = false;
   // }
 
-  // if (keypadTimer.tick(keypad_scanrate_micros))
-  // {
-  //   readKey();
-  //   //readTouch();
-  // }
-
-  if (mainTimer.tick(fps_micros))
+  if (keypadTimer.tick(keypad_scanrate_micros))
   {
     readKey();
+    //readTouch();
+  }
+
+  if (ledTimer.tick(fps_micros))
+  {
+    // readKey();
     LED.update();
     LED.changed = false;
     Midi.offScan();

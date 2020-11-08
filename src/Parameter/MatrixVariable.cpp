@@ -14,14 +14,13 @@ extern bool pro_input_mode = false;
 extern u8 brightness = 128;
 extern u16 max_mAh = 1000;
 extern u8 brightness_level[8] = {16, 32, 64, 96, 128, 160, 216, 255};
-extern u8 fps = 100;
 extern u32 led_color_temperture = 0xFFFFFFFF;
 extern bool desaturated_mode = false;
 extern u8 desaturate_rate = 80; // 0~255
-
+extern u8 fps = 60;
 extern u16 fps_micros = 1000 / fps;
 
-extern u8 keypad_scanrate = 200;
+extern u8 keypad_scanrate = 120;
 extern u16 keypad_scanrate_micros = 1000 / keypad_scanrate;
 
 extern const CRGB pre_compilled_palette[2][128] = //color Palette
@@ -410,9 +409,10 @@ extern u32 fn_keymap_active_color[5][2][XSIZE]{{{0x00FFFFFF, 0x00FFFFFF, 0x00FFF
 
 extern float velocity_threshold = 0;
 extern float aftertouch_threshold = 0;
-extern u16 debounce_threshold = 50;
+extern u16 debounce_threshold = 0;
 
 //TouchBar
+extern u8 touch_mode = 0;
 extern u8 touch_keymap[5][8] =
     {
         {100, 101, 102, 103, 104, 105, 106, 107},

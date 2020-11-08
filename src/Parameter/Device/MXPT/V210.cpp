@@ -15,11 +15,11 @@ void loadConfigMXPTV210()
 
   //KeyPad
   keypad_type = 2;
-  u8 type2keyPins[16] = {PB15, PB14, PB13, PB12, PC6, PC15, PC14, PC13, //X (SOURCE)
+  u8 type2keypad_pins[16] = {PB15, PB14, PB13, PB12, PC6, PC15, PC14, PC13, //X (SOURCE)
                  PB1, PB0, PA2, PA1, PC3, PA3, PC5, PC4}; // Y (RECIVE)
   for(u8 i = 0; i < 16; i ++)
   {
-    keyPins[i] = type2keyPins[i];
+    keypad_pins[i] = type2keypad_pins[i];
   }
 
   velocity_sensitivity = 1;

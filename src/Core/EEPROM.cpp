@@ -50,7 +50,7 @@ void loadSetting()
   device_id = EEPROM_USER.read(E_DEVICE_ID);
   rotation = EEPROM_USER.read(E_ROTATION);
   brightness = EEPROM_USER.read(E_BRIGHTNESS);
-  fps = EEPROM_USER.read(E_FPS);
+  // fps = EEPROM_USER.read(E_FPS);
   gamma_enable = EEPROM_USER.read(E_GAMMA_ENABLE);
   midi_enable = EEPROM_USER.read(E_MIDI_ENABLE);
   m2p_enable = EEPROM_USER.read(E_M2P_ENABLE);
@@ -143,7 +143,7 @@ void saveAllSetting()
   EEPROM_USER.write(E_DEVICE_ID, device_id);
   EEPROM_USER.write(E_ROTATION, rotation);
   EEPROM_USER.write(E_BRIGHTNESS, brightness);
-  EEPROM_USER.write(E_FPS, fps);
+  // EEPROM_USER.write(E_FPS, fps);
   EEPROM_USER.write(E_GAMMA_ENABLE, (u8)gamma_enable);
   EEPROM_USER.write(E_MIDI_ENABLE, (u8)midi_enable);
   EEPROM_USER.write(E_M2P_ENABLE, (u8)m2p_enable);

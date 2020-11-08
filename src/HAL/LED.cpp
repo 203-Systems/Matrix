@@ -27,7 +27,7 @@ void LED::init()
     FastLED.addLeds<NEOPIXEL, PC7>(leds, NUM_TOTAL_LEDS);
     break;
   }
-  //FastLED.setDither(0);
+  FastLED.setDither(0);
   FastLED.setBrightness(brightness);
   //FastLED.setCorrection(led_color_correction);
 

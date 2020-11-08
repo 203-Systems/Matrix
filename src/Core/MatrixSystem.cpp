@@ -7,6 +7,7 @@ EEPROMClass EEPROM_SYS;
 extern LED LED;
 extern KeyPad KeyPad;
 extern MIDI Midi;
+extern Touch Touch;
 extern USBCompositeSerial CompositeSerial;
 
 u8 cW = 255;
@@ -20,12 +21,12 @@ String serial_number;
 void setupUSB()
 {
   USBComposite.clear();
-  if(device_id != 0)
+  if (device_id != 0)
   {
     device_name_with_ID = (DEVICENAME + String(' ') + String(device_id));
     USBComposite.setProductString(device_name_with_ID.c_str());
     USBComposite.setVendorId(VID2);
-    USBComposite.setProductId(PID2+device_id);
+    USBComposite.setProductId(PID2 + device_id);
   }
   else
   {
@@ -43,42 +44,42 @@ void setupUSB()
   CompositeSerial.registerComponent();
 
   USBComposite.begin();
-
 }
 
 void setupHardware()
 {
   LED.init();
   KeyPad.init();
+  Touch.init();
 }
 
 void specialBoot()
 {
   KeyPad.scan();
-  if(KeyPad.checkXY(0, 5, true) && KeyPad.checkXY(1, 6, true) && KeyPad.checkXY(0, 7, true))
+  if (KeyPad.checkXY(0, 5, true) && KeyPad.checkXY(1, 6, true) && KeyPad.checkXY(0, 7, true))
   {
-    LED.setXYCRGB(0x33,0xFF00FF, true);
-    LED.setXYCRGB(0x34,0xFF00FF, true);
-    LED.setXYCRGB(0x43,0xFF00FF, true);
-    LED.setXYCRGB(0x44,0xFF00FF, true);
+    LED.setXYCRGB(0x33, 0xFF00FF, true);
+    LED.setXYCRGB(0x34, 0xFF00FF, true);
+    LED.setXYCRGB(0x43, 0xFF00FF, true);
+    LED.setXYCRGB(0x44, 0xFF00FF, true);
     LED.update();
     formatEEPROM();
     return;
   }
 
-  if(KeyPad.checkXY(1, 1, true) && KeyPad.checkXY(0, 0, true))
+  if (KeyPad.checkXY(1, 1, true) && KeyPad.checkXY(0, 0, true))
   {
     factoryTest();
     return;
   }
 
-  if(KeyPad.checkXY(6, 6, true) && KeyPad.checkXY(7, 7, true))
+  if (KeyPad.checkXY(6, 6, true) && KeyPad.checkXY(7, 7, true))
   {
     setBrightness(16);
     return;
   }
 
-  if(KeyPad.checkXY(7, 0, true) && KeyPad.checkXY(6, 1, true))
+  if (KeyPad.checkXY(7, 0, true) && KeyPad.checkXY(6, 1, true))
   {
     setBrightness(255);
     return;
@@ -91,15 +92,15 @@ void factoryTest()
   LED.fill(0);
   LED.update();
 
-  while(KeyPad.fn.state != PRESSED)
+  while (KeyPad.fn.state != PRESSED)
   {
-    if (mainTimer.tick(1000/fps))
+    if (ledTimer.tick(fps_micros))
     {
-      if(KeyPad.scan())
+      if (KeyPad.scan())
       {
-        for(int i = 0; i < MULTIPRESS; i++)
+        for (int i = 0; i < MULTIPRESS; i++)
         {
-          if(KeyPad.getKey(KeyPad.changelist[i]).state == PRESSED)
+          if (KeyPad.getKey(KeyPad.changelist[i]).state == PRESSED)
           {
             LED.setXYCRGB(KeyPad.changelist[i], 0xFFFFFF, true);
           }
@@ -108,6 +109,44 @@ void factoryTest()
       }
     }
   }
+  LED.fill(0);
+  LED.update();
+  while (KeyPad.fn.state != IDLE)
+  {
+    if (ledTimer.tick(fps_micros))
+    {
+      KeyPad.scan();
+    }
+  }
+
+  while (KeyPad.fn.state != PRESSED)
+  {
+    if (ledTimer.tick(fps_micros))
+    {
+      CompositeSerial.println();
+      if (Touch.scan())
+      {
+        for (int i = 0; i < 16; i++)
+        {
+          CompositeSerial.print(Touch.rawInput[i]);
+          CompositeSerial.print(" ");
+          if (Touch.rawInput[i])
+          {
+            u8 x = (i % 4) * 2;
+            u8 y = (i / 4) * 2;
+            LED.setXYCRGB(xytoxy(x, y), 0x00FF00, true);
+            LED.setXYCRGB(xytoxy(x, y + 1), 0x00FF00, true);
+            LED.setXYCRGB(xytoxy(x + 1, y), 0x00FF00, true);
+            LED.setXYCRGB(xytoxy(x + 1, y + 1), 0x00FF00, true);
+          }
+        }
+        CompositeSerial.println();
+        LED.update();
+      }
+    }
+  }
+  LED.fill(0);
+  LED.update();
 }
 
 // void loadDeviceSerialNumber()
@@ -120,7 +159,7 @@ void factoryTest()
 //     u32 current_byte = 0xF0000000;
 //     for(s8 b = 7; b >= 0; b--)
 //     {
-//       serial_number[c] = char_table[(serial_num[i] & current_byte) >> 4*b]; 
+//       serial_number[c] = char_table[(serial_num[i] & current_byte) >> 4*b];
 //       current_byte = current_byte >> 4;
 //       c++;
 //     }
@@ -132,12 +171,12 @@ String getDeviceSerialString()
   String serial;
   u32 serial_num[3] = {DEVICE_SERIAL_1, DEVICE_SERIAL_2, DEVICE_SERIAL_3};
   char char_table[16] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
-  for(u8 i = 0; i < 3; i ++)
+  for (u8 i = 0; i < 3; i++)
   {
     u32 current_byte = 0xF0000000;
-    for(s8 b = 7; b >= 0; b--)
+    for (s8 b = 7; b >= 0; b--)
     {
-      serial += char_table[(serial_num[i] & current_byte) >> 4*b]; 
+      serial += char_table[(serial_num[i] & current_byte) >> 4 * b];
       current_byte = current_byte >> 4;
     }
   }
@@ -161,21 +200,19 @@ void setDeviceID(u8 id)
   device_id = id;
 }
 
-
-
 void enterBootloader()
 {
-  LED.fill(0,true);
-  LED.setXYCRGB(0x32,0xFF0000, true);
-  LED.setXYCRGB(0x42,0xFF0000, true);
-  LED.setXYCRGB(0x23,0xFF0000, true);
-  LED.setXYCRGB(0x33,0xFF0000, true);
-  LED.setXYCRGB(0x43,0xFF0000, true);
-  LED.setXYCRGB(0x53,0xFF0000, true);
-  LED.setXYCRGB(0x34,0xFF0000, true);
-  LED.setXYCRGB(0x44,0xFF0000, true);
-  LED.setXYCRGB(0x35,0xFF0000, true);
-  LED.setXYCRGB(0x45,0xFF0000, true);
+  LED.fill(0, true);
+  LED.setXYCRGB(0x32, 0xFF0000, true);
+  LED.setXYCRGB(0x42, 0xFF0000, true);
+  LED.setXYCRGB(0x23, 0xFF0000, true);
+  LED.setXYCRGB(0x33, 0xFF0000, true);
+  LED.setXYCRGB(0x43, 0xFF0000, true);
+  LED.setXYCRGB(0x53, 0xFF0000, true);
+  LED.setXYCRGB(0x34, 0xFF0000, true);
+  LED.setXYCRGB(0x44, 0xFF0000, true);
+  LED.setXYCRGB(0x35, 0xFF0000, true);
+  LED.setXYCRGB(0x45, 0xFF0000, true);
   LED.update();
   bkp_init();
   bkp_enable_writes();
@@ -196,42 +233,38 @@ void setupPalette()
   compilePalette();
 }
 
-
-
 void compileColorScaleTable()
 {
   u8 scale[4] = {
-  (led_color_correction & 0xFF000000) >> 24,
-  (led_color_correction& 0xFF0000) >> 16,
-  (led_color_correction & 0xFF00) >> 8,
-  led_color_correction & 0xFF
-  };
+      (led_color_correction & 0xFF000000) >> 24,
+      (led_color_correction & 0xFF0000) >> 16,
+      (led_color_correction & 0xFF00) >> 8,
+      led_color_correction & 0xFF};
 
-  for(u8 c = 0; c < 4; c++)
+  for (u8 c = 0; c < 4; c++)
   {
-    for(int i = 0; i < 256; i++)
+    for (int i = 0; i < 256; i++)
     {
       color_correction_table[c][i] = scale8_video(i, scale[c]);
     }
   }
 
-  for(int i = 0; i < 256; i++)
+  for (int i = 0; i < 256; i++)
   {
     color_desaturate_table[i] = scale8_video(i, desaturate_rate);
   }
 
-  for(int i = 0; i < 256; i++)
+  for (int i = 0; i < 256; i++)
   {
     low_brightness_table[i] = scale8_video(i, LOW_STATE_BRIGHTNESS);
   }
-
 }
 
 void compilePalette()
 {
-  for(u8 p = 0; p < 4; p++)
+  for (u8 p = 0; p < 4; p++)
   {
-    for(u8 i = 0; i < 128; i++)
+    for (u8 i = 0; i < 128; i++)
     {
       palette[p][i] = compileColor(palette[p][i]);
     }
@@ -241,14 +274,14 @@ void compilePalette()
 void setgamma(bool g)
 {
   gamma_enable = g;
-  EEPROM_USER.write(E_GAMMA_ENABLE,g);
+  EEPROM_USER.write(E_GAMMA_ENABLE, g);
 }
 
 void nextBrightnessState()
 {
-  for(u8 i = 0; i < sizeof(brightness_level); i++)  //
+  for (u8 i = 0; i < sizeof(brightness_level); i++) //
   {
-    if(brightness_level[i] > brightness)
+    if (brightness_level[i] > brightness)
     {
       setBrightness(brightness_level[i]);
       return;
@@ -290,10 +323,10 @@ void setFnHold(bool h)
 
 void setColorCorrection(u32 c, bool dont_write)
 {
-  if(!dont_write)
+  if (!dont_write)
   {
-  EEPROM_USER.write(E_color_CORRECTION_1, c >> 16);
-  EEPROM_USER.write(E_color_CORRECTION_2, c & 0xFFFF);
+    EEPROM_USER.write(E_color_CORRECTION_1, c >> 16);
+    EEPROM_USER.write(E_color_CORRECTION_2, c & 0xFFFF);
   }
   //LED.setColorCorrection(c);
   led_color_correction = c;
@@ -302,9 +335,10 @@ void setColorCorrection(u32 c, bool dont_write)
   // cG = (c & 0xFF00) >> 8;
   // cB = c & 0xFF;
   setupPalette();
-  #ifdef DEBUG
-  CompositeSerial.print("Set color Correction ");CompositeSerial.println(c);
-  #endif
+#ifdef DEBUG
+  CompositeSerial.print("Set color Correction ");
+  CompositeSerial.println(c);
+#endif
 }
 
 void setSTFU(u16 v)
@@ -324,7 +358,6 @@ void setProInputMode(bool e)
   pro_input_mode = e;
   EEPROM_USER.write(E_PRO_INPUT_MODE, e);
 }
-
 
 //Sysex get
 // void getDeviceInfo()
@@ -425,11 +458,10 @@ void setProInputMode(bool e)
 //   TouchBar.init();
 // }
 
-
 void rotationCW(u8 r)
 {
   r += rotation;
-  if(r > 3)
+  if (r > 3)
   {
     setRotation(r % 4);
   }
@@ -442,12 +474,12 @@ void rotationCW(u8 r)
 
 void setRotation(u8 r)
 {
-  #ifdef DEBUG
+#ifdef DEBUG
   CompositeSerial.print("Set Rotation: ");
   CompositeSerial.println(EEPROM_USER.write(E_ROTATION, r));
-  #else
+#else
   EEPROM_USER.write(E_ROTATION, r);
-  #endif
+#endif
   //rotation = EEPROM_USER.read(2);
   rotation = r;
 }
@@ -475,11 +507,11 @@ u8 indexToXY(u8 index)
 u8 indexRotation(int index)
 {
   // XY xy = indexToXY(index);
-  if(index < NUM_LEDS)
+  if (index < NUM_LEDS)
   {
     return xyToIndex(indexToXY(index));
   }
-  else if(index >= NUM_LEDS && index < NUM_TOTAL_LEDS)
+  else if (index >= NUM_LEDS && index < NUM_TOTAL_LEDS)
   {
     return bottomLEDrotation(index);
   }
@@ -490,25 +522,25 @@ u8 bottomLEDrotation(int index)
 {
   switch (rotation)
   {
-    case 1: //90
-    if(index >= NUM_BOTTOM_LEDS / 4 * 3 - 1)
+  case 1: //90
+    if (index >= NUM_BOTTOM_LEDS / 4 * 3 - 1)
     {
       return index - NUM_BOTTOM_LEDS / 4 * 3;
     }
     return index + NUM_BOTTOM_LEDS / 4 * 1;
-    case 2: //180
-    if(index >= NUM_BOTTOM_LEDS / 4 * 2 - 1)
+  case 2: //180
+    if (index >= NUM_BOTTOM_LEDS / 4 * 2 - 1)
     {
       return index - NUM_BOTTOM_LEDS / 4 * 2;
     }
     return index + NUM_BOTTOM_LEDS / 4 * 2;
-    case 3: //270
-    if(index >= NUM_BOTTOM_LEDS / 4 * 1 - 1)
+  case 3: //270
+    if (index >= NUM_BOTTOM_LEDS / 4 * 1 - 1)
     {
       return index - NUM_BOTTOM_LEDS / 4 * 1;
     }
     return index + NUM_BOTTOM_LEDS / 4 * 3;
-    default:
+  default:
     return index;
   }
 }
@@ -542,21 +574,21 @@ u8 xyRotation(u8 xy)
   u8 y = xy & 0x0F;
   u8 xr;
   u8 yr;
-  switch(rotation)
+  switch (rotation)
   {
-    case 1:
+  case 1:
     xr = y;
     yr = 7 - x;
     break;
-    case 2:
+  case 2:
     xr = 7 - x;
     yr = 7 - y;
     break;
-    case 3:
+  case 3:
     xr = 7 - y;
     yr = x;
     break;
-    default:
+  default:
     xr = x;
     yr = y;
   }
@@ -569,21 +601,21 @@ u8 xyRotation(u8 xy, u8 r)
   u8 y = xy & 0x0F;
   u8 xr;
   u8 yr;
-  switch(r)
+  switch (r)
   {
-    case 1:
+  case 1:
     xr = y;
     yr = 7 - x;
     break;
-    case 2:
+  case 2:
     xr = 7 - x;
     yr = 7 - y;
     break;
-    case 3:
+  case 3:
     xr = 7 - y;
     yr = x;
     break;
-    default:
+  default:
     xr = x;
     yr = y;
   }
@@ -596,21 +628,21 @@ u8 xyReverseRotation(u8 xy)
   u8 y = xy & 0x0F;
   u8 xr;
   u8 yr;
-  switch(rotation)
+  switch (rotation)
   {
-    case 1:
+  case 1:
     xr = 7 - y;
     yr = x;
     break;
-    case 2:
+  case 2:
     xr = 7 - x;
     yr = 7 - y;
     break;
-    case 3:
+  case 3:
     xr = y;
     yr = 7 - x;
     break;
-    default:
+  default:
     xr = x;
     yr = y;
   }
@@ -623,52 +655,52 @@ u8 xyReverseRotation(u8 xy, u8 r)
   u8 y = xy & 0x0F;
   u8 xr;
   u8 yr;
-  switch(r)
+  switch (r)
   {
-    case 1:
+  case 1:
     xr = 7 - y;
     yr = x;
     break;
-    case 2:
+  case 2:
     xr = 7 - x;
     yr = 7 - y;
     break;
-    case 3:
+  case 3:
     xr = y;
     yr = 7 - x;
     break;
-    default:
+  default:
     xr = x;
     yr = y;
   }
   return xr * 0x10 + yr;
 }
 
-u8 touchbarRotate(u8 id)
+u8 touchbarRotation(u8 id)
 {
-  switch(rotation)
+  switch (rotation)
   {
-    case 0:
-    case 1:
+  case 0:
+  case 1:
     return id;
-    case 2:
-    case 3:
-    return 7-id;
+  case 2:
+  case 3:
+    return 7 - id;
   }
 }
 
 void recordReportCode(u8 code)
 {
-  #ifdef DEBUG
+#ifdef DEBUG
   CompositeSerial.print("Code loged N");
   CompositeSerial.print(available_report_code);
   CompositeSerial.print(" ");
   CompositeSerial.println(code);
-  #endif
+#endif
   report_code[available_report_code] = code;
-  available_report_code ++;
-  if(available_report_code ==  10)
-  available_report_code = 0;
+  available_report_code++;
+  if (available_report_code == 10)
+    available_report_code = 0;
 }
 
 // float velocityCurve(float input)

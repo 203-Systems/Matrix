@@ -17,13 +17,10 @@ extern u32 led_color_correction;
 
 //KeyPad
 extern u8 keypad_type;
-extern u8 keyPins[16];
-
-#define KEYPAD_SO_DATA keyPins[0]
-#define KEYPAD_SO_CLOCK keyPins[1]
-#define KEYPAD_SI_DATA keyPins[2]
-#define KEYPAD_SI_CLOCK keyPins[3]
-#define KEYPAD_SI_LATCH keyPins[4]
+extern u8 keypad_pins[16];
+//For Type 1, it will be SO_DATA, SO_CLOCK, SI_LATCH, SI_CLOCK, SI_DATA. Rest slots will remain null;
+//(I know the Type 1 pin order is kind weird but type 1 support is just for legacy now, not gonna touch it)
+//For Type 2, it will be x(source) 1~8, y(sink) 1~8. 
 
 extern u8 velocity_sensitivity;
 
@@ -89,6 +86,9 @@ extern u32 eeprom_sys_adds_1;
 extern u32 eeprom_pagesize;
 
 extern u8 touch_type;
+extern u8 touch_length;
+extern u8 touch_pins[2];
+//for Type 1, it will be SO_CLOCK, SO_DATA
 
 void loadDeviceConfig();
 //MXPT

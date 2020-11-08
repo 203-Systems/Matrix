@@ -21,7 +21,7 @@ extern u32 led_color_correction = 0xFFFFFFFF;
 
 //KeyPad
 extern u8 keypad_type = 1;
-extern u8 keyPins[16] = {0};
+extern u8 keypad_pins[16] = {0};
 extern u8 velocity_sensitivity = 1;  //for velocity sensitivy, bit 1 for no velocity (binary) 8 for 8 bit(0~255)
 
 extern u8 fn_pin = 0;
@@ -85,6 +85,8 @@ extern u32 eeprom_sys_adds_1 = 0;
 extern u32 eeprom_pagesize = 0;
 
 extern u8 touch_type = 0;
+extern u8 touch_length = 0;
+extern u8 touch_pins[2] = {0};
 
 void loadDeviceConfig()
 {

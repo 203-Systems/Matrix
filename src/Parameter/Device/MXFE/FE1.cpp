@@ -11,16 +11,17 @@ void loadConfigMXFE1()
   powercord_pin = PA8;
   powercord_detection = PC9;
 
-  led_color_correction = 0xC0FFD8;
+  led_color_correction = 0xFFFFFF;
 
   //KeyPad
   keypad_type = 2;
-  u8 type2keyPins[16] = {PB15, PB14, PB13, PB12, PC6, PC15, PC14, PC13, //X (SOURCE)
+  u8 type2_keypad_pins[16] = {PB15, PB14, PB13, PB12, PC6, PC15, PC14, PC13, //X (SOURCE)
                  PB1, PB0, PA2, PA1, PC3, PA3, PC5, PC4}; // Y (RECIVE)
-  for(u8 i = 0; i < 16; i ++)
-  {
-    keyPins[i] = type2keyPins[i];
-  }
+  // for(u8 i = 0; i < 16; i ++)
+  // {
+  //   keypad_pins[i] = type2keypad_pins[i];
+  // }
+  memcpy(keypad_pins, type2_keypad_pins, 16);
 
   //Velocity sensitivty bit depth
   velocity_sensitivity = 1;
@@ -73,4 +74,7 @@ void loadConfigMXFE1()
 
   //Touch Bar
   touch_type = 1; //TTP229-BSF
+  touch_length = 16;
+  touch_pins[0] = PA7;
+  touch_pins[1] = PA6;
 }

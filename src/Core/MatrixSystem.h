@@ -7,6 +7,7 @@
 #include <USBComposite.h>
 #include <FastLED.h>
 #include "../HAL/Keypad.h"
+#include "../HAL/Touch.h"
 #include "../HAL/LED.h"
 #include "../HAL/Timer.h"
 #include "../Protocol/MIDI.h"
@@ -23,7 +24,7 @@
 // };
 extern String test_Serial;
 
-extern Timer mainTimer;
+extern Timer ledTimer;
 extern MicroTimer microTimer;
 
 void setupUSB();
@@ -96,7 +97,7 @@ u8 xyRotation(u8 xy);
 u8 xyRotation(u8 xy, u8 r);
 u8 xyReverseRotation(u8 xy);
 u8 xyReverseRotation(u8 xy, u8 r);
-u8 touchbarRotate(u8 id);
+u8 touchbarRotation(u8 id);
 void recordReportCode(u8 code);
 //u16 velocityCurve(u16 input);
 

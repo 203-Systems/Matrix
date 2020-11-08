@@ -43,24 +43,24 @@ void KeyPad::init()
 
 void KeyPad::initType1()
 {
-  pinMode(KEYPAD_SO_DATA, OUTPUT);
-  pinMode(KEYPAD_SO_CLOCK, OUTPUT);
+  pinMode(keypad_pins[0], OUTPUT); //SO_DATA
+  pinMode(keypad_pins[1], OUTPUT); //SO_CLOCK
 
-  pinMode(KEYPAD_SI_LATCH, OUTPUT);
-  pinMode(KEYPAD_SI_CLOCK, OUTPUT);
-  pinMode(KEYPAD_SI_DATA, INPUT_PULLDOWN);
+  pinMode(keypad_pins[4], OUTPUT); //SI_LATCH
+  pinMode(keypad_pins[3], OUTPUT); //SI_CLOCK
+  pinMode(keypad_pins[2], INPUT_PULLDOWN); //SI_DATA
 }
 
 void KeyPad::initType2()
 {
   for(u8 x = 0; x < XSIZE; x ++)
   {
-    pinMode(keyPins[x], OUTPUT);
-    digitalWrite(keyPins[x], LOW);
+    pinMode(keypad_pins[x], OUTPUT);
+    digitalWrite(keypad_pins[x], LOW);
   }
   for(u8 y = 0; y < YSIZE; y ++)
   {
-    pinMode(keyPins[y + XSIZE], INPUT_PULLDOWN);
+    pinMode(keypad_pins[y + XSIZE], INPUT_PULLDOWN);
   }
 
 }
@@ -69,12 +69,12 @@ void KeyPad::initType2()
 {
   for(u8 x = 0; x < XSIZE; x ++)
   {
-    pinMode(keyPins[x], OUTPUT);
-    digitalWrite(keyPins[x], LOW);
+    pinMode(keypad_pins[x], OUTPUT);
+    digitalWrite(keypad_pins[x], LOW);
   }
   for(u8 y = 0; y < YSIZE; y ++)
   {
-    pinMode(keyPins[y + XSIZE], INPUT_PULLDOWN);
+    pinMode(keypad_pins[y + XSIZE], INPUT_PULLDOWN);
   }
 
 }
@@ -102,25 +102,25 @@ bool KeyPad::scanType1() //1.x 165/164 solution
 
   for (u8 x = 0; x < XSIZE; x++) //for 0 - 7 do
   {
-    //shiftOut(KEYPAD_SO_DATA, KEYPAD_SO_CLOCK, MSBFIRST, 1 << x); // bit shift a logic high (1) value by i
+    //shiftOut(keypad_pins[0], keypad_pins[1], MSBFIRST, 1 << x); // bit shift a logic high (1) value by i
     if( x == 0)
     {
-      digitalWrite(KEYPAD_SO_DATA, HIGH);
+      digitalWrite(keypad_pins[0], HIGH);
     }
 
-    digitalWrite(KEYPAD_SO_CLOCK, HIGH);
-    digitalWrite(KEYPAD_SO_DATA, LOW);
-    digitalWrite(KEYPAD_SO_CLOCK, LOW);
+    digitalWrite(keypad_pins[1], HIGH);
+    digitalWrite(keypad_pins[0], LOW);
+    digitalWrite(keypad_pins[1], LOW);
 
-    digitalWrite(KEYPAD_SI_LATCH, LOW); //165's load Active at Low
-    digitalWrite(KEYPAD_SI_LATCH, HIGH);
+    digitalWrite(keypad_pins[4], LOW); //165's load Active at Low
+    digitalWrite(keypad_pins[4], HIGH);
 
 
     for (s8 y = YSIZE-1; y >= 0; y--) //y could go negative so use int instead uint
     {
-      digitalWrite(KEYPAD_SI_CLOCK, LOW);
+      digitalWrite(keypad_pins[3], LOW);
 
-      keypadState[x][y] = KeyPad::updateKey(keypadState[x][y], digitalRead(KEYPAD_SI_DATA));
+      keypadState[x][y] = KeyPad::updateKey(keypadState[x][y], digitalRead(keypad_pins[2]));
       if(keypadState[x][y].changed)
       {
         changed = true;
@@ -130,13 +130,13 @@ bool KeyPad::scanType1() //1.x 165/164 solution
         CompositeSerial.print("Key Action ");
         CompositeSerial.print(xytoxy(x,y), HEX);
         CompositeSerial.print(" ");
-        CompositeSerial.print(keypadState[x][y].state);
+        CompositeSerial.print(KeyStatesString[keypadState[x][y].state]);
         CompositeSerial.print(" ");
         CompositeSerial.println(keypadState[x][y].velocity);
         #endif
       }
 
-      digitalWrite(KEYPAD_SI_CLOCK, HIGH);
+      digitalWrite(keypad_pins[3], HIGH);
     }
   }
 
@@ -151,10 +151,10 @@ bool KeyPad::scanType2()
 
   for(u8 x = 0; x < XSIZE; x ++)
   {
-    digitalWrite(keyPins[x], HIGH);
+    digitalWrite(keypad_pins[x], HIGH);
     for(u8 y = 0; y < YSIZE; y ++)
     {
-      keypadState[x][y] = KeyPad::updateKey(keypadState[x][y], digitalRead(keyPins[y+8]));
+      keypadState[x][y] = KeyPad::updateKey(keypadState[x][y], digitalRead(keypad_pins[y+8]));
       if(keypadState[x][y].changed)
       {
         changed = true;
@@ -170,7 +170,7 @@ bool KeyPad::scanType2()
         return changed;
       }
     }
-    digitalWrite(keyPins[x], LOW);
+    digitalWrite(keypad_pins[x], LOW);
   }
 
   return changed;

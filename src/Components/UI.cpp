@@ -98,7 +98,16 @@ void UI::fnKeyAction()
     u8 x = xytox(KeyPad.changelist[i]);
     u8 y = xytoy(KeyPad.changelist[i]);
 
-    //hadAction = true;
+    if (KeyPad.getKey(KeyPad.changelist[i]).state == PRESSED &&
+        KeyPad.changelist[i] != 0x33 && //Because it's easy to hit them by accident
+        KeyPad.changelist[i] != 0x34 &&
+        KeyPad.changelist[i] != 0x43 &&
+        KeyPad.changelist[i] != 0x44
+    )
+    {
+      hadAction = true;
+    }
+    
 
     if (y > 5)
     {
