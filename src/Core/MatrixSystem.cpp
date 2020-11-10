@@ -123,7 +123,7 @@ void factoryTest()
   {
     if (ledTimer.tick(fps_micros))
     {
-      CompositeSerial.println();
+      KeyPad.scan();
       if (Touch.scan())
       {
         for (int i = 0; i < 16; i++)
