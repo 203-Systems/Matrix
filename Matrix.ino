@@ -105,10 +105,20 @@ if (Touch.scan())
             break;
           if (Touch.getKey(Touch.changelist[i]).state == PRESSED)
           {
+            #ifdef DEBUG
+            CompositeSerial.print("Touch Key #");
+            CompositeSerial.print(Touch.changelist[i]);
+            CompositeSerial.println(" Pressed");
+            #endif
             Midi.sendNoteOn(0, touch_keymap[current_keymap][Touch.changelist[i]], Touch.getKey(Touch.changelist[i]).velocity * 127);
           }
           else if (Touch.getKey(Touch.changelist[i]).state == RELEASED)
           {
+            #ifdef DEBUG
+            CompositeSerial.print("Touch Key #");
+            CompositeSerial.print(Touch.changelist[i]);
+            CompositeSerial.println(" Released");
+            #endif
             Midi.sendNoteOff(0, touch_keymap[current_keymap][Touch.changelist[i]], 0);
           }
         }

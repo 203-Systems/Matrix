@@ -568,39 +568,14 @@ u8 xytoy(u8 xy)
   return xy & 0x0F;
 }
 
-u8 xyRotation(u8 xy)
+u8 xyRotation(u8 xy, u8 r /*= 255*/)
 {
   u8 x = (xy & 0xF0) >> 4;
   u8 y = xy & 0x0F;
   u8 xr;
   u8 yr;
-  switch (rotation)
-  {
-  case 1:
-    xr = y;
-    yr = 7 - x;
-    break;
-  case 2:
-    xr = 7 - x;
-    yr = 7 - y;
-    break;
-  case 3:
-    xr = 7 - y;
-    yr = x;
-    break;
-  default:
-    xr = x;
-    yr = y;
-  }
-  return xr * 0x10 + yr;
-}
-
-u8 xyRotation(u8 xy, u8 r)
-{
-  u8 x = (xy & 0xF0) >> 4;
-  u8 y = xy & 0x0F;
-  u8 xr;
-  u8 yr;
+    if(r = 255)
+    r = rotation;
   switch (r)
   {
   case 1:
@@ -622,39 +597,14 @@ u8 xyRotation(u8 xy, u8 r)
   return xr * 0x10 + yr;
 }
 
-u8 xyReverseRotation(u8 xy)
+u8 xyReverseRotation(u8 xy, u8 r /*= 255*/)
 {
   u8 x = (xy & 0xF0) >> 4;
   u8 y = xy & 0x0F;
   u8 xr;
   u8 yr;
-  switch (rotation)
-  {
-  case 1:
-    xr = 7 - y;
-    yr = x;
-    break;
-  case 2:
-    xr = 7 - x;
-    yr = 7 - y;
-    break;
-  case 3:
-    xr = y;
-    yr = 7 - x;
-    break;
-  default:
-    xr = x;
-    yr = y;
-  }
-  return xr * 0x10 + yr;
-}
-
-u8 xyReverseRotation(u8 xy, u8 r)
-{
-  u8 x = (xy & 0xF0) >> 4;
-  u8 y = xy & 0x0F;
-  u8 xr;
-  u8 yr;
+  if(r = 255)
+    r = rotation;
   switch (r)
   {
   case 1:
@@ -681,12 +631,17 @@ u8 touchbarRotation(u8 id)
   switch (rotation)
   {
   case 0:
-  case 1:
-    return id;
-  case 2:
   case 3:
+    return id;
+  case 1:
+  case 2:
     return 7 - id;
   }
+}
+
+u8 touchbarReverseRotation(u8 id)
+{
+  return touchbarRotation(id);
 }
 
 void recordReportCode(u8 code)

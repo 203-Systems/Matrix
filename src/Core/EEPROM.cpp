@@ -13,13 +13,13 @@ void setupEEPROM()
 
 void variableLoad()
 {
-  if(EEPROM_USER.read(E_INIT) == 0x00CB)
+  if(EEPROM_USER.read(E_INIT) == 0x00CB) //EEPROM was just reseted
   {
     saveAllSetting();
     return;
   }
 
-  if(EEPROM_USER.read(E_INIT) != 0x0203)
+  if(EEPROM_USER.read(E_INIT) != 0x0203) //EEPROM isn't ready
   {
     initEEPROM();
     return;

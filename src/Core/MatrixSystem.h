@@ -93,11 +93,10 @@ u8 xytoxy(u8 x, u8 y);
 u8 xytox(u8 xy);
 u8 xytoy(u8 xy);
 //u8 xyToIndex(u8 X,u8 Y);
-u8 xyRotation(u8 xy);
-u8 xyRotation(u8 xy, u8 r);
-u8 xyReverseRotation(u8 xy);
-u8 xyReverseRotation(u8 xy, u8 r);
+u8 xyRotation(u8 xy, u8 r = 255);
+u8 xyReverseRotation(u8 xy, u8 r = 255);
 u8 touchbarRotation(u8 id);
+u8 touchbarReverseRotation(u8 id);
 void recordReportCode(u8 code);
 //u16 velocityCurve(u16 input);
 

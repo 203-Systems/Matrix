@@ -18,7 +18,7 @@ extern u32 led_color_temperture = 0xFFFFFFFF;
 extern bool desaturated_mode = false;
 extern u8 desaturate_rate = 80; // 0~255
 extern u8 fps = 60;
-extern u16 fps_micros = 1000 / fps;
+extern u16 fps_micros = 1000 / fps; //Well I just realize that it's still mill not micro. TODO
 
 extern u8 keypad_scanrate = 120;
 extern u16 keypad_scanrate_micros = 1000 / keypad_scanrate;

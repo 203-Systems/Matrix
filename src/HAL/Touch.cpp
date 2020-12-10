@@ -63,18 +63,18 @@ bool Touch::scanType1() //TTP229-BSD (16Keys merged to 8Keys)
 
   if(changed)
   {
-    #ifdef DEBUG    
-    // filler = 0;
-    // CompositeSerial.print("filler: ");
-    // CompositeSerial.println(filler);
-    CompositeSerial.print("Touch Action Raw ");
-    for (u8 x = 0; x < 16; x++)
-    {
-      CompositeSerial.print(newInput[x]);
-      CompositeSerial.print(" ");
-    }
-    CompositeSerial.println();
-    #endif
+    // #ifdef DEBUG    
+    // // filler = 0;
+    // // CompositeSerial.print("filler: ");
+    // // CompositeSerial.println(filler);
+    // CompositeSerial.print("Touch Action Raw ");
+    // for (u8 x = 0; x < 16; x++)
+    // {
+    //   CompositeSerial.print(newInput[x]);
+    //   CompositeSerial.print(" ");
+    // }
+    // CompositeSerial.println();
+    // #endif
 
     for (u8 x = 0; x < 16; x+=2)
     {
@@ -90,14 +90,14 @@ bool Touch::scanType1() //TTP229-BSD (16Keys merged to 8Keys)
       { 
         if(!Touch::addtoList(index))
           return changed;
-        #ifdef DEBUG
-        CompositeSerial.print("Touch Action ");
-        CompositeSerial.print(index);
-        CompositeSerial.print(" ");
-        CompositeSerial.print(KeyStatesString[touchState[index].state]);
-        CompositeSerial.print(" ");
-        CompositeSerial.println(touchState[index].velocity);
-        #endif
+        // #ifdef DEBUG
+        // CompositeSerial.print("Touch Action ");
+        // CompositeSerial.print(index);
+        // CompositeSerial.print(" ");
+        // CompositeSerial.print(KeyStatesString[touchState[index].state]);
+        // CompositeSerial.print(" ");
+        // CompositeSerial.println(touchState[index].velocity);
+        // #endif
       }
       else
       {     
@@ -193,7 +193,7 @@ KeyInfo Touch::updateKey(KeyInfo currentKey, float input)
 
 KeyInfo Touch::getKey(u8 index)
 {
-  return touchState[index];
+  return touchState[touchbarReverseRotation(index)];
 }
 
 float Touch::calculatePercentage()

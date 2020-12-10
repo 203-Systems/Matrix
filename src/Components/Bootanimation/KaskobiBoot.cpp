@@ -26,7 +26,7 @@ void UI::kaskobiWaitAnimation()
       }
       LED.offXY(0x07, true);
       LED.update();
-      onPause = 2;
+      onPause = 0;
     }
     else
     {
@@ -36,7 +36,7 @@ void UI::kaskobiWaitAnimation()
         LED.update();
         delay(10);
       }
-    onPause = 2;
+    onPause = 1;
     }
     uiTimer.recordCurrent();
   }
