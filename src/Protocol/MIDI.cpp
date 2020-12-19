@@ -287,7 +287,10 @@ void MIDI::handleSysEx()
         MIDI::setLED(sysexBuffer, sysexLength);
         break;
       case 34: //LED Area Fill
-        MIDI::fillLED(sysexBuffer, sysexLength);
+        MIDI::fillLEDArea(sysexBuffer, sysexLength);
+        break;
+      case 35: //LED serial fill
+        MIDI::serialFillLED(sysexBuffer, sysexLength);
         break;
 
       //Graphic
@@ -477,9 +480,7 @@ void MIDI::scrollText(uint8_t *sysexBuffer, uint16_t len)
 void MIDI::setLED(uint8_t *sysexBuffer, uint16_t len)
 {
   bool xy_mode = sysexBuffer[6] == 33;
-  u8 led_class;
-
-  led_class = sysexBuffer[7]; //Ignore for now, since <LED Class> Isn't implented yet
+  u8 led_class = sysexBuffer[7]; //Ignore for now, since <LED Class> Isn't implented yet
 
   u8 color_type = sysexBuffer[8];
   bool gamma = dispatchColorStructGamma(color_type);
@@ -542,10 +543,9 @@ void MIDI::setLED(uint8_t *sysexBuffer, uint16_t len)
   }
 }
 
-void MIDI::fillLED(uint8_t *sysexBuffer, uint16_t len)
+void MIDI::fillLEDArea(uint8_t *sysexBuffer, uint16_t len)
 {
-  u8 led_class;
-  led_class = sysexBuffer[7]; //Ignore for now, since <LED Class> Isn't implented yet
+  u8 led_class = sysexBuffer[7]; //Ignore for now, since <LED Class> Isn't implented yet
   if(sysexLength == 8)
   {
     LED.fill(0, false);
@@ -560,6 +560,28 @@ void MIDI::fillLED(uint8_t *sysexBuffer, uint16_t len)
     LED.fill(color, overlay, gamma);
   }
 }
+
+void MIDI::serialFillLED(uint8_t *sysexBuffer, uint16_t len)
+{
+  #ifdef DEBUG
+  CompositeSerial.print("Sysex Serieal Fill LED");
+  CompositeSerial.println(getDeviceSerialString().c_str());
+  #endif  
+  u8 led_class = sysexBuffer[7]; //Ignore for now, since <LED Class> Isn't implented yet
+
+  u8 color_type = sysexBuffer[8];
+  bool gamma = dispatchColorStructGamma(color_type);
+  bool overlay = dispatchColorStructOverlay(color_type);  
+  u8 block_size = dispatchColorDataOffset(color_type);
+  u8 index = sysexBuffer[9];
+  for(u8 i = 0; i < len - 10; i += block_size)
+  {
+    CRGB color = dispatchColorData(color_type, sysexBuffer + 10 + i);    
+    LED.setCRGB(index, color, overlay, gamma);
+    index++;
+  }
+}
+
 void MIDI::writePalette(uint8_t *sysexBuffer, uint16_t len)
 {
   u8 palette_index = sysexBuffer[7];

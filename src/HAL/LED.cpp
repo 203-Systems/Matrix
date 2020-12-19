@@ -140,16 +140,16 @@ void LED::setWRGB(s16 index, u8 w, u8 r, u8 g, u8 b, bool overlay /*= false*/)
 
 void LED::setCRGB(s16 index, CRGB CRGB, bool overlay /*= false*/, bool gamma /*= false*/)
 {
-  // #ifdef DEBUG
-  // CompositeSerial.print("LED\t");
-  // CompositeSerial.print(index);
-  // CompositeSerial.print("\t");
-  // CompositeSerial.print(CRGB.r);
-  // CompositeSerial.print("\t");
-  // CompositeSerial.print(CRGB.g);
-  // CompositeSerial.print("\t");
-  // CompositeSerial.println(CRGB.b);
-  // #endif
+  #ifdef DEBUG
+  CompositeSerial.print("LED\t");
+  CompositeSerial.print(index);
+  CompositeSerial.print("\t");
+  CompositeSerial.print(CRGB.r);
+  CompositeSerial.print("\t");
+  CompositeSerial.print(CRGB.g);
+  CompositeSerial.print("\t");
+  CompositeSerial.println(CRGB.b);
+  #endif
 
   if(index < 0)
   return;

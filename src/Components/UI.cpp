@@ -42,7 +42,7 @@ void UI::fnMenu()
   {
     Midi.poll();
 
-    if (uiTimer.tick(1000 / fps))
+    if (uiTimer.tick(ui_fps_micros))
     {
       if (KeyPad.scan())
       {
@@ -102,12 +102,10 @@ void UI::fnKeyAction()
         KeyPad.changelist[i] != 0x33 && //Because it's easy to hit them by accident
         KeyPad.changelist[i] != 0x34 &&
         KeyPad.changelist[i] != 0x43 &&
-        KeyPad.changelist[i] != 0x44
-    )
+        KeyPad.changelist[i] != 0x44)
     {
       hadAction = true;
     }
-    
 
     if (y > 5)
     {
@@ -472,11 +470,11 @@ void UI::settingMenu()
   {
     Midi.poll();
 
-    if (uiTimer.tick(1000 / fps))
+    if (uiTimer.tick(ui_fps_micros))
     {
       if (KeyPad.scan())
       {
-        if (KeyPad.fn.state == PRESSED)
+        if (KeyPad.fn.state == RELEASED)
         {
           UI::exitSettingMenu();
           return;
@@ -680,34 +678,33 @@ u8 UI::numSelector8bit(u8 currentNum, u32 color, u32 sec_color)
 {
   LED.fill(0, true);
   bool initalized = false;
-  while (!KeyPad.fn.state == PRESSED)
+  while (true)
   {
-    if (uiTimer.tick(1000 / fps))
+    if (uiTimer.tick(ui_fps_micros) && KeyPad.scan() || !initalized)
     {
-      if (KeyPad.scan() || !initalized)
+      if (!initalized)
+        initalized = true;
+      if (KeyPad.fn.state == RELEASED)
       {
-        if (!initalized)
-          initalized = true;
         LED.fill(0, true);
-        if (pro_input_mode)
-        {
-          currentNum = uielement.binary8bitInput(currentNum, 7, color);
-        }
-        else
-        {
-          currentNum = uielement.simple8bitInput(currentNum, 7, color);
-        }
-        uielement.renderHalfHeightNum(currentNum, 0x73, color, sec_color);
-#ifdef DEBUG
-        CompositeSerial.print("numSelector\t");
-        CompositeSerial.println(currentNum);
-#endif
-        LED.update();
+        return currentNum;
       }
+      if (pro_input_mode)
+      {
+        currentNum = uielement.binary8bitInput(currentNum, 7, color);
+      }
+      else
+      {
+        currentNum = uielement.simple8bitInput(currentNum, 7, color);
+      }
+      uielement.renderHalfHeightNum(currentNum, 0x73, color, sec_color);
+#ifdef DEBUG
+      CompositeSerial.print("numSelector\t");
+      CompositeSerial.println(currentNum);
+#endif
+      LED.update();
     }
   }
-  LED.fill(0, true);
-  return currentNum;
 }
 
 u8 UI::numSelector6bit(u8 currentNum, u32 color, u32 sec_color)
@@ -726,12 +723,17 @@ u32 UI::numSelectorRGB(u32 color)
   u8 G = (color & 0xFF00) >> 8;
   u8 B = color & 0xFF;
   uielement.renderHalfHeightNum(R, 0x73, color, 0xFF0000);
-  while (!KeyPad.fn.state == PRESSED)
+  while (true)
   {
-    if (KeyPad.scan() || !initalized)
+    if (uiTimer.tick(ui_fps_micros) && KeyPad.scan() || !initalized)
     {
       if (!initalized)
         initalized = true;
+      if (KeyPad.fn.state == RELEASED)
+      {
+        LED.fill(0, true);
+        return color;
+      }
       if (R != uielement.simple8bitInput(R, 5, 0xFF0000))
       {
         LED.fill(0, true);
@@ -782,8 +784,6 @@ u32 UI::numSelectorRGB(u32 color)
 #endif
     }
   }
-  LED.fill(0, true);
-  return color;
 }
 
 // u32 UI::numSelectorWRGB(u32 color, bool ignore_gamma /* = false */)
@@ -986,10 +986,15 @@ void UI::clearEEPROM()
 
   LED.update();
 
-  while (!KeyPad.fn.velocity)
+  while (true)
   {
-    if (KeyPad.scan())
+    if (uiTimer.tick(ui_fps_micros) && KeyPad.scan())
     {
+      if (KeyPad.fn.state == RELEASED)
+      {
+        LED.fill(0, true);
+        return;
+      }
       for (int i = 0; i < MULTIPRESS; i++)
       {
         if (KeyPad.changelist[i] == 0xFFFF)
@@ -1037,8 +1042,6 @@ void UI::clearEEPROM()
       }
     }
   }
-  LED.fill(0, true);
-  return;
 }
 
 void UI::standbyMode()

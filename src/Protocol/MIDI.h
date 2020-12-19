@@ -74,7 +74,8 @@ public:
 
   void scrollText(u8 *sysexBuffer, uint16_t len);
   void setLED(u8 *sysexBuffer, uint16_t len);
-  void fillLED(u8 *sysexBuffer, uint16_t len);
+  void fillLEDArea(u8 *sysexBuffer, uint16_t len);
+  void serialFillLED(uint8_t *sysexBuffer, uint16_t len);
   void writePalette(u8 *sysexBuffer, uint16_t len);
 
 private:

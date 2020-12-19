@@ -10,6 +10,8 @@ extern bool unipad_mode = false;
 extern bool debug_mode = false;
 extern bool fn_hold = false;
 extern bool pro_input_mode = false;
+extern u16 ui_fps = 60;
+extern u16 ui_fps_micros = 1000 / ui_fps; //Well I just realize that it's still mill not micro. TODO
 //LED setting
 extern u8 brightness = 128;
 extern u16 max_mAh = 1000;
@@ -17,10 +19,10 @@ extern u8 brightness_level[8] = {16, 32, 64, 96, 128, 160, 216, 255};
 extern u32 led_color_temperture = 0xFFFFFFFF;
 extern bool desaturated_mode = false;
 extern u8 desaturate_rate = 80; // 0~255
-extern u8 fps = 60;
+extern u16 fps = 240;
 extern u16 fps_micros = 1000 / fps; //Well I just realize that it's still mill not micro. TODO
 
-extern u8 keypad_scanrate = 120;
+extern u16 keypad_scanrate = 10;
 extern u16 keypad_scanrate_micros = 1000 / keypad_scanrate;
 
 extern const CRGB pre_compilled_palette[2][128] = //color Palette
