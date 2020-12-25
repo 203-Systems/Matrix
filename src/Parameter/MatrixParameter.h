@@ -45,7 +45,7 @@ typedef volatile const int64_t vsc64;
 
 //DeviceInfo
 
-// #define DEBUG
+#define DEBUG
 
 #define DEVICENAME "Matrix"
 #define MAUNFACTURERNAME "203 Electronic"
@@ -56,7 +56,7 @@ typedef volatile const int64_t vsc64;
 #define PID2 0x0100     // for device ID USE
 const u8 SYSEXID[3] = {0x00, 0x02, 0x03};
 
-#define EEPROMVERSION 1 //Each EEPROM change will cause this to increase
+#define EEPROMVERSION 2 //Each EEPROM change will cause this to increase
 #define FWVERSION_STRING "0.8.0 beta 8" //String(MAJOR_VER)+ "." +MINOR_VER+"." +PATCH_VER+(BUILD_VER == 0)?"":("b"+BUILD_VER) 
 #define MAJOR_VER 0
 #define MINOR_VER 8

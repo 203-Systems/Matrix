@@ -527,6 +527,9 @@ void UI::settingKeyAction()
       case 0x20:
         setProInputMode(!pro_input_mode);
         break;
+      case 0x01:
+        setTouchEnable(!touch_enable);
+        break;
       case 0x06:
         UI::clearEEPROM();
         break;
@@ -610,6 +613,16 @@ void UI::settingKeyAction()
       case 0x20:
         UI::scrollText("Pro Input Mode", 0x00FF00);
         break;
+      case 0x01:
+        if(touch_enable)
+        {
+          UI::scrollText("Touchbar Enabled", 0x7957FB);
+        }
+        else
+        {
+          UI::scrollText("Touchbar Disabled", 0x7957FB);
+        }
+        break;
       case 0x06:
         UI::scrollText("Clear Device Config", 0xFF00FF);
         break;
@@ -655,10 +668,15 @@ void UI::settingRender()
   default:
     LED.setXYCRGB(0x00, 0x00FF0000, true); //STFU ???
   }
+
   LED.setXYCRGB(0x10, 0x0033FFBD, true);                                  //Desaturated Mode
   LED.setXYCRGB(0x20, toLowBrightness(0x0000FF00, pro_input_mode), true); //Pro Input Mode
   LED.setXYCRGB(0x06, 0x00FF00FF, true);                                  //Reset EEPROM
   LED.setXYCRGB(0x07, 0x00FF0000, true);                                  //DFU
+
+  LED.setXYCRGB(0x01, toLowBrightness(0x007957FB, touch_enable), true); //Pro Input Mode
+
+
   if (BUILD_VER == 0)
   {
     LED.setXYCRGB(0x17, 0x0000FF30, true); //OS Version
@@ -667,6 +685,7 @@ void UI::settingRender()
   {
     LED.setXYCRGB(0x17, 0x00FFA500, true); //OS Version color change with Beta version is installed
   }
+
   LED.setXYCRGB(0x27, 0x0000FF30, true); //Bootloader Info
   LED.setXYCRGB(0x37, 0x0000FF30, true); //Device Name
   LED.setXYCRGB(0x67, 0x00FFFFFF, true); //color Correction

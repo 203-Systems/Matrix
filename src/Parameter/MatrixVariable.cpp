@@ -414,6 +414,7 @@ extern float aftertouch_threshold = 0;
 extern u16 debounce_threshold = 24;
 
 //TouchBar
+extern bool touch_enable = true;
 extern u8 touch_mode = 0;
 extern u8 touch_keymap[5][8] =
     {

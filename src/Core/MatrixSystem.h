@@ -61,6 +61,7 @@ void setColorCorrection(u32 c, bool temp = false);
 void setSTFU(u16 v);
 void setDesaturatedMode(bool e);
 void setProInputMode(bool e);
+void setTouchEnable(bool e);
 //void setTouchSensitive(u8 s);
 
 //Sysex get

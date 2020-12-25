@@ -34,7 +34,9 @@ void variableLoad()
   switch(EEPROM_USER.read(E_EEPROMVERSION))
   {
     case 0: //0 > 1
-      EEPROM_USER.write(E_DESATURATED_MODE, desaturated_mode);
+      EEPROM_USER.write(E_DESATURATED_MODE, 0);
+    case 1:
+      EEPROM_USER.write(E_TOUCH_ENABLE, true);
     case EEPROMVERSION:
       loadSetting();
       loadPalette();
@@ -50,7 +52,7 @@ void loadSetting()
   device_id = EEPROM_USER.read(E_DEVICE_ID);
   rotation = EEPROM_USER.read(E_ROTATION);
   brightness = EEPROM_USER.read(E_BRIGHTNESS);
-  // fps = EEPROM_USER.read(E_FPS);
+  touch_enable = EEPROM_USER.read(E_TOUCH_ENABLE);
   gamma_enable = EEPROM_USER.read(E_GAMMA_ENABLE);
   midi_enable = EEPROM_USER.read(E_MIDI_ENABLE);
   m2p_enable = EEPROM_USER.read(E_M2P_ENABLE);
@@ -143,7 +145,7 @@ void saveAllSetting()
   EEPROM_USER.write(E_DEVICE_ID, device_id);
   EEPROM_USER.write(E_ROTATION, rotation);
   EEPROM_USER.write(E_BRIGHTNESS, brightness);
-  // EEPROM_USER.write(E_FPS, fps);
+  EEPROM_USER.write(E_TOUCH_ENABLE, touch_enable);
   EEPROM_USER.write(E_GAMMA_ENABLE, (u8)gamma_enable);
   EEPROM_USER.write(E_MIDI_ENABLE, (u8)midi_enable);
   EEPROM_USER.write(E_M2P_ENABLE, (u8)m2p_enable);
@@ -204,18 +206,6 @@ void saveAllSetting()
 //         EEPROM_USER.write(E_CUSTOM_KEYMAP_1_ACTIVE + 128*p + y*16 + x, (fn_keymap_idle_color[2+p][y][x*2] & 0xFFFF0000) >> 16);
 //         EEPROM_USER.write(E_CUSTOM_KEYMAP_1_ACTIVE + 128*p + y*16 + x + 1, fn_keymap_idle_color[2+p][y][x*2] & 0xFFFF);
 //       }
-//     }
-//   }
-// }
-//
-// void savePalette()
-// {
-//   for(u8 p = 0; p < 2; p++)
-//   {
-//     for(u8 i = 0; i <128; i++)
-//     {
-//       EEPROM_PALETTE.write(i * 2 + 256 * p, (palette[p+2][i] & 0xFFFF0000) >> 16);
-//       EEPROM_PALETTE.write(i * 2 + 256 * p + 1, palette[p+2][i] & 0x0000FFFF);
 //     }
 //   }
 // }

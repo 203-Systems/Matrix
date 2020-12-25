@@ -30,7 +30,7 @@
     E_DEVICE_ID = 2,
     E_ROTATION = 3,
     E_BRIGHTNESS = 4,
-    E_FPS = 5,
+    E_TOUCH_ENABLE = 5,
     E_GAMMA_ENABLE = 6,
     E_MIDI_ENABLE = 7,
     E_M2P_ENABLE = 8,

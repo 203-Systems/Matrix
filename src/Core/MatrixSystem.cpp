@@ -359,104 +359,11 @@ void setProInputMode(bool e)
   EEPROM_USER.write(E_PRO_INPUT_MODE, e);
 }
 
-//Sysex get
-// void getDeviceInfo()
-// {
-//   //TODO
-// }
-//
-// void getModuleCount()
-// {
-//   //TODO
-// }
-//
-// void getModuleInfo()
-// {
-//
-// }
-//
-// void getDeviceID()
-// {
-//   CompositeSerial.write((u8)0);
-//   CompositeSerial.write(14);
-//   CompositeSerial.write(3);
-//   CompositeSerial.write(device_id);
-// }
-//
-//
-// void getAllParameter()
-// {
-//   //TODO
-// }
-//
-// void getPaletteRGB()
-// {
-//   CompositeSerial.write((u8)(0));
-//   CompositeSerial.write(14);
-//   CompositeSerial.write(20);
-//
-//   for(u8 i = 0; i < sizeof(palette[2]); i++)
-//   {
-//     CompositeSerial.write(i);
-//     CompositeSerial.write(palette[2][i] & 0xFF0000 >> 16);
-//     CompositeSerial.write(palette[2][i] & 0xFF00 >> 8);
-//     CompositeSerial.write(palette[2][i] & 0xFF);
-//   }
-//   CompositeSerial.write(255);
-// }
-//
-// void getPaletteWRGB()
-// {
-//   CompositeSerial.write((u8)(0));
-//   CompositeSerial.write(14);
-//   CompositeSerial.write(21);
-//
-//   for(u8 i = 0; i < sizeof(palette[2]); i++)
-//   {
-//     CompositeSerial.write(i);
-//     CompositeSerial.write(palette[2][i] & 0xFF000000 >> 24);
-//     CompositeSerial.write(palette[2][i] & 0xFF0000 >> 16);
-//     CompositeSerial.write(palette[2][i] & 0xFF00 >> 8);
-//     CompositeSerial.write(palette[2][i] & 0xFF);
-//   }
-//   CompositeSerial.write(255);
-// }
-//
-// void getgammaState()
-// {
-//   CompositeSerial.write((u8)(0));
-//   CompositeSerial.write(14);
-//   CompositeSerial.write(24);
-// }
-//
-// void getCustomKeymap()
-// {
-//   CompositeSerial.write((u8)(0));
-//   CompositeSerial.write(14);
-//   CompositeSerial.write(25);
-// }
-//
-// void getBrightness()
-// {
-//   CompositeSerial.write((u8)(0));
-//   CompositeSerial.write(14);
-//   CompositeSerial.write(25);
-//   CompositeSerial.write(brightness);
-// }
-
-// void getTouchSensitive()
-// {
-//   CompositeSerial.write((u8)(0));
-//   CompositeSerial.write(14);
-//   CompositeSerial.write(31);
-//   CompositeSerial.write(touch_sensitive);
-// }
-
-//special
-// void resetTouchBar()
-// {
-//   TouchBar.init();
-// }
+void setTouchEnable(bool e)
+{
+  touch_enable = e;
+  EEPROM_USER.write(E_TOUCH_ENABLE, e);
+}
 
 void rotationCW(u8 r)
 {
