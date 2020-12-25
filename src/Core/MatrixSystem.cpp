@@ -262,11 +262,19 @@ void compileColorScaleTable()
 
 void compilePalette()
 {
-  for (u8 p = 0; p < 4; p++)
+  loadPalette();
+  for (u8 p = 0; p < 2; p++)
   {
     for (u8 i = 0; i < 128; i++)
     {
-      palette[p][i] = compileColor(palette[p][i]);
+      palette[p][i] = compileColor(pre_compilled_palette[p][i]);
+    }
+  }
+  for (u8 p = 2; p < 4; p++)
+  {
+    for (u8 i = 0; i < 128; i++)
+    {
+      palette[p][i] = compileColor(palette[p][i]); //Palette from EEPROM
     }
   }
 }

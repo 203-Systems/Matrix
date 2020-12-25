@@ -39,7 +39,7 @@ void variableLoad()
       EEPROM_USER.write(E_TOUCH_ENABLE, true);
     case EEPROMVERSION:
       loadSetting();
-      loadPalette();
+      // loadPalette(); //Compile Palette will handle loading of Palette
       //loadKeyMap();
       break;
     default:
