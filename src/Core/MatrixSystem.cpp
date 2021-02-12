@@ -41,7 +41,9 @@ void setupUSB()
   USBComposite.setSerialString(serial_number.c_str());
 
   Midi.registerComponent();
+  // #ifdef DEBUG
   CompositeSerial.registerComponent();
+  // #endif
 
   USBComposite.begin();
 }
@@ -169,15 +171,15 @@ void factoryTest()
 String getDeviceSerialString()
 {
   String serial;
-  u32 serial_num[3] = {DEVICE_SERIAL_1, DEVICE_SERIAL_2, DEVICE_SERIAL_3};
+  uint8_t *device_serial = (uint8_t *)0x1FFFF7E8;
   char char_table[16] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
-  for (u8 i = 0; i < 3; i++)
+  for (int i = 0; i < 3; i++)
   {
-    u32 current_byte = 0xF0000000;
-    for (s8 b = 7; b >= 0; b--)
+    for (int j = 3; j >= 0; j--)
     {
-      serial += char_table[(serial_num[i] & current_byte) >> 4 * b];
-      current_byte = current_byte >> 4;
+      uint8_t id = device_serial[i * 4 + j];
+      serial += char_table[id >> 4];
+      serial += char_table[id & 0x0F];
     }
   }
   return serial;
@@ -489,7 +491,7 @@ u8 xyRotation(u8 xy, u8 r /*= 255*/)
   u8 y = xy & 0x0F;
   u8 xr;
   u8 yr;
-    if(r = 255)
+  if (r = 255)
     r = rotation;
   switch (r)
   {
@@ -518,7 +520,7 @@ u8 xyReverseRotation(u8 xy, u8 r /*= 255*/)
   u8 y = xy & 0x0F;
   u8 xr;
   u8 yr;
-  if(r = 255)
+  if (r = 255)
     r = rotation;
   switch (r)
   {

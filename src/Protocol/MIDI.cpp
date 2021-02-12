@@ -27,7 +27,7 @@ void MIDI::noteOn(u8 channel, u8 note, u8 velocity)
   //   channel = 1; //unipad support
   if (midi_return)
   {
-    USBMIDI::sendNoteOn(channel, note, velocity);
+    MIDI::sendNoteOn(channel, note, velocity);
   }
 
   if (velocity == 0)
@@ -148,7 +148,7 @@ void MIDI::sendXYon(u8 xy, u8 velocity)
   CompositeSerial.println(velocity);
 #endif
 
-  USBMIDI::sendNoteOn(midi_channel, keymap[current_keymap][y][x], velocity);
+  MIDI::sendNoteOn(midi_channel, keymap[current_keymap][y][x], velocity);
 }
 
 void MIDI::sendXYoff(u8 xy, u8 velocity)
@@ -167,27 +167,108 @@ void MIDI::sendXYoff(u8 xy, u8 velocity)
 
   if(unipad_mode)
   {
-    USBMIDI::sendNoteOn(midi_channel, keymap[current_keymap][y][x], 0);
+    MIDI::sendNoteOn(midi_channel, keymap[current_keymap][y][x], 0);
   }
   else
   {
-    USBMIDI::sendNoteOff(midi_channel, keymap[current_keymap][y][x], 0);
+    MIDI::sendNoteOff(midi_channel, keymap[current_keymap][y][x], 0);
   }
 }
 
 void MIDI::handleNoteOff(unsigned int channel, unsigned int note, unsigned int velocity)
 {
   MIDI::noteOff(channel, note, velocity);
-  //USBMIDI::sendNoteOff(channel,note,velocity);
-  //leds[IndexInKeyMap(note)] = 0;
-  //CompositeSerial.println(channel + " off " + note + " " + velocity);
 }
 
 void MIDI::handleNoteOn(unsigned int channel, unsigned int note, unsigned int velocity)
 {
   MIDI::noteOn(channel, note, velocity);
-  //USBMIDI::sendNoteOn(channel,note,velocity);
-  //leds[IndexInKeyMap(note)] = color[channel][velocity];
+}
+
+void MIDI::poll()
+{
+  USBMIDI::poll();
+  if(midi_serial)
+  {
+    while(Serial4.available() > 2)
+    {
+      byte b1 = Serial4.read();
+      if((b1 >> 7) == 1)
+      {
+        lastStatusOutput = b1;
+        byte note = Serial4.read();
+        byte velocity = Serial4.read();
+
+        // #ifdef DEBUG
+        // CompositeSerial.print("Serial Midi: ");
+        // CompositeSerial.print(lastStatusOutput, HEX);
+        // CompositeSerial.print(" ");
+        // CompositeSerial.print(note, HEX);
+        // CompositeSerial.print(" ");
+        // CompositeSerial.println(velocity, HEX);
+        // #endif
+
+        if((lastStatusOutput & 0xF0) == 0x90)
+        {
+          MIDI::noteOn(lastStatusOutput & 0x0F, note, velocity);
+        }
+        else if((lastStatusOutput & 0xF0) == 0x80)
+        {
+          MIDI::noteOff(lastStatusOutput & 0x0F, note, velocity);
+        }
+      }
+      else
+      {
+        {
+          // CompositeSerial.print("Serial Midi Error: ");
+          // #ifdef DEBUG
+          // CompositeSerial.println(b1, HEX);
+          // #endif
+        }
+      }
+      
+  // if(midi_serial && Serial4.available() > 0)
+  // {
+  //   CompositeSerial.println(Serial4.read(), HEX);
+  // }
+    }
+  }
+}
+
+void MIDI::sendNoteOn(u8 channel, u8 note, u8 velocity)
+{
+  USBMIDI::sendNoteOn(channel,note,velocity);
+  if(midi_serial)
+  {
+    byte status = 0x90 + channel;
+    // if(status != lastStatusOutput)
+    // {
+    //   Serial4.write(status);
+    //   lastStatusOutput = status;
+    // }
+    // Serial4.write(note);
+    // Serial4.write(velocity);
+    Serial4.write(status);
+    Serial4.write(note);
+    Serial4.write(velocity);
+  }
+}
+
+void MIDI::sendNoteOff(u8 channel, u8 note, u8 velocity)
+{
+  USBMIDI::sendNoteOff(channel,note,velocity);
+  if(midi_serial)
+  {
+    byte status = 0x80 + channel;
+    // if(status != lastStatusOutput)
+    // {
+    //   Serial4.write(status);
+    //   lastStatusOutput = status;
+    // }
+    Serial4.write(status);
+    Serial4.write(note);
+    Serial4.write(velocity);
+  }
 }
 
 void MIDI::offScan()

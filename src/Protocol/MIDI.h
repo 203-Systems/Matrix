@@ -42,10 +42,10 @@ public:
   //From parrent
   //void registerComponent();
   //bool available();
-  //void poll();
+  void poll();
 
-  // void sendNoteOn(u8 channel, u8 note, u8 velocity = 127);
-  // void sendNoteOff(u8 channel, u8 note, u8 velocity = 0);
+  void sendNoteOn(u8 channel, u8 note, u8 velocity = 127);
+  void sendNoteOff(u8 channel, u8 note, u8 velocity = 0);
   // void sendVelocityChange(u8 channel, u8 note, u8 velocity);
   // void sendControlChange(u8 channel, u8 controller, u8 value);
   // void sendProgramChange(u8 channel, u8 program);
@@ -81,6 +81,7 @@ public:
 private:
   s8 offMap[128];
   u8 sysexBuffer[1024];
+  byte lastStatusOutput;
   u16 sysexLength;
 };
 

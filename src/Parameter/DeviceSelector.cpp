@@ -92,41 +92,45 @@ void loadDeviceConfig()
 {
   switch(MATRIX_MODEL)
   {
-    case MXPT:
+    // case MXPT:
+    //   switch(MATRIX_VERSION)
+    //   {
+    //     case 120:
+    //     #ifdef DEBUG
+    //     CompositeSerial.print("Device: Matrix Prototype V1.2");
+    //     #endif
+    //     loadConfigMXPTV120();
+    //     break;
 
-      switch(MATRIX_VERSION)
-      {
-        case 120:
-        #ifdef DEBUG
-        CompositeSerial.print("Device: Matrix Prototype V1.2");
-        #endif
-        loadConfigMXPTV120();
-        break;
+    //     case 150:
+    //     #ifdef DEBUG
+    //     CompositeSerial.print("Device: Matrix Prototype V1.5");
+    //     #endif
+    //     loadConfigMXPTV150();
+    //     break;
 
-        case 150:
-        #ifdef DEBUG
-        CompositeSerial.print("Device: Matrix Prototype V1.5");
+    //     case 210:
+    //     #ifdef DEBUG
+    //     CompositeSerial.print("Device: Matrix Prototype V2.1");
+    //     #endif
+    //     loadConfigMXPTV210();
+    //     break;
+    //   }
+    // break;
+    // case MXFE:
+    //   switch(MATRIX_VERSION)
+    //   {
+    //     case 1:
+    //       #ifdef DEBUG
+    //       CompositeSerial.print("Device: Matrix Founder Edition 1");
+    //       #endif
+    //       loadConfigMXFE1();
+    //     break;
+    //   }
+    default:
+      #ifdef DEBUG
+        CompositeSerial.print("No valid device config found");
         #endif
-        loadConfigMXPTV150();
-        break;
-
-        case 210:
-        #ifdef DEBUG
-        CompositeSerial.print("Device: Matrix Prototype V2.1");
-        #endif
-        loadConfigMXPTV210();
-        break;
-      }
-    break;
-    case MXFE:
-      switch(MATRIX_VERSION)
-      {
-        case 1:
-          #ifdef DEBUG
-          CompositeSerial.print("Device: Matrix Founder Edition 1");
-          #endif
-          loadConfigMXFE1();
-        break;
-      }
+      loadConfigMXFE1();
   }
 }

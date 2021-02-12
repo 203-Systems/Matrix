@@ -696,6 +696,13 @@ void UI::settingRender()
 u8 UI::numSelector8bit(u8 currentNum, u32 color, u32 sec_color)
 {
   LED.fill(0, true);
+
+  auto target8bitInput = &UIelement::simple8bitInput;
+  if (pro_input_mode)
+  {
+    target8bitInput = &UIelement::binary8bitInput;
+  }
+
   bool initalized = false;
   while (true)
   {
@@ -708,20 +715,18 @@ u8 UI::numSelector8bit(u8 currentNum, u32 color, u32 sec_color)
         LED.fill(0, true);
         return currentNum;
       }
-      if (pro_input_mode)
+      
+      if(currentNum != (&uielement->*target8bitInput)(currentNum, 7, color))
       {
-        currentNum = uielement.binary8bitInput(currentNum, 7, color);
-      }
-      else
-      {
-        currentNum = uielement.simple8bitInput(currentNum, 7, color);
-      }
-      uielement.renderHalfHeightNum(currentNum, 0x73, color, sec_color);
+        LED.fill(0, true);
+        currentNum = (&uielement->*target8bitInput)(currentNum, 7, color);
+        uielement.renderHalfHeightNum(currentNum, 0x73, color, sec_color);
 #ifdef DEBUG
-      CompositeSerial.print("numSelector\t");
-      CompositeSerial.println(currentNum);
+        CompositeSerial.print("numSelector\t");
+        CompositeSerial.println(currentNum);
 #endif
-      LED.update();
+        LED.update();
+      }
     }
   }
 }
@@ -742,6 +747,13 @@ u32 UI::numSelectorRGB(u32 color)
   u8 G = (color & 0xFF00) >> 8;
   u8 B = color & 0xFF;
   uielement.renderHalfHeightNum(R, 0x73, color, 0xFF0000);
+
+  auto target8bitInput = &UIelement::simple8bitInput;
+  if (pro_input_mode)
+  {
+    target8bitInput = &UIelement::binary8bitInput;
+  }
+  
   while (true)
   {
     if (uiTimer.tick(ui_fps_micros) && KeyPad.scan() || !initalized)
@@ -753,39 +765,32 @@ u32 UI::numSelectorRGB(u32 color)
         LED.fill(0, true);
         return color;
       }
-      if (R != uielement.simple8bitInput(R, 5, 0xFF0000))
+      if (R != (&uielement->*target8bitInput)(R, 5, 0xFF0000))
       {
         LED.fill(0, true);
-        R = uielement.simple8bitInput(R, 5, 0xFF0000);
+        R = (&uielement->*target8bitInput)(R, 5, 0xFF0000);
         color = (R << 16) + (color & 0x00FFFF);
         uielement.renderHalfHeightNum(R, 0x73, color, 0xFF0000);
       }
-      else if (G != uielement.binary8bitInput(G, 6, 0x00FF00))
+      else if (G != (&uielement->*target8bitInput)(G, 6, 0x00FF00))
       {
         LED.fill(0, true);
-        G = uielement.simple8bitInput(G, 6, 0x00FF00);
+        G = (&uielement->*target8bitInput)(G, 6, 0x00FF00);
         color = (G << 8) + (color & 0xFF00FF);
         uielement.renderHalfHeightNum(G, 0x73, color, 0x00FF00);
       }
-      else if (B != uielement.binary8bitInput(B, 7, 0x0000FF))
+      else if (B != (&uielement->*target8bitInput)(B, 7, 0x0000FF))
       {
         LED.fill(0, true);
-        B = uielement.simple8bitInput(B, 7, 0x0000FF);
+        B = (&uielement->*target8bitInput)(B, 7, 0x0000FF);
         color = B + (color & 0xFFFF00);
         uielement.renderHalfHeightNum(B, 0x73, color, 0x0000FF);
       }
-      if (pro_input_mode)
-      {
-        uielement.binary8bitInput(R, 5, 0xFF0000);
-        uielement.binary8bitInput(G, 6, 0x00FF00);
-        uielement.binary8bitInput(B, 7, 0x0000FF);
-      }
-      else
-      {
-        uielement.simple8bitInput(R, 5, 0xFF0000);
-        uielement.simple8bitInput(G, 6, 0x00FF00);
-        uielement.simple8bitInput(B, 7, 0x0000FF);
-      }
+
+      //Rerender Input
+      (&uielement->*target8bitInput)(R, 5, 0xFF0000);
+      (&uielement->*target8bitInput)(G, 6, 0x00FF00);
+      (&uielement->*target8bitInput)(B, 7, 0x0000FF);
 
       LED.update();
 

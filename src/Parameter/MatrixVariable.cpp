@@ -15,7 +15,7 @@ extern u16 ui_fps_micros = 1000 / ui_fps; //Well I just realize that it's still 
 //LED setting
 extern u8 brightness = 128;
 extern u16 max_mAh = 1000;
-extern u8 brightness_level[8] = {16, 32, 64, 96, 128, 160, 216, 255};
+extern u8 brightness_level[8] = {8, 12, 24, 40, 64, 90, 128, 168};
 extern u32 led_color_temperture = 0xFFFFFFFF;
 extern bool desaturated_mode = false;
 extern u8 desaturate_rate = 80; // 0~255
@@ -199,7 +199,7 @@ extern const CRGB pre_compilled_palette[2][128] = //color Palette
          0x0000AFFF, //37
          0x0000577F, //38
          0x00002F3F, //39
-         0x004F7FFF, //40
+         0x004F7FFF, //40 
          0x000057FF, //41
          0x00002F7F, //42
          0x0000173F, //43
@@ -432,6 +432,7 @@ extern bool midi_enable = true;
 extern bool m2p_enable = false;
 extern bool powercord_enable = false;
 extern bool midi_return = false;
+extern bool midi_serial = false;
 extern u8 stfu = 1;
 
 extern u8 report_code[10] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1};

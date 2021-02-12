@@ -2,6 +2,7 @@
 
 extern LED LED;
 extern KeyPad KeyPad;
+extern GFX GFX;
 
 UIelement::UIelement()
 {
@@ -35,11 +36,14 @@ void UIelement::renderAscii(char ascii, u8 xy, u32 color) //XY is the bottom rig
 
 void UIelement::renderHalfHeightNum(u16 num, u8 xy, u32 color, u32 sec_color)
 {
-  // s8 x = (xy & 0xF0) >> 4;
-  // s8 y = (xy & 0x0F);
+  s8 x = (xy & 0xF0) >> 4;
+  s8 y = (xy & 0x0F);
 
   // //Assume Matrix is fixed 8 width for now, there can't be more than
   // if(num > 999) 
+  
+  // GFX.fillRect(x,y,-8, -4,0xFF0000);
+
   if(num > 99)
   UIelement::renderHalfHeightDigit(num / 100, 0x13, color);
   
@@ -87,21 +91,22 @@ u8 UIelement::binary8bitInput(u8 currentNum, u8 y, u32 color)
   return currentNum;
 }
 
-u8 UIelement::simple8bitInput(s16 currentNum, u8 y, u32 color)
+u8 UIelement::simple8bitInput(u8 currentNum, u8 y, u32 color)
 {
+  s16 newNum = currentNum;
   u8 brightness_level[8] = {255, 127, 51, 25, 25, 51, 127, 255};
   s8 addition[8] = {-50, -20, -5, -1, 1, 5, 20, 50};
 
   for(int x = 0; x < 8; x++)
   {
     if(KeyPad.checkXY(x, y))
-      currentNum += addition[x];
+      newNum += addition[x];
   LED.setXYCRGB(xytoxy(x,y), toBrightness(color, brightness_level[x]), true);
   }
-  if(currentNum > 255)
-    currentNum = 255;
-  if(currentNum < 0)
-    currentNum = 0;
+  if(newNum > 255)
+    newNum = 255;
+  if(newNum < 0)
+    newNum = 0;
 
-  return currentNum;
+  return newNum;
 }

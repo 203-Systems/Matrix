@@ -19,15 +19,15 @@ void variableLoad()
     return;
   }
 
-  if(EEPROM_USER.read(E_INIT) != 0x0203) //EEPROM isn't ready
+  if(EEPROM_USER.read(E_INIT) != 0x0203 || EEPROM_USER.read(E_EEPROMVERSION) > EEPROMVERSION) //EEPROM isn't initallized or Firmware was downgraded
   {
     initEEPROM();
     return;
   }
 
-  if(EEPROM_USER.read(E_EEPROMVERSION) > EEPROMVERSION)
+  if(EEPROM_USER.read(E_EEPROMVERSION) == EEPROMVERSION)
   {
-    initEEPROM();
+    loadSetting();
     return;
   }
 
@@ -37,13 +37,9 @@ void variableLoad()
       EEPROM_USER.write(E_DESATURATED_MODE, 0);
     case 1:
       EEPROM_USER.write(E_TOUCH_ENABLE, true);
-    case EEPROMVERSION:
-      loadSetting();
-      // loadPalette(); //Compile Palette will handle loading of Palette
-      //loadKeyMap();
-      break;
     default:
-      initEEPROM();
+      EEPROM_USER.write(E_EEPROMVERSION, EEPROMVERSION);
+      loadSetting();
   }
 }
 

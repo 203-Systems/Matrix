@@ -66,6 +66,7 @@ extern bool midi_enable;
 extern bool m2p_enable;
 extern bool powercord_enable;
 extern bool midi_return;
+extern bool midi_serial;
 extern u8 stfu;
 
 extern u8 cW;

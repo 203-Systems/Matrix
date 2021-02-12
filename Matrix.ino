@@ -40,6 +40,11 @@ void setup()
   setupPalette();
   specialBoot();
 
+  if(midi_serial)
+  {
+    Serial4.begin(57600);
+  }
+
   UI.enterBootAnimation();
 
 #ifdef DEBUG
