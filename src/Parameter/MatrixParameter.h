@@ -53,7 +53,7 @@ typedef volatile const int64_t vsc64;
 #define VID 0x0203
 #define VID2 0x0203 // for device ID USE
 #define PID 0x0100
-#define PID2 0x0100     // for device ID USE
+#define PID2 0x0100 // for device ID USE
 const u8 SYSEXID[3] = {0x00, 0x02, 0x03};
 
 #define EEPROMVERSION 2 //Each EEPROM change will cause this to increase
@@ -70,8 +70,8 @@ const u8 SYSEXID[3] = {0x00, 0x02, 0x03};
 
 //LED
 #define NUM_LEDS 64
-#define NUM_BOTTOM_LEDS 36
-#define NUM_TOTAL_LEDS 64 //64+32
+#define NUM_BOTTOM_LEDS 32
+#define NUM_TOTAL_LEDS 96 //64+32
 #define NUM_POWERCORD_LEDS 100
 #define LOW_STATE_BRIGHTNESS 100 //40%ish
 

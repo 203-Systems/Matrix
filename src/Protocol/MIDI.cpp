@@ -42,33 +42,65 @@ void MIDI::noteOn(u8 channel, u8 note, u8 velocity)
   {
   case 0:
     if (note > 35 && note < 100)
+    {
       LED.setXYPalette(user1_keymap_optimized[note - 36], channel, velocity);
+    }
+    else if (note > 99 && note < 108) //Bottom Light Right Column
+    {
+      LED.setPalette(NUM_LEDS + note - 100, channel, velocity);
+    }
+    else if (note > 115 && note < 124) //Bottom Light Bottom Row
+    {
+      LED.setPalette(NUM_LEDS + 8 + (7 - (note - 116)), channel, velocity);
+    }
+    else if (note > 107 && note < 116) //Bottom Light Left Column
+    {
+      LED.setPalette(NUM_LEDS + 16 + (7 - (note - 108)), channel, velocity);
+    }
+    else if (note > 27 && note < 36) //Bottom Light Top Row
+    {
+      LED.setPalette(NUM_LEDS + 24 + (note - 28), channel, velocity);
+    }
     break;
   case 1:
-    if (note % 10 - 1 < 8)
-      LED.setXYPalette(xytoxy(note % 10 - 1, 8 - note / 10), channel, velocity);
-    break;
-  case 2:
-  case 3:
-  case 4:
-    for (u8 y = 0; y < YSIZE; y++)
+    u8 x = note % 10;
+    u8 y = note / 10;
+    if (x > 0 && x < 9 && y > 0 && y < 9)
     {
-      for (u8 x = 0; x < XSIZE; x++)
-      {
-        if (note == keymap[current_keymap][y][x])
-          LED.setXYPalette(xytoxy(x, y), channel, velocity);
-      }
+      LED.setXYPalette(xytoxy(note % 10 - 1, 8 - note / 10), channel, velocity);
     }
+    else if(x == 9 && y > 0 && y < 10) //Bottom Light Right Column
+    {
+      LED.setPalette(NUM_LEDS + (7 - (y - 1)), channel, velocity);
+    }
+    else if(y == 0 && x > 0 && x < 10) //Bottom Light Bottom Row
+    {
+      LED.setPalette(NUM_LEDS + 8 + (7 - (x - 1)), channel, velocity);
+    }
+    else if(x == 0 && y > 0 && y < 10) //Bottom Light Llft Column
+    {
+      LED.setPalette(NUM_LEDS + 16 + (y - 1), channel, velocity);
+    }
+    else if(y == 9 && x > 0 && x < 10) //Bottom Light Top Row
+    {
+      LED.setPalette(NUM_LEDS + 24 + (x - 1), channel, velocity);
+    }
+    break;
+  // case 2:
+  // case 3:
+  // case 4:
+  //   for (u8 y = 0; y < YSIZE; y++)
+  //   {
+  //     for (u8 x = 0; x < XSIZE; x++)
+  //     {
+  //       if (note == keymap[current_keymap][y][x])
+  //         LED.setXYPalette(xytoxy(x, y), channel, velocity);
+  //     }
+  //   }
   }
 
   offMap[note] = -1;
-  // // BottomLED
-  // for(u8 i = 0;i < NUM_BOTTOM_LEDS; i++)
-  // {
-  //   if(note == bottom_led_map[current_keymap][i])
-  //   LED.setPalette(i+NUM_LEDS, channel ,velocity);
-  // }
-}
+} 
 
 void MIDI::noteOff(u8 channel, u8 note, u8 velocity)
 {
@@ -106,7 +138,25 @@ void MIDI::noteOff(u8 channel, u8 note, u8 velocity)
     {
     case 0:
       if (note > 35 && note < 100)
+      {
         LED.offXY(user1_keymap_optimized[note - 36]);
+      }
+      else if (note > 99 && note < 108) //Bottom Light Right Column
+      {
+        LED.off(NUM_LEDS + note - 100);
+      }
+      else if (note > 115 && note < 124) //Bottom Light Bottom Column
+      {
+        LED.off(NUM_LEDS + 8 + (7 - (note - 116)));
+      }
+      else if (note > 107 && note < 116) //Bottom Light Left Column
+      {
+        LED.off(NUM_LEDS + 16 + (7 - (note - 108)));
+      }
+      else if (note > 27 && note < 36) //Bottom Light Top Row
+      {
+        LED.off(NUM_LEDS + 24 + (note - 28));
+      }
       break;
     case 1:
       if (note % 10 - 1 < 8 && note / 10 - 1 < 8 && note > 10 && note < 89) //need add bottom light support

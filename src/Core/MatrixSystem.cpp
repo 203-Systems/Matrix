@@ -75,6 +75,12 @@ void specialBoot()
     return;
   }
 
+  if (KeyPad.checkXY(0, 7, true) && KeyPad.checkXY(1, 6, true))
+  {
+    bottomLightTest();
+    return;
+  }
+
   if (KeyPad.checkXY(6, 6, true) && KeyPad.checkXY(7, 7, true))
   {
     setBrightness(16);
@@ -103,6 +109,10 @@ void factoryTest()
         for (int i = 0; i < MULTIPRESS; i++)
         {
           if (KeyPad.getKey(KeyPad.changelist[i]).state == PRESSED)
+          {
+            LED.setXYCRGB(KeyPad.changelist[i], 0x00FF00, true);
+          }
+          else if (KeyPad.getKey(KeyPad.changelist[i]).state == RELEASED)
           {
             LED.setXYCRGB(KeyPad.changelist[i], 0xFFFFFF, true);
           }
@@ -145,6 +155,30 @@ void factoryTest()
         CompositeSerial.println();
         LED.update();
       }
+    }
+  }
+  LED.fill(0);
+  LED.update();
+}
+
+void bottomLightTest()
+{
+  LED.setBrightness(64);
+  u8 ledID = NUM_BOTTOM_LEDS - 1;
+  while (KeyPad.fn.state != PRESSED)
+  {
+    if (ledTimer.tick(500))
+    {
+      LED.off(ledID, true);
+      LED.off(ledID + NUM_LEDS, true);
+      if(++ledID == NUM_BOTTOM_LEDS)
+      {
+        ledID = 0;
+      }
+      LED.setCRGB(ledID,0x00FF00, true);
+      LED.on(ledID + NUM_LEDS, true);
+      KeyPad.scan();
+      LED.update();
     }
   }
   LED.fill(0);
@@ -430,34 +464,49 @@ u8 indexRotation(int index)
   }
   else if (index >= NUM_LEDS && index < NUM_TOTAL_LEDS)
   {
-    return bottomLEDrotation(index);
+    return bottomLEDoffset(bottomLEDrotation(index));
   }
   return index;
 }
 
+u8 bottomLEDoffset(int index) //8x8 32led module specific
+{
+  //No check here. Assume it works intented and only cakked from indexRotation
+  u8 bottomIndex = index - NUM_LEDS;
+  if(bottomIndex < 12)
+  {
+    return index + 20;
+  }
+  else
+  {
+    return index - 12;
+  }
+}
+
 u8 bottomLEDrotation(int index)
 {
+  int bottomID = index - NUM_LEDS;
   switch (rotation)
   {
   case 1: //90
-    if (index >= NUM_BOTTOM_LEDS / 4 * 3 - 1)
+    if (bottomID >= NUM_BOTTOM_LEDS / 4 * 3)
     {
       return index - NUM_BOTTOM_LEDS / 4 * 3;
     }
     return index + NUM_BOTTOM_LEDS / 4 * 1;
   case 2: //180
-    if (index >= NUM_BOTTOM_LEDS / 4 * 2 - 1)
+    if (bottomID >= NUM_BOTTOM_LEDS / 4 * 2) // > 32/4*2-1 = > 15
     {
       return index - NUM_BOTTOM_LEDS / 4 * 2;
     }
     return index + NUM_BOTTOM_LEDS / 4 * 2;
   case 3: //270
-    if (index >= NUM_BOTTOM_LEDS / 4 * 1 - 1)
+    if (bottomID >= NUM_BOTTOM_LEDS / 4 * 1)
     {
       return index - NUM_BOTTOM_LEDS / 4 * 1;
     }
     return index + NUM_BOTTOM_LEDS / 4 * 3;
-  default:
+  case 0:
     return index;
   }
 }

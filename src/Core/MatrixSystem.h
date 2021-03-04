@@ -32,6 +32,7 @@ void setupHardware();
 
 void specialBoot();
 void factoryTest();
+void bottomLightTest();
 //void loadDeviceSerialNumber();
 String getDeviceSerialString();
 
@@ -89,6 +90,7 @@ u8 xyToIndex(u8 xy);
 u8 indexToXY(u8 index);
 u8 indexRotation(int index);
 u8 bottomLEDrotation(int index);
+u8 bottomLEDoffset(int index);
 u8 xytoxy(u8 x, u8 y);
 //XY xytoxy(u8 xy);
 u8 xytox(u8 xy);
