@@ -10,6 +10,7 @@
 #include "../HAL/LED.h"
 #include "../HAL/Timer.h"
 #include "../Components/UIelement.h"
+#include "../Components/Redacted.h"
 
 //#include "../protocol/MIDI.h"
 //#include <USBComposite.h>
@@ -45,6 +46,8 @@ private:
   void exitFNmenu();
   void fnKeyAction();
   void fnRender();
+
+  void brightnessControl();
 
   void enterSettingMenu();
   void settingMenu();

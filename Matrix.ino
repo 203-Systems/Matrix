@@ -9,8 +9,7 @@ Copyright © 203 Industries 2016–2020. All rights reserved.
 #include "src/Parameter/MatrixVariable.h"
 #include "src/Parameter/MatrixParameter.h"
 #include "src/Core/MatrixSystem.h"
-#include "src/Core/MatrixSystem.h"
-#include "src/HAL/KeyPad.h"
+#include "src/HAL/KeyPad.h"p0
 #include "src/HAL/Touch.h"
 #include "src/HAL/LED.h"
 #include "src/HAL/Timer.h"
@@ -20,7 +19,7 @@ Copyright © 203 Industries 2016–2020. All rights reserved.
 UI UI;
 MIDI Midi;
 LED LED;
-KeyPad KeyPad;
+KeyPad KeyPad; 
 Touch Touch;
 Timer keypadTimer;
 Timer ledTimer;

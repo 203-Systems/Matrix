@@ -171,6 +171,7 @@ bool KeyPad::scanType2()
       }
     }
     digitalWrite(keypad_pins[x], LOW);
+    delayMicroseconds(10); // To make the Keypad Matrix happy
   }
 
   return changed;

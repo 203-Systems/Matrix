@@ -19,7 +19,7 @@ void loadConfigMXFE1()
                  PB1, PB0, PA2, PA1, PC3, PA3, PC5, PC4}; // Y (RECIVE)
   // for(u8 i = 0; i < 16; i ++)
   // {
-  //   keypad_pins[i] = type2keypad_pins[i];
+  //   keypad_pins[i] = type2_keypad_pins[i];
   // }
   memcpy(keypad_pins, type2_keypad_pins, 16);
 

@@ -57,7 +57,7 @@ typedef volatile const int64_t vsc64;
 const u8 SYSEXID[3] = {0x00, 0x02, 0x03};
 
 #define EEPROMVERSION 2 //Each EEPROM change will cause this to increase
-#define FWVERSION_STRING "0.8.0 beta 9 pre release" //String(MAJOR_VER)+ "." +MINOR_VER+"." +PATCH_VER+(BUILD_VER == 0)?"":("b"+BUILD_VER) 
+#define FWVERSION_STRING "0.8.0 beta 9" //String(MAJOR_VER)+ "." +MINOR_VER+"." +PATCH_VER+(BUILD_VER == 0)?"":("b"+BUILD_VER) 
 #define MAJOR_VER 0
 #define MINOR_VER 8
 #define PATCH_VER 0
@@ -73,7 +73,7 @@ const u8 SYSEXID[3] = {0x00, 0x02, 0x03};
 #define NUM_BOTTOM_LEDS 32
 #define NUM_TOTAL_LEDS 96 //64+32
 #define NUM_POWERCORD_LEDS 100
-#define LOW_STATE_BRIGHTNESS 100 //40%ish
+#define LOW_STATE_BRIGHTNESS 75 //30%ish
 
 #define XSIZE 8 //Max 256 key support due to the m2p and libary data type limition
 #define YSIZE 8 // need tp change data type in keypad.h

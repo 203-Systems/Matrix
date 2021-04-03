@@ -122,7 +122,8 @@ void UI::fnKeyAction()
             if (konami_progress == 9)
             {
               konami_progress = 0; //Easter egg Entence Point
-              UI::scrollText("Hello there", 0x00FFFF);
+              // UI::scrollText("Hello there", 0x00FFFF);
+              Redacted::run();
             }
             break;
           case 0x56:
@@ -315,7 +316,8 @@ void UI::fnKeyAction()
         case 0x34:
         case 0x43:
         case 0x44:
-          UI::scrollText("Brightness Setting", 0xFFFFFF);
+          // UI::scrollText("Brightness Setting", 0xFFFFFF);
+          UI::brightnessControl();
           break;
 
         //rotation
@@ -1095,4 +1097,98 @@ void UI::standbyMode()
     LED.disableOverlayMode();
   LED.update();
   return;
+}
+
+void UI::brightnessControl()
+{
+  LED.fill(0, true);
+  u8 unsafe = 168;
+  u8 brightnessList[] = {4, 8, 14, 20, 28, 38, 50, 63, 79, 98, 119, 142, 169, 198, 231, 255}; //Length has to be multiples of 8
+  u8 height = sizeof(brightnessList) / 8;// + ((sizeof(brightnessList)) % 8 > 0);
+  u8 offset = 8 - height;
+  while(true)
+  {
+    //Text Render
+    u32 accent_color = brightness < unsafe ? 0x00FF00 : 0xFF0000;
+    //L
+    LED.setXYCRGB(0x00, accent_color, true);
+    LED.setXYCRGB(0x01, accent_color, true);
+    LED.setXYCRGB(0x02, accent_color, true);
+    LED.setXYCRGB(0x03, accent_color, true);
+    LED.setXYCRGB(0x13, accent_color, true);
+    //E
+    LED.onXY(0x20, true);
+    LED.onXY(0x21, true);
+    LED.onXY(0x22, true);
+    LED.onXY(0x23, true);
+    LED.onXY(0x30, true);
+    LED.onXY(0x31, true);
+    LED.onXY(0x33, true);
+    LED.onXY(0x40, true);
+    LED.onXY(0x43, true);
+    //D
+    LED.setXYCRGB(0x50, accent_color, true);
+    LED.setXYCRGB(0x51, accent_color, true);
+    LED.setXYCRGB(0x52, accent_color, true);
+    LED.setXYCRGB(0x53, accent_color, true);
+    LED.setXYCRGB(0x60, accent_color, true);
+    LED.setXYCRGB(0x63, accent_color, true);
+    LED.setXYCRGB(0x71, accent_color, true);
+    LED.setXYCRGB(0x72, accent_color, true);
+
+    //Control Render
+      for(u8 y = 0; y < height; y++)
+      {
+        for(u8 x = 0; x < 8; x++)
+        {
+          u8 i = y * 8 + x;
+
+          u32 color = 0;
+          if(brightnessList[i] >= unsafe)
+          {
+            color = 0xFF0000;
+          }
+          else
+          {
+            color = 0xFFFFFF;
+          }
+          
+          LED.setXYCRGB(xytoxy(x, y + offset), toLowBrightness(color, brightness >= brightnessList[i]), true);
+        }
+      }
+    LED.update();
+    //Keypad
+    while (true)
+    {
+      if (uiTimer.tick(ui_fps_micros) && KeyPad.scan())
+      {
+        if (KeyPad.fn.state == RELEASED)
+        {
+          LED.fill(0, true);
+          return;
+        }
+        u8 newBrightness = 0;
+        for (int i = 0; i < MULTIPRESS; i++)
+        {
+          if (KeyPad.changelist[i] == 0xFFFF)
+            break;
+          if (KeyPad.getKey(KeyPad.changelist[i]).state == PRESSED)
+          {
+            u8 x = xytox(KeyPad.changelist[i]);
+            u8 y = xytoy(KeyPad.changelist[i]);
+            if(y >= offset)
+            {
+              u8 brightnessID = (y-offset) * 8 + x;
+              newBrightness = brightnessList[brightnessID];
+            }
+          }
+        }
+        if(newBrightness != 0)
+        {
+          setBrightness(newBrightness);
+          break;
+        }
+      }
+    }
+  }
 }
