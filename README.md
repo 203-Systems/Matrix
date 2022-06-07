@@ -1,5 +1,8 @@
 # 203 | Matrix
 
+This project has been archived. A complete rewrite and massive upgrade of this project is now available at [Matrix OS](https://github.com/203Electronics/MatrixOS).
+
+本项目已重构，新项目在[Matrix OS](https://github.com/203Electronics/MatrixOS).
 <details>
   <summary>English</summary>
 
